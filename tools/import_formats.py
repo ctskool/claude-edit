@@ -104,6 +104,10 @@ def build_profile():
             p[k] = v
     for k, v in (mine.get("skills") or {}).items():
         p["skills"].setdefault(k, {}).update(v)
+    for k, fallback in (("niche", "short-form videos"), ("creator_name", "Creator"), ("brand_name", "Brand"), ("handle", "@handle")):
+        if not str(p.get(k) or "").strip():
+            print(f"note: config/profile.json has no {k!r} yet - using {fallback!r} (fill it in, then --refill)")
+            p[k] = fallback
     work = os.path.join(ROOT, "work").replace(os.sep, "/")
     p.update({"work_root": work, "projects_root": work, "sfx_dir": os.path.join(PROFILE_DIR, "assets", "sfx").replace(os.sep, "/"),
               "asset_dirs": work + "/<id>/shared", "media_drive": "none", "transcriber": "local"})
