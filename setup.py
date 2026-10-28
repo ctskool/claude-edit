@@ -222,13 +222,14 @@ def ensure_venv(a):
         subprocess.run([sys.executable, "-m", "venv", VENV], check=True)
         run([VPY, "-m", "pip", "install", "-q", "--upgrade", "pip"])
     missing = run([VPY, "-c", "import faster_whisper, numpy, cv2, PIL, playwright"]).returncode
-    if missing and not a.check:
-        r = subprocess.run([VPY, "-m", "pip", "install", "-r", os.path.join(ROOT, "requirements.txt")])
+    if not a.check:
+        # always (fast when satisfied): keeps the version pins in requirements.txt enforced on existing venvs
+        r = subprocess.run([VPY, "-m", "pip", "install", "-q", "-r", os.path.join(ROOT, "requirements.txt")])
         if r.returncode:
             say("FAIL", "Python packages", "pip install -r requirements.txt failed")
             return False
+        say("FIXED" if missing else "OK", "Python packages", "faster-whisper, numpy, opencv, pillow, playwright in .venv")
         missing = 0
-        say("FIXED", "Python packages", "faster-whisper, numpy, opencv, pillow, playwright in .venv")
     elif missing:
         say("NEEDS YOU", "Python packages", "run python setup.py")
         return False
