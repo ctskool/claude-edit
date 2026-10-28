@@ -1,0 +1,1651 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Newsreader"; font-weight: 400; font-style: normal; src: url("assets/fonts/newsreader-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Newsreader"; font-weight: 500; font-style: normal; src: url("assets/fonts/newsreader-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Newsreader"; font-weight: 400; font-style: italic; src: url("assets/fonts/newsreader-latin-400-italic.woff2") format("woff2"); }
+      @font-face { font-family: "Newsreader"; font-weight: 500; font-style: italic; src: url("assets/fonts/newsreader-latin-500-italic.woff2") format("woff2"); }
+      @font-face { font-family: "Instrument Serif"; font-weight: 400; font-style: normal; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Instrument Serif"; font-weight: 400; font-style: italic; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 400; src: url("assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 500; src: url("assets/fonts/inter-tight-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 600; src: url("assets/fonts/inter-tight-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 700; src: url("assets/fonts/inter-tight-latin-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 400; src: url("assets/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 500; src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 600; src: url("assets/fonts/jetbrains-mono-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url("assets/fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2"); }
+
+      :root {
+        --iv: #eeece8; --card: #fffffd; --bd: #e4e2da; --ink: #1e1d1b; --sec: #5e5d59; --mut: #8a887f;
+        --clay: #d97757; --clayd: #c15f3c; --clayt: #f6e3da; --dark: #1f1e1c; --term: #edebe4; --ok: #2e9e5b;
+        --jclay: #cb6d55; --jdark: #1b1d18; --jedge: #deded6; --rail: #d5d6ca; --jgrey: #82827a;
+        --mono: "JetBrains Mono", monospace; --tight: "Inter Tight", sans-serif; --serif: "Newsreader", serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--iv); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: var(--ink); background: var(--iv); }
+      .abs { position: absolute; }
+      .fill { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .t { position: absolute; white-space: nowrap; line-height: 1; }
+      svg.ic { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+      .scene { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; z-index: 2; opacity: 0; }
+      .scene.full { height: 1920px; }
+
+      /* ---------- background: ivory + drifting 60px grid (vibecoding replica literal) ---------- */
+      #bg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background-color: var(--iv); overflow: hidden; z-index: 0; }
+      #grid { position: absolute; left: -120px; top: -480px; width: 1320px; height: 2460px;
+        background-image: linear-gradient(to right, rgba(0,0,0,0) 0px, rgba(0,0,0,0.021) 2px, rgba(0,0,0,0) 4px, transparent 4px), linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0.021) 2px, rgba(0,0,0,0) 4px, transparent 4px);
+        background-size: 60px 60px; background-position: -1.25px -1.25px; }
+
+      /* ---------- face cam ---------- */
+      #face-wrap { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; z-index: 1; background: #111; }
+      #face { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; object-fit: cover; object-position: 50% 0%; }
+
+      /* ---------- shared: reference A skill card (chiefofstaff SPEC S1) ---------- */
+      .jlabel { position: absolute; left: 0; width: 1080px; top: 236px; text-align: center; font-weight: 700; font-size: 28px; line-height: 1; letter-spacing: 0.152em; padding-left: 0.152em; color: var(--jgrey); white-space: nowrap; }
+      .jcard { left: 90px; top: 290px; width: 900px; height: 400px; background: #fafcfb; border: 3px solid var(--jedge); border-radius: 30px; box-shadow: 0 10px 26px rgba(70, 70, 50, 0.07); transform-origin: 50% 100%; }
+      /* active outline (donor DemE f590): thin white gap + clay line, no tint halo */
+      .jring { position: absolute; left: -3px; top: -3px; right: -3px; bottom: -3px; border-radius: 30px; box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #d97757, 0 12px 32px rgba(40, 30, 20, 0.07); opacity: 0; }
+      .jtile { left: 44px; top: 44px; width: 150px; height: 150px; border-radius: 34px; background: var(--jclay); box-shadow: 0 12px 26px rgba(203, 109, 85, 0.28); }
+      .jbar { left: 44px; top: 236px; width: 812px; height: 120px; border-radius: 26px; background: var(--jdark); }
+      .jchev { left: 44px; top: 50px; width: 12px; height: 20px; color: #c9705d; }
+      .jcmd { left: 87px; top: 37px; font-family: var(--mono); font-weight: 700; font-size: 46px; color: #edebe4; }
+      .caret { display: inline-block; width: 4px; height: 0.95em; margin-left: 3px; vertical-align: -0.14em; background: #d9663f; opacity: 0; }
+      .jrail { left: 222px; top: 790px; width: 640px; height: 6px; background: var(--rail); }
+      .jrail-on { left: 703px; top: 790px; width: 160px; height: 6px; background: var(--jclay); transform-origin: 0 50%; }
+      .jstep { top: 758px; width: 70px; height: 70px; border-radius: 50%; background: #fafcfb; border: 4px solid var(--rail); }
+      .jstep .jfill { position: absolute; left: -4px; top: -4px; width: 70px; height: 70px; border-radius: 50%; background: #e7e6db; border: 4px solid #d5d6ca; opacity: 0; }
+      .jstep .jlock { position: absolute; left: 17px; top: 15px; width: 28px; height: 32px; color: #9f9e92; opacity: 0; stroke-width: 2.4; stroke-dasharray: 50; stroke-dashoffset: 50; }
+      .jstep .jhalo { position: absolute; left: -16px; top: -16px; width: 94px; height: 94px; border-radius: 50%; background: rgba(203, 109, 85, 0.16); opacity: 0; }
+      .jstep .jon { position: absolute; left: -4px; top: -4px; width: 70px; height: 70px; border-radius: 50%; background: var(--jclay); box-shadow: 0 0 0 10px rgba(203, 109, 85, 0.15); opacity: 0; }
+      .jstep .jon svg { position: absolute; left: 17px; top: 17px; width: 36px; height: 36px; color: #fff; stroke-width: 3.2; }
+      .jtier { top: 838px; width: 200px; text-align: center; font-weight: 600; font-size: 28px; color: var(--jgrey); opacity: 0; }
+
+      /* ---------- shared: reference B card (vibecoding SPEC "Plugin card") ---------- */
+      .mcard { position: absolute; left: 70px; top: 170px; width: 940px; height: 519px; border-radius: 24px; background: var(--card);
+        box-shadow: 0 16px 36px rgba(70, 55, 40, 0.09), 0 2px 6px rgba(70, 55, 40, 0.06); transform-origin: 50% 100%; }
+      /* section word (kit toolsCard header): Inter Tight 600 22.4 px, tracking 2.3 px */
+      .mlabel { font-family: var(--tight); font-weight: 600; font-size: 22.4px; letter-spacing: 2.3px; color: #6e6b66; }
+      .skel { position: absolute; border-radius: 8px; background: #e6e3dc; }
+      .pillx { position: absolute; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-family: var(--tight); font-weight: 600; font-size: 26px; line-height: 1; white-space: nowrap; }
+
+      /* repo card */
+      .spill { position: relative; height: 48px; border-radius: 24px; background: #f2f0ed; }
+      .spill .stx { position: absolute; left: 0; top: 0; width: 100%; height: 48px; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--tight); font-weight: 600; font-size: 28px; color: #4e4b46; opacity: 0; white-space: nowrap; }
+      .mbar { left: 90px; width: 900px; height: 120px; border-radius: 26px; background: var(--jdark); }
+      .mbar .cmd { left: 87px; top: 42px; font-family: var(--mono); font-weight: 700; font-size: 36px; color: #fff; }
+
+      /* film flip card */
+      #fm-wrap { position: absolute; left: 70px; top: 170px; width: 940px; height: 530px; perspective: 2600px; transform-origin: 50% 100%; }
+      #fm-flip { position: absolute; left: 0; top: 0; width: 940px; height: 530px; transform-style: preserve-3d; }
+      .face { position: absolute; left: 0; top: 0; width: 940px; height: 530px; border-radius: 24px; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; }
+      #fm-front { background: var(--card); box-shadow: 0 16px 36px rgba(70, 55, 40, 0.09), 0 2px 6px rgba(70, 55, 40, 0.06); }
+      #fm-back { background: var(--dark); box-shadow: 0 18px 40px rgba(30, 25, 20, 0.22); opacity: 0; }
+      .code { font-family: var(--mono); font-weight: 500; font-size: 30px; line-height: 1; color: var(--term); white-space: nowrap; }
+      .k { color: #e58a68; } .s { color: #9fc79a; } .n { color: #e8b77a; } .c { color: #7d7a72; }
+
+      /* tools rows (vibecoding row recipe scaled to the card width) */
+      .row { position: absolute; left: 30px; width: 880px; height: 120px; border-radius: 14px; }
+      .row .bgs { position: absolute; inset: 0; border-radius: 14px; background: #f8f7f5; border: 1.5px solid #f2f0ec; }
+      .row .bga { position: absolute; inset: 0; border-radius: 14px; background: #fff; border: 2px solid #eba990; box-shadow: 0 6px 14px rgba(235, 169, 144, 0.18); opacity: 0; }
+      .row .tile { position: absolute; left: 24px; top: 24px; width: 72px; height: 72px; border-radius: 16px; background: #e3ded9; }
+      .row .tilea { position: absolute; left: 24px; top: 24px; width: 72px; height: 72px; border-radius: 16px; background: #fde0d5; opacity: 0; }
+      .row .tilea svg { position: absolute; left: 18px; top: 18px; width: 36px; height: 36px; }
+      .row .b1 { position: absolute; left: 120px; top: 32px; height: 22px; border-radius: 11px; background: #d9d6cc; }
+      .row .b2 { position: absolute; left: 120px; top: 74px; height: 16px; border-radius: 8px; background: #e6e2dd; }
+      .row .name { position: absolute; left: 120px; top: 24px; font-family: var(--mono); font-weight: 700; font-size: 23px; line-height: 1; color: #121212; white-space: nowrap; }
+      .row .desc { position: absolute; left: 120px; top: 72px; font-family: var(--mono); font-weight: 400; font-size: 19px; line-height: 1; color: #55524e; white-space: nowrap; opacity: 0; }
+      .row .dc { position: absolute; left: 808px; top: 36px; width: 48px; height: 48px; }
+      .row .xd { position: absolute; left: 808px; top: 36px; width: 48px; height: 48px; border-radius: 50%; background: var(--clay); opacity: 0; }
+      .row .xd svg { position: absolute; left: 12px; top: 12px; width: 24px; height: 24px; color: #fff; stroke-width: 3.4; }
+      .row .ck { position: absolute; left: 808px; top: 36px; width: 48px; height: 48px; border-radius: 50%; background: #3d996a; opacity: 0; }
+      .row .ck svg { position: absolute; left: 12px; top: 12px; width: 24px; height: 24px; color: #fff; stroke-width: 3.4; }
+      .row .strike { position: absolute; left: 108px; top: 39px; height: 6px; border-radius: 0; background: var(--clay); transform-origin: 0 50%; opacity: 0; }
+      /* generator rows at the donor tools-row geometry (kit .kv-row): 91 px tall, 104 px pitch, 55 px tile, name at (91.5, 19) */
+      .row.g { height: 91px; }
+      .row.g .tile, .row.g .tilea { left: 18.5px; top: 18px; width: 55px; height: 55px; border-radius: 12px; }
+      .row.g .tilea svg { left: 13.5px; top: 13.5px; width: 28px; height: 28px; }
+      .row.g .b1 { left: 92px; top: 23px; height: 19px; border-radius: 9.5px; }
+      .row.g .b2 { left: 92px; top: 59px; height: 14px; border-radius: 7px; }
+      .row.g .name { left: 91.5px; top: 19px; }
+      .row.g .desc { left: 92px; top: 55.5px; }
+      .row.g .dc { left: 822px; top: 26px; width: 39px; height: 39px; }
+      .row.g .xd, .row.g .ck { left: 821.8px; top: 25.8px; width: 39.5px; height: 39.5px; }
+      .row.g .xd svg, .row.g .ck svg { left: 9.25px; top: 9.25px; width: 21px; height: 21px; stroke-width: 3; }
+
+      /* b06 name reveal (takeover 10.533-12.933): the face drops away and the name lands in the lower half under the repo card;
+         Newsreader 500 140 px, 'motion' italic clay, baseline y 1210 (box top 1210 - 0.735 x 140 = 1107.1); the repo facts
+         (MIT license, 1.4k stars - beats facts) sit under it as white chips (y 1262-1324) */
+      #nm-title { position: absolute; left: 0; top: 1107.1px; width: 1080px; height: 140px; display: flex; justify-content: center; align-items: baseline; white-space: nowrap; }
+      #nm-title span { display: inline-block; font-family: var(--serif); font-weight: 500; font-size: 140px; line-height: 1; letter-spacing: -0.02em; color: var(--ink); opacity: 0; }
+      #nm-title .it { font-style: italic; color: #cd5a36; }
+      #nm-chips { position: absolute; left: 0; top: 1262px; width: 1080px; height: 62px; display: flex; justify-content: center; gap: 18px; }
+      #nm-chips .chip2 { position: relative; opacity: 0; }
+      /* b11-b13 generators takeover (22.40-27.00): 'Not needed.' (beats b11 state) Newsreader 500 120 px, baseline y 520 (box top
+         431.8), the tools card under it (y 620-1035), the HUD at its takeover slot (y 1393-1507) */
+      #gn-title { position: absolute; left: 0; top: 431.8px; width: 1080px; height: 120px; display: flex; justify-content: center; align-items: baseline; gap: 28px; white-space: nowrap; }
+      #gn-title span { display: inline-block; font-family: var(--serif); font-weight: 500; font-size: 120px; line-height: 1; letter-spacing: -0.02em; color: var(--ink); }
+      #gn-title .it { font-style: italic; color: #cd5a36; }
+      .chip2 { position: absolute; height: 62px; padding: 0 26px; border-radius: 31px; background: #fff; border: 1.5px solid var(--bd); display: flex; align-items: center;
+        font-family: "Inter", sans-serif; font-weight: 600; font-size: 28px; line-height: 1; color: #3b3935; white-space: nowrap; box-shadow: 0 6px 14px rgba(70, 55, 40, 0.06); }
+      .chip2 .on { position: absolute; inset: -1.5px; border-radius: 31px; border: 2px solid var(--clay); background: #fff8f4; color: var(--clayd); display: flex; align-items: center; justify-content: center; opacity: 0; }
+
+      /* feature card + editor */
+      .fh { position: absolute; left: 24px; top: 20px; width: 892px; height: 60px; }
+      .fh .tl { position: absolute; left: 0; top: 2px; width: 56px; height: 56px; border-radius: 14px; background: var(--clay); }
+      .fh .tl svg { position: absolute; left: 13px; top: 13px; width: 30px; height: 30px; color: #fff; stroke-width: 2.2; }
+      /* header name at the donor card-name scale (Inter Tight 700 28.5 px); caps centred on the 56 px tile (y 30) */
+      .fh .nm { position: absolute; left: 74px; top: 15px; display: flex; align-items: baseline; gap: 16px; white-space: nowrap; }
+      .fh .nm b { font-family: var(--tight); font-weight: 700; font-size: 29px; line-height: 1; letter-spacing: -0.005em; color: #1f1e1d; }
+      .fh .nm i { font-style: normal; font-family: "Inter", sans-serif; font-weight: 500; font-size: 23px; line-height: 1; color: #5e5d59; }
+      .fcount { position: absolute; right: 28px; top: 36px; font-family: var(--mono); font-weight: 500; font-size: 28px; line-height: 1; color: var(--mut); }
+      .fclip { position: absolute; left: 24px; top: 96px; width: 892px; height: 404px; border-radius: 14px; overflow: hidden; background: #1a1918; }
+      .fclip video { position: absolute; left: 0; top: 0; width: 892px; height: 404px; object-fit: cover; }
+      .keycap { position: absolute; width: 64px; height: 64px; border-radius: 12px; background: #fff; border: 2px solid #e2dfda; box-shadow: 0 4px 0 #dcd8d1; display: flex; align-items: center; justify-content: center;
+        font-family: var(--mono); font-weight: 700; font-size: 34px; color: var(--ink); }
+
+      /* versus */
+      .vcard { position: absolute; left: 70px; width: 940px; height: 556px; border-radius: 24px; background: var(--card); box-shadow: 0 16px 36px rgba(70, 55, 40, 0.09), 0 2px 6px rgba(70, 55, 40, 0.06); }
+      /* header row: name (donor card-name scale, Inter Tight 700 29 px) + tag, caps centred on y 31 */
+      .vcard .vhd { position: absolute; left: 40px; top: 11px; height: 40px; display: flex; align-items: center; gap: 18px; white-space: nowrap; }
+      .vcard .vn { font-family: var(--tight); font-weight: 700; font-size: 29px; line-height: 1; letter-spacing: -0.005em; color: #1f1e1d; }
+      .vcard .vtag { height: 40px; padding: 0 14px; border-radius: 10px; border: 1.5px solid #d8d5ce; display: flex; align-items: center; font-family: var(--mono); font-weight: 500; font-size: 26px; color: #6e6b66; }
+      .vcard .vtc { position: absolute; right: 40px; top: 18px; font-family: var(--mono); font-weight: 500; font-size: 26px; line-height: 1; color: var(--mut); }
+      /* the real 960x540 test render plays at 0.896x in the 860x484 well */
+      .vcard .vclip { position: absolute; left: 40px; top: 58px; width: 860px; height: 484px; border-radius: 14px; overflow: hidden; background: #111; }
+      .vcard .vtr { position: absolute; left: 40px; top: 547px; width: 860px; height: 4px; border-radius: 2px; background: #ebe9e4; overflow: hidden; }
+      .vcard .vtr i { position: absolute; left: 0; top: 0; width: 860px; height: 4px; background: var(--clay); transform-origin: 0 50%; }
+      .vring { position: absolute; left: 0; top: 0; right: 0; bottom: 0; border-radius: 24px; box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #d97757, 0 12px 32px rgba(40, 30, 20, 0.07); opacity: 0; }
+      .badge { position: absolute; width: 344px; height: 58px; border-radius: 12px; background: var(--jclay); display: flex; align-items: center; justify-content: center; gap: 10px;
+        font-family: "Inter", sans-serif; font-weight: 700; font-size: 28px; letter-spacing: 0.07em; color: #fff; white-space: nowrap; box-shadow: 0 8px 18px rgba(203, 109, 85, 0.25); }
+      .badge svg { width: 26px; height: 26px; color: #fff; stroke-width: 3.2; }
+      #vs-badge { position: absolute; left: 540px; top: 748px; z-index: 5; width: 380px; height: 60px; padding: 0; border-radius: 30px; background: #d97757; display: flex; align-items: center; justify-content: center; gap: 12px;
+        font-family: "Inter", sans-serif; font-weight: 600; font-size: 34px; line-height: 1; color: #ffffff; white-space: nowrap; opacity: 0; box-shadow: 0 8px 18px rgba(217, 119, 87, 0.28); }
+      #vs-badge svg { width: 30px; height: 30px; color: #ffffff; stroke-width: 3.2; }
+      #vs-badge .vbl { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; white-space: nowrap; }
+      .jdash { position: absolute; top: 130px; width: 50px; height: 10px; border-radius: 5px; background: var(--rail); }
+
+      /* power strip HUD (vibecoding #strip literal) */
+      #hud { position: absolute; left: 0; top: 0; width: 1080px; height: 1016px; z-index: 4; }
+      #strip { position: absolute; left: 192px; top: 783px; width: 696px; height: 114px; opacity: 0; }
+      #strip-pop { position: absolute; inset: 0; }
+      #strip-body { position: absolute; inset: 0; background: #fff; border-radius: 22px;
+        box-shadow: inset 0 1.6px 0 #dcdad6, inset 1px 0 0 #e6e4e0, inset -1px 0 0 #e6e4e0, inset 0 -3px 0 #fcfbf9, 0 30px 40px rgba(0, 0, 0, 0.10), 0 2px 12px rgba(0, 0, 0, 0.045); }
+      #hm-mark { position: absolute; left: 25px; top: 24px; width: 21px; height: 21px; border-radius: 6px; background: #e06b44; }
+      #hm-mark i { position: absolute; left: 5px; top: 5px; width: 11px; height: 11px; border-radius: 3px; background: #f6b08f; }
+      /* donor 'CLAUDE CODE' label: cap ~12.5 px, ~11.1 px/char; cap band centred on the mark (y 34.5) */
+      #lbl { position: absolute; left: 60px; top: 26px; font-family: var(--mono); font-weight: 500; font-size: 17px; line-height: 1; letter-spacing: -0.2px; color: #4a423c; white-space: nowrap; }
+      #count { position: absolute; left: 27.4px; top: 59.5px; font-family: var(--mono); font-weight: 500; font-size: 42px; line-height: 1; color: #1e1e1f; white-space: nowrap; -webkit-text-stroke-width: 0.5px; }
+      #count span { display: none; }
+      #count #cn0 { display: inline; color: #7b7a78; }
+      .dot { position: absolute; left: 150px; top: 72px; width: 16px; height: 16px; border-radius: 50%; }
+      #dot-gray { background: #d0cec9; }
+      #dot-red { background: #dc4f42; box-shadow: 0 0 0 1.6px #f0c4c2; opacity: 0; }
+      #dot-green { background: #2f9a68; box-shadow: 0 0 0 4px rgba(47, 154, 104, 0.16); opacity: 0; }
+      .sock { position: absolute; top: 14px; width: 94px; height: 86px; border-radius: 14px; border: 1px solid #e4e2da; background: #f1efea; }
+      .slot { position: absolute; top: 27.5px; width: 9.4px; height: 30px; border-radius: 4.7px; background: #2e2c2a; }
+      .slot.a { left: 26.4px; } .slot.b { left: 55.2px; }
+      .gnd { position: absolute; left: 40.7px; top: 67.7px; width: 9.6px; height: 9.6px; border-radius: 50%; background: #d1cec8; }
+      .plugd { position: absolute; top: 14px; width: 94px; height: 86px; border-radius: 14px; background: #e2e0dc; opacity: 0; }
+      .plug { position: absolute; top: 775px; width: 72px; height: 115px; opacity: 0; }
+      .plug .neck { position: absolute; left: 22.5px; top: 0; width: 27px; height: 17px; border-radius: 5px 5px 2px 2px; background: #222; }
+      .plug .body { position: absolute; left: 0; top: 15px; width: 72px; height: 86px; border-radius: 15px; background: #1f1f1f; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18); }
+      .plug .tile { position: absolute; left: 11px; top: 27px; width: 50px; height: 50px; border-radius: 11px; background: #fff; }
+      .plug .tile svg { position: absolute; left: 11px; top: 11px; width: 28px; height: 28px; color: #d9663f; stroke-width: 2.4; }
+      .plug .prong { position: absolute; top: 101px; width: 6px; height: 13px; border-radius: 1px; background: #9b9893; }
+      .anchor { position: absolute; top: 688px; width: 33px; height: 13px; border-radius: 3px 3px 5px 5px; background: #222; opacity: 0; }
+      .ring { position: absolute; top: 789px; width: 110px; height: 100px; border-radius: 22px; border: 3.6px solid #d9663f; box-shadow: 0 0 10px rgba(235, 140, 110, 0.45), inset 0 0 6px rgba(235, 140, 110, 0.25); opacity: 0; }
+      /* 12.20-14.01 teaser: a '?' tile over each socket (what is being counted is still unknown) */
+      .qtile { position: absolute; top: 700px; width: 44px; height: 44px; border-radius: 10px; background: #ffffff; border: 1px solid #e4e2da; opacity: 0;
+        font-family: var(--mono); font-weight: 700; font-size: 28px; line-height: 42px; text-align: center; color: #8a887f; }
+      #ping { position: absolute; left: 397px; top: 789px; width: 110px; height: 100px; border-radius: 22px; border: 2px solid rgba(225, 120, 95, 0.55); opacity: 0; }
+
+      /* full-face punch-ins (house rule 1, rhythm pass): b04 / b07 / b14 / b18 / b21 on plain face_full.mp4 in sync (data-media-start =
+         data-start; data-start sits just BEFORE the cut frame's boundary so floor((t - start) x 30) never runs the plate a frame late),
+         the split panel, half face and HUD off the frame. Title on the dark shirt as a lower third (CLAUDE.md rule, never over the eyes /
+         mouth): Newsreader 500 116 px #F5F4EE, -0.02em, centred on x 540, baseline y 1600 (ascent 0.735 em -> box top 1600 - 85.3 =
+         1514.7), one italic clay word. The words rise in on their spoken words (y +24 -> 0, 0.35 s power3.out); the mono chip sits at
+         y 1353-1431 (centre 1392), clear of the title. */
+      .ffull { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      .fft { position: absolute; left: 0; top: 1514.7px; width: 1080px; height: 116px; text-align: center; white-space: nowrap;
+        font-family: var(--serif); font-weight: 500; font-size: 116px; line-height: 1; letter-spacing: -0.02em; color: #f5f4ee; }
+      .fft span { display: inline-block; opacity: 0; }
+      .fft .it { font-style: italic; color: #cd5a36; }
+      /* the approx sign as a drawn clay disc (no font fallback), its centre on the cap band (baseline - 38) */
+      .fft .eqd { position: relative; width: 84px; height: 84px; margin-right: 26px; border-radius: 50%; background: #d97757; vertical-align: -4px; }
+      .fft .eqd svg { position: absolute; left: 20px; top: 24px; width: 44px; height: 36px; }
+
+      /* cursor */
+      .cursor { position: absolute; width: 40px; height: 48px; opacity: 0; }
+      .ripple { position: absolute; width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--clay); opacity: 0; }
+
+      /* captions (reference B chip, vibecoding replica) */
+      /* reference B chip: JetBrains Mono 600 46 px (27.6 px advance, no tracking), 78 px tall on the seam (y 921-999), hard swaps at scale 1 */
+      #caps { position: absolute; left: 0; top: 921px; width: 1080px; height: 78px; z-index: 8; }
+      .chip { position: absolute; top: 0; left: 540px; height: 78px; display: flex; align-items: center; opacity: 0; }
+      .chip .in { position: relative; left: -50%; height: 78px; padding: 0 24px; border-radius: 11px; background: #1d1d1a; display: block; line-height: 78px;
+        font-family: var(--mono); font-weight: 600; font-size: 46px; letter-spacing: 0; text-transform: uppercase; color: #f3f5f5; white-space: nowrap; }
+      .chip .in b { font-weight: 600; color: #e0907e; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <symbol id="i-claude" viewBox="0 0 24 24"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></symbol>
+        <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+        <symbol id="i-google" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></symbol>
+        <symbol id="i-javascript" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z"/></symbol>
+        <symbol id="i-kuaishou" viewBox="0 0 24 24"><path d="M18.315 12.264c2.33 0 4.218 1.88 4.218 4.2V19.8c0 2.32-1.888 4.2-4.218 4.2h-6.202a4.218 4.218 0 0 1-4.023-2.938l-3.676 1.833a2.04 2.04 0 0 1-2.731-.903 2.015 2.015 0 0 1-.216-.907v-5.94a2.03 2.03 0 0 1 2.035-2.024 2.044 2.044 0 0 1 .919.218l3.673 1.85a4.218 4.218 0 0 1 4.02-2.925zm-.062 2.162h-6.078c-1.153 0-2.09.921-2.108 2.065v3.247c0 1.148.925 2.081 2.073 2.1h6.113c1.153 0 2.09-.922 2.109-2.065v-3.247a2.104 2.104 0 0 0-2.074-2.1zM4.18 15.72a.554.554 0 0 0-.555.542v3.734a.556.556 0 0 0 .798.496l.01-.004 3.463-1.756V17.51l-3.467-1.73a.557.557 0 0 0-.249-.06zM9.28 0a5.667 5.667 0 0 1 4.98 2.965 4.921 4.921 0 0 1 3.36-1.317c2.714 0 4.913 2.177 4.913 4.863 0 2.686-2.2 4.863-4.912 4.863a4.921 4.921 0 0 1-3.996-2.034 5.651 5.651 0 0 1-4.345 2.034c-3.131 0-5.67-2.546-5.67-5.687C3.61 2.546 6.149 0 9.28 0Zm8.34 3.926c-1.441 0-2.61 1.157-2.61 2.585s1.169 2.585 2.61 2.585c1.443 0 2.612-1.157 2.612-2.585s-1.169-2.585-2.611-2.585zM9.28 2.287a3.395 3.395 0 0 0-3.39 3.4c0 1.877 1.518 3.4 3.39 3.4a3.395 3.395 0 0 0 3.39-3.4c0-1.878-1.518-3.4-3.39-3.4z"/></symbol>
+        <symbol id="i-bytedance" viewBox="0 0 24 24"><path d="M19.8772 1.4685L24 2.5326v18.9426l-4.1228 1.0563V1.4685zm-13.3481 9.428l4.115 1.0641v8.9786l-4.115 1.0642v-11.107zM0 2.572l4.115 1.0642v16.7354L0 21.428V2.572zm17.4553 5.6205v11.107l-4.1228-1.0642V9.2568l4.1228-1.0642z"/></symbol>
+        <symbol id="i-chev" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l6 7-6 7"/></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10.5" rx="2.2"/><path d="M8 10.5V7.2a4 4 0 0 1 8 0v3.3"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+        <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/><path d="m14 4-4 16"/></symbol>
+        <symbol id="i-wipe" viewBox="0 0 24 24"><rect x="2.5" y="7" width="12.5" height="12.5" rx="2.2"/><path d="M9 7V5.2A2.2 2.2 0 0 1 11.2 3h8.1a2.2 2.2 0 0 1 2.2 2.2v8.1a2.2 2.2 0 0 1-2.2 2.2H15"/></symbol>
+        <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+        <symbol id="i-pointer" viewBox="0 0 24 24"><path d="M4.04 4.69a.5.5 0 0 1 .65-.65l16 6.5a.5.5 0 0 1-.06.95l-6.13 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.12a.5.5 0 0 1-.95.07z"/></symbol>
+        <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/><path d="M20 3v4M22 5h-4"/></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.6-4.6"/></symbol>
+        <symbol id="i-star" viewBox="0 0 24 24"><path d="M11.5 2.3a.6.6 0 0 1 1 0l2.6 5.4 5.9.9a.6.6 0 0 1 .3 1l-4.3 4.2 1 5.9a.6.6 0 0 1-.8.6L12 17.5l-5.3 2.8a.6.6 0 0 1-.8-.6l1-5.9-4.3-4.2a.6.6 0 0 1 .3-1l5.9-.9z"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z"/></symbol>
+        <symbol id="i-arrow" viewBox="0 0 40 48"><path d="M5 3 L5 37 L13.5 29 L19.5 42.5 L25.5 40 L19.6 26.8 L31 26.4 Z" fill="#1e1d1b" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/></symbol>
+      </defs>
+    </svg>
+
+    <div id="root" data-composition-id="main" data-start="0" data-duration="48.05" data-width="1080" data-height="1920" data-fps="30">
+      <div id="bg" data-layout-allow-overflow="true"><div id="grid" data-layout-allow-overflow="true"></div></div>
+
+      <div id="face-wrap">
+        <video id="face" src="assets/face_half_rt.mp4" muted playsinline data-start="0" data-duration="48.05" data-track-index="0"></video>
+      </div>
+      <audio id="voice" src="assets/voice.m4a" data-start="0" data-duration="48.05" data-track-index="9"></audio>
+
+      <!-- ===================== b01-b04 HOOK: reference A skill card + 5-step plan rail ===================== -->
+      <div id="sc-hook" class="scene" style="opacity:1">
+        <div id="hk-in" class="fill"><div id="hk-cam" class="fill">
+          <div id="hk-lbl1" class="jlabel">CLAUDE&nbsp;&nbsp;·&nbsp;&nbsp;NEW IN BETA</div>
+          <div id="hk-lbl2" class="jlabel" style="color:#cb6d55;opacity:0">ONLY ON TEAM &amp; ENTERPRISE</div>
+          <div id="hk-rail" class="abs jrail"></div>
+          <div id="hk-railon" class="abs jrail-on"></div>
+          <!-- b01 'for free?' (beats copy, never spoken) is the hook's second headline under the card, f80 ('design') -> f116: Newsreader 500
+               112 px, 'for' ink + 'free?' italic clay, centred on x 540, baseline y 830 (box top 830 - 0.735 x 112 = 747.7). On f117 ('you')
+               it hard-swaps to the plan rail in the same slot -->
+          <div id="hk-kick" class="t" style="left:0;top:747.7px;width:1080px;text-align:center;font-family:var(--serif);font-weight:500;font-size:112px;letter-spacing:-0.02em;color:#1f1e1d;opacity:0">for <span style="font-style:italic;color:#cd5a36">free?</span></div>
+          <div id="hk-steps"></div>
+          <div id="hk-card" class="abs jcard">
+            <div id="hk-ring" class="jring"></div>
+            <div id="hk-tile" class="abs jtile"><svg id="hk-spark" class="abs" style="left:31px;top:31px;width:88px;height:88px;fill:#fff"><use href="#i-claude"/></svg></div>
+            <!-- 'Claude' is on the card from frame 0 (the thumbnail frame has a real headline); only 'Motion' lands, on its word -->
+            <div id="hk-title" class="t" style="left:231px;top:81px;font-family:var(--serif);font-weight:500;font-size:96px;letter-spacing:-0.02em;color:#1f1e1d">
+              <span id="hk-w1" style="display:inline-block">Claude</span><span id="hk-w2" style="display:inline-block;opacity:0;margin-left:22px;font-family:var(--serif);font-style:italic;font-weight:500;font-size:96px;letter-spacing:-0.02em;color:#cd5a36">Motion</span>
+            </div>
+            <div id="hk-bar" class="abs jbar">
+              <svg id="hk-chev" class="abs jchev"><use href="#i-chev"/></svg>
+              <svg id="hk-lock" class="abs ic" style="left:34px;top:42px;width:32px;height:36px;color:#e0896d;stroke-width:2.4;opacity:0"><use href="#i-lock"/></svg>
+              <div id="hk-cmd" class="t jcmd"></div>
+              <div id="hk-pill" class="abs" style="right:30px;top:31px;width:300px;height:58px;border-radius:29px;border:2px solid rgba(203,109,85,0.8);background:rgba(203,109,85,0.14);overflow:hidden">
+                <div id="hk-p1" class="t" style="left:0;top:14px;width:296px;text-align:center;font-weight:600;font-size:28px;color:#f2b7a2">Motion&nbsp;·&nbsp;Beta</div>
+                <div id="hk-p2" class="t" style="left:0;top:14px;width:296px;text-align:center;font-weight:600;font-size:28px;color:#f2b7a2;opacity:0">Team &amp; Enterprise</div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ===================== b04 FULL-FACE (f182-228, 'which' -> 'then'): 'The only place.' ===================== -->
+      <div id="sc-f04" class="scene full">
+        <video id="ff-04" class="ffull" src="assets/face_full.mp4" muted playsinline data-start="6.06666" data-duration="1.566" data-media-start="6.0667" data-track-index="1"></video>
+        <div class="fft"><span id="f04-1">The</span> <span id="f04-2" class="it">only</span> <span id="f04-3">place.</span></div>
+      </div>
+
+      <!-- ===================== b05-b06 REPO: reference B plugin card + reference A command bar ===================== -->
+      <div id="sc-repo" class="scene">
+        <!-- rhythm pass: the card stays at its content height (330 px) through the b06 takeover; the repo facts (MIT / 1.4k stars) moved
+             to the name reveal under it and 'open source ~ Claude Motion' is the b07 punch-in title, so no pills / compare row here -->
+        <div id="rp-card" class="mcard" style="overflow:hidden;height:330px">
+          <div id="rp-in" class="fill">
+            <div class="t mlabel" style="left:44.6px;top:43px">GITHUB REPO</div>
+            <!-- the card arrives on f229 already holding the owner row, the tagline, this #ECEAE6 slot at the GitHub tile's final box and two
+                 title skeleton bars; the dark GitHub tile pops into the slot on 'GitHub' (8.83) and the bars give way to the typed name (10.47) -->
+            <div id="rp-slot" class="abs" style="left:43.6px;top:93.6px;width:178px;height:179px;border-radius:41px;background:#eceae6"></div>
+            <div id="rp-nsk" class="abs" style="left:252px;top:142px;width:360px;height:66px">
+              <div class="abs" style="left:0;top:9px;width:360px;height:18px;border-radius:9px;background:#eceae6"></div>
+              <div class="abs" style="left:0;top:39px;width:240px;height:18px;border-radius:9px;background:#eceae6"></div>
+            </div>
+            <div id="rp-icon" class="abs" style="left:43.6px;top:93.6px;width:178px;height:179px;border-radius:41px;background:#1e1e1e;box-shadow:0 8px 16px rgba(0,0,0,0.2);opacity:0">
+              <svg style="position:absolute;left:37px;top:37px;width:104px;height:104px;fill:#fff"><use href="#i-github"/></svg>
+            </div>
+            <!-- owner line -->
+            <div id="rp-owner" class="abs" style="left:252px;top:94px;height:42px;display:flex;align-items:center;gap:14px">
+              <span id="rp-own" style="font-family:var(--mono);font-weight:500;font-size:28px;color:#5c5955">alchaincyf /</span>
+              <span id="rp-pub" class="pillx" style="position:relative;height:42px;padding:0 16px;border:2px solid #d0cec9;color:#6f6b66;font-size:26px">Public</span>
+            </div>
+            <div id="rp-name" class="t" style="left:249px;top:142px;font-family:var(--tight);font-weight:700;font-size:66px;letter-spacing:-1.1px;color:#1a1a1a"></div>
+            <div id="rp-tag" class="abs" style="left:252px;top:224px;width:610px;font-family:'Inter',sans-serif;font-weight:500;font-size:28px;line-height:37px;color:#5e5d59"><div>Commercial-grade product launch films,</div><div>in one go.</div></div>
+          </div>
+        </div>
+        <div id="rp-bar" class="abs mbar" style="top:770px" data-layout-allow-overlap="true">
+          <!-- white layer for the f352-356 crossfade into the HUD body (same fill + shadows as #strip-body) -->
+          <div id="rp-bar-w" class="fill" style="border-radius:inherit;background:#fff;opacity:0;box-shadow:inset 0 1.6px 0 #dcdad6, inset 1px 0 0 #e6e4e0, inset -1px 0 0 #e6e4e0, inset 0 -3px 0 #fcfbf9, 0 30px 40px rgba(0, 0, 0, 0.10), 0 2px 12px rgba(0, 0, 0, 0.045)"></div>
+          <svg id="rp-chev" class="abs jchev" style="top:50px"><use href="#i-chev"/></svg>
+          <div id="rp-cmd" class="t cmd"></div>
+        </div>
+      </div>
+
+      <!-- ===================== b06 NAME REVEAL takeover (f316-387, 'Huashu' -> 'open'): the repo card and the URL bar -> HUD morph
+           stay where they are; the face drops away and the name + repo facts fill the lower half ===================== -->
+      <div id="sc-name" class="scene full">
+        <div id="nm-title"><span id="nm-w1">huashu-</span><span id="nm-w2" class="it">motion</span></div>
+        <div id="nm-chips">
+          <div id="nm-c1" class="chip2">MIT license</div>
+          <!-- fixed width so the count-up never re-centres the row -->
+          <div id="nm-c2" class="chip2" style="width:236px;justify-content:center;gap:10px"><svg style="width:26px;height:26px;fill:#d9a23f"><use href="#i-star"/></svg><span id="nm-cnt"></span><span>stars</span></div>
+        </div>
+      </div>
+
+      <!-- ===================== b07 FULL-FACE (f388-460, 'open' -> the f461 face-cam jump cut): 'Open source' -> '~ Claude Motion.' ===================== -->
+      <div id="sc-f07" class="scene full">
+        <video id="ff-07" class="ffull" src="assets/face_full.mp4" muted playsinline data-start="12.93333" data-duration="2.433" data-media-start="12.9334" data-track-index="1"></video>
+        <div id="f07-a" class="fft"><span id="f07-1">Open</span> <span id="f07-2" class="it">source</span></div>
+        <div id="f07-b" class="fft"><span id="f07-3" class="eqd"><svg viewBox="0 0 44 36"><path d="M4 12 C 10 4, 16 4, 22 11 S 34 18, 40 10 M4 27 C 10 19, 16 19, 22 26 S 34 33, 40 25" fill="none" stroke="#ffffff" stroke-width="4.2" stroke-linecap="round"/></svg></span><span id="f07-4">Claude</span> <span id="f07-5" class="it">Motion.</span></div>
+      </div>
+
+      <!-- ===================== b08-b09 FILM -> CODE: card flip ===================== -->
+      <div id="sc-film" class="scene">
+        <div id="fm-wrap">
+          <div id="fm-flip">
+            <div id="fm-front" class="face">
+              <div class="t" style="left:24px;top:30px;font-family:var(--tight);font-weight:700;font-size:29px;letter-spacing:-0.005em;color:#1f1e1d">Launch films</div>
+              <div class="t" style="left:208px;top:32px;font-family:var(--mono);font-weight:500;font-size:26px;color:var(--mut);letter-spacing:0.5px">README DEMO</div>
+              <div id="fm-rlbl" class="t" style="right:112px;top:32px;font-family:var(--mono);font-weight:500;font-size:26px;color:var(--mut);opacity:0">RENDERING IN CHROME</div>
+              <div id="fm-ctr" class="t" style="right:24px;top:30px;width:76px;text-align:right;font-family:var(--mono);font-weight:700;font-size:28px;color:var(--clay);opacity:0"></div>
+              <div class="abs" style="left:24px;top:80px;width:892px;height:6px;border-radius:3px;background:#e7e6db;overflow:hidden"><div id="fm-rfill" class="abs" style="left:0;top:0;width:892px;height:6px;background:var(--clay);transform-origin:0 50%"></div></div>
+              <!-- the README demo is a small framed plate (card-local x 24-420, 42 % of the card), never the main device -->
+              <div class="abs" style="left:24px;top:96px;width:396px;height:420px;border-radius:16px;overflow:hidden;background:#111">
+                <!-- rhythm pass: the card cuts in on f461 (the face-cam jump cut); same absolute media mapping as before (t 15.05 = media 0) -->
+                <video id="v-wall" src="assets/clips/readme-huashu-motion.mp4" muted playsinline data-start="15.36666" data-duration="1.993" data-media-start="0.3167" data-track-index="3" style="position:absolute;left:0;top:0;width:396px;height:420px;object-fit:cover;object-position:56% 50%"></video>
+                <!-- last clean frame of the tilted tile grid (clip frame 52 = media 1.733 s); covers the clip's blur zoom into the red slab from 16.77 -->
+                <img id="fm-wclean" src="assets/stills/wall-clean.jpg" alt="" style="position:absolute;left:0;top:0;width:396px;height:420px;object-fit:cover;object-position:56% 50%;opacity:0" />
+              </div>
+              <!-- right half, rebuilt: '16 shots' (Newsreader 500 110 px, baseline y 250) / '1 index.html' (mono 28 px) / 16-cell shot strip
+                   (2 x 8 cells, 51 x 44 px, 8 px gaps) that fills column by column 70 ms apart across 'motion graphics' (15.66-16.18) -->
+              <div class="t" style="left:452px;top:169px;font-family:var(--serif);font-weight:500;font-size:110px;letter-spacing:-0.02em;color:#1f1e1d">16 shots</div>
+              <div class="t" style="left:456px;top:280px;font-family:var(--mono);font-weight:400;font-size:28px;color:#8a887f">1 index.html</div>
+              <div id="fm-strip" class="abs" style="left:452px;top:344px;width:464px;height:96px"></div>
+            </div>
+            <div id="fm-back" class="face">
+              <div class="abs" style="left:28px;top:30px;width:14px;height:14px;border-radius:50%;background:#4a4843"></div>
+              <div class="abs" style="left:50px;top:30px;width:14px;height:14px;border-radius:50%;background:#4a4843"></div>
+              <div class="abs" style="left:72px;top:30px;width:14px;height:14px;border-radius:50%;background:#4a4843"></div>
+              <div id="fm-fn" class="t" style="left:108px;top:24px;font-family:var(--tight);font-weight:600;font-size:28px;color:var(--term)">index.html</div>
+              <div id="fm-js" class="abs" style="left:108px;top:16px;width:42px;height:42px;border-radius:8px;overflow:hidden;opacity:0"><svg style="position:absolute;left:0;top:0;width:42px;height:42px;fill:#f7df1e"><use href="#i-javascript"/></svg></div>
+              <div id="fm-jsl" class="t" style="left:164px;top:24px;font-family:var(--tight);font-weight:600;font-size:28px;color:var(--term);opacity:0">JavaScript&nbsp;·&nbsp;GSAP</div>
+              <div class="t" style="right:32px;top:27px;font-family:var(--mono);font-weight:500;font-size:26px;color:#8e8b82">HTML · CSS · JS</div>
+              <div class="abs" style="left:0;top:74px;width:940px;height:1.5px;background:#34322e"></div>
+              <div id="fm-code" class="abs" style="left:0;top:96px;width:940px;height:220px"></div>
+              <div class="abs" style="left:24px;top:324px;width:892px;height:1.5px;background:#34322e"></div>
+              <!-- preview mini-player -->
+              <div class="abs" style="left:28px;top:342px;width:304px;height:171px;border-radius:10px;background:#f6e3da;overflow:hidden">
+                <!-- the rendered frame of the code above: '.title' rises in when its line is typed (18.90), '.frame' scales 1.08 (19.90) -->
+                <div id="fm-pv" class="fill">
+                  <div id="pv-frame" class="fill">
+                    <div class="abs" style="left:139px;top:30px;width:26px;height:26px;border-radius:7px;background:#e06b44"><i class="abs" style="left:7px;top:7px;width:12px;height:12px;border-radius:3px;background:#f6b08f"></i></div>
+                    <div id="pv-title" class="t" style="left:0;top:72px;width:304px;text-align:center;font-family:'Inter',sans-serif;font-weight:700;font-size:28px;color:#1f1e1d">huashu-motion</div>
+                  </div>
+                  <div class="abs" style="left:24px;top:143px;width:256px;height:4px;border-radius:2px;background:rgba(217,119,87,0.22);overflow:hidden"><div id="pv-prog" class="abs" style="left:0;top:0;width:256px;height:4px;background:#d97757;transform-origin:0 50%"></div></div>
+                </div>
+              </div>
+              <div class="t" style="left:360px;top:355px;font-family:var(--mono);font-weight:500;font-size:26px;letter-spacing:1px;color:#8e8b82">PREVIEW</div>
+              <div id="fm-tc" class="t" style="right:32px;top:355px;width:230px;text-align:right;font-family:var(--mono);font-weight:500;font-size:26px;color:#8e8b82"></div>
+              <div class="t" style="left:360px;top:400px;font-family:var(--tight);font-weight:700;font-size:32px;color:var(--term)">huashu-motion</div>
+              <div class="t" style="left:360px;top:443px;font-family:'Inter',sans-serif;font-weight:500;font-size:26px;color:#a19e96">rendered in Chrome</div>
+              <div class="abs" style="left:360px;top:494px;width:548px;height:4px;border-radius:2px;background:#3a3935;overflow:hidden"><div id="fm-scrub" class="abs" style="left:0;top:0;width:548px;height:4px;background:#d97757;transform-origin:0 50%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== b10 COST: $0 reel + pipeline ===================== -->
+      <div id="sc-cost" class="scene">
+        <div id="cs-card" class="mcard">
+          <div class="t mlabel" style="left:44.6px;top:43px">AI VIDEO CREDITS</div>
+          <div id="cs-num" class="abs" style="left:34px;top:100px;height:300px;display:flex;align-items:flex-start;font-family:var(--serif);font-weight:500;font-size:286px;line-height:300px;color:#d97757">
+            <span>$</span><span style="display:inline-block;width:184px;text-align:center">0</span>
+          </div>
+          <div id="cs-per" class="t" style="left:54px;top:420px;font-family:'Inter',sans-serif;font-weight:500;font-size:40px;color:var(--sec);opacity:0">per video</div>
+          <div id="cs-pipe" class="abs" style="left:560px;top:0;width:340px;height:519px"></div>
+        </div>
+      </div>
+
+      <!-- ===================== b11-b13 GENERATORS takeover (f672-809, 'video' -> 'This'): list of three, struck out ===================== -->
+      <div id="sc-gen" class="scene full">
+        <div id="gn-title"><span>Not</span><span class="it">needed.</span></div>
+        <!-- 3 rows: 415 px tall (rows 86 / 190 / 294, 30 px bottom margin), y 620-1035 under the title -->
+        <div id="gn-card" class="mcard" style="top:620px;height:415px">
+          <div class="t mlabel" style="left:44.6px;top:41px">AI VIDEO GENERATORS</div>
+          <div id="gn-rows" class="fill"></div>
+        </div>
+      </div>
+
+      <!-- ===================== b14 FULL-FACE (f810-864, 'This' -> the f865 face-cam jump cut): 'This is all code.' (the payoff) ===================== -->
+      <div id="sc-f14" class="scene full">
+        <video id="ff-14" class="ffull" src="assets/face_full.mp4" muted playsinline data-start="26.99999" data-duration="1.833" data-media-start="27.0001" data-track-index="1"></video>
+        <div class="fft"><span id="f14-1">This</span> <span id="f14-2">is</span> <span id="f14-3">all</span> <span id="f14-4" class="it">code.</span></div>
+      </div>
+
+      <!-- ===================== b15-b17 FEATURES: feature card (clip) -> browser editor ===================== -->
+      <div id="sc-feat" class="scene">
+        <div id="ft-card" class="mcard">
+          <div id="fh-a" class="fh"><div class="tl"><svg class="ic"><use href="#i-wipe"/></svg></div><div class="nm"><b>Transitions</b><i id="fh-a-sub" style="opacity:0">Sixteen shots, cut on the beat</i></div></div>
+          <div id="fh-b" class="fh" style="opacity:0"><div class="tl"><svg class="ic"><use href="#i-music"/></svg></div><div class="nm"><b>Music</b><i>Score first, then the picture</i></div></div>
+          <div id="fh-c" class="fh" style="opacity:0"><div class="tl"><svg class="ic"><use href="#i-pointer"/></svg></div><div class="nm"><b>Browser editor</b><i>Point at the frame</i></div></div>
+          <div id="fc-2" class="fcount">02 / 04</div>
+          <div id="fc-3" class="fcount" style="opacity:0">03 / 04</div>
+          <div id="fc-4" class="fcount" style="opacity:0">04 / 04</div>
+          <div class="fclip">
+            <!-- transitions: vector cut timeline is the main read; the real clip sits small + framed (416x234 well) -->
+            <div id="ft-tr" class="fill" style="background:#fbfaf8;box-shadow:inset 0 0 0 1.5px #ebe8e2;border-radius:14px">
+              <!-- 720x404 source: its 16:9 film frame (x 75-645, y 16-335) fills the 416x234 well at 0.73x; the burned-in subtitle row (y 350+) lands below the well. Media starts at 0.6 s, past the third-party '500+' slate (to the 0.5 cut): the first visible shot is the painted dragon, and no numeral is ever in the well -->
+              <div class="abs" style="left:28px;top:28px;width:416px;height:234px;border-radius:12px;overflow:hidden;background:#0e0e0e">
+                <!-- rhythm pass: starts with the card on the f865 cut (media 0.6 = the dragon shot, cuts at media 1.0 / 1.3 / 1.5 = f877 / f886
+                     / f892); it runs to 30.36 under the score wipe (its media 2.0 cut to a 5th shot lands on f907, when the left-to-right wipe already covers
+                     86 % of the body and all of the well) -->
+                <video id="v-cuts" src="assets/clips/readme-sixteen-cuts.mp4" muted playsinline data-start="28.83333" data-duration="1.526" data-media-start="0.6" data-track-index="3" style="left:-54.8px;top:-11.7px;width:525.6px;height:294.9px;object-fit:fill"></video>
+              </div>
+              <div class="t" style="left:478px;top:38px;font-family:var(--mono);font-weight:500;font-size:24px;letter-spacing:0.14em;color:var(--mut)">SHOT</div>
+              <div class="abs" style="left:472px;top:74px;height:132px;display:flex;align-items:baseline;gap:12px;white-space:nowrap">
+                <!-- Newsreader 500 (lining tabular digits: 01 -> 02 -> 03 never shifts '/16') -->
+                <span id="tr-num" style="font-family:var(--serif);font-weight:500;font-size:116px;line-height:1;letter-spacing:-0.02em;color:#1f1e1d"></span>
+                <span style="font-family:var(--mono);font-weight:500;font-size:29px;line-height:1;color:#8a887f">/16</span>
+              </div>
+              <div class="t" style="left:478px;top:230px;font-family:var(--mono);font-weight:700;font-size:24px;letter-spacing:0.14em;color:var(--clayd)">CUT ON THE BEAT</div>
+              <div id="tr-tl" class="abs" style="left:28px;top:292px;width:836px;height:84px"></div>
+            </div>
+            <!-- music (v11): a score lane, the way a motion editor shows it: 760x150 white lane (the .fclip well is 892 px wide: well x 66-826, y 150-300 =
+                 frame x 160-920, y 416-566, label above it at the same x: the block is centred in the well, 66 px each side), 16 beat ticks every 47.5 px, a clay waveform (4 px bars, 7 px pitch, 40 %), clay cut markers on beats 1 / 5 / 9 / 13
+                 (one per bar) and a 2 px ink playhead running at 120 bpm (95 px/s); label 'SCORE -> CUTS' above it -->
+            <div id="ft-abc" class="fill" style="clip-path:inset(0 100% 0 0);background:#fbfaf8">
+              <div class="abs" style="left:66px;top:105px;height:24px;display:flex;align-items:center;gap:10px;white-space:nowrap;font-family:var(--mono);font-weight:500;font-size:22px;line-height:1;letter-spacing:0.14em;color:#8a887f">
+                <span>SCORE</span><svg width="26" height="14" style="overflow:visible"><path d="M1 7h22M17 1.5 23 7l-6 5.5" fill="none" stroke="#8a887f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>CUTS</span>
+              </div>
+              <div id="ft-lane" class="abs" style="left:66px;top:150px;width:760px;height:150px;border-radius:12px;background:#ffffff;box-shadow:inset 0 0 0 1px #e4e2da;overflow:hidden">
+                <div id="ft-ticks" class="fill"></div>
+                <div id="ft-played" class="abs" style="left:0;top:0;width:760px;height:150px;background:rgba(217,119,87,0.08);transform-origin:0 50%"></div>
+                <div id="ft-wave" class="fill"></div>
+                <div id="ft-marks" class="fill"></div>
+                <div id="ft-ph" class="abs" style="left:0;top:0;width:2px;height:150px;background:#1f1e1d"></div>
+              </div>
+            </div>
+            <div id="ft-edge" class="abs" style="left:0;top:0;width:4px;height:404px;background:var(--clay);opacity:0"></div>
+          </div>
+          <!-- browser editor (b17) -->
+          <div id="ed" class="abs" style="left:24px;top:96px;width:892px;height:404px;border-radius:14px;overflow:hidden;background:#fbfaf8;border:1.5px solid #ebe8e2;clip-path:inset(0 100% 0 0)">
+            <div class="abs" style="left:0;top:0;width:892px;height:46px;background:#f1efeb"></div>
+            <div class="abs" style="left:18px;top:17px;width:12px;height:12px;border-radius:50%;background:#dcd9d4"></div>
+            <div class="abs" style="left:38px;top:17px;width:12px;height:12px;border-radius:50%;background:#dcd9d4"></div>
+            <div class="abs" style="left:58px;top:17px;width:12px;height:12px;border-radius:50%;background:#dcd9d4"></div>
+            <div class="abs" style="left:96px;top:9px;width:420px;height:28px;border-radius:14px;background:#e4e1dc"></div>
+            <!-- the film preview in the house system: clay #D97757 ground, white Newsreader 500 (78 px; the 1.22 'hit harder' push lands it at ~96 px) -->
+            <div id="ed-canvas" class="abs" style="left:18px;top:60px;width:540px;height:304px;border-radius:6px;background:#d97757;overflow:hidden">
+              <div class="t" style="left:20px;top:18px;font-family:var(--mono);font-weight:500;font-size:16px;letter-spacing:1px;color:rgba(255,255,255,0.78)">MY-REPO · LAUNCH FILM</div>
+              <div id="ed-ttl" class="abs" style="left:0;top:96px;width:540px;height:110px;transform-origin:50% 50%">
+                <div class="t" style="left:0;top:8px;width:540px;text-align:center;font-family:var(--serif);font-weight:500;font-size:78px;letter-spacing:-0.02em;color:#fff">Point at <i style="font-style:italic">it.</i></div>
+                <div class="t" style="left:0;top:108px;width:540px;text-align:center;font-family:'Inter',sans-serif;font-weight:500;font-size:20px;color:rgba(255,255,255,0.88)">a launch film, written in code</div>
+              </div>
+              <!-- selection: 18 px side / 16 px cap-and-baseline padding around the 'Point at it.' glyphs (x 102-438, cap 109, baseline 161) -->
+              <div id="ed-sel" class="abs" style="left:81px;top:90px;width:378px;height:90px;border:3px solid #fff;border-radius:6px;box-shadow:0 0 0 3px rgba(31,30,28,0.35);opacity:0"></div>
+            </div>
+            <svg id="ed-point" class="abs" style="left:12px;top:54px;width:552px;height:316px;overflow:visible;opacity:0"><rect x="2" y="2" width="548" height="312" rx="8" fill="none" stroke="#d97757" stroke-width="3" stroke-dasharray="10 7"/></svg>
+            <div class="abs" style="left:18px;top:372px;width:540px;height:20px;border-radius:5px;background:#ebe8e2"></div>
+            <div class="abs" style="left:18px;top:372px;width:150px;height:20px;border-radius:5px;background:#f2c7b6"></div>
+            <div class="abs" style="left:172px;top:372px;width:210px;height:20px;border-radius:5px;background:#e3dfd8"></div>
+            <div id="ed-ph" class="abs" style="left:18px;top:366px;width:3px;height:32px;background:var(--clayd)"></div>
+            <!-- right column -->
+            <div id="ed-key" class="keycap" style="left:582px;top:66px">C</div>
+            <div id="ed-hint" class="t" style="left:662px;top:86px;font-family:var(--mono);font-weight:500;font-size:26px;letter-spacing:1px;color:var(--mut)">PRESS C</div>
+            <svg class="abs" style="left:580px;top:150px;width:296px;height:156px;overflow:visible"><rect x="1.5" y="1.5" width="293" height="153" rx="14" fill="none" stroke="#d9d5ce" stroke-width="2" stroke-dasharray="8 6"/></svg>
+            <div id="ed-box" class="abs" style="left:580px;top:150px;width:296px;height:156px;border-radius:14px;background:#fff;border:2px solid #e2a48d;box-shadow:0 10px 22px rgba(70,55,40,0.10);opacity:0">
+              <div class="t" style="left:18px;top:14px;font-family:var(--mono);font-weight:500;font-size:24px;letter-spacing:1px;color:var(--mut)">NOTE</div>
+              <div id="ed-txt" class="abs" style="left:18px;top:50px;width:262px;font-family:'Inter',sans-serif;font-weight:600;font-size:28px;line-height:36px;color:var(--ink);white-space:normal"></div>
+            </div>
+            <div id="ed-send" class="pillx" style="left:580px;top:322px;width:132px;height:54px;border-radius:12px;background:var(--clay);color:#fff;font-size:28px;opacity:0">Send</div>
+            <div id="ed-ok" class="pillx" style="left:726px;top:327px;width:150px;height:44px;border:2px solid #9fd4ba;background:#eef8f2;color:#2f8a5e;font-size:26px;gap:6px;opacity:0"><svg class="ic" style="width:24px;height:24px;stroke-width:3"><use href="#i-check"/></svg>applied</div>
+            <!-- white ring: the click lands on the clay canvas, where a clay ring would vanish (the CTA ripple stays clay on its white card) -->
+            <div id="ed-rip" class="ripple" style="left:475px;top:178px;border-color:#ffffff"></div>
+            <div id="ed-cur" class="cursor" style="left:0;top:0"><svg style="width:40px;height:48px"><use href="#i-arrow"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== b18 FULL-FACE (f1061-1096, the face-cam jump cut -> 'HyperFrames'): 'Head to head.' ===================== -->
+      <div id="sc-f18" class="scene full">
+        <video id="ff-18" class="ffull" src="assets/face_full.mp4" muted playsinline data-start="35.36666" data-duration="1.199" data-media-start="35.3667" data-track-index="1"></video>
+        <div class="fft"><span id="f18-1">Head</span> <span id="f18-2">to</span> <span id="f18-3" class="it">head.</span></div>
+      </div>
+
+      <!-- ===================== b19 VERSUS takeover (f1097-1207, 'HyperFrames' -> the pause after 'when'): two real renders ===================== -->
+      <div id="sc-vs" class="scene full">
+        <div class="t" style="right:220px;top:121px;font-family:var(--mono);font-weight:500;font-size:28px;letter-spacing:1.5px;color:var(--mut)">SAME BRIEF</div>
+        <div class="jdash" style="left:880px;background:#cb6d55"></div>
+        <div id="vs-d2" class="jdash" style="left:940px"></div>
+        <div id="vs-c1" class="vcard" style="top:170px">
+          <div id="vs-r1" class="vring"></div>
+          <div class="vhd"><div class="vn">huashu-motion</div><div class="vtag">TEST RENDER</div></div>
+          <div id="vs-tc1" class="vtc"></div>
+          <!-- Chase's real huashu-motion test render (960x540 at 0.896x) in two windows that skip the film's own dark agent-terminal
+               backdrop (source frames 360-389, 12.000-12.967): v1a (t 35.05 = media 8.64, shown from the f1097 takeover cut at media
+               10.157: the comment typed, Send) f1097-1150, then v1b 13.04 -> 14.907 (the regenerated 280 px title, 'om done', push-in)
+               f1151-1207, cut on 'Motion' where the winner ring fires. v1b ends on source frame 447, before the 15.000 '20 MOTION LANGUAGES' cut -->
+          <div id="vs-well1" class="vclip">
+            <video id="vs-v1" src="assets/clips/huashu-film.mp4" muted playsinline data-start="36.56666" data-duration="1.799" data-media-start="10.1567" data-track-index="3" style="position:absolute;left:0;top:0;width:860px;height:484px;object-fit:cover"></video>
+            <video id="vs-v1b" src="assets/clips/huashu-film.mp4" muted playsinline data-start="38.366" data-duration="1.901" data-media-start="13.04" data-track-index="4" style="position:absolute;left:0;top:0;width:860px;height:484px;object-fit:cover"></video>
+          </div>
+          <div class="vtr"><i id="vs-s1"></i></div>
+        </div>
+        <div id="vs-c2" class="vcard" style="top:770px;opacity:0">
+          <div id="vs-dim" class="fill">
+            <div class="vhd"><div class="vn">HyperFrames</div><div class="vtag">TEST RENDER</div></div>
+            <div id="vs-tc2" class="vtc"></div>
+            <!-- Chase's real HyperFrames test render, clip 10.267 (f1097 cut) -> 13.933 on the last visible frame (f1207): the film's score-lane
+                 section on its dark ground ('it writes the score / then cuts on the beat.'), continuous motion, no hold, no 'huashu-motion'
+                 text, and it ends before the film's 14.00 cut into the editor zoom-blur -->
+            <div class="vclip">
+              <video id="vs-v2" src="assets/clips/hyperframes-film.mp4" muted playsinline data-start="36.56666" data-duration="3.7" data-media-start="10.2667" data-track-index="3" style="position:absolute;left:0;top:0;width:860px;height:484px;object-fit:cover"></video>
+            </div>
+            <div class="vtr"><i id="vs-s2"></i></div>
+          </div>
+        </div>
+        <div id="vs-vs" class="abs" style="left:498px;top:706px;width:84px;height:84px;border-radius:50%;background:var(--dark);box-shadow:0 0 0 6px var(--iv);opacity:0">
+          <div class="t" style="left:0;top:16px;width:84px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:46px;color:#e58a68">vs</div>
+        </div>
+      </div>
+
+      <!-- ===================== b20 RESULT: Product demos ===================== -->
+      <div id="sc-res" class="scene">
+        <div id="rs-card" class="mcard">
+          <!-- the title slot is never empty: 'Better at' (Newsreader 500 100 px ink) + a 300 px clay blank with a blinking caret sit in
+               it from the card's first frame (reads as a sentence waiting for its word); 41.467-41.567 they lift out, then 'Product demos'
+               settles in on the same baseline (card-local y 194.5) while the words it said move up into the clay 'BETTER AT' kicker -->
+          <div id="rs-kick" class="t" style="left:44.6px;top:44px;font-family:var(--mono);font-weight:700;font-size:22px;letter-spacing:0.14em;color:#d97757;opacity:0">BETTER AT</div>
+          <div class="t mlabel" style="right:44px;top:43px">SAME BRIEF · RESULT</div>
+          <div id="rs-pre" class="abs" style="left:0;top:0;width:940px;height:240px">
+            <div class="t" style="left:40px;top:121px;font-family:var(--serif);font-weight:500;font-size:100px;letter-spacing:-0.02em;color:#1f1e1d">Better at</div>
+            <div class="abs" style="left:428px;top:189px;width:300px;height:6px;background:#d97757"></div>
+            <div id="rs-car" class="abs" style="left:428px;top:111px;width:4px;height:84px;background:#d97757"></div>
+          </div>
+          <div id="rs-title" class="abs" style="left:40px;top:113.65px;height:124px;display:flex;align-items:baseline;gap:26px;white-space:nowrap;opacity:0">
+            <span id="rs-w1" style="display:inline-block;font-family:var(--serif);font-weight:500;font-size:110px;line-height:1;letter-spacing:-0.02em;color:#1f1e1d">Product</span>
+            <span id="rs-w2" style="display:inline-block;font-family:var(--serif);font-style:italic;font-weight:500;font-size:110px;line-height:1;letter-spacing:-0.02em;color:#cd5a36">demos</span>
+          </div>
+          <div id="rs-row1" class="row" style="top:240px">
+            <div class="bgs"></div><div id="rs-a1" class="bga" style="border-color:var(--clay);box-shadow:0 0 0 8px rgba(217,119,87,0.13)"></div>
+            <div id="rs-ring1" class="abs" style="left:-2px;top:-2px;right:-2px;bottom:-2px;border-radius:16px;border:4px solid #d97757;opacity:0"></div>
+            <!-- still of the real huashu render (clip 15.2 s, '20 MOTION LANGUAGES', full frame) -->
+            <img src="assets/stills/hs-15.2.jpg" alt="" style="position:absolute;left:24px;top:24px;width:120px;height:72px;border-radius:10px;object-fit:cover" />
+            <div class="name" style="left:168px;top:34px">huashu-motion</div>
+            <div class="desc" style="left:168px;top:64px;opacity:1">same brief</div>
+            <!-- verdict badge rides inside the winning row, between the text and the check (row-local x 500-784, centred on the row) -->
+            <div id="rs-badge" class="badge" style="left:500px;top:36px;width:284px;height:48px;border-radius:10px;gap:8px;font-size:22px;box-shadow:0 6px 14px rgba(203,109,85,0.22)"><svg class="ic" style="width:22px;height:22px"><use href="#i-check"/></svg>A LITTLE BETTER</div>
+            <svg id="rs-dc1" class="dc" width="48" height="48"><circle cx="24" cy="24" r="22.5" fill="none" stroke="#cfccc7" stroke-width="1.8" stroke-dasharray="4.5 3.5"/></svg>
+            <div id="rs-ck" class="ck" style="background:#2e9e5b"><svg class="ic"><use href="#i-check"/></svg></div>
+          </div>
+          <div id="rs-row2" class="row" style="top:380px">
+            <div class="bgs"></div>
+            <!-- still of the real HyperFrames render (clip 4.5 s, 'one film.', full frame), desaturated like the versus loser -->
+            <img src="assets/stills/hf-4.5.jpg" alt="" style="position:absolute;left:24px;top:24px;width:120px;height:72px;border-radius:10px;object-fit:cover;filter:saturate(0)" />
+            <div class="name" style="left:168px;top:34px">HyperFrames</div>
+            <div class="desc" style="left:168px;top:64px;opacity:1">same brief</div>
+            <svg class="dc" width="48" height="48"><circle cx="24" cy="24" r="22.5" fill="none" stroke="#cfccc7" stroke-width="1.8" stroke-dasharray="4.5 3.5"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== b21 FULL-FACE (f1288-1338, 'So' -> 'Google'): 'So definitely' on the face alone, then 'Check it out.' on the shirt ===================== -->
+      <div id="sc-chk" class="scene full">
+        <!-- data-start 42.93333 sits just BEFORE the f1288 boundary (1288/30 = 42.933333): a start just after it made the renderer's
+             floor((t - start) x 30) run the plate 1 frame late (v11 note). data-media-start is rounded up (42.9334). -->
+        <video id="face-full" class="ffull" src="assets/face_full.mp4" muted playsinline data-start="42.93333" data-duration="1.699" data-media-start="42.9334" data-track-index="1"></video>
+        <div class="fft"><span id="ck-w1">Check</span> <span id="ck-w2">it</span> <span id="ck-w3" class="it">out.</span></div>
+      </div>
+
+      <!-- ===================== b22 CTA: search -> #1 result ===================== -->
+      <!-- the Google card is full size on its first frame (x 60-1020, y 170-725): search field + 3 skeleton suggestion rows (#F1EFEA,
+           56 px, 24 px gaps) that resolve as the query types, and an Enter keycap that presses on 'GitHub' -->
+      <div id="sc-cta" class="scene">
+        <div id="ct-card" class="mcard" style="left:60px;width:960px;height:555px;overflow:hidden">
+          <div id="ct-field" class="abs" style="left:40px;top:36px;width:880px;height:120px;border-radius:60px;background:#fff;border:1.5px solid #e2dfda;box-shadow:0 6px 16px rgba(70,55,40,0.06)">
+            <div id="ct-fl" class="abs" style="left:-2px;top:-2px;width:881px;height:121px;border-radius:61px;border:3px solid var(--clay);opacity:0"></div>
+            <svg id="ct-mag" class="abs ic" style="left:38px;top:39px;width:42px;height:42px;color:var(--mut);stroke-width:2.4"><use href="#i-search"/></svg>
+            <!-- the Google G in its four official colours, 56 px, centred on the field's icon slot (60, 60) -->
+            <svg id="ct-g" class="abs" viewBox="0 0 48 48" style="left:32px;top:32px;width:56px;height:56px;opacity:0">
+              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+            <div id="ct-q" class="t" style="left:118px;top:34px;font-family:var(--mono);font-weight:500;font-size:52px;color:#c15f3c"></div>
+          </div>
+          <div id="ct-rows" class="fill"></div>
+          <div id="ct-foot" class="abs" style="left:40px;top:452px;width:880px;height:64px">
+            <div id="ct-key" class="keycap" style="left:0;top:0;width:96px;font-size:26px">enter</div>
+            <div class="t" style="left:120px;top:20px;font-family:var(--mono);font-weight:500;font-size:24px;letter-spacing:0.14em;color:var(--mut)">PRESS ENTER</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- verdict pill (layer above both scenes and the HUD, z 5): pops out of the vs coin (540, 748) on f1181, holds f1190-1207, then on the f1208 cut
+           flies into the result card's verdict slot (742, 471) over f1208-1218 and hands off to #rs-badge on f1218 -->
+      <div id="vs-badge" data-layout-allow-overlap="true">
+        <!-- the row badge's own type (Inter 700 22 px, .07em, 22 px check) shown at 1.39x (content 328 px, as wide as the old 34 px set):
+             it scales 1.39 -> 1 in flight, so the f1218 hand-off to #rs-badge is identical -->
+        <div id="vs-bA" class="vbl" data-layout-allow-overflow="true" style="gap:8px;font-weight:700;font-size:22px;letter-spacing:0.07em"><svg class="ic" style="width:22px;height:22px"><use href="#i-check"/></svg>A LITTLE BETTER</div>
+      </div>
+
+      <!-- ===================== HUD: power strip + plugs + cables (vibecoding replica) ===================== -->
+      <div id="hud">
+        <svg id="cabs" class="abs" style="left:0;top:0;width:1080px;height:1016px;overflow:visible"></svg>
+        <div id="anchors"></div>
+        <div id="strip">
+          <div id="strip-pop">
+            <div id="strip-body"></div>
+            <div id="hm-mark"><i></i></div>
+            <div id="lbl">HUASHU-MOTION</div>
+            <div id="count"><span id="cn0">0</span><span id="cn1">1</span><span id="cn2">2</span><span id="cn3">3</span><span id="cn4">4</span>/4</div>
+            <div id="dot-gray" class="dot"></div>
+            <div id="dot-red" class="dot"></div>
+            <div id="dot-green" class="dot"></div>
+            <div id="socks"></div>
+          </div>
+        </div>
+        <div id="qs"></div>
+        <div id="ping"></div>
+        <div id="rings"></div>
+        <div id="plugs"></div>
+      </div>
+
+      <div id="caps"></div>
+
+      <!-- SFX (rhythm pass, STYLE house rule 2): one cue per meaningful event, picked from that event's class and rotated, never the same
+           file back to back, no file on > 25 % of the cues (28 cues / 15 files, max 4 = typing), silence where nothing happens, nothing on
+           the CTA hold after 46.92. data-start is shifted by each file's lead-in so the audible onset lands on the event (pop peak +0.10,
+           ping onset +0.30, chime onset +0.40, whoosh-short peak +0.15; typing skips its 0.42 s lead silence via data-media-start). Riser =
+           a 0.6 s window of riser.mp3 (media 2.0-2.6, the rising part) that ends ON the punch-in cut; impact-bass-2 = a 0.4 s sub thump
+           from the cut at 0.05 (felt, kept under the stressed word). Class key: [S] layout switch, [P] pop, [T] tick / HUD fill, [K] typing,
+           [R] stat / verdict / reveal, [F] into a full-face punch-in. Gains 0.05-0.3 under the voice: sub-heavy thumps and bright
+           sparkle / ping / notification cues that land on a stressed word sit at 0.05-0.12 so they never mask it (QA mix check
+           2026-10-23). Send (34.46) and the Enterprise check (5.17) play silent to keep ~1 cue per 1.2 s. -->
+      <audio id="sfx-01" src="assets/sfx/pop.mp3" data-start="1.40" data-duration="0.72" data-track-index="10" data-volume="0.3"></audio> <!-- [P] 1.48 'Motion · Beta' pill pops ('new') -->
+      <audio id="sfx-02" src="assets/sfx/sparkle.mp3" data-start="2.67" data-duration="1.2" data-track-index="10" data-volume="0.05" data-fade-out="0.4"></audio> <!-- [P] 2.67 'for free?' headline settles -->
+      <audio id="sfx-03" src="assets/sfx/click-soft.mp3" data-start="3.90" data-duration="0.37" data-track-index="10" data-volume="0.28"></audio> <!-- [T] 3.90 plan rail + 5 tiers land, locks draw -->
+      <audio id="sfx-05" src="assets/sfx/impact-bass-2.mp3" data-start="6.067" data-duration="0.4" data-track-index="11" data-volume="0.05" data-fade-out="0.25"></audio> <!-- [F] 6.067 punch-in 'which' (b04) -->
+      <audio id="sfx-06" src="assets/sfx/typing.mp3" data-start="7.633" data-duration="1.0" data-media-start="0.42" data-track-index="10" data-volume="0.2" data-fade-out="0.1"></audio> <!-- [K] 7.633-8.63 URL types (back to split) -->
+      <audio id="sfx-07" src="assets/sfx/pop.mp3" data-start="8.76" data-duration="0.72" data-track-index="10" data-volume="0.3"></audio> <!-- [P] 8.833 GitHub tile pops -->
+      <audio id="sfx-08" src="assets/sfx/whoosh-short.mp3" data-start="10.36" data-duration="0.57" data-track-index="11" data-volume="0.22"></audio> <!-- [S] 10.533 name-reveal takeover (peaks just before 'Huashu') -->
+      <audio id="sfx-09" src="assets/sfx/notification.mp3" data-start="11.75" data-duration="1.0" data-track-index="10" data-volume="0.18" data-fade-out="0.4"></audio> <!-- [P] 11.80 MIT chip pops as the URL bar becomes the HUD -->
+      <audio id="sfx-10" src="assets/sfx/impact-bass-2.mp3" data-start="12.933" data-duration="0.4" data-track-index="11" data-volume="0.05" data-fade-out="0.25"></audio> <!-- [F] 12.933 punch-in 'open' (b07) -->
+      <audio id="sfx-11" src="assets/sfx/click.mp3" data-start="15.66" data-duration="0.37" data-track-index="10" data-volume="0.3"></audio> <!-- [T] 15.66 the 16-shot strip fills (back to split) -->
+      <audio id="sfx-12" src="assets/sfx/typing.mp3" data-start="17.50" data-duration="1.08" data-media-start="0.42" data-track-index="10" data-volume="0.2" data-fade-out="0.1"></audio> <!-- [K] 17.50 GSAP code types -->
+      <audio id="sfx-13" src="assets/sfx/sparkle.mp3" data-start="19.50" data-duration="1.2" data-track-index="10" data-volume="0.05" data-fade-out="0.4"></audio> <!-- [P] 19.50 JS tile pops -->
+      <audio id="sfx-14" src="assets/sfx/impact-bass-1.mp3" data-start="21.0" data-duration="0.9" data-track-index="10" data-volume="0.1" data-fade-out="0.35"></audio> <!-- [R] 21.00 '$0' lands (low) -->
+      <audio id="sfx-15" src="assets/sfx/whoosh-cinematic.mp3" data-start="21.75" data-duration="1.4" data-media-start="1.8" data-track-index="11" data-volume="0.12" data-fade-in="0.2" data-fade-out="0.4"></audio> <!-- [S] 22.40 generators takeover (soft, peak on the cut) -->
+      <audio id="sfx-16" src="assets/sfx/click.mp3" data-start="23.70" data-duration="0.37" data-track-index="10" data-volume="0.3"></audio> <!-- [T] 23.70 strike + X, item 1 -->
+      <audio id="sfx-17" src="assets/sfx/ping.mp3" data-start="25.03" data-duration="1.2" data-track-index="10" data-volume="0.07" data-fade-out="0.3"></audio> <!-- [T] 25.33 strike, item 2 (Kling) -->
+      <audio id="sfx-18" src="assets/sfx/riser.mp3" data-start="26.40" data-duration="0.6" data-media-start="2.0" data-track-index="11" data-volume="0.18" data-fade-in="0.15" data-fade-out="0.03"></audio> <!-- [F] rises through item 3 into the 27.00 punch-in 'This' (b14) -->
+      <audio id="sfx-19" src="assets/sfx/click-soft.mp3" data-start="28.833" data-duration="0.37" data-track-index="10" data-volume="0.28"></audio> <!-- [T] 28.833 back to split, HUD slot 1 'code' fills -->
+      <audio id="sfx-20" src="assets/sfx/ping.mp3" data-start="30.0" data-duration="1.2" data-track-index="10" data-volume="0.08" data-fade-out="0.3"></audio> <!-- [T] 30.30 HUD slot 3 'music' + cut markers -->
+      <audio id="sfx-21" src="assets/sfx/key-press.mp3" data-start="31.80" data-duration="0.4" data-track-index="10" data-volume="0.3"></audio> <!-- [K] 31.80 the 'C' keycap presses -->
+      <audio id="sfx-22" src="assets/sfx/typing.mp3" data-start="33.30" data-duration="1.0" data-media-start="0.42" data-track-index="10" data-volume="0.2" data-fade-out="0.1"></audio> <!-- [K] 33.30 the note types -->
+      <audio id="sfx-24" src="assets/sfx/impact-bass-2.mp3" data-start="35.367" data-duration="0.4" data-track-index="11" data-volume="0.05" data-fade-out="0.25"></audio> <!-- [F] 35.367 punch-in on the jump cut (b18) -->
+      <audio id="sfx-25" src="assets/sfx/whoosh.mp3" data-start="36.39" data-duration="0.57" data-track-index="11" data-volume="0.22"></audio> <!-- [S] 36.567 versus takeover (peaks just before 'HyperFrames') -->
+      <audio id="sfx-26" src="assets/sfx/chime.mp3" data-start="38.967" data-duration="2.0" data-track-index="10" data-volume="0.18" data-fade-out="0.6"></audio> <!-- [R] 39.367 verdict 'A LITTLE BETTER' -->
+      <audio id="sfx-27" src="assets/sfx/click.mp3" data-start="41.02" data-duration="0.37" data-track-index="10" data-volume="0.28"></audio> <!-- [T] 41.02 the huashu row checks -->
+      <audio id="sfx-28" src="assets/sfx/riser.mp3" data-start="42.333" data-duration="0.6" data-media-start="2.0" data-track-index="11" data-volume="0.18" data-fade-in="0.15" data-fade-out="0.03"></audio> <!-- [F] into the 42.933 punch-in 'So' (b21) -->
+      <audio id="sfx-29" src="assets/sfx/typing.mp3" data-start="44.95" data-duration="1.08" data-media-start="0.42" data-track-index="10" data-volume="0.2" data-fade-out="0.15"></audio> <!-- [K] 44.95 the query types -->
+      <audio id="sfx-30" src="assets/sfx/notification.mp3" data-start="46.87" data-duration="1.18" data-track-index="10" data-volume="0.05" data-fade-out="0.5"></audio> <!-- [P] 46.92 'first': the #1 result pops up; silence after (CTA hold) -->
+    </div>
+
+    <script>
+      (function () {
+        const END = 48.05, FPS = 30;
+        const tl = gsap.timeline({ paused: true });
+        const $ = (s) => document.querySelector(s);
+        const A = (t) => t - 0.004; // state switches land just before the frame boundary
+        // ---- layout cut list (rhythm pass, STYLE house rule 1: switch on what is said, hard cuts on the word, no quota) ----
+        // S split / G full-graphic takeover / F full-face punch-in. The three face-cam jump cuts (f461, f865, f1061: isolated frame-diff
+        // spikes in BOTH face files) each fall exactly on a layout cut, so the cut hides them. 13 switches, shortest gap 1.20 s (F18 -> G19).
+        const F04 = 182 / 30;   // 6.067  F 'which is the only place you can get it' (emphasis on 'only')
+        const S05 = 229 / 30;   // 7.633  S 'then you need to check out this GitHub repo' (points at the repo)
+        const G06 = 316 / 30;   // 10.533 G 'Huashu Motion' (name reveal)
+        const F07 = 388 / 30;   // 12.933 F 'open source version of Claude Motion' (payoff of the hook)
+        const S08 = 461 / 30;   // 15.367 S jump cut: 'All the motion graphics are created with code'
+        const G11 = 672 / 30;   // 22.400 G 'video AI generator / not Kling / not Seedance' (list of three)
+        const F14 = 810 / 30;   // 27.000 F 'This is all code.' (payoff + emphasis)
+        const S15 = 865 / 30;   // 28.833 S jump cut: 'It adds transitions, music, an editor'
+        const F18 = 1061 / 30;  // 35.367 F jump cut: 'I also ran it head to head' (his own test)
+        const G19 = 1097 / 30;  // 36.567 G 'HyperFrames' (A vs B on his real renders)
+        const VS_CUT = 1208 / 30; // 40.267 S the pause after 'when' (40.07-40.32): 'we're looking at things like product demos'
+        const F21 = 1288 / 30;  // 42.933 F 'So definitely check it out.' (opinion + CTA)
+        const CUT = 1339 / 30;  // 44.633 S 'Google': the CTA search card
+        const FACE = [[F04, S05], [F07, S08], [F14, S15], [F18, G19], [F21, CUT]];
+        const el = (tag, cls, parent, style, html) => {
+          const e = document.createElement(tag);
+          if (cls) e.className = cls;
+          if (style) e.setAttribute("style", style);
+          if (html != null) e.innerHTML = html;
+          parent.appendChild(e);
+          return e;
+        };
+        const SVGNS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+        const use = (id, cls, style) => `<svg class="${cls || ""}" style="${style || ""}"><use href="#${id}"/></svg>`;
+
+        // ---------- shared motion helpers (copied from the replicas) ----------
+        // chiefofstaff "pop": scale .6 -> 1 back.out(1.7), opacity linear over the first ~0.1 s
+        function pop(sel, t0, dur, fade) {
+          tl.fromTo(sel, { scale: 0.6 }, { scale: 1, duration: dur || 0.26, ease: "back.out(1.7)" }, t0);
+          tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: fade || 0.1, ease: "none" }, t0);
+        }
+        // checks, X marks and HUD slot fills (STYLE 'Checks: back.out(2) scale 0 -> 1, 0.35 s'): opaque on their first frame,
+        // scale 0 -> 1 about the centre (peak ~1.10 at frames 5-6, settled by frame 10)
+        function checkPop(sel, t0) {
+          tl.set(sel, { opacity: 1 }, A(t0));
+          tl.fromTo(sel, { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(2)" }, A(t0));
+        }
+        function slotPop(sel, t0) {
+          tl.set(sel, { opacity: 1 }, A(t0));
+          tl.fromTo(sel, { scale: 0, y: -22 }, { scale: 1, y: 0, duration: 0.35, ease: "back.out(2)" }, A(t0));
+        }
+        // card cut-in settle, matched to the donor in WALL-CLOCK time (DemE f593-599 white card: top edge 204/191/181/176/173/171/170
+        // per 25 fps frame = offsets 1 / .62 / .32 / .18 / .09 / .03 / 0 at 0 / .04 / .08 / .12 / .16 / .20 / .24 s). GSAP power4 is a
+        // quint curve: (1 - t / 0.41)^5 fits those within 0.02 -> top offsets 35/23/14/9/5/3/1/0 (white, 28 px + the .973 scale) and
+        // 44/29/18/11/6/3/2/0 (dark) per 30 fps frame. v9 ran 0.32 s, i.e. the donor's per-frame curve at 30 fps = 17 % fast.
+        // Opaque on its first visible frame, never starts above scale 1.000.
+        const SETTLE = { white: [28, 0.973], dark: [36, 0.969] }, SD = 0.41;
+        const fIn = (t) => Math.ceil(t * FPS - 1e-6) / FPS; // first frame on which a cut-in at t is visible
+        function settle(sel, t0, kind, o) {
+          o = o || {};
+          const S = SETTLE[kind || "white"], tIn = fIn(t0);
+          tl.fromTo(sel, { y: o.y != null ? o.y : S[0], scale: S[1], transformOrigin: "50% 50%" }, { y: 0, scale: 1, duration: SD, ease: "power4.out" }, tIn);
+          // scale is exactly 1 here, so handing the push its own anchor never jumps
+          if (o.origin) tl.set(sel, { transformOrigin: o.origin }, tIn + SD);
+          return tIn + SD;
+        }
+        // card cut-in = settle, then the slow push s(t) = 1 + k (t - t_settled) about the card's own anchor (bottom centre by default)
+        function cardIn(sel, t0, t1, k, origin) {
+          k = k || 0.0052;
+          const t = settle(sel, t0, "white", { origin: origin || "50% 100%" });
+          tl.to(sel, { scale: 1 + k * (t1 - t), duration: t1 - t, ease: "none" }, t);
+        }
+        function show(sel, t) { tl.set(sel, { opacity: 1 }, A(t)); }
+        function hide(sel, t) { tl.set(sel, { opacity: 0 }, A(t)); }
+        function scene(sel, t0, t1) { show(sel, t0); if (t1 < END) hide(sel, t1); }
+        // typed text: one span per char, display none -> inline (vibecoding "Supabase" typing)
+        function typer(host, text, cls, keepSpaces) {
+          return [...text].map((ch) => el("span", cls || "", host, "display:none", ch === " " && !keepSpaces ? "&nbsp;" : ch === "<" ? "&lt;" : ch));
+        }
+        function typeAt(spans, t0, step) { spans.forEach((s, i) => tl.set(s, { display: "inline" }, A(t0 + step * i))); return t0 + step * spans.length; }
+        // caret: deterministic 0.45 s blink, held solid inside the typing windows
+        function caret(c, t0, t1, solids) {
+          solids = solids || [];
+          tl.set(c, { opacity: 1 }, t0 === 0 ? 0 : A(t0));
+          for (let k = 1; t0 + 0.45 * k < t1 - 0.05; k++) {
+            const t = t0 + 0.45 * k;
+            const solid = solids.some(([a, b]) => t >= a - 0.05 && t <= b + 0.3);
+            tl.set(c, { opacity: solid || k % 2 === 0 ? 1 : 0 }, A(t));
+          }
+          tl.set(c, { opacity: 0 }, A(t1));
+        }
+        // counter: one span per value, swapped on the frame the eased value changes
+        function stepper(host, values, t0, dur, easeName) {
+          const ease = gsap.parseEase(easeName);
+          const spans = values.map((v, i) => el("span", "", host, i === 0 ? "display:inline" : "display:none", v));
+          let cur = 0; const n = Math.max(1, Math.round(dur * FPS));
+          for (let f = 1; f <= n; f++) {
+            const idx = Math.min(values.length - 1, Math.round(ease(f / n) * (values.length - 1)));
+            if (idx !== cur) { tl.set(spans[cur], { display: "none" }, A(t0 + f / FPS)); tl.set(spans[idx], { display: "inline" }, A(t0 + f / FPS)); cur = idx; }
+          }
+        }
+        const mmss = (s) => { s = Math.floor(s); return "00:" + String(s).padStart(2, "0"); };
+
+        // ---------------- background drift (vibecoding SPEC: x(t) = -0.115 + 1.166 t, y(t) = -0.105 + 7.50 t) ----------------
+        tl.fromTo("#grid", { x: -0.115, y: -0.105 }, { x: -0.115 + 1.166 * END, y: -0.105 + 7.5 * END, duration: END, ease: "none" }, 0);
+
+        // layout runs: the half face is off on every takeover and every full-face punch-in (contiguous G+F runs merged)
+        [[F04, S05], [G06, S08], [G11, S15], [F18, VS_CUT], [F21, CUT]].forEach(([a, b]) => { hide("#face-wrap", a); show("#face-wrap", b); });
+        // full-face punch-ins: the scene is on exactly on its cut frames; each title word rises in 1 frame before its spoken word
+        const ffWords = (pairs) => pairs.forEach(([s, t]) => tl.fromTo(s, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, t));
+
+        /* =====================================================================
+           b01-b04 HOOK (0.00 - 7.55)
+           ===================================================================== */
+        const TIERS = ["Free", "Pro", "Max", "Team", "Enterprise"];
+        const stepsHost = $("#hk-steps");
+        TIERS.forEach((name, n) => {
+          const s = el("div", "abs jstep", stepsHost, `left:${188 + 160 * n}px`);
+          s.id = "hk-st" + n;
+          el("div", "jfill", s);
+          el("div", "jhalo", s);
+          s.insertAdjacentHTML("beforeend", use("i-lock", "jlock ic"));
+          const on = el("div", "jon", s, "", use("i-check", "ic"));
+          on.id = "hk-on" + n;
+          const lab = el("div", "t jtier", stepsHost, `left:${222.5 + 160 * n - 100}px`, name);
+          lab.id = "hk-tl" + n;
+        });
+        // card slow push (whole hook) + title push (+0.75 %/s from 'Motion')
+        // slow camera push on the whole hook composition + the Claude spark turning like its 'thinking' spinner
+        const HK_OUT = F04; // 6.067: hard cut hook -> the b04 full-face punch-in (frame 182, 'which')
+        // same push / spin speeds as v11 (1.067 and 222 deg over 7.533 s), cut at 6.067
+        tl.fromTo("#hk-cam", { scale: 1, transformOrigin: "540px 600px" }, { scale: 1 + 0.067 * HK_OUT / (226 / 30), duration: HK_OUT, ease: "none" }, 0);
+        tl.fromTo("#hk-spark", { rotation: 0 }, { rotation: 222 * HK_OUT / (226 / 30), duration: HK_OUT, ease: "none" }, 0);
+        // a new element about every 0.8 s (reference B cadence, no gap > 1.2 s): frame 0 card + 'Claude' + spark + bar, '/motion' types
+        // 0.00-0.32 (22 cps); 1.48 'new' the 'Motion · Beta' pill pops; 2.25 'Motion' lands; f80 (2.67 'design') the 'for free?' headline
+        // settles in under the card and holds at 100 % f89-116; f117 (3.90 'you') hard swap: the rail and the 5 plans are on screen
+        // (settling up 12 px, 70 ms stagger) and their locks draw; 4.00 Free/Pro/Max dim.
+        const hkTyped = typer($("#hk-cmd"), "/motion");
+        const hkCaret = el("span", "caret", $("#hk-cmd"));
+        tl.set(hkTyped[0], { display: "inline", immediateRender: true }, 0);
+        typeAt(hkTyped.slice(1), 1 / 22, 1 / 22);
+        caret(hkCaret, 0, HK_OUT, [[0, 0.32]]);
+        const TIER_T = 117 / 30;
+        tl.set("#hk-rail", { opacity: 0, immediateRender: true }, 0);
+        show("#hk-rail", TIER_T);
+        TIERS.forEach((n, i) => {
+          tl.set(`#hk-st${i} .jlock`, { opacity: 1 }, A(TIER_T + 0.07 * i));
+          tl.fromTo(`#hk-st${i} .jlock`, { strokeDashoffset: 50 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, TIER_T + 0.07 * i);
+          // the 5 plan circles (and their tier names) are opaque on the swap frame and settle up 12 px, 70 ms apart (0.30 s power3.out)
+          tl.set([`#hk-st${i}`, `#hk-tl${i}`], { opacity: 0, immediateRender: true }, 0);
+          show([`#hk-st${i}`, `#hk-tl${i}`], TIER_T);
+          tl.fromTo([`#hk-st${i}`, `#hk-tl${i}`], { y: 12 }, { y: 0, duration: 0.3, ease: "power3.out" }, TIER_T + 0.07 * i);
+        });
+        // 1.48 'new': the 'Motion · Beta' pill pops in the command bar (scale 0 -> 1, back.out(2), 0.35 s)
+        tl.fromTo("#hk-pill", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(2)" }, 1.48);
+        // 'Claude' is there from frame 0; 'Motion' (italic clay) lands on its word: opacity 0 -> 1, y +24 -> 0, 0.45 s power3.out
+        tl.fromTo("#hk-w2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 2.25);
+        tl.fromTo("#hk-title", { scale: 1, transformOrigin: "0% 60%" }, { scale: 1.0395, duration: 5.27, ease: "none" }, 2.28);
+        // f80 ('design' 2.68) the 'for free?' headline settles in (y +24 -> 0, opacity 0 -> 1, 0.30 s power3.out, 100 % from f89);
+        // on f117 it hard-swaps to the plan rail (no overlap, no fade)
+        tl.fromTo("#hk-kick", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 80 / 30);
+        hide("#hk-kick", TIER_T);
+        // 4.00 on "don't": Free / Pro / Max fill grey and their (just drawn) locks pulse (60 ms stagger)
+        [0, 1, 2].forEach((i) => {
+          tl.to(`#hk-st${i} .jfill`, { opacity: 1, duration: 0.12, ease: "none" }, 4.0 + 0.06 * i);
+          tl.fromTo(`#hk-st${i} .jlock`, { scale: 1 }, { scale: 1.16, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false }, 4.0 + 0.06 * i);
+        });
+        // b03: Team (f140, 1 frame before 'teams' 4.70) and Enterprise (f155, before 'enterprise' 5.20) go active; clay rail segment draws
+        checkPop("#hk-on3", 140 / 30);
+        tl.to("#hk-tl3", { color: "#1e1d1b", duration: 0.15, ease: "power1.out" }, 4.7);
+        checkPop("#hk-on4", 155 / 30);
+        tl.to("#hk-tl4", { color: "#1e1d1b", duration: 0.15, ease: "power1.out" }, 5.2);
+        tl.fromTo("#hk-railon", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 5.2);
+        // halo pulse on the two active plans (finite sine)
+        [3, 4].forEach((i) => {
+          tl.fromTo(`#hk-st${i} .jhalo`, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1.18, duration: 0.3, ease: "sine.out" }, 5.5 + 0.12 * (i - 3));
+          tl.to(`#hk-st${i} .jhalo`, { opacity: 0, scale: 1.3, duration: 0.3, ease: "sine.in" }, 5.8 + 0.12 * (i - 3));
+        });
+        // hard cut on frame 182 ('which'): the hook holds at 100 % (halos still pulsing) through frame 181, then the b04 punch-in.
+        // (v11's b04 gate swap - 'ONLY ON TEAM & ENTERPRISE' label, ring, lock - fell inside the punch-in; 'The only place.' on the
+        // shirt carries that line now)
+        hide("#sc-hook", HK_OUT);
+
+        /* =====================================================================
+           b04 FULL-FACE (6.067 - 7.633): 'The only place.' ('the' 6.36, 'only' 6.44, 'place' 6.68)
+           ===================================================================== */
+        scene("#sc-f04", F04, S05);
+        ffWords([["#f04-1", 6.33], ["#f04-2", 6.41], ["#f04-3", 6.65]]);
+
+        /* =====================================================================
+           b05-b06 REPO (7.633 - 12.933; the card stays put through the b06 takeover from 10.533)
+           ===================================================================== */
+        const RP_IN = S05;
+        scene("#sc-repo", RP_IN, F07);
+        // slow push (0.3 %/s, v11's speed), about the card's bottom centre
+        cardIn("#rp-card", RP_IN, F07, 0.003);
+        // dark command bar: opaque on its first frame 229 (7.633), rises into place from +16 px / .969 (dark settle; +16 keeps its
+        // bottom above the seam caption chip)
+        tl.set("#rp-bar", { opacity: 0, immediateRender: true }, 0);
+        tl.set("#rp-bar", { opacity: 1 }, A(RP_IN));
+        settle("#rp-bar", RP_IN, "dark", { y: 16 });
+        const RP_DRIFT = 7.5;
+        tl.fromTo("#sc-repo", { y: 0 }, { y: -22, duration: RP_DRIFT, ease: "none" }, RP_IN);
+        // URL types into the bar at 22 cps (STYLE ~22, donors 15-25): 22 chars f229 ('then' 7.63) -> f259 (8.63), before 'GitHub' 8.90;
+        // the repo name types in the bar and the card together from 10.47 at 22 cps
+        const rpUrl = typer($("#rp-cmd"), "github.com/alchaincyf/");
+        const rpUrl2 = typer($("#rp-cmd"), "huashu-motion");
+        const rpCaret = el("span", "caret", $("#rp-cmd"));
+        typeAt(rpUrl, 229 / 30, 1 / 22);
+        typeAt(rpUrl2, 10.47, 1 / 22);
+        caret(rpCaret, RP_IN, 11.48, [[229 / 30, 259 / 30], [10.47, 11.06]]);
+        // 8.83 (2 frames before 'GitHub'): the GitHub tile (tilted pop) and the 'alchaincyf / Public' row land together; no placeholder grey
+        tl.set("#rp-icon", { opacity: 1 }, A(8.8333)); // dark tile: opaque on its first frame, the tilted scale pop does the arrival
+        tl.fromTo("#rp-icon", { scale: 0.72, rotation: -15 }, { scale: 1, rotation: 0, duration: 0.17, ease: "power2.out" }, A(8.8333));
+        tl.to("#rp-icon", { rotation: 3.5, scale: 1.02, duration: 0.07, ease: "sine.out" }, 9.0);
+        tl.to("#rp-icon", { rotation: 0, scale: 1, duration: 0.14, ease: "sine.inOut" }, 9.07);
+        // the owner row and tagline are on the card from its first frame (f226); 10.47 'Huashu': the title skeleton bars hard-swap to the
+        // name, which types in the card (22 cps) in sync with the bar
+        tl.set("#rp-nsk", { opacity: 0 }, A(10.47));
+        typeAt(typer($("#rp-name"), "huashu-motion"), 10.47, 1 / 22);
+        // 11.36 Enter: the chevron flashes; f350 the URL bar MORPHS into the HUD strip (continuity): its contents hard-cut out on f350
+        // and it shrinks to the strip's exact box (x 192-888, y 783-897 in frame; local y compensates the scene's -22 px drift),
+        // radius 26 -> 22, f350-354 (power3.out); over f352-356 its dark fill crossfades to the strip's white body + hairline + shadow
+        // (power2.inOut). On f356 the bar hands over to the identical #strip-body, and the HUD's label / 0/4 / sockets fade up in
+        // 70 ms steps over f355-364 (see HUD): the content-less dark bar is never on screen for more than 2 frames
+        tl.to("#rp-chev", { scale: 1.6, color: "#f19a7c", duration: 0.08, ease: "power2.out" }, 11.36);
+        const MT0 = 350 / 30, MTS = 354 / 30, MT1 = 356 / 30;
+        tl.set(["#rp-chev", "#rp-cmd"], { opacity: 0 }, A(MT0));
+        // v11: size + position only, f350-358 (0.267 s expo.out, within 1 px of the strip box by f356); the fill swaps dark -> white in
+        // one frame on f354 (no crossfade, so no frame shows a mid-grey bar)
+        tl.fromTo("#rp-bar", { x: 0, y: 0, width: 900, height: 120, borderRadius: 26 },
+          { x: 192 - 90, y: 783 + 22 * (MT1 - RP_IN) / RP_DRIFT - 770, width: 696, height: 114, borderRadius: 22, duration: 8 / 30, ease: "expo.out", immediateRender: false }, MT0);
+        tl.set("#rp-bar-w", { opacity: 1 }, A(MTS));
+        hide("#rp-bar", MT1);
+        // no exit fade: the card holds at 100 % through f387 and hard-cuts to the b07 punch-in on f388 ('open')
+
+        /* =====================================================================
+           b06 NAME REVEAL takeover (10.533 - 12.933): the face drops away on 'Huashu'; the card above keeps typing the name and the URL
+           bar still morphs into the HUD strip (both at their split places, the HUD at rest), the lower half carries the reveal
+           ===================================================================== */
+        scene("#sc-name", G06, F07);
+        // the whole name is the reveal: both words are on the cut frame (opaque, rising the last 24 px, 'motion' 2 frames behind), so
+        // the centred line never sits lopsided waiting for its second word
+        tl.set(["#nm-w1", "#nm-w2"], { opacity: 1 }, A(G06));
+        tl.fromTo("#nm-w1", { y: 24 }, { y: 0, duration: 0.45, ease: "power3.out" }, A(G06));
+        tl.fromTo("#nm-w2", { y: 24 }, { y: 0, duration: 0.5, ease: "power3.out" }, A(G06));
+        // slow push on the name through the hold (0 -> 2.4 %, about its centre)
+        tl.fromTo("#nm-title", { scale: 1, transformOrigin: "540px 90px" }, { scale: 1.024, duration: F07 - G06, ease: "none" }, G06);
+        // repo facts (beats facts: MIT license, ~1.4k stars) pop whole under the name as one beat on 'and' (11.80 / 11.87, scale .6 -> 1
+        // back.out(2) 0.35 s, opacity 0 -> 1 0.1 s), the stars chip counting 0 -> 1.4k
+        [["#nm-c1", 11.8], ["#nm-c2", 11.87]].forEach(([sel, t]) => {
+          tl.fromTo(sel, { scale: 0.6, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(2)" }, t);
+          tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, t);
+        });
+        stepper($("#nm-cnt"), ["0", "0.1k", "0.2k", "0.3k", "0.4k", "0.5k", "0.6k", "0.7k", "0.8k", "0.9k", "1.0k", "1.1k", "1.2k", "1.3k", "1.4k"], 11.87, 0.5, "power2.out");
+
+        /* =====================================================================
+           b07 FULL-FACE (12.933 - 15.367): 'Open source' on 'open' / 'source', then on 'Claude' (14.50) the slot swaps in sequence to
+           '~ Claude Motion.' (the old lifts out 14.37-14.47, the new words rise in from 14.47 / 14.69)
+           ===================================================================== */
+        scene("#sc-f07", F07, S08);
+        ffWords([["#f07-1", F07 - 1 / 30], ["#f07-2", 13.17]]);
+        tl.fromTo("#f07-a", { opacity: 1, y: 0 }, { opacity: 0, y: -8, duration: 0.1, ease: "power2.in", immediateRender: false }, 14.37);
+        ffWords([["#f07-3", 14.47], ["#f07-4", 14.47], ["#f07-5", 14.69]]);
+
+        /* =====================================================================
+           b08-b09 FILM -> CODE (15.367 - 20.25): cuts in on the f461 face-cam jump cut
+           ===================================================================== */
+        scene("#sc-film", S08, 20.25);
+        cardIn("#fm-wrap", S08, 20.25);
+        // 15.88 render bar + frame counter 0000 -> 0240
+        tl.to(["#fm-rlbl", "#fm-ctr"], { opacity: 1, duration: 0.15, ease: "power1.out" }, 15.88);
+        tl.fromTo("#fm-rfill", { scaleX: 0 }, { scaleX: 1, duration: 1.22, ease: "power1.inOut" }, 15.88);
+        stepper($("#fm-ctr"), Array.from({ length: 241 }, (_, i) => String(i).padStart(4, "0")), 15.88, 1.22, "power1.inOut");
+        // 16-cell shot strip: empty #EFECE6 cells, a clay fill pops into each (scale .6 -> 1, back.out(1.7), 0.2 s), column c at
+        // 15.66 + 0.07 c (top cell, bottom cell 35 ms later) -> all 16 shots are in by 16.18 'graphics'
+        const fmStrip = $("#fm-strip");
+        for (let c = 0; c < 8; c++) {
+          for (let r = 0; r < 2; r++) {
+            const cell = el("div", "abs", fmStrip, `left:${59 * c}px;top:${52 * r}px;width:51px;height:44px;border-radius:7px;background:#efece6`);
+            const fill = el("div", "fill", cell, `border-radius:7px;background:${(c + r) % 5 === 3 ? "#1f1e1c" : "#d97757"};opacity:0`);
+            const t = 15.66 + 0.07 * c + 0.035 * r;
+            tl.fromTo(fill, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(1.7)" }, t);
+          }
+        }
+        // 16.77 (frame 503) the plate freezes on the last clean tile-grid frame before the source's blur zoom into the red slab;
+        // a slow push keeps it alive until the card lifts out
+        tl.set("#fm-wclean", { opacity: 1 }, A(16.7667));
+        tl.fromTo("#fm-wclean", { scale: 1, transformOrigin: "50% 50%" }, { scale: 1.02, duration: 0.5, ease: "none" }, A(16.7667));
+        // hard cut on frame 518 (17.267): the footage card holds at 100 % through f517; on f518 it is gone and the dark index.html panel
+        // is opaque on its first frame, rising into place from below (dark settle y +36 / .969 -> 0 / 1, never above scale 1)
+        const FM_CUT = 518 / 30;
+        hide("#fm-front", FM_CUT);
+        tl.set("#fm-back", { opacity: 1 }, A(FM_CUT));
+        settle("#fm-back", FM_CUT, "dark");
+        // code: the comment line is in the file already; 2 GSAP lines (54 chars) type at 24 cps (STYLE ~22) from f525 (17.50):
+        // line 2 17.50 -> 18.58, a 0.1 s beat, line 3 18.68 -> 19.85 (f596, done before f600)
+        const LINES = [
+          [["// A film is one index.html.", "c"]],
+          [["const", "k"], [" tl = gsap.timeline()", ""]],
+          [["tl.from(", ""], ["'.title'", "s"], [", { y: ", ""], ["80", "n"], [" })", ""]],
+        ];
+        const codeHost = $("#fm-code");
+        const lineSpans = LINES.map((toks, li) => {
+          el("div", "t code", codeHost, `left:24px;top:${li * 54}px;width:40px;text-align:right;color:#5f5c55`, String(li + 1));
+          const ln = el("div", "t code", codeHost, `left:92px;top:${li * 54}px`);
+          const spans = [];
+          toks.forEach(([txt, cls]) => typer(ln, txt, cls).forEach((s) => spans.push(s)));
+          if (li === 0) spans.forEach((s) => (s.style.display = "inline"));
+          return { ln, spans };
+        });
+        const codeCaret = el("span", "caret", lineSpans[1].ln, "background:#e58a68");
+        const CODE_T = 525 / 30, L3_T = CODE_T + lineSpans[1].spans.length / 24 + 0.1;
+        const L3_END = typeAt(lineSpans[2].spans, L3_T, 1 / 24);
+        typeAt(lineSpans[1].spans, CODE_T, 1 / 24);
+        caret(codeCaret, 17.3, L3_T, [[CODE_T, L3_T - 0.1]]);
+        const c2 = el("span", "caret", lineSpans[2].ln, "background:#e58a68");
+        caret(c2, L3_T, 20.25, [[L3_T, L3_END]]);
+        // the preview renders the code above: on #F6E3DA the 'huashu-motion' title waits in its from() state (y +22, 30 %) and rises
+        // in as soon as "tl.from('.title'" is typed (16 chars into line 3, 19.35); its 4 px clay line runs linearly
+        tl.fromTo("#pv-title", { y: 22, opacity: 0.3 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out", immediateRender: true }, L3_T + 16 / 24);
+        tl.fromTo("#pv-prog", { scaleX: 0 }, { scaleX: 1, duration: 20.25 - 17.267, ease: "none" }, 17.267);
+        // the 4 px clay scrub fills 00:18 -> 00:23 linearly 17.00 -> 20.10 and the timecode steps with it
+        tl.fromTo("#fm-scrub", { scaleX: 18 / 23 }, { scaleX: 1, duration: 3.1, ease: "none" }, 17.0);
+        stepper($("#fm-tc"), ["00:18 / 00:23", "00:19 / 00:23", "00:20 / 00:23", "00:21 / 00:23", "00:22 / 00:23", "00:23 / 00:23"], 17.0, 3.1, "none");
+        // 19.52 'JavaScript': JS tile pops, header label becomes 'JavaScript · GSAP'
+        // (in sequence, one layer per slot: 'index.html' lifts out 19.40-19.50, then the tile pops and the label slides in)
+        tl.to("#fm-fn", { opacity: 0, y: -10, duration: 0.1, ease: "power2.in" }, 19.4);
+        pop("#fm-js", 19.5, 0.26, 0.1);
+        tl.fromTo("#fm-jsl", { opacity: 0, x: -8 }, { opacity: 1, x: 0, duration: 0.22, ease: "power2.out" }, 19.52);
+
+        /* =====================================================================
+           b10 COST (20.25 - 22.40)
+           ===================================================================== */
+        scene("#sc-cost", 20.25, G11);
+        cardIn("#cs-card", 20.25, G11, 0.015);
+        // '$0' is on the card in full clay #D97757 from its first frame (no ghost-tint state); on 'paying' (f630, 21.00) it lands with a
+        // 0.20 s scale pulse 1.06 -> 1.00 power3.out; 'per video' lands with it on f630 (y +12 -> 0, 0.30 s power3.out) and reads for
+        // 41 frames before the f671 cut (the spoken 'video' falls after the cut)
+        tl.set("#cs-num", { scale: 1, transformOrigin: "30% 70%", immediateRender: true }, 0);
+        tl.fromTo("#cs-num", { scale: 1.06 }, { scale: 1, duration: 0.2, ease: "power3.out", immediateRender: false }, A(21.0));
+        tl.fromTo("#cs-per", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, A(21.0));
+        // pipeline pills (light version of the mich_terminal build -> deploy -> live row) + travelling packets
+        const PIPE = ["HTML · JS", "Chrome", "MP4"];
+        const pipe = $("#cs-pipe");
+        const PY0 = [70, 216, 362];
+        PIPE.forEach((name, i) => {
+          if (i < 2) {
+            el("div", "abs", pipe, `left:168.5px;top:${PY0[i] + 84}px;width:3px;height:62px;background:#e4e2da`).id = "cs-gl" + i;
+            const cl = el("div", "abs", pipe, `left:168.5px;top:${PY0[i] + 84}px;width:3px;height:62px;background:#d9704f;transform-origin:50% 0%`);
+            cl.id = "cs-cl" + i;
+            const pk = el("div", "abs", pipe, `left:163px;top:${PY0[i] + 80}px;width:14px;height:14px;border-radius:2px;background:#d9603b;box-shadow:0 0 0 4px rgba(219,106,69,0.17);opacity:0`);
+            pk.id = "cs-pk" + i;
+          }
+          const p = el("div", "abs", pipe, `left:10px;top:${PY0[i]}px;width:320px;height:84px;border-radius:16px;background:#fff;border:2px solid #ebe8e2`);
+          p.id = "cs-p" + i;
+          const pa = el("div", "abs", p, "left:-2px;top:-2px;width:320px;height:84px;border-radius:16px;border:2px solid #eba990;box-shadow:0 6px 14px rgba(235,169,144,0.2);opacity:0");
+          pa.id = "cs-pa" + i;
+          el("div", "abs", p, "left:22px;top:20px;width:40px;height:40px", '<svg width="40" height="40"><circle cx="20" cy="20" r="18.5" fill="none" stroke="#cfccc7" stroke-width="1.8" stroke-dasharray="4.5 3.5"/></svg>');
+          const ck = el("div", "abs", p, "left:22px;top:20px;width:40px;height:40px;border-radius:50%;background:#2e9e5b;opacity:0", use("i-check", "ic", "position:absolute;left:9px;top:9px;width:22px;height:22px;color:#fff;stroke-width:3.4"));
+          ck.id = "cs-ck" + i;
+          const tx = el("div", "t", p, "left:82px;top:30px;font-family:var(--mono);font-weight:700;font-size:24px;color:#b3b0a9", name);
+          tx.id = "cs-tx" + i;
+        });
+        tl.set(["#cs-cl0", "#cs-cl1"], { scaleY: 0, immediateRender: true }, 0);
+        // the ghost pipeline builds while '$0' waits (20.33 / 20.45 / 20.57, y +24 -> 0, 0.55 s power3.out): no static hold before 'paying'
+        [0, 1, 2].forEach((i) => tl.fromTo(i < 2 ? ["#cs-p" + i, "#cs-gl" + i] : "#cs-p" + i, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 20.33 + 0.12 * i));
+        const pipeOn = (i, t) => {
+          tl.to("#cs-pa" + i, { opacity: 1, duration: 0.1, ease: "none" }, t);
+          tl.to("#cs-tx" + i, { color: "#1e1d1b", duration: 0.12, ease: "power1.out" }, t);
+          checkPop("#cs-ck" + i, t);
+        };
+        const packet = (i, t, d) => {
+          tl.set("#cs-pk" + i, { opacity: 1, rotation: 45, y: 0 }, A(t));
+          tl.to("#cs-pk" + i, { y: 62, duration: d, ease: "sine.inOut" }, t);
+          tl.to("#cs-cl" + i, { scaleY: 1, duration: d, ease: "sine.inOut" }, t);
+          tl.set("#cs-pk" + i, { opacity: 0 }, A(t + d + 0.02));
+        };
+        // checks on 'for' / 'like' / 'any' (21.28 / 21.62 / 21.76)
+        pipeOn(0, 21.28); packet(0, 21.3, 0.3); pipeOn(1, 21.62); packet(1, 21.63, 0.12); pipeOn(2, 21.76);
+
+        /* =====================================================================
+           b11-b13 GENERATORS takeover (22.40 - 27.00): the list of three, struck out item by item, face off, HUD at its takeover slot
+           ===================================================================== */
+        scene("#sc-gen", G11, F14);
+        cardIn("#gn-card", G11, F14, 0.009);
+        tl.fromTo("#sc-gen", { y: 0 }, { y: -16, duration: F14 - G11, ease: "none" }, G11);
+        // 'Not needed.' (beats b11 state) is the takeover's headline: opaque on the cut frame, settling up 24 px (0.45 s power3.out)
+        tl.fromTo("#gn-title", { y: 24 }, { y: 0, duration: 0.45, ease: "power3.out" }, A(G11));
+        // rows at the donor tools-row geometry (91 px, pitch 104, name JetBrains Mono 700 23 px at (91.5, 19)). Kling / Seedance show
+        // their real marks (Kuaishou #FF4906, ByteDance #3C8CFF, 28 px, centred in the tile) from the row entrance. Each strike reads
+        // the ink first: Kling inks at 25.17 (full ink by the 25.24 word), strikes f760 (25.33, 3 frames after its f757 onset, like
+        // Seedance), X f766 (25.53), dims 25.87; Seedance inks 26.26, strikes 26.46 (0.22 s draw, done 26.68), X 26.56, no dim (cut first)
+        const GEN = [
+          { name: "AI video generator", desc: "", icon: '<svg class="ic" style="color:#934b38;stroke-width:1.9"><use href="#i-sparkles"/></svg>', act: 22.42, type: 22.42, strike: 23.7, sd: 0.3, xAt: 23.82, dim: 24.0, b1: 225, b2: 135 },
+          { name: "Kling", desc: "by Kuaishou", icon: '<svg style="fill:#ff4906"><use href="#i-kuaishou"/></svg>', logo: true, act: 24.74, ink: 25.17, strike: 760 / 30, sd: 0.3, xAt: 766 / 30, dim: 25.87, b1: 115, b2: 170 },
+          { name: "Seedance", desc: "by ByteDance", icon: '<svg style="fill:#3c8cff"><use href="#i-bytedance"/></svg>', logo: true, act: 25.96, ink: 26.26, strike: 26.46, sd: 0.22, xAt: 26.56, dim: 0, b1: 160, b2: 190 },
+        ];
+        const GFS = 23, GNT = 19; // row name font size / top
+        const genRows = $("#gn-rows");
+        GEN.forEach((G, i) => {
+          const top = 86 + 104 * i;
+          const r = el("div", "row g", genRows, `top:${top}px`);
+          r.id = "gn-r" + i;
+          el("div", "bgs", r);
+          const bga = el("div", "bga", r); bga.id = "gn-a" + i;
+          const body = el("div", "fill", r); body.id = "gn-body" + i;
+          // the grey tile carries the brand mark from the entrance (no blank grey square); activation only swaps the tile ground
+          el("div", "tile", body, "", G.logo ? G.icon.replace("<svg ", '<svg class="abs" width="28" height="28" ').replace('style="', 'style="left:13.5px;top:13.5px;width:28px;height:28px;') : "");
+          const ta = el("div", "tilea", body, "", G.icon); ta.id = "gn-t" + i;
+          const b1 = el("div", "b1", body, `width:${G.b1}px`), b2 = el("div", "b2", body, `width:${G.b2}px`);
+          b1.id = "gn-b1" + i; b2.id = "gn-b2" + i;
+          const nmTop = G.desc ? GNT : (91 - GFS) / 2;
+          const nm = el("div", "name", body, `top:${nmTop}px`); nm.id = "gn-n" + i; nm.setAttribute("data-layout-allow-occlusion", "true");
+          const ds = el("div", "desc", body, "", G.desc); ds.id = "gn-d" + i;
+          el("div", "dc", r, "", '<svg width="39" height="39"><circle cx="19.5" cy="19.5" r="18.5" fill="none" stroke="#cfccc7" stroke-width="1.6" stroke-dasharray="4 3.2"/></svg>').id = "gn-dc" + i;
+          const xd = el("div", "xd", r, "", use("i-x", "ic")); xd.id = "gn-x" + i;
+          // strike: 13.8 px per char at 23 px (JetBrains Mono advance 0.6 em) + 13 px overshoot each side, centred on the name's x-height
+          const sk = el("div", "strike", r, `left:${91.5 - 13}px;width:${G.name.length * 0.6 * GFS + 26}px;top:${(nmTop + 0.36 * GFS).toFixed(1)}px`); sk.id = "gn-s" + i; sk.setAttribute("data-layout-allow-occlusion", "true");
+          // rows enter across the takeover cut (blur + slide up 25 px, 50 ms stagger, vibecoding tools rows) so the card is never empty:
+          // on the cut frame they are ~75 / 50 / 25 % in
+          tl.fromTo(r, { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power1.out" }, G11 - 0.15 + i * 0.05);
+          tl.fromTo(r, { y: 25 }, { y: 0, duration: 0.25, ease: "power2.out" }, G11 - 0.15 + i * 0.05);
+          // activation: border + tile, skeleton bars out, name typed at 0.04 s/char
+          tl.to(bga, { opacity: 1, duration: 0.07, ease: "none" }, G.act);
+          tl.to(ta, { opacity: 1, duration: 0.07, ease: "none" }, G.act);
+          if (!G.ink) {
+            tl.to([b1, b2], { opacity: 0, duration: 0.05, ease: "none" }, G.type - 0.05);
+            // the typed glyph spans sit under the strike on purpose: tag each one (the name's own allow-occlusion does not cascade)
+            const sp = typer(nm, G.name);
+            sp.forEach((s) => s.setAttribute("data-layout-allow-occlusion", "true"));
+            typeAt(sp, G.type, 0.04);
+          } else {
+            // Kling / Seedance: skeleton bars resolve (23.05-23.13, then the text, no overlap) into ghost text #B9B6AD; each name +
+            // maker inks before its spoken word (0.1 s)
+            nm.textContent = G.name;
+            tl.set([nm, ds], { color: "#b9b6ad", opacity: 0, immediateRender: true }, 0);
+            tl.to([b1, b2], { opacity: 0, duration: 0.08, ease: "none" }, 23.05);
+            tl.to([nm, ds], { opacity: 1, duration: 0.15, ease: "power1.out" }, 23.13);
+            tl.to(nm, { color: "#1f1e1d", duration: 0.1, ease: "none" }, G.ink);
+            tl.to(ds, { color: "#55524e", duration: 0.1, ease: "none" }, G.ink);
+          }
+          if (G.desc && !G.ink) tl.fromTo(ds, { opacity: 0, x: -8 }, { opacity: 1, x: 0, duration: 0.18, ease: "power2.out" }, G.type + 0.04 * G.name.length);
+          // strike (6 px clay, butt ends): hidden until its draw starts, then opacity 1 + scaleX 0 -> 1 (power2.out) on the same
+          // frame, so a zero-length strike never shows a cap; clay X in the check slot, row dims to 55 %
+          tl.set(sk, { opacity: 1 }, G.strike);
+          tl.fromTo(sk, { scaleX: 0 }, { scaleX: 1, duration: G.sd, ease: "power2.out" }, G.strike);
+          tl.set("#gn-dc" + i, { opacity: 0 }, A(G.xAt));
+          checkPop(xd, G.xAt);
+          if (G.dim) tl.to(body, { opacity: 0.55, duration: 0.2, ease: "power1.inOut" }, G.dim);
+        });
+        // (v11's 'NOT USED' header pill is gone: the 'Not needed.' headline says it)
+
+        // HUD status blinks red on "aren't" (x2) and on each "not"
+        [[20.82, 20.95], [21.02, 21.15], [24.58, 24.74], [25.84, 25.96]].forEach(([a, b]) => { tl.set("#dot-red", { opacity: 1 }, A(a)); tl.set("#dot-red", { opacity: 0 }, A(b)); });
+
+        /* =====================================================================
+           b14 FULL-FACE (27.00 - 28.833): 'This is all code.' - the payoff (v11's cube takeover cannot run in full-face; the HUD's
+           'code' slot fills when the split comes back on the f865 jump cut)
+           ===================================================================== */
+        scene("#sc-f14", F14, S15);
+        ffWords([["#f14-1", F14 - 1 / 30], ["#f14-2", 27.37], ["#f14-3", 27.51], ["#f14-4", 27.71]]);
+
+        /* =====================================================================
+           HUD: power strip, sockets, plugs, cables (vibecoding replica)
+           ===================================================================== */
+        const SX = [262, 382, 502, 622]; // socket centres, strip-local
+        const socks = $("#socks"), ringsHost = $("#rings"), plugsHost = $("#plugs"), cabs = $("#cabs"), anchors = $("#anchors");
+        const PLUG_ICONS = ["i-code", "i-wipe", "i-music", "i-pointer"];
+        const plugs = [], cables = [], anchs = [], rings = [], plugd = [];
+        SX.forEach((cx, i) => {
+          const s = el("div", "sock", socks, `left:${cx - 47}px`);
+          el("div", "slot a", s); el("div", "slot b", s); el("div", "gnd", s);
+          plugd.push(el("div", "plugd", socks, `left:${cx - 47}px`));
+          const fx = 192 + cx; // frame x of socket centre
+          rings.push(el("div", "ring", ringsHost, `left:${fx - 57}px`));
+          // every plug arrives already seated (slot pop), so its prongs are inside the socket from the first frame
+          const p = el("div", "plug", plugsHost, `left:${fx - 38}px`, `<div class="neck"></div><div class="body"></div><div class="tile">${use(PLUG_ICONS[i], "ic")}</div>`);
+          plugs.push(p);
+          const d = `M ${fx - 2} 775 C ${fx - 4} 738.5, ${fx + 7} 730.5, ${fx + 8} 694`;
+          const c = svgEl("path", { d, fill: "none", stroke: "#222", "stroke-width": 7.5, "stroke-linecap": "round", "stroke-dasharray": 100, "stroke-dashoffset": 100 }, cabs);
+          cables.push(c);
+          anchs.push(el("div", "anchor", anchors, `left:${fx - 8}px`));
+        });
+        // the strip is the end state of the URL-bar morph (f350-356, see REPO): its contents fade up over the whitening bar from f355
+        // (label + mark, then 0/4 + dot, then the 4 sockets; 70 ms apart, y +8 -> 0, 0.16 s power3.out, all in by f364) and its own
+        // white body takes over from the bar on f356
+        tl.set("#strip-body", { opacity: 0, immediateRender: true }, 0);
+        show("#strip", 355 / 30);
+        show("#strip-body", MT1);
+        [["#hm-mark", "#lbl"], ["#count", "#dot-gray"], ["#socks"]].forEach((g, i) =>
+          tl.fromTo(g, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.16, ease: "power3.out" }, 355 / 30 + 0.07 * i));
+        // teaser f366 (12.20) -> 14.01: a 44 px '?' tile pops over each socket (x 454 / 574 / 694 / 814, y 700-744; back.out(2) 0.35 s
+        // from .6, 70 ms apart), holds while the repo is named, fades 13.76 -> 14.01 (power1.in): the HUD asks what it will count
+        const qs = $("#qs");
+        SX.forEach((cx, i) => {
+          const q = el("div", "qtile", qs, `left:${192 + cx - 22}px`, "?");
+          const t = 366 / 30 + 0.07 * i;
+          tl.fromTo(q, { scale: 0.6, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(2)" }, t);
+          tl.fromTo(q, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, t);
+          tl.to(q, { opacity: 0, duration: 0.25, ease: "power1.in" }, 13.76);
+        });
+        // empty sockets are plain tiles (no dashed rings); each goes to the plugged tone when its plug seats
+        // slot 1 'code' fills on the f865 cut back to split (its word 'code' fell in the b14 punch-in, where the HUD is off), slot 2
+        // 'transitions' 7 frames later on its word, 'music' 30.30, 'editor' 32.82
+        const SEAT_T = [S15, 29.06, 30.3, 32.82];
+        plugd.forEach((p, i) => show(p, SEAT_T[i]));
+        // HUD position per layout: rest (split, and the b06 takeover where the URL bar morphs into it) / G position (the generators and
+        // versus takeovers); off the frame on every full-face punch-in; at rest, 4/4, from the f1208 cut to the end
+        [[G11, 610], [S15, 0], [G19, 610], [VS_CUT, 0]].forEach(([t, y]) => tl.set("#hud", { y }, A(t)));
+        FACE.forEach(([a, b]) => { tl.set("#hud", { opacity: 0 }, A(a)); tl.set("#hud", { opacity: 1 }, A(b)); });
+
+        // slot 1 seat: clay ring + expanding ping, count 0/4 -> 1/4, dot gray -> green (all from the f865 cut frame)
+        tl.set(rings[0], { opacity: 1 }, A(S15));
+        tl.to(rings[0], { opacity: 0, duration: 0.26, ease: "power1.in" }, S15 + 0.69);
+        const PING = [[199, 0.8, 1.0], [201, 0.6, 1.15], [203, 0.35, 1.3], [205, 0.1, 1.38], [207, 0, 1.42]];
+        tl.set("#ping", { opacity: 0, scale: 1, immediateRender: true }, 0);
+        tl.set("#ping", { opacity: PING[0][1], scale: PING[0][2] }, A(S15));
+        for (let k = 1; k < PING.length; k++) tl.to("#ping", { opacity: PING[k][1], scale: PING[k][2], duration: (PING[k][0] - PING[k - 1][0]) / 30, ease: "none" }, S15 + (PING[k - 1][0] - 199) / 30);
+        tl.fromTo("#dot-green", { opacity: 0 }, { opacity: 1, duration: 0.03, ease: "none" }, S15 + 0.04);
+        // count n/4 (replica count pop table)
+        const CP = [[0, 1.5], [1, 1.3], [2, 1.3], [3, 1.15], [4, 1.07], [5, 1.0]];
+        SEAT_T.forEach((t, i) => {
+          tl.set("#cn" + i, { display: "none" }, A(t));
+          tl.set("#cn" + (i + 1), { display: "inline-block", scale: CP[0][1], transformOrigin: "50% 55%" }, A(t));
+          for (let k = 1; k < CP.length; k++) tl.to("#cn" + (i + 1), { scale: CP[k][1], duration: 1 / 30, ease: "none" }, t + CP[k - 1][0] / 30);
+          if (i < 3) tl.set("#cn" + (i + 1), { display: "none" }, A(SEAT_T[i + 1]));
+        });
+        // split cables: each plug pops seated (from 1 frame before its cue; plug 1's first frame is hidden under the punch-in) and its
+        // cable draws up into the card
+        const cabOn = (i, t, draw) => {
+          if (draw) tl.fromTo(cables[i], { attr: { "stroke-dashoffset": 100 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+          else tl.set(cables[i], { attr: { "stroke-dashoffset": 0 } }, A(t));
+          tl.set(anchs[i], { opacity: 1 }, A(t + (draw ? 0.22 : 0)));
+        };
+        [[0, S15], [1, 29.06], [2, 30.3], [3, 32.82]].forEach(([i, t]) => { slotPop(plugs[i], t - 0.033); cabOn(i, t, true); });
+        // all four sockets get the clay outline once on 4/4: the 0.5 s 'complete' flash, 32.90-33.40
+        rings.forEach((r) => { tl.to(r, { opacity: 1, duration: 0.08, ease: "none" }, 32.9); tl.to(r, { opacity: 0, duration: 0.2, ease: "power1.in" }, 33.2); });
+        // completion (DemE f925): on f986 the numerator '4' turns clay and 'HUASHU-MOTION' sits in a clay-tint pill (#F6E3DA, radius
+        // 8 px, padding 4 px top / bottom, 4 px left, 2 px right: with the letter-spacing tail the ink sits ~5 / 4 px inside the
+        // fill; x / y compensate the padding so the text never moves), hard-set, no tween, held to the end. The pill (frame x
+        // ~248-399) clears the mark (right edge 237) by ~10 px and socket 1's tile (407) by ~7 px
+        tl.set("#cn4", { color: "#d97757" }, A(986 / 30));
+        tl.set("#lbl", { backgroundColor: "#f6e3da", borderRadius: 8, padding: "4px 2px 4px 4px", x: -4, y: -4 }, A(986 / 30));
+        // versus: plugs seated, NO cables (the b18 punch-in + the takeover, 35.367-40.267)
+        hide("#cabs", F18); hide("#anchors", F18); show("#cabs", VS_CUT); show("#anchors", VS_CUT);
+        // the 4 cables are reset into their slots on the f1288 punch-in cut (the HUD is off there), so the CTA card that follows (its
+        // bottom edge at y 725, inside the cables' 694-775 run) never meets them; the HUD itself comes back at rest, 4/4, to the end
+        tl.set(cables, { attr: { "stroke-dashoffset": 100 } }, A(F21));
+        tl.set(anchs, { opacity: 0 }, A(F21));
+
+        /* =====================================================================
+           b15-b17 FEATURES (28.833 - 35.367): cuts in on the f865 face-cam jump cut, holds the 'applied' editor to the f1061 one
+           ===================================================================== */
+        scene("#sc-feat", S15, F18);
+        cardIn("#ft-card", S15, F18);
+        tl.fromTo("#fh-a-sub", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" }, 29.55);
+        // transitions: 16-shot cut timeline (one block = one shot). The active block, the cut marker and the SHOT counter step on the
+        // clip's real cuts (media 1.0 / 1.3 / 1.5 s from data-media-start 0.6 at the f865 cut = frames 877 / 886 / 892), and the playhead
+        // crosses each block boundary on its cut frame (piecewise linear, so it is always inside the active shot's block)
+        const trTl = $("#tr-tl"), TRW = 836, TRB = (TRW - 15 * 6) / 16;
+        for (let k = 0; k <= 16; k++) el("div", "abs", trTl, `left:${Math.min(TRW - 2, k * (TRB + 6) - 3)}px;top:0;width:2px;height:${k % 4 === 0 ? 12 : 8}px;border-radius:1px;background:#d9d6cc`);
+        const trOn = [];
+        for (let k = 0; k < 16; k++) {
+          const bx = k * (TRB + 6);
+          el("div", "abs", trTl, `left:${bx}px;top:20px;width:${TRB}px;height:52px;border-radius:8px;background:${k % 2 ? "#e9e5de" : "#efebe5"}`);
+          if (k < 4) trOn.push(el("div", "abs", trTl, `left:${bx}px;top:20px;width:${TRB}px;height:52px;border-radius:8px;background:#f6e3da;box-shadow:inset 0 0 0 2px #d97757;opacity:0`));
+        }
+        const trCut = [1, 2, 3].map((k) => el("div", "abs", trTl, `left:${k * (TRB + 6) - 8}px;top:-2px;width:10px;height:10px;border-radius:2px;background:#d97757;transform:rotate(45deg);opacity:0`));
+        const trPh = el("div", "abs", trTl, "left:0;top:-8px;width:3px;height:88px;border-radius:1.5px;background:#d97757");
+        const trNum = ["01", "02", "03", "04"].map((v, i) => el("span", "", $("#tr-num"), i === 0 ? "display:inline" : "display:none", v));
+        const TR_CUTS = [877 / 30, 886 / 30, 892 / 30], TRP = TRB + 6;
+        // playhead keys: block 0's start on the f865 cut, block boundaries 1 / 2 / 3 / 4 on the clip's cut frames (124 / 175 / 263 /
+        // 105 px/s; the 4th, media 2.0 = f907, is already under the score wipe), then 120 px/s to the clip's end (30.36)
+        const TRK = [[S15, 0], [TR_CUTS[0], TRP - 3], [TR_CUTS[1], 2 * TRP - 3], [TR_CUTS[2], 3 * TRP - 3], [907 / 30, 4 * TRP - 3], [30.36, 4 * TRP - 3 + (30.36 - 907 / 30) * 120]];
+        tl.set(trPh, { x: TRK[0][1] }, 0);
+        for (let k = 1; k < TRK.length; k++) tl.fromTo(trPh, { x: TRK[k - 1][1] }, { x: TRK[k][1], duration: TRK[k][0] - TRK[k - 1][0], ease: "none", immediateRender: false }, TRK[k - 1][0]);
+        show(trOn[0], S15);
+        TR_CUTS.map((t, i) => [t, i + 1]).forEach(([t, k]) => {
+          hide(trOn[k - 1], t); show(trOn[k], t);
+          tl.set(trNum[k - 1], { display: "none" }, A(t)); tl.set(trNum[k], { display: "inline" }, A(t));
+          tl.fromTo(trCut[k - 1], { opacity: 0, scale: 0, rotation: 45 }, { opacity: 1, scale: 1, rotation: 45, duration: 0.35, ease: "back.out(2)", immediateRender: false }, t);
+        });
+        // 30.05 clay-edged wipe into the score card (the 'Music 03/04' header swaps on f906, once the wipe has passed 50 %)
+        tl.fromTo("#ft-abc", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.25, ease: "power2.inOut" }, 30.05);
+        tl.set("#ft-edge", { opacity: 1 }, A(30.05));
+        tl.fromTo("#ft-edge", { x: 0 }, { x: 888, duration: 0.25, ease: "power2.inOut" }, 30.05);
+        hide("#ft-edge", 30.31);
+        // score lane: 16 beat ticks (1 px #D9D6CC, 47.5 px apart, beat k at x 23.75 + 47.5 k), a deterministic waveform (4 px bars on a
+        // 7 px pitch, clay 40 %, 20-110 px peaks accented on each beat and hardest on each bar's downbeat), clay 3x150 cut markers on beats
+        // 1 / 5 / 9 / 13 (the bar downbeats) that pop on 'music' (30.30, 70 ms apart, scaleY 0 -> 1 back.out(2) 0.3 s); the 2 px ink
+        // playhead plays at 120 bpm (47.5 px per beat = 95 px/s) f899 -> f953 with the played region tinted behind it
+        const BEAT = 47.5, B0 = 23.75, PH0 = 899 / 30, PH1 = 953 / 30, PHV = 95;
+        for (let k = 0; k < 16; k++) el("div", "abs", $("#ft-ticks"), `left:${(B0 + k * BEAT - 0.5).toFixed(2)}px;top:0;width:1px;height:150px;background:#d9d6cc`);
+        const wave = $("#ft-wave");
+        for (let i = 0; 1.5 + 7 * i + 4 <= 760; i++) {
+          const x = 1.5 + 7 * i + 2, bi = Math.floor((x - B0) / BEAT), ph = (x - B0 + 10 * BEAT) % BEAT, down = bi >= 0 && bi % 4 === 0;
+          const env = 0.28 + 0.72 * Math.exp(-ph / 15) * (down ? 1 : 0.78);
+          const h = Math.round(20 + 90 * env * (0.62 + 0.38 * Math.abs(Math.sin(i * 2.399))));
+          el("div", "abs", wave, `left:${x - 2}px;top:${(75 - h / 2).toFixed(1)}px;width:4px;height:${h}px;border-radius:2px;background:rgba(217,119,87,0.4)`);
+        }
+        [0, 4, 8, 12].forEach((b, i) => {
+          const m = el("div", "abs", $("#ft-marks"), `left:${(B0 + b * BEAT - 1.5).toFixed(2)}px;top:0;width:3px;height:150px;background:#d97757;opacity:0`);
+          tl.set(m, { opacity: 1 }, A(30.3 + 0.07 * i));
+          tl.fromTo(m, { scaleY: 0, transformOrigin: "50% 50%" }, { scaleY: 1, duration: 0.3, ease: "back.out(2)" }, A(30.3 + 0.07 * i));
+        });
+        tl.fromTo("#ft-ph", { x: 0 }, { x: PHV * (PH1 - PH0), duration: PH1 - PH0, ease: "none" }, PH0);
+        tl.fromTo("#ft-played", { scaleX: 0 }, { scaleX: (PHV * (PH1 - PH0)) / 760, duration: PH1 - PH0, ease: "none" }, PH0);
+        // header + counter hard swap on f906 (30.20), the first frame on which the power2.inOut wipe has passed 50 % of the body
+        // (f902-905 cover 1 / 8 / 22 / 43 %, f906 68 %): the header always names whichever card covers most of the body
+        tl.set(["#fh-a", "#fc-2"], { opacity: 0 }, A(906 / 30));
+        tl.set(["#fh-b", "#fc-3"], { opacity: 1 }, A(906 / 30));
+        // 31.77 (two frames before 'includes') hard cut to the browser editor, composed on its first frame: header + '04 / 04' counter
+        tl.set("#ed", { clipPath: "inset(0 0% 0 0)" }, A(31.77));
+        hide("#fh-b", 31.77); show("#fh-c", 31.77);
+        hide("#fc-3", 31.77); show("#fc-4", 31.77);
+        tl.fromTo("#ed-ph", { x: 0 }, { x: 536, duration: F18 - 31.77, ease: "none" }, 31.77);
+        // 31.80 'includes': the 'C' keycap presses; canvas enters point mode
+        tl.to("#ed-key", { y: 4, backgroundColor: "#efece6", boxShadow: "0 0px 0 #dcd8d1", duration: 0.06, ease: "power1.in" }, 31.8);
+        tl.to("#ed-key", { y: 0, backgroundColor: "#ffffff", boxShadow: "0 4px 0 #dcd8d1", duration: 0.12, ease: "power1.out" }, 31.92);
+        tl.fromTo("#ed-point", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, 31.86);
+        // cursor appears, then glides to the title from 32.10 and clicks on 'editor' (32.82)
+        // (the tip parks at frame ~(600, 470): right of 'it.', clear of the glyphs, inside the selection's row)
+        tl.set("#ed-cur", { x: 640, y: 290 }, A(31.95));
+        tl.fromTo("#ed-cur", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, 31.95);
+        tl.to("#ed-cur", { x: 500, y: 205, duration: 0.7, ease: "power2.inOut" }, 32.1);
+        tl.to("#ed-cur", { scale: 0.88, duration: 0.06, ease: "power1.in", transformOrigin: "5px 3px" }, 32.8);
+        tl.to("#ed-cur", { scale: 1, duration: 0.1, ease: "power1.out" }, 32.86);
+        tl.fromTo("#ed-rip", { opacity: 0.9, scale: 0.3 }, { opacity: 0, scale: 1.4, duration: 0.45, ease: "power2.out", immediateRender: false }, 32.82);
+        tl.set("#ed-rip", { opacity: 0, immediateRender: true }, 0);
+        tl.fromTo("#ed-sel", { opacity: 0, scale: 1.06 }, { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(1.7)" }, 32.84);
+        tl.to("#ed-cur", { x: 540, y: 300, opacity: 0, duration: 0.35, ease: "power2.in" }, 33.3);
+        // 33.30 comment box pops beside the selection, note types (0.04 s/char), Send, outcome on 'browser'
+        pop("#ed-box", 33.3, 0.26, 0.1);
+        pop("#ed-send", 33.36, 0.26, 0.1);
+        const edSpans = typer($("#ed-txt"), "make the title hit harder", "", true);
+        const edCaret = el("span", "caret", $("#ed-txt"), "height:28px;vertical-align:-4px");
+        typeAt(edSpans, 33.3, 0.04);
+        caret(edCaret, 33.3, 34.5, [[33.3, 34.3]]);
+        tl.to("#ed-send", { scale: 0.96, backgroundColor: "#c15f3c", duration: 0.08, ease: "power1.in" }, 34.46);
+        tl.to("#ed-send", { scale: 1, duration: 0.14, ease: "power1.out" }, 34.56);
+        tl.to("#ed-sel", { opacity: 0, duration: 0.15, ease: "none" }, 34.6);
+        tl.to("#ed-ttl", { scale: 1.22, duration: 0.4, ease: "back.out(1.4)" }, 34.66);
+        pop("#ed-ok", 34.61, 0.26, 0.1);
+
+        /* =====================================================================
+           b19 VERSUS takeover (36.567 - 40.267): both cards are on the cut frame ('HyperFrames'), A over B
+           ===================================================================== */
+        scene("#sc-vs", G19, VS_CUT);
+        settle("#vs-c1", G19, "white");
+        // (v11's editor-tile -> huashu-well fly-in is gone: the b18 punch-in now sits between the editor and the versus)
+        // Both panels play Chase's REAL head-to-head test renders (same brief), on v11's absolute media mapping: huashu-film.mp4 media
+        // 10.157 -> 11.907 (G19 -> f1150) then 13.04 -> 14.907 (f1151 split -> VS_CUT), ending before the 15.0 montage; hyperframes-film.mp4
+        // media 10.267 -> 13.933 from G19 to VS_CUT (40.267). Timecodes are the clips' own media time (mm:ss:ff) and each
+        // 4 px scrub bar sits at media time / clip length, running linearly to the cut.
+        // prev: the run this one continues on the same host (its last span hands over on this run's first frame: a hard jump)
+        const tcRun = (host, t0, t1, mf0, prev) => {
+          const f0 = Math.round(t0 * FPS), f1 = Math.round(t1 * FPS), sp = [];
+          for (let f = f0; f <= f1; f++) {
+            const tot = mf0 + (f - f0); // media frame number
+            sp.push(el("span", "", host, f === f0 && !prev ? "display:inline" : "display:none", `00:${String(Math.floor(tot / FPS)).padStart(2, "0")}:${String(tot % FPS).padStart(2, "0")}`));
+          }
+          if (prev) { tl.set(prev[prev.length - 1], { display: "none" }, A(f0 / FPS)); tl.set(sp[0], { display: "inline" }, A(f0 / FPS)); }
+          for (let k = 1; k < sp.length; k++) { tl.set(sp[k - 1], { display: "none" }, A((f0 + k) / FPS)); tl.set(sp[k], { display: "inline" }, A((f0 + k) / FPS)); }
+          return sp;
+        };
+        // huashu: two source windows (8.64 -> 11.907, then 13.04 -> 14.907), timecode and scrub bar jump at the f1151 split
+        const V1B = 1151 / 30;
+        const tc1a = tcRun($("#vs-tc1"), G19, 1150 / 30, 304); // 00:10:04 -> 00:11:27
+        tcRun($("#vs-tc1"), V1B, VS_CUT, 391, tc1a); // 00:13:01 -> 00:14:28
+        tl.fromTo("#vs-s1", { scaleX: 10.1567 / 23.6 }, { scaleX: 11.907 / 23.6, duration: 38.366 - G19, ease: "none" }, G19);
+        tl.fromTo("#vs-s1", { scaleX: 13.04 / 23.6 }, { scaleX: 14.927 / 23.6, duration: VS_CUT + 0.02 - 38.366, ease: "none", immediateRender: false }, 38.366);
+        // card 2 (HyperFrames) is on the same cut frame at the bottom and plays its own film
+        show("#vs-c2", G19);
+        settle("#vs-c2", G19, "white");
+        tl.fromTo("#vs-s2", { scaleX: 10.2667 / 25 }, { scaleX: 13.987 / 25, duration: VS_CUT + 0.02 - G19, ease: "none" }, G19);
+        tcRun($("#vs-tc2"), G19, VS_CUT, 308); // 00:10:08 -> 00:13:28 on the last visible frame (media 10.267 -> 13.933)
+        tl.set("#vs-d2", { backgroundColor: "#cb6d55" }, A(G19));
+        // dark 'vs' disc: opaque on its first frame (no fade through grey), scale .6 -> 1 back.out(1.7)
+        tl.set("#vs-vs", { opacity: 1 }, A(36.95));
+        tl.fromTo("#vs-vs", { scale: 0.6 }, { scale: 1, duration: 0.26, ease: "back.out(1.7)" }, A(36.95));
+        // f1134 ('Huashu' 37.80): the coin pulses 1 -> 1.12 -> 1 (0.3 s, back at 1 by 38.10) so the typing stretch between the coin
+        // settle (37.21) and the f1151 split never holds longer than ~18 frames; the VERDICT shrink (1 -> 0.5) starts after it ends
+        tl.fromTo("#vs-vs", { scale: 1 }, { scale: 1.12, duration: 0.15, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false }, 1134 / 30);
+        // b19: clay outline on the huashu card on 'did' (38.46) + card scale 1 -> 1.02. The verdict lands on f1181 (39.367, 'little'):
+        // the 'A LITTLE BETTER' pill pops out of the vs coin (scale 0 -> 1, back.out(2), 0.30 s, settled f1190) and the HyperFrames
+        // panel dims to 45 % and desaturates over f1181-1189; the finished verdict holds f1190-1207 (0.6 s) before the f1208 cut.
+        const VERDICT = 1181 / 30;
+        tl.fromTo("#vs-r1", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, 38.46);
+        tl.fromTo("#vs-c1", { scale: 1 }, { scale: 1.02, duration: 0.25, ease: "back.out(1.7)", immediateRender: false }, 38.46);
+        tl.fromTo("#vs-c2", { opacity: 1, filter: "saturate(1)" }, { opacity: 0.45, filter: "saturate(0)", duration: 8 / 30, ease: "power2.out", immediateRender: false }, A(VERDICT));
+        tl.set("#vs-badge", { xPercent: -50, yPercent: -50, transformOrigin: "50% 50%", immediateRender: true }, 0);
+        tl.set("#vs-badge", { opacity: 1 }, A(VERDICT));
+        tl.fromTo("#vs-badge", { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(2)" }, A(VERDICT));
+        // the 84 px coin shrinks away under the growing 60 px pill so its dark edge never bumps out above / below it
+        tl.fromTo("#vs-vs", { scale: 1, opacity: 1 }, { scale: 0.5, opacity: 0, duration: 0.2, ease: "power2.in", immediateRender: false }, A(VERDICT));
+        // pill carry across the f1208 cut: centre (540, 748) -> the #rs-badge slot (742, 471.5 on f1218, where row 1 has settled to
+        // within 1.5 px), 380x60 r30 34 px -> 284x48 r10 22 px in the row badge's clay, f1208-1218 power3.out (leaves the HUD cable
+        // zone y 688-800 fast: centre y ~673 on f1209, ~613 on f1210, then decelerates into the slot); hard hand-off on f1218
+        const FLY0 = VS_CUT, FLY1 = 1218 / 30, FLYD = { duration: FLY1 - FLY0, ease: "power3.out", immediateRender: false };
+        tl.fromTo("#vs-badge", { x: 0, y: 0, width: 380, height: 60, borderRadius: 30, backgroundColor: "#d97757" },
+          Object.assign({ x: 202, y: 471.5 - 748, width: 284, height: 48, borderRadius: 10, backgroundColor: "#cb6d55" }, FLYD), FLY0);
+        // type: the row badge's 22 px set rides at 1.39x in the versus pill and settles to 1x in the slot
+        tl.set("#vs-bA", { scale: 1.39, immediateRender: true }, 0);
+        tl.fromTo("#vs-bA", { scale: 1.39 }, Object.assign({ scale: 1 }, FLYD), FLY0);
+        tl.set("#vs-badge", { opacity: 0 }, A(FLY1));
+        tl.set("#rs-badge", { opacity: 0, immediateRender: true }, 0);
+        tl.set("#rs-badge", { opacity: 1 }, A(FLY1));
+
+        /* =====================================================================
+           b20 RESULT (40.267 - 42.933): the 'Product demos' card holds through f1287
+           ===================================================================== */
+        scene("#sc-res", VS_CUT, F21);
+        // slow push (0.6 %/s) about the card's bottom centre
+        cardIn("#rs-card", VS_CUT, F21, 0.006);
+        // the rows build the card on the words: the huashu row (carrying the 'A LITTLE BETTER' verdict badge) at VS_CUT (40.267, f1208),
+        // the HyperFrames row on f1218 (40.60, 'looking') (each y +24 -> 0, 0.55 s power3.out); 41.02 the huashu radio becomes a green check (back.out(2)) and the HyperFrames
+        // row dims; 41.467 'Better at' lifts out and 'Product demos' settles into the same slot with the clay kicker
+        // the verdict row is on the card from its first frame (carries the versus verdict across the cut) and settles up 24 px
+        tl.fromTo("#rs-row1", { y: 24 }, { y: 0, duration: 0.55, ease: "power3.out" }, VS_CUT);
+        // row 2 on f1218 (40.60, 'looking'), settled before the 41.02 check and the 41.1 dim
+        tl.fromTo("#rs-row2", { y: 24 }, { y: 0, duration: 0.55, ease: "power3.out" }, 1218 / 30);
+        tl.fromTo("#rs-row2", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power3.out" }, 1218 / 30);
+        hide("#rs-dc1", 41.02);
+        checkPop("#rs-ck", 41.02);
+        tl.to("#rs-row2", { opacity: 0.55, duration: 0.25, ease: "power1.inOut" }, 41.1);
+        // the blank's caret blinks at 1 Hz (0.5 s on / 0.5 s off) from the card's first frame until the swap
+        for (let t = VS_CUT + 0.5; t < 41.44; t += 0.5) tl.set("#rs-car", { opacity: Math.round((t - VS_CUT - 0.5) / 0.5) % 2 ? 1 : 0 }, A(t));
+        // the title slot swaps in sequence, never two titles on one frame: 'Better at' + blank lift out f1244-1246 (0.10 s), then
+        // 'Product demos' and the kicker settle in from f1247 (41.567, 'product' 41.54), 0.20 s power3.out
+        tl.fromTo("#rs-pre", { opacity: 1, y: 0 }, { opacity: 0, y: -8, duration: 0.1, ease: "power2.in", immediateRender: false }, 1244 / 30);
+        tl.fromTo(["#rs-title", "#rs-kick"], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.2, ease: "power3.out" }, 1246.5 / 30);
+        tl.to("#rs-a1", { opacity: 1, duration: 0.1, ease: "none" }, 42.09);
+        // 42.40 (end of 'demos'): the winning row steps forward (scale 1 -> 1.03, 0.35 s power3.out; at 1.06 the ring met the card
+        // edge), takes a 4 px clay ring (outer edge ~x 76 / 1004, ~16 px inside the card) and its check pulses (1 -> 1.15 -> 1, 0.3 s):
+        // the scorecard's last 0.53 s before the f1288 punch-in is never a hold
+        tl.fromTo("#rs-row1", { scale: 1, transformOrigin: "50% 50%" }, { scale: 1.03, duration: 0.35, ease: "power3.out", immediateRender: false }, 42.4);
+        tl.fromTo("#rs-ring1", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 42.4);
+        tl.fromTo("#rs-ck", { scale: 1 }, { scale: 1.15, duration: 0.15, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false }, 42.4);
+
+        /* =====================================================================
+           b18 FULL-FACE (35.367 - 36.567): 'Head to head.' ('head' 36.00, 'to' 36.12, 'head' 36.24; 'I also ran it' on the face alone)
+           ===================================================================== */
+        scene("#sc-f18", F18, G19);
+        ffWords([["#f18-1", 35.97], ["#f18-2", 36.09], ["#f18-3", 36.21]]);
+
+        /* =====================================================================
+           b21 FULL-FACE (42.933 - 44.633): 'So definitely' on the face alone (opinion, direct address), then the title builds on the
+           voice on the shirt: 'Check' 43.69 ('check' 43.72), 'it' 43.89 ('it' 43.92), 'out.' 44.03 ('out' 44.06). Hard cut back to the
+           split CTA card on 'Google' (f1339).
+           ===================================================================== */
+        scene("#sc-chk", F21, CUT);
+        ffWords([["#ck-w1", 43.69], ["#ck-w2", 43.89], ["#ck-w3", 44.03]]);
+
+        /* =====================================================================
+           b22 CTA (44.633 - 48.05): hard cut on 'Google', the Google card is full size on its first frame (x 60-1020, y 170-725):
+           search field (52 px mono query) + 3 skeleton suggestion rows that resolve as the query types -> Enter -> the repo result is #1
+           ===================================================================== */
+        scene("#sc-cta", CUT, END);
+        // card cut-in (white settle about the centre, opaque on frame 1), then the top-anchored slow push (1 %/s) from the settled frame
+        cardIn("#ct-card", CUT, END, 0.01, "50% 0%");
+        // 3 skeleton suggestion rows (#F1EFEA, 56 px tall, 24 px gaps; card-local y 196 / 276 / 356) settle in (CUT 44.633, 70 ms), pulse
+        // like a loading list (flat opacity 1 <-> 0.4, 0.4 s sine) and resolve one by one as the query types
+        // (45.15 'hu' / 45.55 'huashu' / 45.95 'huashu motio')
+        const SUG = [["huashu motion", " github"], ["huashu motion", " claude"], ["huashu motion", " demo"]];
+        const SUG_T = [45.15, 45.55, 45.95], SK_W = [330, 270, 300];
+        const ctRows = $("#ct-rows");
+        SUG.forEach(([pre, post], i) => {
+          const r = el("div", "abs", ctRows, `left:40px;top:${196 + 80 * i}px;width:880px;height:56px;border-radius:14px;background:#f1efea`);
+          r.id = "ct-r" + i;
+          const sk = el("div", "fill", r); sk.id = "ct-sk" + i;
+          el("div", "abs", sk, "left:22px;top:16px;width:24px;height:24px;border-radius:50%;background:#e4e1da");
+          el("div", "abs", sk, `left:66px;top:20px;width:${SK_W[i]}px;height:16px;border-radius:8px;background:#e4e1da`);
+          const sg = el("div", "fill", r, "opacity:0"); sg.id = "ct-sg" + i;
+          sg.innerHTML = use("i-search", "ic", "position:absolute;left:20px;top:13px;width:30px;height:30px;color:#8a887f;stroke-width:2.4") +
+            `<div class="t" style="left:66px;top:12px;font-family:var(--mono);font-size:32px;color:#5e5d59;font-weight:400">${pre}<b style="font-weight:700;color:#1f1e1d">${post}</b></div>`;
+          // opaque on the cut frame (the card is never empty), the rows settle up 24 px in a 70 ms stagger
+          tl.fromTo(r, { y: 24 }, { y: 0, duration: 0.55, ease: "power3.out" }, CUT + 0.07 * i);
+          const p0 = 44.6 + 0.13 * i, halves = Math.floor((SUG_T[i] - p0) / 0.4);
+          if (halves > 0) tl.fromTo(sk, { opacity: 1 }, { opacity: 0.4, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: halves - 1, immediateRender: false }, p0);
+          // in sequence (one layer per slot): the skeleton lifts out over the 0.1 s before the suggestion slides in
+          tl.to(sk, { opacity: 0, duration: 0.1, ease: "none" }, SUG_T[i] - 0.1);
+          tl.fromTo(sg, { opacity: 0, x: -8 }, { opacity: 1, x: 0, duration: 0.25, ease: "power2.out" }, SUG_T[i]);
+        });
+        // the top row's 'first result' state: white fill + clay outline + halo (under the content), the real repo result, the #1 pill
+        const r0 = $("#ct-r0");
+        const ra = el("div", "abs", r0, "left:0;top:0;right:0;bottom:0;border-radius:14px;background:#fff;box-shadow:0 0 0 2px #ffffff, 0 0 0 5px #d97757, 0 12px 32px rgba(40,30,20,0.07);opacity:0");
+        ra.id = "ct-ra";
+        r0.insertBefore(ra, r0.firstChild);
+        const real = el("div", "fill", r0, "opacity:0"); real.id = "ct-real";
+        el("div", "abs", real, "left:22px;top:40px;width:56px;height:56px;border-radius:12px;background:#1e1e1e", use("i-github", "", "position:absolute;left:12px;top:12px;width:32px;height:32px;fill:#fff"));
+        el("div", "t", real, "left:100px;top:18px;font-family:var(--mono);font-weight:400;font-size:22px;color:#6e6b66", "github.com › alchaincyf › huashu-motion");
+        el("div", "t", real, "left:99px;top:51px;font-family:var(--tight);font-weight:700;font-size:29px;letter-spacing:-0.005em;color:#1f1e1d", "alchaincyf/huashu-motion");
+        el("div", "t", real, "left:100px;top:96px;font-family:'Inter',sans-serif;font-weight:500;font-size:22px;color:#5e5d59", "Commercial-grade product launch films, in one go.");
+        const one = el("div", "pillx", r0, "left:784px;top:18px;width:72px;height:46px;border-radius:12px;background:var(--clay);color:#fff;font-family:var(--mono);font-weight:700;font-size:28px;opacity:0", "#1");
+        one.id = "ct-one";
+        // f1339 = CUT ('Google' 44.64): the card's first frame is a clean field (no magnifier) and the 56 px four-colour G starts
+        // its pop on the same frame, back.out(2) 0.35 s
+        tl.set("#ct-mag", { opacity: 0 }, A(CUT));
+        tl.fromTo("#ct-g", { scale: 0.5, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(2)" }, CUT);
+        tl.fromTo("#ct-g", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, CUT);
+        // query types 44.95 -> 46.30 at ~15 chars/s ('hu' is in by 'Huashu' at 45.02), 52 px JetBrains Mono
+        const ctSpans = typer($("#ct-q"), "huashu motion github");
+        const ctCaret = el("span", "caret", $("#ct-q"));
+        typeAt(ctSpans, 44.95, 0.0675);
+        caret(ctCaret, CUT, 48.05, [[44.95, 46.3]]);
+        // 46.32 Enter: the keycap presses, the field border flashes clay, the footer drops out; 46.40 the top suggestion grows 56 -> 136 px
+        // into the real repo result while rows 2-3 slide down 80 px (0.3 s power3.out)
+        tl.to("#ct-key", { y: 4, backgroundColor: "#efece6", boxShadow: "0 0px 0 #dcd8d1", duration: 0.06, ease: "power1.in" }, 46.32);
+        tl.to("#ct-key", { y: 0, backgroundColor: "#ffffff", boxShadow: "0 4px 0 #dcd8d1", duration: 0.12, ease: "power1.out" }, 46.4);
+        tl.to("#ct-foot", { opacity: 0, y: 24, duration: 0.18, ease: "power2.out" }, 46.4);
+        tl.fromTo("#ct-fl", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 46.36);
+        tl.to("#ct-fl", { opacity: 0, duration: 0.35, ease: "power1.in" }, 46.5);
+        tl.to("#ct-sg0", { opacity: 0, duration: 0.08, ease: "none" }, 46.36);
+        tl.fromTo("#ct-r0", { height: 56 }, { height: 136, duration: 0.3, ease: "power3.out", immediateRender: false }, 46.4);
+        tl.fromTo(["#ct-r1", "#ct-r2"], { y: 0 }, { y: 80, duration: 0.3, ease: "power3.out", immediateRender: false }, 46.4);
+        tl.fromTo("#ct-real", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.24, ease: "power2.out" }, 46.48);
+        // 46.92 'first': row 1 white + thin clay outline (on the cue frame, 0.10 s), #1 pill, the other suggestions dim
+        tl.to("#ct-ra", { opacity: 1, duration: 0.1, ease: "power1.out" }, 46.92);
+        pop("#ct-one", 46.92, 0.26, 0.1);
+        tl.to(["#ct-r1", "#ct-r2"], { opacity: 0.45, duration: 0.25, ease: "power1.inOut" }, 46.95);
+        // CTA payoff (both donors end on a CTA object that builds): the cursor glides into row 1 and CLICKS on f1419 (2 frames before
+        // 'pops'): clay ripple + row squash; on f1424 (before 'up') the row opens 64 px to show the repo facts (1.4k stars, MIT license
+        // - beats facts, nothing new spoken) and a clay 'Star' pill that pulses once and holds to the end. Tip parks at (865, 458).
+        const ctCur = el("div", "cursor", $("#sc-cta"), "left:0;top:0;z-index:3", '<svg style="width:40px;height:48px"><use href="#i-arrow"/></svg>');
+        const ctRip = el("div", "ripple", $("#sc-cta"), "left:835px;top:428px;z-index:3");
+        const CT_CLICK = 1419 / 30, CT_OPEN = 1424 / 30;
+        tl.set(ctCur, { x: 905, y: 630 }, A(46.98));
+        tl.fromTo(ctCur, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, 46.98);
+        tl.to(ctCur, { x: 860, y: 455, duration: 0.3, ease: "power2.out" }, 47.0);
+        tl.to(ctCur, { scale: 0.88, duration: 0.06, ease: "power1.in", transformOrigin: "5px 3px" }, CT_CLICK);
+        tl.to(ctCur, { scale: 1, duration: 0.1, ease: "power1.out" }, CT_CLICK + 0.06);
+        tl.set(ctRip, { opacity: 0, immediateRender: true }, 0);
+        tl.fromTo(ctRip, { opacity: 1, scale: 0.4 }, { opacity: 0, scale: 1.4, duration: 0.3, ease: "power2.out", immediateRender: false }, A(CT_CLICK));
+        tl.fromTo("#ct-r0", { scale: 1 }, { scale: 0.98, duration: 0.075, ease: "power1.inOut", yoyo: true, repeat: 1, immediateRender: false }, CT_CLICK);
+        const ctMore = el("div", "abs", r0, "left:0;top:0;width:880px;height:200px;opacity:0");
+        ctMore.id = "ct-more";
+        el("div", "abs", ctMore, "left:100px;top:150px;height:22px;display:flex;align-items:center;gap:8px;white-space:nowrap;font-family:var(--mono);font-weight:500;font-size:22px;line-height:1;color:#5e5d59",
+          '<svg style="width:22px;height:22px;fill:#d9a23f"><use href="#i-star"/></svg><span>1.4k · MIT license</span>');
+        const star = el("div", "pillx", ctMore, "left:392px;top:139px;height:44px;padding:0 18px;border-radius:10px;background:#d97757;color:#ffffff;font-family:'Inter',sans-serif;font-weight:600;font-size:26px", "Star");
+        star.id = "ct-star";
+        tl.fromTo("#ct-r0", { height: 136 }, { height: 200, duration: 0.28, ease: "expo.out", immediateRender: false }, CT_OPEN);
+        tl.fromTo(["#ct-r1", "#ct-r2"], { y: 80 }, { y: 144, duration: 0.28, ease: "expo.out", immediateRender: false }, CT_OPEN);
+        // row 3 fades out while it slides: at y +144 it would sit at card y 500-556 and the 555 px card (overflow hidden) would cut its
+        // rounded bottom flat. End frame: row 1 (196-396) + row 2 (420-476), 79 px bottom margin, nothing clipped
+        tl.to("#ct-r2", { opacity: 0, duration: 0.1, ease: "power1.in" }, CT_OPEN);
+        tl.fromTo(ctMore, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.24, ease: "power2.out" }, CT_OPEN + 0.05);
+        tl.fromTo(star, { scale: 1, transformOrigin: "50% 50%" }, { scale: 1.06, duration: 0.2, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false }, 47.62);
+
+        /* =====================================================================
+           CAPTIONS (reference B chip, hard swaps, plan chunks from words.json)
+           ===================================================================== */
+        const CAPS = [
+          // chunks are mostly 3 words, every chunk holds >= 9 frames (0.30 s); a swap lands 2 frames before its first word
+          [0.0, 0.273, "SO IF YOU"],
+          [0.273, 20 / 30, "WANT TO GET"],
+          [20 / 30, 1.073, "YOUR HANDS"],
+          [1.073, 1.553, "ON THE NEW"],
+          [1.553, 2.62, "<b>CLAUDE MOTION</b>"],
+          [2.62, 3.493, "DESIGN"],
+          [3.493, 4.273, "YET YOU DON'T"],
+          [4.273, 4.913, "HAVE THE TEAMS"],
+          // (rhythm pass: chunk boundaries moved onto the layout cuts where a word starts there, so the chip changes with the cut)
+          [4.913, F04, "OR ENTERPRISE PLAN"],
+          [F04, 6.373, "WHICH IS THE"],
+          [6.373, 7.033, "ONLY PLACE YOU"],
+          [7.033, S05, "CAN GET IT"],
+          [S05, 8.153, "THEN YOU NEED"],
+          [8.153, 8.573, "TO CHECK OUT"],
+          [8.573, 9.853, "THIS GITHUB REPO"],
+          [9.853, G06, "IT'S CALLED"],
+          [G06, 11.713, "<b>HUASHU MOTION</b>"],
+          [11.713, 12.273, "AND IT IS"],
+          [12.273, F07, "ESSENTIALLY AN"],
+          [F07, 13.753, "OPEN SOURCE VERSION"],
+          [13.753, 15.053, "OF <b>CLAUDE MOTION</b>"],
+          [15.053, 15.813, "ALL THE MOTION"],
+          [15.813, 16.953, "GRAPHICS ARE CREATED"],
+          [16.953, 17.833, "WITH CODE"],
+          [17.833, 18.353, "SPECIFICALLY"],
+          [18.353, 19.453, "THINGS LIKE"],
+          [19.453, 20.233, "JAVASCRIPT"],
+          [20.233, 20.933, "SO YOU AREN'T"],
+          [20.933, 21.553, "PAYING FOR"],
+          [21.553, G11, "LIKE ANY"],
+          [G11, 23.6, "VIDEO AI"],
+          [23.6, 24.253, "GENERATOR"],
+          [24.253, 24.673, "LIKE WE'RE NOT"],
+          [24.673, 25.593, "USING KLING"],
+          [25.593, 26.293, "WE'RE NOT USING"],
+          [26.293, F14, "SEEDANCE"],
+          [F14, 27.673, "THIS IS ALL"],
+          [27.673, 28.293, "CODE"],
+          [28.293, 29.753, "IT ADDS TRANSITIONS"],
+          [29.753, 30.973, "IT ADDS MUSIC"],
+          [30.973, 31.733, "AND IT EVEN"],
+          [31.733, 33.193, "INCLUDES AN EDITOR"],
+          [33.193, 33.973, "THAT YOU CAN"],
+          [33.973, 34.513, "USE INSIDE OF"],
+          [34.513, 35.053, "YOUR BROWSER"],
+          [35.053, 35.98, "I ALSO RAN IT"],
+          [35.98, G19, "HEAD-TO-HEAD WITH"],
+          [G19, 37.293, "HYPERFRAMES"],
+          [37.293, 37.733, "AND THIS"],
+          [37.733, 39.153, "<b>HUASHU MOTION</b> DID"],
+          [39.153, 39.533, "A LITTLE BIT"],
+          [39.533, 39.85, "BETTER"],
+          [39.85, 1208 / 30, "WHEN"], // takeover position, to the f1208 cut
+          [1208 / 30, 40.673, "WE'RE LOOKING"],
+          [40.673, 41.473, "AT THINGS LIKE"],
+          [41.473, F21, "PRODUCT DEMOS"],
+          [F21, 43.653, "SO DEFINITELY"],
+          [43.653, 1328 / 30, "CHECK IT OUT"], // the chip swaps on 'Just' (44.26), independent of the 44.633 CTA cut
+          [1328 / 30, 44.953, "JUST GOOGLE"],
+          [44.953, 1391 / 30, "<b>HUASHU MOTION</b> GITHUB"],
+          [1391 / 30, 46.733, "AND IT'LL BE"], // spoken 'it'll' (will = 20 ms); 11 frames, off the strobe floor
+          [46.733, 47.213, "THE FIRST THING"],
+          [47.213, 48.05, "THAT POPS UP"]
+        ];
+        const POSY = { seam: 0, takeover: 621, full: 432 }; // seam y 920-1000, G y 1541-1621, full-face y 1353-1431 (centre 1392, reference B)
+        const caps = $("#caps");
+        [[0, "seam"], [F04, "full"], [S05, "seam"], [G06, "takeover"], [F07, "full"], [S08, "seam"], [G11, "takeover"], [F14, "full"],
+         [S15, "seam"], [F18, "full"], [G19, "takeover"], [VS_CUT, "seam"], [F21, "full"], [CUT, "seam"]].forEach(([t, p]) => tl.set(caps, { y: POSY[p] }, t === 0 ? 0 : A(t)));
+        CAPS.forEach(([on, off, html]) => {
+          const c = el("div", "chip", caps);
+          el("div", "in", c, "", html);
+          // pure hard swap: full size from the first frame, no entrance tween
+          if (on === 0) tl.set(c, { opacity: 1, immediateRender: true }, 0); else tl.set(c, { opacity: 1 }, A(on));
+          if (off < END - 0.01) tl.set(c, { opacity: 0 }, A(off));
+        });
+
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>

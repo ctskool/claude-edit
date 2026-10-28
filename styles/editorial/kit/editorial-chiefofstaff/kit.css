@@ -1,0 +1,198 @@
+/* =====================================================================================================
+   EDITORIAL KIT - kit.css  (v1.0)
+   Distilled from the frame-matched replica of reference creator A "5 Claude skills", skill 1 (Chief of Staff)
+   (work/replica/editorial-chiefofstaff, mean SSIM 0.967 vs the reference). Every number below was measured on
+   the 1080x1920 / 30 fps reference. See COMPONENTS.md for what each class is for.
+
+   Paths: this file must sit in the project ROOT (next to index.html) with the project's assets/ folder beside
+   it, because CSS url() resolves relative to the stylesheet: assets/fonts/*.woff2.
+   Font names are written literally (never through var()) so `hyperframes lint` can match them to @font-face.
+   ===================================================================================================== */
+
+/* ---------- fonts (local, assets/fonts) ---------- */
+@font-face { font-family: "Inter"; font-weight: 400; src: url("assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Newsreader"; font-weight: 400; src: url("assets/fonts/newsreader-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Newsreader"; font-weight: 500; src: url("assets/fonts/newsreader-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Newsreader"; font-weight: 400; font-style: italic; src: url("assets/fonts/newsreader-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Newsreader"; font-weight: 500; font-style: italic; src: url("assets/fonts/newsreader-latin-500-italic.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 500; src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url("assets/fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2"); }
+
+/* ---------- tokens (sampled from the reference; video-compressed values) ---------- */
+:root {
+  /* surfaces */
+  --k-ivory: #EEEEE7;          /* panel / takeover background */
+  --k-card: #FAFCFB;           /* card fill */
+  --k-edge: #DEDED6;           /* card border, 3 px */
+  --k-dark: #1B1D18;           /* command bar, HUD pill, tree node, dark hook panel */
+  --k-pink: #F5EAE4;           /* icon disc behind clay line icons */
+  /* ink */
+  --k-ink: #151716;            /* titles, names */
+  --k-grey: #82827A;           /* "SKILL 1 OF 5", section labels */
+  --k-step-grey: #ADAEA4;      /* inactive step numbers */
+  --k-sub-grey: #7E807C;       /* "AGENT" / "agent" sub-labels */
+  /* accent */
+  --k-clay: #CB6D55;           /* THE accent: fills, active states, eyebrows, bars, checks */
+  --k-clay-chev: #C9705D;      /* prompt chevron in the command bar */
+  --k-claude-red: #CF5850;     /* Claude chip fill */
+  --k-badge: #D9614D;          /* Claude badge on the dark hook */
+  /* lines & tracks */
+  --k-rail: #D5D6CA;           /* stepper rail, inactive HUD dashes, inactive step border */
+  --k-line: #AFAFA6;           /* org-tree lines, 4 px */
+  --k-dash: #CECFC7;           /* dashed placeholders, 4 px, dash 8.5 / gap 4 */
+  --k-track: #E7E6DB;          /* agent-card progress track */
+  --k-track-row: #E8E6E0;      /* list-row progress track */
+  --k-track-goal: #E6E7DB;     /* goal progress track */
+  /* calendar */
+  --k-cal-last: #EBEADF; --k-cal-last-text: #9F9E92;
+  --k-cal-this: #F2F2ED; --k-cal-this-text: #C4C4BC;
+  --k-cal-label: #111313; --k-cal-label-dim: #ACACA8;
+  /* dark hook / cubes */
+  --k-hook-sub: #A6A69F;
+  --k-cube-front: #CB6D55; --k-cube-top: #E09685; --k-cube-side: #AB553D;
+  /* captions */
+  --k-cap-bg: rgba(15, 17, 17, 0.94);   /* solved from #1C1E1E on ivory and #0E1010 on black */
+  /* shadows / halos */
+  --k-shadow-card: 0 10px 26px rgba(70, 70, 50, 0.07);
+  --k-shadow-tile: 0 12px 26px rgba(203, 109, 85, 0.28);
+  --k-shadow-goal: 0 0 0 12px rgba(203, 109, 85, 0.15), 0 14px 30px rgba(203, 109, 85, 0.16);
+  --k-shadow-node: 0 14px 28px rgba(30, 30, 20, 0.16);
+  --k-shadow-agent: 0 8px 20px rgba(70, 70, 50, 0.06);
+  --k-shadow-row: 0 6px 16px rgba(70, 70, 50, 0.05);
+  --k-shadow-chip: 0 8px 18px rgba(207, 88, 80, 0.18);
+  --k-halo-10: 0 0 0 10px rgba(203, 109, 85, 0.15);   /* active step */
+  --k-halo-6: 0 0 0 6px rgba(203, 109, 85, 0.15);     /* NEW calendar cell */
+  /* radii (px) */
+  --k-r-card: 30px; --k-r-tile: 34px; --k-r-bar: 26px; --k-r-goal: 40px; --k-r-agent: 25px;
+  --k-r-row: 28px; --k-r-node: 29px; --k-r-cell: 16px; --k-r-pill: 9px; --k-r-chip: 16px; --k-r-cap: 14px;
+  /* layout */
+  --k-seam: 960px;             /* split: graphics 0-960, face cam 960-1920, hard edge */
+  --k-cap-top-split: 904px;    /* caption chip top, split (chip 904-1015, centred on the seam) */
+  --k-cap-top-full: 1423px;    /* caption chip top, full takeover (chip 1423-1534) */
+}
+
+/* ---------- base ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--k-ivory); }
+.k-root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: var(--k-ink);
+          will-change: transform; /* forces grayscale text AA like the reference (no LCD colour fringes) */ }
+.k-root svg { stroke-width: 2; }
+.k-abs { position: absolute; }
+.k-t { position: absolute; line-height: 1; white-space: nowrap; }
+.k-serif { font-family: "Newsreader", serif; font-weight: 400; transform-origin: 0 50%; }
+
+/* ---------- layout: face cam, scenes, HUD host, caption rail ---------- */
+.k-face-wrap { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; background: #000; z-index: 1; }
+.k-face { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; object-fit: cover; object-position: 50% 0%; }
+.k-face-stub { position: absolute; inset: 0; background: linear-gradient(180deg, #2a2b27 0%, #121311 100%); }
+.k-face-stub .k-t { left: 0; width: 1080px; top: 460px; text-align: center; font-family: "JetBrains Mono", monospace; font-weight: 500;
+                    font-size: 26px; letter-spacing: 0.12em; color: #6f706a; }
+.k-scene { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; background: var(--k-ivory); overflow: hidden; z-index: 2; }
+.k-scene.k-full { height: 1920px; }            /* full takeover: covers the face cam */
+.k-scene.k-dark { background: var(--k-dark); } /* dark hook panel */
+.k-hud { position: absolute; left: 0; top: 0; width: 1080px; height: 300px; z-index: 3; }
+.k-caps { position: absolute; left: 0; top: 904px; width: 1080px; height: 111px; z-index: 5; }
+
+/* ---------- caption chip (hard swap) ---------- */
+.k-cap { position: absolute; left: 50%; top: 0; height: 111px; transform: translateX(-50%); padding: 4px 33px 0 33px; border-radius: 14px;
+         background: var(--k-cap-bg); color: #fff; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 55px;
+         letter-spacing: 2.25px; display: flex; align-items: center; white-space: nowrap; opacity: 0; line-height: 1; }
+
+/* ---------- labels ---------- */
+.k-sk-label { left: 0; width: 1080px; top: 239px; text-align: center; font-weight: 700; font-size: 25px; letter-spacing: 0.152em;
+              padding-left: 0.03em; color: var(--k-grey); }
+.k-label { font-weight: 700; font-size: 26px; letter-spacing: 0.124em; color: var(--k-grey); }
+.k-eyebrow { font-weight: 700; letter-spacing: 0.14em; color: var(--k-clay); }
+
+/* ---------- skill card ---------- */
+.k-sk-card { left: 90px; top: 290px; width: 900px; height: 400px; background: var(--k-card); border: 3px solid var(--k-edge);
+             border-radius: 30px; box-shadow: var(--k-shadow-card); }
+.k-sk-tile { left: 44px; top: 44px; width: 150px; height: 150px; border-radius: 34px; background: var(--k-clay); box-shadow: var(--k-shadow-tile); }
+.k-sk-tile svg { position: absolute; left: 0; top: 0; width: 150px; height: 150px; }
+.k-sk-title { left: 231px; top: 81px; font-size: 93px; color: var(--k-ink); letter-spacing: -0.01em; }
+.k-sk-bar { left: 44px; top: 236px; width: 812px; height: 120px; border-radius: 26px; background: var(--k-dark); }
+.k-sk-chev { left: 44px; top: 48px; width: 12px; height: 20px; }
+.k-cmd { left: 87px; top: 34.5px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 44px; color: #fff; }
+.k-cmd span { opacity: 0; }
+
+/* ---------- stepper ---------- */
+.k-rail { height: 6px; background: var(--k-rail); }
+.k-rail-on { height: 6px; background: var(--k-clay); }
+.k-step { width: 70px; height: 70px; border-radius: 50%; background: var(--k-card); border: 4px solid var(--k-rail);
+          display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 34px; color: var(--k-step-grey); }
+.k-step.k-on { background: var(--k-clay); border-color: var(--k-clay); color: #fff; box-shadow: var(--k-halo-10); }
+.k-step.k-done { border-color: var(--k-clay); color: var(--k-clay); }
+.k-step b { font-weight: 600; display: block; line-height: 1; margin: 5px 0 0 8px; }   /* outline-step digit sits +4/+2.5 px off centre (as in ref) */
+.k-step.k-on b { margin: -2px 0 0 0; font-size: 33px; }
+.k-step.k-done b { margin: 3px 0 0 5px; }
+
+/* ---------- HUD (pill + progress dashes) ---------- */
+.k-pill { left: 90px; top: 226px; width: 311px; height: 46px; border-radius: 9px; background: var(--k-dark); }
+.k-pill .k-t { top: 9px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 24px; }
+.k-dash { top: 244px; width: 50px; height: 10px; border-radius: 5px; background: var(--k-rail); }
+.k-dash.k-on { background: var(--k-clay); }
+
+/* ---------- calendar card ---------- */
+.k-cal { left: 90px; top: 300px; width: 900px; height: 255px; background: var(--k-card); border: 3px solid var(--k-edge); border-radius: 30px;
+         box-shadow: var(--k-shadow-card); }
+.k-cal-l { font-weight: 700; font-size: 22px; letter-spacing: 0.14em; color: var(--k-cal-label); }
+.k-cal-l.k-dim { color: var(--k-cal-label-dim); }
+.k-cell { width: 80px; height: 80px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 23px; }
+.k-cell.k-l { background: var(--k-cal-last); color: var(--k-cal-last-text); box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.025); }
+.k-cell.k-n { background: var(--k-cal-this); color: var(--k-cal-this-text); }
+.k-cell.k-new { background: var(--k-clay); color: #fff; font-weight: 700; font-size: 22px; letter-spacing: 0.02em; padding-bottom: 6px; box-shadow: var(--k-halo-6); }
+
+/* ---------- goal card (big hero), connector, Claude chip ---------- */
+.k-goal { left: 90px; top: 640px; width: 900px; height: 470px; background: var(--k-card); border: 4px solid var(--k-clay); border-radius: 40px;
+          box-shadow: var(--k-shadow-goal); }
+.k-target { left: 372px; top: 46px; width: 150px; height: 150px; border-radius: 50%; background: var(--k-clay); }
+.k-conn { left: 537px; top: 1112px; width: 6px; height: 88px; background: var(--k-clay); border-radius: 3px; transform-origin: 50% 0%; }
+.k-cchip { left: 398px; top: 1200px; width: 284px; height: 84px; border-radius: 16px; background: var(--k-claude-red); box-shadow: var(--k-shadow-chip); }
+
+/* ---------- org tree: node, lines, agent cards ---------- */
+.k-node { left: 330px; top: 300px; width: 420px; height: 110px; border-radius: 29px; background: var(--k-dark); box-shadow: var(--k-shadow-node); }
+.k-node .k-ic { left: 22px; top: 20px; width: 70px; height: 70px; border-radius: 50%; background: var(--k-clay); }
+.k-ln { background: var(--k-line); }
+.k-agent { top: 560px; width: 164px; height: 250px; background: var(--k-card); border: 3px solid var(--k-edge); border-radius: 25px; box-shadow: var(--k-shadow-agent); }
+.k-agent .k-ic { left: 38px; top: 29px; width: 86px; height: 86px; border-radius: 50%; background: var(--k-pink); }
+.k-agent .k-ic svg { position: absolute; left: 23px; top: 23px; width: 40px; height: 40px; stroke-width: 1.8; }
+.k-agent .k-nm { left: 0; width: 158px; top: 137.5px; text-align: center; font-weight: 700; font-size: 28.2px; letter-spacing: -0.01em; }
+.k-agent .k-ag { left: 0; width: 158px; top: 174px; text-align: center; font-weight: 600; font-size: 19px; letter-spacing: 0.175em; color: var(--k-sub-grey); }
+.k-agent .k-tr { left: 28px; top: 216px; width: 102px; height: 8px; border-radius: 4px; background: var(--k-track); overflow: hidden; }
+.k-agent .k-tr i { position: absolute; left: 0; top: 0; height: 8px; border-radius: 4px; background: var(--k-clay); }
+
+/* ---------- goal progress card + check rows ---------- */
+.k-goal2 { left: 90px; top: 300px; width: 900px; height: 260px; background: var(--k-card); border: 4px solid var(--k-clay); border-radius: 40px;
+           box-shadow: var(--k-shadow-goal); }
+.k-gbar { left: 44px; top: 190px; width: 680px; height: 18px; border-radius: 9px; background: var(--k-track-goal); overflow: hidden; }
+.k-gbar i, .k-rbar i { position: absolute; left: 0; top: 0; height: 100%; border-radius: 9px; background: var(--k-clay); transform-origin: 0 50%; }
+.k-gchk { left: 770px; top: 60px; width: 96px; height: 96px; border-radius: 50%; background: var(--k-clay); }
+.k-row { left: 90px; width: 900px; height: 112px; background: var(--k-card); border: 3px solid var(--k-edge); border-radius: 28px; box-shadow: var(--k-shadow-row); }
+.k-row .k-ic { left: 22px; top: 20px; width: 76px; height: 76px; border-radius: 50%; background: var(--k-pink); }
+.k-row .k-ic svg { position: absolute; left: 19.5px; top: 19.5px; width: 37px; height: 37px; stroke-width: 1.7; }
+.k-row .k-nm { left: 123px; top: 27px; font-weight: 700; font-size: 33px; letter-spacing: -0.01em; }
+.k-row .k-ag { left: 123px; top: 70px; font-weight: 500; font-size: 23px; color: var(--k-sub-grey); }
+.k-rbar { left: 330px; top: 51px; width: 440px; height: 12px; border-radius: 6px; background: var(--k-track-row); overflow: hidden; }
+.k-rbar i { border-radius: 6px; }
+.k-rchk { left: 810px; top: 29px; width: 56px; height: 56px; border-radius: 50%; background: var(--k-clay); }
+
+/* ---------- dark hook title card: Claude badge + 3D cubes ---------- */
+.k-badge { left: 458px; top: 222px; width: 164px; height: 48px; border-radius: 8px; background: var(--k-badge); box-shadow: 0 0 18px rgba(217, 97, 77, 0.35); }
+.k-cube { width: 151px; height: 150px; }
+.k-cube .k-f { left: 0; top: 32px; width: 118px; height: 118px; background: var(--k-cube-front); display: flex; align-items: center; justify-content: center;
+               font-family: "Newsreader", serif; font-size: 66px; color: #fff; padding-top: 4px; }
+.k-cube .k-tp { left: 0; top: 0; width: 151px; height: 33px; background: var(--k-cube-top); clip-path: polygon(33px 0, 151px 0, 118px 33px, 0 33px); }
+.k-cube .k-sd { left: 117px; top: 0; width: 34px; height: 150px; background: var(--k-cube-side); clip-path: polygon(34px 0, 34px 117px, 1px 150px, 1px 32px); }
+
+/* ---------- OPT-IN contrast-safe variant: <div id="root" class="k-root k-contrast" ...> ----------
+   The reference's muted greys (inactive step digits, empty calendar cells, "THIS WEEK", agent sub-labels) fail
+   `hyperframes check` contrast (WCAG AA). This class darkens exactly those to the minimum passing value. It is a
+   deliberate deviation from the reference: leave it off for frame-matching, turn it on when the gate must pass. */
+.k-root.k-contrast .k-step { color: #919189; }                                 /* 3.08:1 on card (large text) */
+.k-root.k-contrast .k-cal-l.k-dim { color: #90908D; }                          /* 3.11:1 */
+.k-root.k-contrast .k-cell.k-l { color: #696861; }                             /* 4.63:1 on #EBEADF */
+.k-root.k-contrast .k-cell.k-n { color: #6D6D69; }                             /* 4.63:1 on #F2F2ED */
+.k-root.k-contrast .k-agent .k-ag, .k-root.k-contrast .k-row .k-ag { color: #727470; }  /* 4.58:1 */

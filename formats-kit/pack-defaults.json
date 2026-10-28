@@ -1,0 +1,100 @@
+{
+ "_help": "Per-format answers the Creator Skill Pack asks at setup; your brand comes from config/profile.json. Edit a value here or override it under \"skills\" in config/profile.json, then: python tools/import_formats.py --refill",
+ "creator_name": "Your Name",
+ "brand_name": "Your Brand",
+ "handle": "@yourhandle",
+ "platform": "Instagram",
+ "niche": "",
+ "accent": "#FF5A1F",
+ "accent_name": "orange",
+ "bg": "#0B0B0C",
+ "paper": "#F2F0EC",
+ "grey": "#9AA3AE",
+ "font_main_name": "Space Grotesk",
+ "font_main_bold": {
+  "file": "SpaceGrotesk-Bold.woff2"
+ },
+ "font_main_regular": {
+  "file": "SpaceGrotesk-Regular.woff2"
+ },
+ "font_caption_name": "Inter Tight",
+ "font_caption": {
+  "file": "InterTight-ExtraBold.woff2"
+ },
+ "font_accent_name": "Instrument Serif Italic",
+ "font_accent": {
+  "file": "InstrumentSerif-Italic.woff2"
+ },
+ "transcriber": "local",
+ "output_rule": "work/<id>/formats/<format>/renders, collected in out/<id>-formats.html",
+ "music_dir": "none",
+ "music_rule": "ask",
+ "proof_dir": "none (fetch real pages and screenshots, list every source)",
+ "skills": {
+  "business-short-form-reels": {
+   "camera_setup": "Desk camera + optional screen recording; raw takes tight-cut by tools/rawcut.py",
+   "working_style": "build-first",
+   "cta_style": "point to where to find the tool"
+  },
+  "explainer-panel-reel": {
+   "watermark": "no",
+   "emphasis_scale": 1.12,
+   "heading_block": "block",
+   "popout": "on",
+   "close_up_zoom": "off",
+   "work_rule": "run to the end and report (build-first); show the draft render before any final"
+  },
+  "depth-ui-reel": {
+   "working_style": "build-first",
+   "web_assets": "yes: real over drawn, every source listed in the report",
+   "never_show": "nothing listed",
+   "dim_level": "0.40",
+   "punch_max": "1.10",
+   "caption_size": "64",
+   "caption_y": "1146",
+   "emph_size": "132",
+   "head_box": "320 320 840 1120"
+  },
+  "fitted-stacked-captions": {
+   "lead_seconds": 0.22,
+   "anchor_px": 195,
+   "small_px": 48,
+   "bottom_limit": 1250,
+   "review_rule": "render the final straight after a clean layout sheet"
+  },
+  "glass-explainer-reel": {
+   "watermark": "off",
+   "glass_look": "full",
+   "sound_effects": "on",
+   "web_assets": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed",
+   "work_rule": "finish the best version, then report"
+  },
+  "visual-essay-reel": {
+   "web_assets": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed",
+   "work_rule": "run to the end, then report",
+   "glow_default": "bottom",
+   "title_font": "emphasis"
+  },
+  "cutout-backdrop-reel": {
+   "hook_label": "white",
+   "image_dirs": "work/<id>/shared",
+   "web_images": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed",
+   "review_rule": "render the final straight after a clean layout sheet"
+  },
+  "cutout-grid-reel": {
+   "paper": "#F2F0EC",
+   "hook_rule": "yes: a short text hook on a white label across the top images",
+   "web_images": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed"
+  },
+  "image-cluster-reel": {
+   "image_types": "real screenshots, product shots, logos and charts that carry the idea; metaphor images only when the creator supplies them",
+   "image_sources": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed",
+   "image_dirs": "work/<id>/shared",
+   "review_rule": "render the final straight after a clean layout sheet"
+  },
+  "ranking-format": {
+   "web_assets": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed",
+   "work_rule": "build the preview and report; ask before changing the table placement"
+  }
+ }
+}

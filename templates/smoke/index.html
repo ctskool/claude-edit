@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Newsreader"; font-weight: 500; font-style: italic; src: url("assets/fonts/newsreader-latin-500-italic.woff2") format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url("assets/fonts/inter-tight-latin-800-normal.woff2") format("woff2"); }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #eeeee7; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #eeeee7; }
+      #panel { position: absolute; left: 40px; top: 620px; width: 1000px; height: 563px; border-radius: 22px; overflow: hidden; background: #111; }
+      #clip { position: absolute; inset: 0; width: 1000px; height: 563px; object-fit: cover; }
+      #title { position: absolute; left: 40px; top: 300px; font: italic 500 120px/1 "Newsreader", serif; color: #b8573a; opacity: 0; }
+      #cap { position: absolute; left: 50%; top: 1260px; transform: translateX(-50%); white-space: nowrap; opacity: 0;
+        font: 800 64px/1 "Inter Tight", sans-serif; color: #fff; -webkit-text-stroke: 8px #111; paint-order: stroke fill; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-width="1080" data-height="1920" data-fps="30">
+      <div id="title">claude-edit</div>
+      <div id="panel"><video id="clip" class="clip" src="assets/clip.mp4" muted playsinline data-start="0" data-duration="5" data-track-index="0"></video></div>
+      <div id="cap">setup works</div>
+      <audio id="tone" class="clip" src="assets/tone.m4a" data-start="0" data-duration="5" data-track-index="1" data-volume="0.2"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.3);
+      tl.fromTo("#panel", { scale: 0.92 }, { scale: 1, duration: 0.8, ease: "power3.out" }, 0);
+      tl.fromTo("#cap", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.5);
+      tl.set({}, {}, 5);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

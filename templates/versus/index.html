@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Raw vs Claude: two 16:9 panels stacked in 9:16. Top = the take with every edit the speaker asks for, landing on the
+         word that names it; bottom = the same take, dead space cut only. Everything timed comes from edits.js, which
+         tools/versus.py build writes from work/<id>/versus/edits.json. -->
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script src="edits.js"></script>
+    <style>
+      @font-face { font-family: "Newsreader"; font-weight: 500; font-style: normal; src: url("assets/fonts/newsreader-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Newsreader"; font-weight: 500; font-style: italic; src: url("assets/fonts/newsreader-latin-500-italic.woff2") format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url("assets/fonts/inter-tight-latin-800-normal.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 500; src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url("assets/fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Space Grotesk"; font-weight: 700; src: url("assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); }
+      :root { --ivory: #eeeee7; --ink: #1f1e1d; --clay: #d97757; --clay-lt: #f0a07e; --mute: #6e6c65; --clay-dk: #b8573a; --serif: "Newsreader", Georgia, serif; --mono: "JetBrains Mono", ui-monospace, monospace; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ivory); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ivory);
+        background-image: linear-gradient(rgba(0,0,0,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px);
+        background-size: 40px 40px; }
+
+      /* short-form safe layout: header below the app's top tabs, both panels done by y ~1550 (caption + buttons zone below) */
+      .hline { position: absolute; left: 40px; font: 500 78px/1 var(--serif); color: var(--ink); letter-spacing: -.01em; white-space: nowrap; }
+      #h1 { top: 140px; }
+      #h2 { top: 224px; font-style: italic; color: var(--clay-dk); }
+      .hw { display: inline-block; opacity: 0; }
+
+      /* panels: built at 1080x608, shown at 1000x563 */
+      .panel { position: absolute; left: 40px; width: 1080px; height: 608px; overflow: hidden; background: #111; border-radius: 22px; transform: scale(.92593); transform-origin: 0 0; }
+      #pa { top: 362px; }
+      #pb { top: 985px; }
+      .label { position: absolute; left: 40px; height: 36px; padding: 0 14px; border-radius: 8px; font: 700 20px/36px var(--mono); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+      #la { top: 316px; background: var(--clay); color: #fff; }
+      #lb { top: 939px; background: #dcd8d1; color: var(--ink); }
+      #lb span { color: var(--mute); font-weight: 500; }
+
+      /* panel A layers: #cam is what the punch-in scales */
+      #cam { position: absolute; inset: 0; transform-origin: 50% 32%; }
+      .camv { position: absolute; left: -20px; top: -11px; width: 1120px; height: 630px; object-fit: cover; display: block; }
+      #bgw { position: absolute; inset: 0; --b: 0; --gs: 0; --con: 1; filter: blur(calc(var(--b) * 1px)) grayscale(var(--gs)) contrast(var(--con)); }
+      #grade { position: absolute; inset: 0; opacity: 0; mix-blend-mode: soft-light; }
+      #grade.warm { background: radial-gradient(120% 120% at 50% 35%, #ffd2a1 0%, #f2a66a 60%, #c98a5c 100%); }
+      #grade.cool { background: radial-gradient(120% 120% at 50% 35%, #cfe6ff 0%, #7fa8d9 60%, #4f6f99 100%); }
+      #grade.punchy { background: radial-gradient(120% 120% at 50% 35%, #fff2dc 0%, #e08a5a 55%, #2a1c14 100%); }
+      #fgw { position: absolute; inset: 0; --wf: 0; --cf: 0; --gs: 0;
+        filter: sepia(calc(var(--wf) * .06)) saturate(calc(1 + var(--wf) * .03 - var(--cf) * .05)) brightness(calc(1 + var(--wf) * .02)) hue-rotate(calc(var(--cf) * -8deg)) grayscale(var(--gs)); }
+      #title { position: absolute; left: 0; width: 1080px; top: 46px; text-align: center; font: 500 196px/.9 var(--serif); color: #fbf8f2; letter-spacing: -.02em; transform-origin: 50% 0; }
+      #title .t2 { font-style: italic; color: var(--clay-lt); }
+      #title .tw { display: inline-block; opacity: 0; }
+
+      /* captions: plain short-form captions (heavy white sans, black outline); key words get a clay box */
+      #caps { position: absolute; left: 0; width: 1080px; top: 0; height: 608px; pointer-events: none; }
+      .c1 { position: absolute; left: 50%; top: 476px; transform: translateX(-50%); opacity: 0; white-space: nowrap;
+        color: #fff; font: 800 52px/1.15 "Inter Tight", sans-serif; letter-spacing: -.005em; word-spacing: .08em;
+        -webkit-text-stroke: 7px #111; paint-order: stroke fill; text-shadow: 0 4px 14px rgba(0,0,0,.35); }
+      .c1 .kw { border-radius: 8px; }
+      .c2 { position: absolute; left: 50%; top: 488px; transform: translateX(-50%); opacity: 0; white-space: nowrap;
+        color: #fff; font: 500 58px/1.05 var(--serif); text-shadow: 0 2px 14px rgba(0,0,0,.55), 0 0 2px rgba(0,0,0,.35); }
+      .c2.mono { font: 700 46px/1.1 var(--mono); letter-spacing: -.01em; }
+      .c2.grotesk { font: 700 54px/1.05 "Space Grotesk", sans-serif; letter-spacing: -.01em; }
+      .kw { display: inline-block; }
+      .c2 .kw { font-style: italic; color: var(--clay-lt); }
+      .c2.mono .kw, .c2.grotesk .kw { font-style: normal; }
+
+      /* text pop + lower third (optional ops) */
+      .pop { position: absolute; left: 0; width: 1080px; top: 170px; text-align: center; font: 800 150px/1 "Inter Tight", sans-serif; color: #fff;
+        -webkit-text-stroke: 10px #111; paint-order: stroke fill; opacity: 0; }
+      .lower { position: absolute; left: 40px; top: 400px; padding: 14px 22px; background: rgba(255,255,255,.95); border-radius: 14px; opacity: 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,.28); }
+      .lower b { display: block; font: 700 34px/1.1 var(--serif); color: var(--ink); }
+      .lower span { display: block; font: 500 20px/1.3 var(--mono); color: var(--clay-dk); letter-spacing: .06em; text-transform: uppercase; }
+
+      /* edit log card */
+      #log { position: absolute; left: 708px; top: 20px; width: 352px; padding: 14px 18px 10px; background: #fff; border-radius: 14px; opacity: 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,.28), 0 0 0 1px rgba(0,0,0,.05); font: 500 23px/1 var(--mono); color: var(--ink); }
+      #log .hd { display: flex; justify-content: space-between; font: 700 18px/1 var(--mono); letter-spacing: .14em; color: var(--mute); padding-bottom: 10px; border-bottom: 1px solid #e4e2da; margin-bottom: 6px; }
+      #log .hd b { color: var(--clay-dk); }
+      .row { position: relative; height: 35px; display: none; align-items: center; gap: 10px; opacity: 0; border-radius: 6px; padding: 0 6px; margin: 0 -6px; }
+      .row .ck { color: var(--clay); font-weight: 700; width: 18px; }
+      .row .tx { position: relative; flex: 1; height: 35px; }
+      .row .tx span { position: absolute; left: 0; top: 6px; white-space: nowrap; }
+      .row .hl { position: absolute; inset: 0; border-radius: 6px; background: rgba(217,119,87,.16); opacity: 0; }
+
+      /* end strip */
+      #end { position: absolute; left: 40px; top: 1572px; font: 500 58px/1 var(--serif); color: var(--ink); opacity: 0; }
+      #end i { color: var(--clay-dk); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{{DURATION}}" data-width="1080" data-height="1920" data-fps="30">
+      <div id="h1" class="hline"></div>
+      <div id="h2" class="hline"></div>
+
+      <div id="la" class="label"></div>
+      <div id="pa" class="panel">
+        <div id="cam">
+          <div id="bgw"><video id="vbg" class="camv clip" src="assets/cam_1080.mp4" muted playsinline data-start="0" data-duration="{{DURATION}}" data-track-index="0"></video></div>
+          <div id="grade"></div>
+          <div id="title"></div>
+          {{FOREGROUND}}
+        </div>
+        <div id="fx"></div>
+        <div id="caps"></div>
+        <div id="log"><div class="hd"><span>EDIT LOG</span><b id="cnt">00</b></div><div id="rows"></div></div>
+      </div>
+
+      <div id="lb" class="label"></div>
+      <div id="pb" class="panel">
+        <video id="vraw" class="clip" src="assets/cam_raw.mp4" muted playsinline data-start="0" data-duration="{{DURATION}}" data-track-index="2" style="position:absolute;left:0;top:0;width:1080px;height:608px;object-fit:cover"></video>
+      </div>
+      <div id="end"></div>
+
+      <audio id="voice" class="clip" src="assets/voice.m4a" data-start="0" data-duration="{{DURATION}}" data-track-index="9" data-volume="1"></audio>
+{{AUDIO}}
+    </div>
+
+    <script>
+      (function () {
+        const E = window.EDITS;
+        const $ = (s) => document.querySelector(s);
+        const root = $("#root");
+        const el = (tag, cls, parent, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; parent.appendChild(e); return e; };
+        const D = E.duration, END = E.speech_end || D;
+        // music bed + one sound per edit are static <audio> clips that tools/versus.py build writes into this page
+
+        const tl = gsap.timeline({ paused: true });
+        const A = (t) => t - 0.004;           // land a hard set just before the frame of the word
+
+        // ---- header + labels ----
+        const head = (id, words) => (words || []).forEach(([w, t]) => { const s = el("span", "hw", $(id), w); $(id).append(" ");
+          tl.fromTo(s, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: .45, ease: "power3.out" }, t); });
+        head("#h1", E.header.line1); head("#h2", E.header.line2);
+        $("#la").innerHTML = E.labels.top;
+        $("#lb").innerHTML = E.labels.bottom + (E.labels.bottom_note ? ` <span>&middot; ${E.labels.bottom_note}</span>` : "");
+        if (E.labels.pulse != null) tl.fromTo("#la", { scale: 1 }, { scale: 1.08, duration: .16, yoyo: true, repeat: 1, ease: "power2.out", transformOrigin: "0 50%" }, E.labels.pulse);
+
+        const ops = {};
+        E.edits.forEach((e) => { (ops[e.op] = ops[e.op] || []).push(e); });
+        const first = (op) => (ops[op] || [])[0];
+
+        // ---- captions: on at the captions edit; key words boxed from the keywords edit; new font from caption_font ----
+        const cap = first("captions"), kwOp = first("keywords"), fontOp = first("caption_font");
+        const K = kwOp ? kwOp.t : Infinity, SWITCH = fontOp ? fontOp.t : Infinity, fontCls = fontOp ? (fontOp.font || "serif") : "serif";
+        const mk = (cls, text, kws, t0) => {
+          const c = el("div", cls, $("#caps"));
+          const parts = text.split(" ");
+          const ws = parts.map((w, i) => { const s = el("span", "kw0", c, w); if (i < parts.length - 1) c.append(" "); return s; });
+          (kws || []).forEach(([i, t]) => { if (t < K || !ws[i]) return; const s = ws[i]; s.className = "kw";
+            if (cls === "c1") { const at = A(Math.max(t, t0)); tl.set(s, { backgroundColor: "#d97757", boxShadow: "0 0 0 7px #d97757" }, at);
+              if (t > t0 + .01) tl.fromTo(s, { scale: 1.07 }, { scale: 1, duration: .18, ease: "power2.out" }, at); } });
+          if (cls === "c1") ws.forEach((s) => { if (s.className === "kw0") s.className = ""; });
+          return c;
+        };
+        if (cap) (E.captions || []).forEach(([text, on, off, kws]) => {
+          if (off <= cap.t) return;
+          on = Math.max(on, cap.t);
+          if (on < SWITCH && off > SWITCH) {           // the chunk where the font changes: same words, both styles
+            const a = mk("c1", text, kws, on), b = mk("c2 " + fontCls, text, kws, SWITCH);
+            tl.set(a, { opacity: 1 }, A(on)); tl.set(a, { opacity: 0 }, A(SWITCH));
+            tl.fromTo(b, { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: .35, ease: "back.out(2)" }, A(SWITCH));
+            tl.set(b, { opacity: 0 }, A(off));
+            return;
+          }
+          const c = mk(on >= SWITCH ? "c2 " + fontCls : "c1", text, kws, on);
+          if (Math.abs(on - cap.t) < .01) tl.fromTo(c, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .3, ease: "power3.out" }, A(on));
+          else tl.set(c, { opacity: 1 }, A(on));
+          if (off < END - .01) tl.set(c, { opacity: 0 }, A(off));
+        });
+
+        // ---- grade: background hard, the person only slightly (skin protected by the cut-out) ----
+        (ops.grade || []).forEach((g) => {
+          const look = g.look || "warm", t = g.t - .07, d = g.dur || 1.1;
+          if (look === "bw") { tl.to("#bgw", { "--gs": 1, duration: d, ease: "power2.inOut" }, t); if (E.has_cutout) tl.to("#fgw", { "--gs": 1, duration: d, ease: "power2.inOut" }, t); return; }
+          if (look === "none") { tl.to("#grade", { opacity: 0, duration: d, ease: "power2.inOut" }, t); tl.to("#bgw", { "--gs": 0, "--con": 1, duration: d }, t); return; }
+          tl.set("#grade", { className: look }, t);
+          tl.to("#grade", { opacity: g.strength || .3, duration: d, ease: "power2.inOut" }, t);
+          if (look === "punchy") tl.to("#bgw", { "--con": 1.12, duration: d, ease: "power2.inOut" }, t);
+          if (E.has_cutout) tl.to("#fgw", { [look === "cool" ? "--cf" : "--wf"]: 1, duration: d, ease: "power2.inOut" }, t);
+        });
+
+        // ---- title behind the head, word by word as it is said ----
+        (ops.title_behind || []).forEach((T) => {
+          const it = T.italic_from == null ? T.words.length - 1 : T.italic_from;
+          $("#title").innerHTML = T.words.map(([w], i) => `<span class="tw${i >= it ? " t2" : ""}">${w}</span>`).join(" ").replace(new RegExp(`(<span class="tw t2">)`), "<br />$1");
+          T.words.forEach(([, t], i) => tl.fromTo(`#title .tw:nth-of-type(${i + 1})`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, t - .05));
+          if (T.out != null) tl.to("#title", { opacity: 0, y: -24, duration: .45, ease: "power2.in" }, T.out);
+        });
+
+        // ---- edit log card: backfills what was done before it appeared, then one row per edit ----
+        const logOp = first("edit_log");
+        const rows = $("#rows"), rowOf = {};
+        let n = 0;
+        const count = (t) => { n += 1; tl.set("#cnt", { textContent: String(n).padStart(2, "0") }, t); };
+        const addRow = (text, t, quick) => {
+          const r = el("div", "row", rows); el("div", "hl", r); el("span", "ck", r, "&check;"); const tx = el("div", "tx", r); el("span", "", tx, text);
+          tl.set(r, { display: "flex" }, t);
+          tl.fromTo(r, { opacity: 0, x: 14 }, { opacity: 1, x: 0, duration: quick ? .22 : .3, ease: "power3.out" }, t);
+          if (!quick) tl.fromTo(r.querySelector(".hl"), { opacity: 1 }, { opacity: 0, duration: 1.2, ease: "power1.in" }, t + .1);
+          return r;
+        };
+        const swapText = (r, text, t) => { const tx = r.querySelector(".tx"), old = tx.querySelector("span"), nu = el("span", "", tx, text);
+          tl.set(nu, { opacity: 0 }, 0); tl.to(old, { opacity: 0, y: -10, duration: .2 }, t); tl.fromTo(nu, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .25 }, t + .08);
+          tl.fromTo(r.querySelector(".hl"), { opacity: 1 }, { opacity: 0, duration: 1.2, ease: "power1.in" }, t + .1); };
+        if (logOp) {
+          const shown = logOp.show != null ? logOp.show : logOp.t + .46;
+          tl.fromTo("#log", { opacity: 0, y: -16, scale: .96 }, { opacity: 1, y: 0, scale: 1, duration: .45, ease: "power3.out", transformOrigin: "100% 0" }, shown);
+          if (logOp.out != null) tl.to("#log", { opacity: 0, y: -12, duration: .35, ease: "power2.in" }, logOp.out);
+          let k = 0;
+          E.edits.filter((e) => e.label && e.op !== "edit_log").forEach((e) => {
+            const back = e.t <= shown;
+            const t = back ? shown + .24 + .18 * k++ : e.t;
+            if (e.updates && rowOf[e.updates]) { swapText(rowOf[e.updates], e.label, t); rowOf[e.op] = rowOf[e.updates]; return; }
+            rowOf[e.op] = addRow(e.label, t, back); count(t);
+          });
+        }
+
+        // ---- camera: punch in on the word, back out on the word ----
+        (ops.punch_in || []).forEach((p) => tl.to("#cam", { scale: p.scale || 1.36, duration: .75, ease: "power3.inOut" }, p.t - .03));
+        (ops.punch_out || []).forEach((p) => tl.to("#cam", { scale: 1, duration: .75, ease: "power3.inOut" }, p.t - .03));
+
+        // ---- background soften (person stays sharp) ----
+        (ops.bg_blur || []).forEach((b) => tl.to("#bgw", { "--b": b.px || 9, duration: b.dur || 1.4, ease: "power2.inOut" }, b.t - .06));
+
+        // ---- optional: a word popped big on screen, a lower third ----
+        (ops.text_pop || []).forEach((p) => { const d = el("div", "pop", $("#fx"), p.text);
+          tl.fromTo(d, { opacity: 0, scale: .8 }, { opacity: 1, scale: 1, duration: .3, ease: "back.out(2)" }, A(p.t));
+          tl.to(d, { opacity: 0, duration: .25, ease: "power2.in" }, p.out != null ? p.out : p.t + 1.2); });
+        (ops.lower_third || []).forEach((p) => { const d = el("div", "lower", $("#fx"), `<b>${p.name}</b><span>${p.role || ""}</span>`);
+          tl.fromTo(d, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: .45, ease: "power3.out" }, p.t);
+          tl.to(d, { opacity: 0, x: -16, duration: .35, ease: "power2.in" }, p.out != null ? p.out : p.t + 3); });
+
+        // ---- custom edits: GSAP written for this take (tl, $, el, E in scope) ----
+        (ops.custom || []).forEach((c) => { try { new Function("tl", "$", "el", "E", "t", c.js)(tl, $, el, E, c.t); } catch (err) { console.error("custom edit", c, err); } });
+
+        // ---- end strip ----
+        if (E.end_card) { $("#end").innerHTML = E.end_card.text;
+          tl.fromTo("#end", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .5, ease: "power3.out" }, E.end_card.t); }
+
+        tl.set({}, {}, D);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>

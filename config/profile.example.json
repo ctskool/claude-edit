@@ -1,0 +1,20 @@
+{
+ "_help": "Your brand. setup.py copies this to config/profile.json; fill it in or say /claude-edit-setup in Claude Code. glossary = product / people names Whisper should spell right (comma separated); caption_fixes = {\"misheard\": \"right\"}; never_show = anything that must never appear on screen.",
+ "creator_name": "Your Name",
+ "brand_name": "Your Brand",
+ "handle": "@yourhandle",
+ "platform": "Instagram",
+ "niche": "",
+ "accent": "#FF5A1F",
+ "accent_name": "orange",
+ "bg": "#0B0B0C",
+ "paper": "#F2F0EC",
+ "grey": "#9AA3AE",
+ "font_main_name": "Space Grotesk",
+ "font_caption_name": "Inter Tight",
+ "font_accent_name": "Instrument Serif Italic",
+ "glossary": "",
+ "caption_fixes": {},
+ "never_show": "",
+ "style_overrides": {}
+}

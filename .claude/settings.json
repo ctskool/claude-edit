@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python setup.py:*)",
+      "Bash(python tools/:*)",
+      "Bash(python3 tools/:*)",
+      "Bash(ffmpeg:*)",
+      "Bash(ffprobe:*)",
+      "Bash(npx hyperframes:*)"
+    ]
+  }
+}

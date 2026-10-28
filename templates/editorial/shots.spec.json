@@ -1,0 +1,10 @@
+[
+ {"name": "huashu-repo-top-light", "url": "https://github.com/alchaincyf/huashu-motion", "theme": "light", "width": 1280, "height": 820},
+ {"name": "huashu-repo-top-dark", "url": "https://github.com/alchaincyf/huashu-motion", "theme": "dark", "width": 1280, "height": 820},
+ {"name": "huashu-readme-light", "url": "https://github.com/alchaincyf/huashu-motion/blob/main/README.en.md", "theme": "light", "width": 1280, "height": 900, "element": "article.markdown-body"},
+ {"name": "huashu-readme-dark", "url": "https://github.com/alchaincyf/huashu-motion/blob/main/README.en.md", "theme": "dark", "width": 1280, "height": 900, "element": "article.markdown-body"},
+ {"name": "hyperframes-repo-top-light", "url": "https://github.com/heygen-com/hyperframes", "theme": "light", "width": 1280, "height": 820},
+ {"name": "hyperframes-repo-top-dark", "url": "https://github.com/heygen-com/hyperframes", "theme": "dark", "width": 1280, "height": 820},
+ {"name": "claude-motion-article", "url": "https://claude.com/resources/articles/dashboards-and-motion", "theme": "light", "width": 1280, "height": 900, "full_page": true},
+ {"name": "claude-pricing", "url": "https://claude.com/pricing", "theme": "light", "width": 1440, "height": 1000, "full_page": true}
+]

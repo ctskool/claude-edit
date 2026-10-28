@@ -1,0 +1,190 @@
+/* =====================================================================================================
+   EDITORIAL KIT "vibecoding" - kit.css  (v1.0)
+   Distilled from the frame-matched replica of reference creator B "4 plugin" (Italian), seconds 0-14.5
+   (work/replica/editorial-vibecoding: mean SSIM 0.9737, colour error 2.08 against the reference).
+   Every number below was measured on the 1080x1920 / 30 fps reference (25 fps source, 540p upscaled 2x).
+   See COMPONENTS.md for what each class is for.
+
+   Paths: this file sits in the project ROOT (next to index.html) with the project's assets/ folder beside it,
+   because CSS url() resolves relative to the stylesheet: assets/fonts/*.woff2.
+   Font names are written literally (never through var()) so `hyperframes lint` can match them to @font-face.
+   Class prefix is kv- so this kit can live next to the editorial-chiefofstaff kit (prefix k-).
+   ===================================================================================================== */
+
+/* ---------- fonts (local, assets/fonts) ---------- */
+@font-face { font-family: "Newsreader"; font-weight: 400; font-style: normal; src: url("assets/fonts/newsreader-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Newsreader"; font-weight: 500; font-style: normal; src: url("assets/fonts/newsreader-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Newsreader"; font-weight: 400; font-style: italic; src: url("assets/fonts/newsreader-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Newsreader"; font-weight: 500; font-style: italic; src: url("assets/fonts/newsreader-latin-500-italic.woff2") format("woff2"); }
+@font-face { font-family: "Instrument Serif"; font-weight: 400; font-style: normal; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Instrument Serif"; font-weight: 400; font-style: italic; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; src: url("assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter Tight"; font-weight: 500; src: url("assets/fonts/inter-tight-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter Tight"; font-weight: 600; src: url("assets/fonts/inter-tight-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter Tight"; font-weight: 700; src: url("assets/fonts/inter-tight-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 400; src: url("assets/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 500; src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url("assets/fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2"); }
+
+/* ---------- tokens (sampled from the reference; video-compressed values) ---------- */
+:root {
+  /* surfaces */
+  --kv-bg: #eeece8;              /* ivory panel (reference B's ivory; reference A's is #EEEEE7) */
+  --kv-card: #ffffff;            /* every card */
+  --kv-inner: #f7f5f2;           /* inner row inside the plugin card */
+  --kv-sock: #f0eeea;            /* power-strip socket fill */
+  --kv-sock-edge: #dad8d4;       /* socket border 1.5 px */
+  --kv-slot: #393735;            /* socket slots */
+  /* ink */
+  --kv-ink: #1e1d1b;             /* default text */
+  --kv-ink-title: #151513;       /* serif title ink word */
+  --kv-ink-sub: #56524d;         /* serif title subline (traced), #7b7772 when set in Inter */
+  --kv-ink-label: #6e6b66;       /* "PLUGIN" eyebrow */
+  --kv-ink-desc: #55524e;        /* tool descriptions, diagram labels */
+  --kv-ink-strip: #4a423c;       /* "CLAUDE CODE" strip label */
+  --kv-count-off: #7b7a78;       /* the "0" of 0/4 */
+  --kv-count-on: #121213;        /* lit counts and "/4" */
+  /* accent */
+  --kv-clay: #d05a33;            /* replica root token */
+  --kv-clay-title: #c9532d;      /* the italic clay word ("Vibe") */
+  --kv-clay-spark: #c45f3b;      /* Claude spark on the strip */
+  --kv-clay-tile: #da6a43;       /* Claude tile in the plugin card */
+  --kv-clay-line: #bd5f3e;       /* plugin-card progress line */
+  --kv-clay-soft: #e9a48c;
+  --kv-clay-hot: #ec987f;        /* caption accent word */
+  --kv-numeral: #e1bfaf;         /* big pale "1" */
+  --kv-pill: #f9ddd2;            /* strip label highlight */
+  --kv-pill-edge: #d39a8e;
+  /* status */
+  --kv-red: #ad1f2e;             /* strip status dot, "not yet" */
+  --kv-green: #2f9a68;           /* strip status dot, connected */
+  --kv-supabase: #3ecf8e;        /* product green (bolt, Apri button) */
+  --kv-check: #3d996a;           /* tool-row check disc */
+  /* dashed outlines */
+  --kv-dash-socket: #ad5d4a;     /* phase-1 socket outlines */
+  --kv-dash-wait: #ab5b47;       /* phase-2 waiting outline */
+  --kv-dash-box: #d6937f;        /* "?" boxes */
+  --kv-dash-skel: #c9c6c1;       /* skeleton icon border */
+  --kv-dash-db: #bf8f88;         /* database placeholder */
+  /* captions */
+  --kv-cap-bg: #1c1d1c;
+  --kv-cap-text: #fafcfc;
+  /* shadows */
+  --kv-shadow-card: 0 16px 36px rgba(70, 55, 40, 0.09), 0 2px 6px rgba(70, 55, 40, 0.06);
+  --kv-shadow-strip: 0 30px 40px rgba(0, 0, 0, 0.10), 0 2px 12px rgba(0, 0, 0, 0.045);
+  --kv-shadow-chip: 0 0 3px 14px rgba(0, 0, 0, 0.022), 0 8px 16px rgba(0, 0, 0, 0.09);
+  --kv-shadow-icon: 0 8px 16px rgba(0, 0, 0, 0.2);
+  --kv-shadow-row: 0 6px 14px rgba(235, 169, 144, 0.18);
+  /* radii (px) */
+  --kv-r-card: 24px; --kv-r-strip: 22px; --kv-r-sock: 16px; --kv-r-row: 14px; --kv-r-inner: 18px; --kv-r-cap: 9px;
+  /* layout */
+  --kv-seam: 960px;              /* split: graphics 0-960, face cam 960-1920 (caption chip 921-998 straddles it) */
+}
+
+/* ---------- base ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--kv-bg); }
+.kv-root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter Tight", sans-serif; color: var(--kv-ink); }
+.kv-abs { position: absolute; }
+/* every editor graphic sits in one wrapper; .kv-soft adds the 0.6 px blur that matches reference B's 540p-upscaled export */
+.kv-gfx { position: absolute; left: 0; top: 0; width: 1080px; height: 1016px; }
+.kv-soft { filter: blur(0.6px); }
+
+/* ---------- background: ivory + drifting 60 px grid (4 px triangular line, 5 levels deep) ---------- */
+.kv-bg { position: absolute; left: 0; top: 0; width: 1080px; height: 1016px; background-color: var(--kv-bg); overflow: hidden; }
+.kv-grid { position: absolute; left: -60px; top: -120px; width: 1260px; height: 1200px;
+  background-image: linear-gradient(to right, rgba(0,0,0,0) 0px, rgba(0,0,0,0.021) 2px, rgba(0,0,0,0) 4px, transparent 4px), linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0.021) 2px, rgba(0,0,0,0) 4px, transparent 4px);
+  background-size: 60px 60px; background-position: -1.25px -1.25px; }
+
+/* ---------- face cam (split: y 960-1920, hard edge) ---------- */
+.kv-face { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; object-fit: cover; object-position: 50% 0%; }
+.kv-face-stub { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; background: #6b6661; }
+.kv-face-stub .kv-t { left: 0; top: 440px; width: 1080px; text-align: center; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 40px; color: #f2efe9; letter-spacing: 4px; }
+
+/* ---------- serif title + subline ---------- */
+.kv-center { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; }
+.kv-title { position: absolute; left: 0; top: 0; width: 1080px; height: 106px; color: var(--kv-ink); }
+.kv-sub { position: absolute; left: 0; top: 0; width: 1080px; height: 30px; }
+/* word mode (fonts instead of traced outlines): baseline lands on y 268 for a title at top 190 */
+.kv-title-line { position: absolute; left: 2.5px; top: 0; width: 1080px; text-align: center; white-space: nowrap; line-height: 1; font-family: "Newsreader", serif; font-size: 105px; }
+.kv-tw { display: inline-block; position: relative; top: -3.5px; font-family: "Newsreader", serif; font-weight: 400; font-size: 107px; letter-spacing: 0.6px; color: var(--kv-ink-title); -webkit-text-stroke: 0.5px var(--kv-ink-title); }
+.kv-tw.kv-it { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; top: 0; font-size: 108px; letter-spacing: 6.5px; margin-right: -9px; color: var(--kv-clay-title); -webkit-text-stroke: 0.8px var(--kv-clay-title); }
+.kv-sub-line { position: absolute; left: 0; top: 0; width: 1080px; text-align: center; white-space: nowrap; line-height: 1; font-family: "Inter", sans-serif; font-weight: 400; font-size: 30.3px; letter-spacing: -1px; color: #7b7772; }
+
+/* ---------- big pale numeral ---------- */
+.kv-numeral { position: absolute; left: 0; top: 0; width: 1080px; text-align: center; font-family: "Newsreader", serif; font-weight: 400; font-size: 560px; line-height: 1; color: var(--kv-numeral); }
+
+/* ---------- power strip HUD (local units = phase 2 rest, scale 1) ---------- */
+.kv-strip { position: absolute; left: 192px; top: 783px; width: 696px; height: 114px; }
+.kv-strip-pop { position: absolute; inset: 0; }
+.kv-strip-body { position: absolute; inset: 0; background: #fff; border-radius: var(--kv-r-strip);
+  box-shadow: inset 0 1.6px 0 #dcdad6, inset 1px 0 0 #e6e4e0, inset -1px 0 0 #e6e4e0, inset 0 -3px 0 #fcfbf9, var(--kv-shadow-strip); }
+.kv-pill { position: absolute; left: 16px; top: 15.3px; width: 180px; height: 41.4px; border-radius: 9px; background: var(--kv-pill); border: 2.2px solid var(--kv-pill-edge); box-shadow: 0 0 0 2.5px rgba(240, 200, 185, 0.35); opacity: 0; }
+.kv-spark { position: absolute; left: 25.5px; top: 24.5px; width: 23px; height: 23px; fill: var(--kv-clay-spark); }
+.kv-lbl { position: absolute; left: 61px; top: 27.9px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 16.4px; line-height: 1; letter-spacing: 1.4px; color: var(--kv-ink-strip); white-space: nowrap; }
+.kv-count { position: absolute; left: 27.4px; top: 59px; font-family: "JetBrains Mono", monospace; font-weight: 500; font-size: 42px; line-height: 1; color: var(--kv-count-on); white-space: nowrap; -webkit-text-stroke-width: 0.5px; }
+.kv-count .n { color: var(--kv-count-off); }
+.kv-count .n1 { color: var(--kv-count-on); }
+.kv-dot { position: absolute; left: 150px; top: 72px; width: 16px; height: 16px; border-radius: 50%; }
+.kv-dot.gray { background: #d0cec9; }
+.kv-dot.red { background: radial-gradient(circle, #ad1f2e 0%, #ad1f2e 55%, #a3263a 100%); box-shadow: 0 0 0 2.6px #efc3c4, 0 0 7px rgba(190, 35, 55, 0.4); opacity: 0; }
+.kv-dot.green { background: var(--kv-green); box-shadow: 0 0 0 3.5px rgba(47, 154, 104, 0.15), 0 0 9px rgba(47, 154, 104, 0.3); opacity: 0; }
+.kv-sock { position: absolute; top: 14px; width: 94px; height: 86px; border-radius: var(--kv-r-sock); background: var(--kv-sock); border: 1.5px solid var(--kv-sock-edge);
+  box-shadow: inset 0 4px 5px -1px rgba(0, 0, 0, 0.075), inset 3px 0 4px -2px rgba(0, 0, 0, 0.04), inset -3px 0 4px -2px rgba(0, 0, 0, 0.03); }
+.kv-slot { position: absolute; top: 27.5px; width: 9.4px; height: 30px; border-radius: 4.7px; background: var(--kv-slot); }
+.kv-slot.a { left: 27.3px; } .kv-slot.b { left: 55.4px; }
+.kv-gnd { position: absolute; left: 40.7px; top: 67.7px; width: 9.6px; height: 9.6px; border-radius: 50%; background: #d1cec8; }
+.kv-outl { position: absolute; top: 4.6px; width: 110px; height: 102px; opacity: 0; overflow: visible; }
+.kv-outl.kv-wait { top: 6px; }
+.kv-qbox { position: absolute; top: -142.1px; width: 73.4px; height: 106.5px; opacity: 0; overflow: visible; filter: blur(0.35px); }
+.kv-qbox .kv-q { position: absolute; left: 0.4px; top: 38.3px; width: 73.4px; text-align: center; font-family: "Newsreader", serif; font-weight: 400; font-size: 47px; line-height: 1; color: #9c4a35; }
+.kv-plugged { position: absolute; top: 14px; width: 94px; height: 86px; border-radius: var(--kv-r-sock); background: #e2e0dc; opacity: 0; }
+
+/* ---------- plug + cable (frame coordinates) ---------- */
+.kv-cables { position: absolute; left: 0; top: 0; width: 1080px; height: 1016px; overflow: visible; }
+.kv-anchor { position: absolute; left: 447px; top: 689.7px; width: 30.5px; height: 12.1px; border-radius: 2px 2px 3px 3px; background: #2c2c2c; opacity: 0; }
+.kv-plug { position: absolute; left: 416px; top: 775px; width: 72px; height: 115px; opacity: 0; }
+.kv-plug .neck { position: absolute; left: 22.5px; top: 0; width: 27px; height: 17px; border-radius: 5px 5px 2px 2px; background: #222; }
+.kv-plug .body { position: absolute; left: 0; top: 14px; width: 72px; height: 87px; border-radius: 11px; background: #212121; box-shadow: 0 12px 14px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1); }
+.kv-plug .tile { position: absolute; left: 11px; top: 27px; width: 50px; height: 50px; border-radius: 11px; background: #fff; }
+.kv-plug .tile svg { position: absolute; left: 11px; top: 10px; width: 28px; height: 30px; fill: var(--kv-supabase); }
+.kv-plug .prong { position: absolute; top: 101px; width: 6px; height: 13px; border-radius: 1px; background: #9b9893; }
+.kv-ring { position: absolute; left: 396px; top: 788.5px; width: 112px; height: 101.5px; border-radius: 22px; border: 3.2px solid #b4583d; box-shadow: 0 0 10px rgba(235, 140, 110, 0.45), inset 0 0 6px rgba(235, 140, 110, 0.25); opacity: 0; }
+.kv-ping { position: absolute; left: 397px; top: 789px; width: 110px; height: 100px; border-radius: 22px; border: 2px solid rgba(225, 120, 95, 0.55); box-shadow: 0 0 6px rgba(240, 160, 140, 0.35); opacity: 0; }
+
+/* ---------- cards ---------- */
+.kv-card { position: absolute; left: 70px; top: 170px; width: 940px; height: 519px; border-radius: var(--kv-r-card); background: var(--kv-card); opacity: 0;
+  box-shadow: var(--kv-shadow-card); transform-origin: 50% 100%; }
+.kv-layer { position: absolute; inset: 0; }
+.kv-t { position: absolute; white-space: nowrap; line-height: 1; }
+.kv-bar { position: absolute; border-radius: 6px; background: #e9e7e3; }
+.kv-pillx { position: absolute; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-family: "Inter Tight", sans-serif; font-weight: 500; font-size: 21px; line-height: 1; white-space: nowrap; }
+/* browser card: box refit +0.8/+1.2 px, its content keeps the earlier fitted positions */
+.kv-browser > * { translate: -0.7px -1.9px; }
+
+/* ---------- tool rows (tools card) ---------- */
+.kv-row { position: absolute; left: 30px; width: 540px; height: 91px; border-radius: var(--kv-r-row); }
+.kv-row .bgs { position: absolute; inset: 0; border-radius: var(--kv-r-row); background: #f8f7f5; border: 2px solid #ebe8e3; }
+.kv-row .bga { position: absolute; inset: 0; border-radius: var(--kv-r-row); background: #fff; border: 2px solid #d99a84; box-shadow: var(--kv-shadow-row); opacity: 0; }
+.kv-row .tile { position: absolute; left: 18.5px; top: 18px; width: 55px; height: 55px; border-radius: 12px; background: #e3ded9; }
+.kv-row .tilea { position: absolute; left: 18.5px; top: 18px; width: 55px; height: 55px; border-radius: 12px; background: #fde0d5; opacity: 0; }
+.kv-row .tilea svg { position: absolute; left: 13.5px; top: 13.5px; width: 28px; height: 28px; fill: none; stroke: #934b38; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.kv-row .b1 { position: absolute; left: 92px; top: 23px; height: 19px; border-radius: 9px; background: #d0cfc3; }
+.kv-row .b2 { position: absolute; left: 92px; top: 59px; height: 14px; border-radius: 7px; background: #e2deda; }
+.kv-row .name { position: absolute; left: 91.5px; top: 19px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 23.03px; line-height: 1; color: #121212; white-space: nowrap; }
+.kv-row .desc { position: absolute; left: 92px; top: 55.5px; font-family: "JetBrains Mono", monospace; font-weight: 400; font-size: 18.9px; line-height: 1; color: var(--kv-ink-desc); white-space: nowrap; }
+.kv-row .name span, .kv-row .desc span.c { display: none; }
+.kv-caret { display: inline-block; width: 2.5px; height: 1.05em; margin-left: 4px; vertical-align: -0.18em; background: #d9663f; opacity: 0; }
+.kv-row .dc { position: absolute; left: 482px; top: 26px; width: 39px; height: 39px; }
+.kv-row .ck { position: absolute; left: 481.8px; top: 27px; width: 39.5px; height: 39.5px; border-radius: 50%; background: var(--kv-check); opacity: 0; }
+.kv-row .ck svg { position: absolute; left: 9.25px; top: 9.25px; width: 21px; height: 21px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.kv-ts { display: inline-block; width: 19.6px; height: 20.5px; border-radius: 2px; background: #2f6db6; color: #fff; font-family: "Inter Tight", sans-serif; font-weight: 700; font-size: 10.5px; line-height: 1; text-align: right; padding: 8.5px 1.5px 0 0; vertical-align: -1px; margin-right: 8px; }
+
+/* ---------- captions: mono chip on the seam, hard swap + tiny pop ---------- */
+.kv-caps { position: absolute; left: 0; top: 921.05px; width: 1080px; height: 78.15px; }
+.kv-chip { position: absolute; top: 0; left: 540px; height: 78.15px; display: flex; align-items: center; opacity: 0; }
+.kv-chip .in { position: relative; left: -50%; height: 78.15px; padding: 0 25.3px 0 26.3px; border-radius: var(--kv-r-cap); background: var(--kv-cap-bg); display: block; line-height: 80.4px; will-change: transform;
+  box-shadow: var(--kv-shadow-chip);
+  font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 46px; letter-spacing: 0.45px; color: var(--kv-cap-text); white-space: nowrap; }
+.kv-chip .kv-hot { color: var(--kv-cap-text); }

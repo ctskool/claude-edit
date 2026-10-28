@@ -1,0 +1,30 @@
+# machine + personal
+config/config.json
+config/profile.json
+config/avatar.jpg
+.venv/
+.venv-matte/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# downloaded at setup (licences: see THIRD_PARTY.md)
+vendor/
+assets/
+.claude/skills/media-use/audio/assets/sfx/*.mp3
+formats/
+
+# your videos and renders
+work/
+out/
+reference/
+*.mp4
+*.mkv
+*.mov
+*.webm
+*.wav
+*.m4a
+!docs/media/**
+release/

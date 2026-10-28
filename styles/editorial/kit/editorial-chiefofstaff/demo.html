@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Editorial kit demo: the measured reference window (reference creator A "5 Claude skills", skill 1, 11.008 s)
+         rebuilt ONLY from kit.css / kit.js calls. Copy kit.css + kit.js next to this file and the project's
+         assets/ folder (fonts + vendor/gsap.min.js) beside them. The face cam is a stub so the demo needs no video. -->
+    <script src="assets/vendor/gsap.min.js"></script>
+    <link rel="stylesheet" href="kit.css" />
+    <script src="kit.js"></script>
+  </head>
+  <body>
+    <div id="root" class="k-root" data-composition-id="main" data-start="0" data-duration="11.008" data-width="1080" data-height="1920" data-fps="30">
+      <!-- face cam (real project: <video class="k-face" src="assets/face_half.mp4" muted playsinline data-start="0"
+           data-duration="..." data-media-start="0.01"></video> inside .k-face-wrap) -->
+      <div class="k-face-wrap"><div class="k-face-stub"><div class="k-t" data-layout-allow-occlusion>FACE CAM</div></div></div>
+
+      <!-- scenes: hard cuts, clip windows authored at mid-frame = KIT.clip(k0, k1) -->
+      <section id="s0" class="clip k-scene k-dark" data-start="0" data-duration="0.0833" data-track-index="2"></section>
+      <section id="s1" class="clip k-scene" data-start="0.0833" data-duration="2.5667" data-track-index="2"></section>
+      <section id="s2" class="clip k-scene k-full" data-start="2.65" data-duration="2.8667" data-track-index="2"></section>
+      <section id="s3" class="clip k-scene" data-start="5.5167" data-duration="2.1333" data-track-index="2"></section>
+      <section id="s4" class="clip k-scene k-full" data-start="7.65" data-duration="1.9333" data-track-index="2"></section>
+      <section id="s5" class="clip k-scene" data-start="9.5833" data-duration="1.425" data-track-index="2"></section>
+      <div id="hud" class="clip k-hud" data-start="2.65" data-duration="6.9333" data-track-index="3"></div>
+      <div id="caps" class="k-caps"></div>
+    </div>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- captions: hard-swap chips (frames measured on the reference) ----------
+      KIT.captions(tl, $("caps"), [
+        { text: "ANYONE KNOWS ABOUT", k0: 0, k1: 3 },
+        { text: "NUMBER ONE IS", k0: 4, k1: 26 },
+        { text: "THE CHIEF OF", k0: 26, k1: 45 },
+        { text: "STAFF SKILL", k0: 45, k1: 75 },
+        { text: "IT CAME OUT", k0: 78, k1: 92 },
+        { text: "LAST WEEK AND", k0: 92, k1: 113 },
+        { text: "IT GIVES CLAUDE", k0: 113, k1: 138 },
+        { text: "ONE BIG GOAL", k0: 138, k1: 165 },
+        { text: "AND IT RUNS", k0: 165, k1: 181 },
+        { text: "A WHOLE TEAM", k0: 181, k1: 203 },
+        { text: "OF AI AGENTS", k0: 203, k1: 228 },
+        { text: "IN THE BACKGROUND", k0: 228, k1: 251 },
+        { text: "TO GET IT", k0: 251, k1: 269 },
+        { text: "DONE", k0: 269, k1: 287 },
+        { text: "NUMBER TWO IS", k0: 287, k1: 304 },
+        { text: "THE ANATOMY SKILL", k0: 304, k1: 331 }
+      ]);
+      KIT.captionRail(tl, $("caps"), []);
+      KIT.takeover(tl, $("caps"), 80, 166);   // S2 full takeover
+      KIT.takeover(tl, $("caps"), 230, 288);  // S4 full takeover
+
+      // ---------- S0: dark hook title card (tail of the previous segment) ----------
+      KIT.titleCard(tl, $("s0"), {
+        badge: "Claude",
+        words: [{ text: "5", left: 241, scaleX: 0.89 }, { text: "Claude", left: 316, scaleX: 0.986 }, { text: "skills", left: 631, scaleX: 1.01 }],
+        subtitle: "BARELY ANYONE KNOWS ABOUT"
+      });
+
+      // ---------- S1: skill card ----------
+      KIT.skillCard(tl, $("s1"), {
+        n: 1, total: 5, title: "Chief of Staff", titleScaleX: 0.93, icon: "users",
+        command: "chief-of-staff", typeAt: 0.4333, typeStep: 0.05, stepAt: 0.31
+      }, 0.08);
+
+      // ---------- S2: full takeover: calendar -> one big goal -> Claude ----------
+      KIT.calendarCard(tl, $("s2"), { newCell: { row: 0, col: 3, text: "NEW" }, newAt: 3.01 }, 2.635);
+      const goalSlot = KIT.placeholder($("s2"), { x: 90, y: 640, w: 900, h: 470, r: 38 });
+      KIT.goalCard(tl, $("s2"), {
+        eyebrow: "ONE BIG GOAL",
+        words: [{ text: "Launch", left: 84, scaleX: 0.98 }, { text: "Course", left: 465, scaleX: 1.012 }]
+      }, 4.45);
+      KIT.hideAt(tl, goalSlot, 4.56);
+      KIT.connector(tl, $("s2"), {}, 4.8);
+      KIT.claudeChip(tl, $("s2"), {}, 5.02);
+
+      // ---------- S3: org tree of agents (split) ----------
+      const AGENTS = [
+        { name: "Research", icon: "search", pct: 0.58 }, { name: "Writing", icon: "pen", pct: 0.33 },
+        { name: "Design", icon: "layout", pct: 0.46 }, { name: "Code", icon: "code", pct: 0.2 },
+        { name: "Review", icon: "check", pct: 0.37 }
+      ];
+      KIT.agentTree(tl, $("s3"), { node: { label: "Chief of Staff", icon: "users" }, agents: AGENTS },
+        { node: 5.523, lines: 5.84, agents: 6.064, stagger: 0.2 });
+
+      // ---------- S4: full takeover: goal progress + agents running ----------
+      KIT.goalProgress(tl, $("s4"), {
+        eyebrow: "THE GOAL",
+        words: [{ text: "Launch", left: 44, scaleX: 0.933 }, { text: "Course", left: 275, scaleX: 0.97 }],
+        barAt: 7.80, barDur: 1.15, checkAt: 8.945
+      }, 7.655);
+      KIT.sectionLabel($("s4"), "RUNNING IN THE BACKGROUND");
+      KIT.checkRows(tl, $("s4"), {
+        rows: AGENTS.map((a) => ({ name: a.name, icon: a.icon })),
+        checkAt: [8.258, 8.40, 8.552, 8.70, 8.852]
+      }, 7.648);
+
+      // ---------- S5: next skill card (step 1 done, step 2 active) ----------
+      KIT.skillCard(tl, $("s5"), {
+        n: 2, total: 5, title: "Anatomy", titleScaleX: 0.969, icon: "layers",
+        command: "anatomy", typeAt: 9.9333, typeStep: 0.1, stepAt: 9.79
+      }, 9.563);
+
+      // ---------- HUD through the deep dive (S2-S4) ----------
+      KIT.hud(tl, $("hud"), { index: 1, total: 5, slug: "chief-of-staff" });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

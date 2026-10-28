@@ -1,0 +1,12 @@
+{
+ "_help": "Written by `python setup.py` as config/config.json - do not edit by hand unless you know why.",
+ "os": "windows | macos",
+ "gpu": "nvidia | apple | cpu",
+ "encoder": "h264_nvenc | h264_videotoolbox | libx264",
+ "hwaccel": "cuda | videotoolbox | null",
+ "whisper_device": "cuda | cpu",
+ "matte_device": "cuda | mps | cpu",
+ "python": "<repo>/.venv python",
+ "recordings_dir": "where your raw recordings live (used to find takes and CAMERA files)",
+ "chrome": null
+}

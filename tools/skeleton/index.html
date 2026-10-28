@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; font-weight: 800; src: url("assets/fonts/inter-tight-latin-800-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter Tight"; font-weight: 800; font-style: italic; src: url("assets/fonts/inter-tight-latin-800-italic.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0d10; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter Tight", sans-serif; }
+      /* Face cam lives in an untimed wrapper so GSAP can move/scale it between layouts. */
+      #face-wrap { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; }
+      #face { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; }
+      #face-full { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .scene { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; display: flex; align-items: center; justify-content: center; }
+      .scene h1 { font-size: 96px; font-weight: 800; color: #fff; letter-spacing: -0.03em; }
+      #captions { position: absolute; left: 0; top: 900px; width: 1080px; height: 120px; display: flex; align-items: center; justify-content: center; }
+      .cap { position: absolute; font-size: 72px; font-weight: 800; color: #fff; opacity: 0; -webkit-text-stroke: 0; text-shadow: 0 4px 18px rgba(0,0,0,.6); }
+      .cap .hot { color: #ff3b30; font-style: italic; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="48.05" data-width="1080" data-height="1920" data-fps="30">
+      <div id="face-wrap">
+        <video id="face" src="assets/face_half.mp4" muted playsinline data-start="0" data-duration="48.05" data-track-index="0"></video>
+      </div>
+      <video id="face-full" src="assets/face_full.mp4" muted playsinline data-start="42.9" data-duration="1.4" data-media-start="42.9" data-track-index="1"></video>
+      <audio id="voice" src="assets/voice.m4a" data-start="0" data-duration="48.05" data-track-index="9"></audio>
+
+      <section id="s01" class="clip scene" data-start="0" data-duration="9.9" data-track-index="2">
+        <h1 id="s01-title">Claude Motion</h1>
+      </section>
+      <section id="s02" class="clip scene" data-start="9.9" data-duration="33" data-track-index="2">
+        <h1 id="s02-title">huashu-motion</h1>
+      </section>
+
+      <audio id="sfx-01" src="assets/sfx/whoosh-short.mp3" data-start="9.85" data-duration="0.8" data-track-index="10" data-volume="0.5"></audio>
+      <div id="captions"></div>
+    </div>
+    <script>
+      // [text, start, end] per spoken word, from words.json. Inlined: no fetch at render time.
+      const WORDS = [["So",0,0.12],["if",0.12,0.26],["you",0.26,0.34],["want",0.34,0.52],["to",0.52,0.6],["get",0.6,0.72],["your",0.72,0.86],["hands",0.86,1.14],["on",1.14,1.32],["the",1.32,1.48],["new",1.48,1.62],["Claude",1.62,2.28],["Motion",2.28,2.68],["design,",2.68,3.56]];
+      const HOT = new Set(["Claude", "Motion"]);
+      const tl = gsap.timeline({ paused: true });
+
+      // Captions: groups of up to 3 words, hard swap, shown 2 frames before the first word.
+      const caps = document.getElementById("captions");
+      for (let i = 0; i < WORDS.length; i += 3) {
+        const group = WORDS.slice(i, i + 3);
+        const el = document.createElement("div");
+        el.className = "cap";
+        el.id = "cap-" + i;
+        el.innerHTML = group.map(([t]) => HOT.has(t.replace(/[^\w]/g, "")) ? `<span class="hot">${t}</span>` : t).join(" ");
+        caps.appendChild(el);
+        const start = Math.max(0, group[0][1] - 0.066);
+        const next = WORDS[i + 3];
+        const end = next ? next[1] - 0.066 : group[group.length - 1][2] + 0.3;
+        tl.set(el, { opacity: 1 }, start).set(el, { opacity: 0 }, end);
+      }
+
+      tl.fromTo("#s01-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 0.1);
+      tl.fromTo("#s02-title", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "expo.out" }, 9.95);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

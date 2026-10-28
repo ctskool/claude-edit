@@ -1,0 +1,10 @@
+claude-edit
+Copyright (c) 2026 Chase Hannegan (Chase AI)
+
+This repository includes the HyperFrames agent skills (.claude/skills/hyperframes,
+hyperframes-animation, hyperframes-audio, hyperframes-cli, hyperframes-core, hyperframes-creative,
+hyperframes-keyframes, hyperframes-registry, hyperframes-studio, media-use), copied unmodified from
+the HyperFrames project (https://github.com/heygen-com/hyperframes), licensed under the Apache
+License 2.0 (licenses/Apache-2.0.txt). The only change: the bundled Pixabay sound effects in
+media-use/audio/assets/sfx are not committed; setup.py copies them from the installed hyperframes
+npm package. HyperFrames is a product of its authors; this project is not affiliated with them.
