@@ -9,12 +9,11 @@ pack's author. They are **not** covered by this repo's MIT licence: please don't
 | frost | `glass` | `glass-explainer-reel/` |
 | popout | `panel` | `explainer-panel-reel/` |
 
-`setup.py` (or `python tools/import_formats.py` with no argument) copies them into `formats/`, applies the Windows /
+`setup.py` (or `python tools/import_formats.py`) copies them into `formats/`, applies the Windows /
 macOS port rules, and fills their `@@PLACEHOLDERS@@` with your brand from `config/profile.json`. Edit your brand there,
 not here; the files in `pack/` stay as the pack ships them.
 
-The other seven layout formats (mosaic, layers, evidence, scenes, collage, wrap, tiers) are not included; they need your
-own copy of the pack: `python tools/import_formats.py <path to Creator-Skill-Pack/skills>`.
+The pack's other layout formats are not included.
 
 ## Changes from the pack
 

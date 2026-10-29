@@ -5,33 +5,21 @@ The claude-edit skill has two menus:
 - **Style** = the visual skin of the split-screen layout (`styles/`: `editorial` = menu name `ivory`).
 - **Format** = the layout itself and what moves (this folder, `formats/`).
 
-A format is one of the Creator Skill Pack's reel skills. rotation, frost and popout ship in `pack/` (with the pack
-author's permission) and are installed by `python tools/import_formats.py`; the other seven are imported from your own
-copy of the pack by `python tools/import_formats.py <pack>/skills`. Either way they are filled with your brand from `config/profile.json` and patched to run on
-Windows and macOS. Every format reads the same prepped video (the contract below), so one recording can be rendered as
+A format is one of the Creator Skill Pack's reel skills, shipped in `pack/` with the pack author's permission and
+installed by `python tools/import_formats.py` (setup.py runs it), filled with your brand from `config/profile.json` and
+patched to run on Windows and macOS. Every format reads the same prepped video (the contract below), so one recording can be rendered as
 several kinds of edit and compared side by side.
 
 | menu name | key | folder | what it looks like | how it runs |
 |---|---|---|---|---|
 | `rotation` | `business` | `business-short-form-reels/` | face full screen / split / full-screen animation rotation; glass pills, real interfaces | HyperFrames, reel engine |
 | `popout` | `panel` | `explainer-panel-reel/` | you in a rounded panel at the bottom (head pops above it), headings + diagrams above | HyperFrames, its own 06_crops / 07_captions |
-| `layers` | `depth` | `depth-ui-reel/` | full frame the whole time; real interfaces BEHIND your head (cut-out), cards on the chest | HyperFrames |
-| `wrap` | `fitted` | `fitted-stacked-captions/` | caption layer: one big accent anchor word, the others fitted around its letters | headless Chrome + ffmpeg |
 | `frost` | `glass` | `glass-explainer-reel/` | the panel layout with graphics on rectangular glass cards | HyperFrames |
-| `evidence` | `essay` | `visual-essay-reel/` | dark frame, you cut out low (wide shot), an evidence wall of real posts / charts | HyperFrames |
-| `scenes` | `backdrop` | `cutout-backdrop-reel/` | you cut out over one full-screen image per idea, hard cuts every 1.5-3 s | `cutout_reel.py` (PIL + ffmpeg) |
-| `mosaic` | `grid` | `cutout-grid-reel/` | you cut out in the centre over a 2x2 image grid that changes together | `grid_reel.py` (PIL + ffmpeg) |
-| `collage` | `cluster` | `image-cluster-reel/` | you low, 1-3 images above your head changing every 3-5 s, tiny captions | `cluster_reel.py` (headless Chrome + ffmpeg) |
-| `tiers` | `ranking` | `ranking-format/` | tier list S-F; item cards pop when named and drop into their tier | HyperFrames, `rank_engine.py` from `plan.json` |
 
 **Screenshots of the thing being talked about: yes, capture them.** When the video names a repo, skill, product page,
 pricing page, blog post or doc, builders capture it live with `tools/capture_shots.py` (Playwright, DPR 2, light + dark,
 element crops, per-shot box JSON) into `work/<id>/shared/shots/` and list the URL in ASSETS.md. The source is chosen per
 asset (routing table in `.claude/skills/claude-edit/SKILL.md`, "Pick the source per asset").
-
-**Other people's images (backdrop / grid / collage):** the pack's `fetch_images.py` scrapes image search. Do not use it
-unless you decide that is fine for you; by default the image formats use your real assets only (page screenshots, logos,
-stills/clips of your own recording) or images you supply.
 
 ## How to run one
 
@@ -69,14 +57,10 @@ Written by `tools/rawcut.py` + `tools/prep_source.py` (+ the `recut-plan` workfl
 ## Known engine quirks (work around them in build.py)
 
 - Whisper splits decimals ("5" ".5") - `tools/formats.py` joins them in every words file it writes.
-- business `reel_engine` and depth `captions()` strip "." from words ("5.5" -> "55"); depth `counter()` rounds to whole
-  numbers; depth `camera()` hard-codes transform-origin 50% 38%; business split scenes hidden under a face window trip
+- business `reel_engine` strips "." from words ("5.5" -> "55"); business split scenes hidden under a face window trip
   `content_overlap` in check (filler scenes fix it).
-- panel / glass headings and the ranking title sit at y ~190 (pack default), inside the band a phone app's top bar can
+- panel / glass headings sit at y ~190 (pack default), inside the band a phone app's top bar can
   cover - move them to ~y 290+.
-- Framing: a camera framed tight for split screen leaves little room in the full-frame formats (the pack's chin / chest
-  caption spots land on the mouth). Measure the head box from stills; for full-frame formats frame wider (chin ~60%
-  down the frame).
 - Captions stay verbatim (what you say); the facts rules apply to graphics only.
 
 ## Brand
@@ -89,6 +73,6 @@ Per-format answers live in `formats-kit/pack-defaults.json`; override any of the
 
 `tools/import_formats.py` applies them as pattern rules every time you import (see its docstring): local GSAP instead
 of the CDN, the cut-out through `tools/matte.py` (CUDA / Apple MPS / CPU) instead of `hyperframes remove-background`,
-Windows font fallbacks, Windows-safe file:// URLs, `shutil.rmtree` instead of `rm -rf`, Chrome found on any OS, OpenCV
-face boxes for ranking (no Swift), the business engine at 30 fps. Everything runs with `PYTHONUTF8=1`. The pack's zsh
+Windows font fallbacks, Windows-safe file:// URLs, `shutil.rmtree` instead of `rm -rf`, Chrome found on any OS, the
+business engine at 30 fps. Everything runs with `PYTHONUTF8=1`. The pack's zsh
 scripts and `npx hyperframes@latest init` are not used.

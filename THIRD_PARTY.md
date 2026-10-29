@@ -25,4 +25,3 @@ Everything else in the repo is the author's work under [MIT](LICENSE), except `t
 | PyTorch, torchvision | PyPI / download.pytorch.org | BSD-3-Clause | CUDA wheels include NVIDIA libraries under NVIDIA's licence |
 | numpy, opencv-python, pillow, playwright, PyAV | PyPI | BSD / Apache-2.0 / MIT-CMU / Apache-2.0 / BSD | |
 | ffmpeg | winget (Gyan build) / Homebrew | LGPL / GPL (build-dependent) | system install, asks first |
-| The other 7 Creator Skill Pack layout formats | YOUR copy, imported by `tools/import_formats.py` | the pack's own terms | not in this repo; see README |

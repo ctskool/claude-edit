@@ -9,7 +9,7 @@ post them, and compare which one works.
 
 **[See every version in the gallery](https://ctskool.github.io/claude-edit/)** (or open `docs/index.html`).
 
-![The edit menu: twelve versions of the same 50-second take](docs/media/menu-grid.jpg)
+![The edit menu: ivory, rotation, frost and popout on the same 50-second take](docs/media/menu-grid.jpg)
 
 ## What it does
 
@@ -33,17 +33,9 @@ post them, and compare which one works.
 | rotation | face / split / full-screen animation rotation | `/claude-edit-rotation` |
 | frost | you in a rounded panel, frosted glass cards above | `/claude-edit-frost` |
 | popout | you in a panel at the bottom, head popping above it | `/claude-edit-popout` |
-| mosaic | cut-out over a 2x2 grid of tiles | `/claude-edit-mosaic` * |
-| layers | full frame, real interfaces behind your head | `/claude-edit-layers` * |
-| evidence | cut-out low, an evidence wall of real posts | `/claude-edit-evidence` * |
-| scenes | cut-out over one full-screen image per idea | `/claude-edit-scenes` * |
-| collage | image cards above your head | `/claude-edit-collage` * |
-| wrap | caption layer: big anchor word, small words fitted around it | `/claude-edit-wrap` * |
-| tiers | tier list (only for videos that rank things) | `/claude-edit-tiers` * |
 
 rotation, frost and popout come from the **Creator Skill Pack** and ship in `pack/`, with its author's permission;
-`setup.py` installs them. \* The other layout formats need your own copy of the pack: one command imports it and patches
-it for Windows and macOS (see Install, step 3 below).
+`setup.py` installs them. The other layout formats are being reworked and are not in the repo yet.
 
 ## Install
 
@@ -83,7 +75,6 @@ Then, inside Claude Code:
 
 1. `/claude-edit-setup` asks for your brand (name, handle, colours, fonts) and writes `config/profile.json`.
 2. `/claude-edit my-video.mp4` makes your first edit.
-3. Optional, for the other seven layout formats: `python setup.py --import-pack "<path to Creator-Skill-Pack>/skills"`.
 
 **Platform status:** developed and tested on Windows 11 with an RTX 5090: setup plus smoke test pass, and the Raw vs
 Claude render reproduces the hand-built original (PSNR 49.8 dB). **The macOS paths are implemented but have not been run on a Mac yet**
@@ -100,7 +91,7 @@ Raw vs Claude take much longer (the cut-out runs at a few frames per second).
 /claude-edit my-video.mp4 ivory and rotation       two versions to A/B
 /claude-edit my-video.mp4 ivory + all formats      everything that fits the video
 /claude-edit-cut take1.mkv take2.mkv               just the verified tight cut of raw takes
-/claude-edit-mosaic my-video.mp4                   one format, nothing else
+/claude-edit-frost my-video.mp4                    one format, nothing else
 /claude-edit-versus take.mkv                       Raw vs Claude from one 16:9 take
 /claude-edit-setup                                 install check + brand questions ("redo my setup" works too)
 ```
@@ -114,7 +105,6 @@ More, including follow-ups such as "polish the rotation version" and "the captio
   vertical scene. Raw takes are fine; `/claude-edit` cuts them.
 - **Camera only**: a 16:9 talking-head take. Landscape footage is detected automatically.
 - **Raw vs Claude**: one 16:9 take, camera only. Say the edits out loud in order, and finish with a line that lands it.
-- For the full-frame formats (layers, wrap, evidence), sit a little further back: your chin about 60% down the frame.
 
 ## How it works
 

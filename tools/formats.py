@@ -7,9 +7,9 @@ Usage (run from the repo root):
   python tools/formats.py gallery <id>                     out/<id>-formats.html: the cut, every style and every format side by side
   python tools/formats.py list                             the formats and what each one needs
 
-Formats live in formats/<name>/: Creator Skill Pack skills (rotation, frost, popout bundled in pack/, the rest from your own
-copy of the pack), imported and patched for Windows + macOS by `python tools/import_formats.py [<pack>/skills]`, filled with your brand (config/profile.json -> formats/profile/profile.json)
-by their setup/apply_profile.py; see formats/README.md.
+Formats live in formats/<name>/: the Creator Skill Pack skills bundled in pack/ (rotation, frost, popout), imported and
+patched for Windows + macOS by `python tools/import_formats.py`, filled with your brand (config/profile.json ->
+formats/profile/profile.json) by their setup/apply_profile.py; see formats/README.md.
 
 THE CONTRACT - what every format may read from work/<id>/ (written by tools/rawcut.py + tools/prep_source.py, and by the
 recut-plan workflow for the content):
@@ -31,7 +31,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FMT = os.path.join(ROOT, "formats")
 TOOLS = os.path.join(ROOT, "tools")
 sys.path.insert(0, TOOLS)
-from common import chrome_path, hwaccel_args, matte_python, profile  # noqa: E402
+from common import chrome_path, matte_python, profile  # noqa: E402
 
 MATTE_PY = matte_python()
 GSAP = os.path.join(ROOT, "node_modules", "gsap", "dist", "gsap.min.js")
@@ -41,33 +41,16 @@ FIX = profile().get("caption_fixes", {})   # misheard names on screen, e.g. {"Ki
 ENV = dict(os.environ, PYTHONUTF8="1", CREATOR_PROFILE_DIR=PROFILE, CLAUDE_EDIT_ROOT=ROOT, CLAUDE_EDIT_PY=MATTE_PY,
            CLAUDE_EDIT_CHROME=chrome_path() or "")
 if not os.path.isdir(os.path.join(FMT, "business-short-form-reels")) and sys.argv[1:2] != ["list"]:
-    sys.exit("No layout formats imported yet. Install the bundled ones (rotation, frost, popout) with:\n"
-             "  python tools/import_formats.py\n"
-             "or all 10 from your own copy of the Creator Skill Pack:\n"
-             "  python tools/import_formats.py <path to Creator-Skill-Pack/skills>")
+    sys.exit("No layout formats installed yet (rotation, frost, popout). Install them with:\n"
+             "  python tools/import_formats.py")
 
 FORMATS = {
     "business": dict(skill="business-short-form-reels",
                      what="rotation: face full screen / split (graphics top, face bottom) / full-screen animation; glass pills, real UIs"),
     "panel": dict(skill="explainer-panel-reel",
                   what="you in a rounded panel at the bottom (head pops above it), headings + diagrams building above; close-ups"),
-    "depth": dict(skill="depth-ui-reel",
-                  what="you full frame the whole time; real interfaces BEHIND your head (cut-out), cards on your chest"),
-    "fitted": dict(skill="fitted-stacked-captions",
-                   what="caption layer: one big accent anchor word with the other words fitted around it; over any host video"),
-    # phase 2 (2026-10-25)
     "glass": dict(skill="glass-explainer-reel",
                   what="the panel layout with business graphics on rectangular glass cards (notifications, docs, channel cards, graphs)"),
-    "essay": dict(skill="visual-essay-reel",
-                  what="dark reel: you cut out in the lower half, an evidence wall of real posts / articles / stats above you"),
-    "backdrop": dict(skill="cutout-backdrop-reel", script="cutout_reel.py",
-                     what="you cut out over one full-screen image per idea (hard cuts every 1.5-3 s), hook over a collage"),
-    "grid": dict(skill="cutout-grid-reel", script="grid_reel.py",
-                 what="you cut out in the centre over a 2x2 grid of four images that change together"),
-    "cluster": dict(skill="image-cluster-reel", script="cluster_reel.py",
-                    what="you low in the frame, clusters of 1-3 images above your head that change every 3-5 s, tiny captions"),
-    "ranking": dict(skill="ranking-format",
-                    what="tier list: S-F table over you, item cards pop up when named and drop into their tier (ranking videos)"),
 }
 # panel-style formats (the skill's own crop / caption scripts, a project built by build.py with the skill's engine)
 PANEL_LIKE = {
@@ -75,7 +58,6 @@ PANEL_LIKE = {
                   engine=("panel_engine.py",)),
     "glass": dict(crop="06_crops.py", media=("cam_full.mp4", "cam_panel.mp4", "cam_panel_fg.webm"), crops="crops.json",
                   engine=("glass_engine.py", "glass_kit.py"), avatar=True),
-    "essay": dict(crop="06_cutout.py", media=("cam.mp4", "cam_fg.webm"), crops="cutout.json", engine=("essay_engine.py",)),
 }
 
 
@@ -153,7 +135,7 @@ def media(vid):
         if not os.path.exists(os.path.join(A, f)):
             sys.exit(f"missing assets/{f}: run tools/prep_source.py on raw/cut.mp4 first")
     D = dur(os.path.join(R, "cut.mp4"))
-    # full-screen face (business FACE windows, depth UI) = prep's face_full; its cut-out on the GPU
+    # full-screen face (business FACE windows) = prep's face_full; its cut-out on the GPU
     link(os.path.join(A, "face_full.mp4"), os.path.join(M, "cam_full.mp4"))
     if not os.path.exists(os.path.join(M, "cam_fg.webm")):
         run([MATTE_PY, os.path.join(TOOLS, "matte.py"), os.path.join(M, "cam_full.mp4"), os.path.join(M, "cam_fg.webm")])
@@ -201,13 +183,6 @@ def new(vid, fmt, title):
     info = json.load(open(os.path.join(M, "media.json")))
     D = info["dur"]
     json.dump(words_seconds(vid), open(os.path.join(M, "words_sew.json"), "w", encoding="utf-8"))   # always the current fixes (decimals, names)
-    if fmt == "fitted":                                      # a caption layer: no HyperFrames project, just a work folder
-        os.makedirs(P, exist_ok=True)
-        shutil.copy2(os.path.join(M, "words_sew.json"), os.path.join(P, "words.json"))
-        print(f"fitted work dir {P}: write plan.json (see formats/{skill}/SKILL.md), pick a host video, then render")
-        return
-    if spec.get("script"):                                   # backdrop / grid / cluster: script-driven, no HyperFrames project
-        return new_script(vid, fmt, P, M)
     base_project(P, skill, f"{vid}-{fmt}")
     if fmt == "business":
         shutil.copy2(os.path.join(S, "assets", "brand.css"), os.path.join(P, "assets", "brand.css"))
@@ -220,36 +195,8 @@ def new(vid, fmt, title):
         if not os.path.exists(os.path.join(P, "build.py")):
             t = open(os.path.join(S, "templates", "build.py"), encoding="utf-8").read()
             open(os.path.join(P, "build.py"), "w", encoding="utf-8").write(t.replace("__TITLE__", title).replace("__DUR__", str(D)))
-    elif fmt == "depth":
-        shutil.copy2(os.path.join(S, "engine", "depth_engine.py"), os.path.join(P, "depth_engine.py"))
-        for d in ("real", "yt", "reels"):
-            os.makedirs(os.path.join(P, "assets", d), exist_ok=True)
-        for f in ("cam_full.mp4", "cam_fg.webm"):
-            link(os.path.join(M, f), os.path.join(P, "assets", f))
-        shutil.copy2(os.path.join(M, "words_sew.json"), os.path.join(P, "words.json"))
-        open(os.path.join(P, "fps.txt"), "w").write("30")
-        if not os.path.exists(os.path.join(P, "build.py")):
-            shutil.copy2(os.path.join(S, "examples", "worked-example", "build.py"), os.path.join(P, "build.py"))
     elif fmt in PANEL_LIKE:
         new_panellike(vid, fmt, P, S, M, info, title)
-    elif fmt == "ranking":
-        shutil.copy2(os.path.join(S, "engine", "rank_engine.py"), os.path.join(P, "rank_engine.py"))
-        os.makedirs(os.path.join(P, "assets", "items"), exist_ok=True); os.makedirs(os.path.join(P, "work"), exist_ok=True)
-        # a tight framing leaves no table spot that clears the face (layout.py: chin at y ~1690), so the ranking uses the
-        # WIDE 4K shot across the top of the frame (y 270-878) on the brand background; the table then sits in the safe zone below.
-        wide = os.path.join(M, "cam_wide_top.mp4")
-        if not os.path.exists(wide):
-            bg = json.load(open(os.path.join(PROFILE, "profile.json"), encoding="utf-8"))["bg"].lstrip("#")
-            run(["ffmpeg", "-v", "error", "-y", *hwaccel_args(), "-i", os.path.join(M, "cut16x9.mp4"), "-an", "-vf",
-                 f"scale=1080:-2:flags=lanczos,pad=1080:1920:0:270:color=0x{bg}", "-c:v", "libx264", "-crf", "16", "-g", "30",
-                 "-pix_fmt", "yuv420p", "-movflags", "+faststart", wide])
-        link(wide, os.path.join(P, "assets", "cam_full.mp4"))
-        shutil.copy2(os.path.join(M, "words_sew.json"), os.path.join(P, "words.json"))
-        open(os.path.join(P, "fps.txt"), "w").write("30")
-        if not os.path.exists(os.path.join(P, "plan.json")):
-            shutil.copy2(os.path.join(S, "examples", "plan.example.json"), os.path.join(P, "plan.json"))
-        print(f"ranking: write plan.json (formats/{skill}/SKILL.md step 4), put one image per item in assets/items/, then "
-              f"python formats/{skill}/scripts/layout.py {P}  (OpenCV face boxes) and read work/layout_options.jpg")
     print(f"project {P} ({D:.2f}s). Next: write build.py (formats/{skill}/SKILL.md + its examples), then: "
           f"python tools/formats.py render {vid} {fmt} --draft")
 
@@ -264,16 +211,6 @@ def make_avatar(vid):
     run(["ffmpeg", "-v", "error", "-y", "-ss", "20", "-i", os.path.join(M, "cut16x9.mp4"), "-frames:v", "1", "-vf",
          f"crop={side}:{side}:{g['cx'] - side // 2}:{max(0, cy - side // 2)},scale=400:400", "-q:v", "2", av])
     return av
-
-
-def new_script(vid, fmt, P, M):
-    """Image formats driven by one script (sheet / preview / final): a work dir with the host clip, its cut-out and the words."""
-    os.makedirs(os.path.join(P, "w"), exist_ok=True); os.makedirs(os.path.join(P, "images"), exist_ok=True)
-    shutil.copy2(os.path.join(M, "words_sew.json"), os.path.join(P, "words.json"))
-    link(face_voice(vid), os.path.join(P, "clip.mp4"))                              # you full frame + the voice
-    link(os.path.join(M, "cam_fg.webm"), os.path.join(P, "w", "matte.webm"))       # its GPU cut-out, frame-aligned (the scripts' `matte` step)
-    print(f"{fmt} work dir {P}: images in images/, plan.json (format in formats/{FORMATS[fmt]['skill']}/scripts/{FORMATS[fmt]['script']} header), "
-          f"then python tools/formats.py render {vid} {fmt}")
 
 
 def new_panellike(vid, fmt, P, S, M, info, title):
@@ -303,7 +240,7 @@ def new_panellike(vid, fmt, P, S, M, info, title):
             link(os.path.join(H, f), os.path.join(P, "assets", f))
     for f in spec["engine"]:
         shutil.copy2(os.path.join(S, "engine", f), os.path.join(P, f))
-    for f in os.listdir(os.path.join(S, "assets")):                           # film grain etc. (essay)
+    for f in os.listdir(os.path.join(S, "assets")):                           # image assets the engine expects
         if f.endswith(".png"):
             shutil.copy2(os.path.join(S, "assets", f), os.path.join(P, "assets", f))
     if os.path.exists(os.path.join(PROFILE, "assets", "sfx_map.json")):
@@ -337,11 +274,7 @@ def new_panellike(vid, fmt, P, S, M, info, title):
 def render(vid, fmt, draft):
     P = W(vid, "formats", fmt); M = W(vid, "formats", "_media"); out = os.path.join(ROOT, "out")
     tag = f"{vid}_fmt-{fmt}" + ("_draft" if draft else "")
-    if fmt == "fitted":
-        return render_fitted(vid, P, M, tag, draft)
-    if FORMATS[fmt].get("script"):
-        return render_script(vid, fmt, P, tag, draft)
-    run([sys.executable, "build.py" if os.path.exists(os.path.join(P, "build.py")) else "rank_engine.py"], cwd=P)   # ranking: plan.json -> rank_engine
+    run([sys.executable, "build.py"], cwd=P)
     chk = subprocess.run("npx hyperframes check", cwd=P, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", env=ENV)
     bad = [l for l in re.sub(r"\x1b\[[0-9;]*m", "", chk.stdout + chk.stderr).splitlines() if "✗" in l and "text_occluded" not in l]
     print("\n".join(bad[:25]) or "check: no errors (text_occluded behind the head is intended)")
@@ -354,7 +287,7 @@ def render(vid, fmt, draft):
     has_audio = any(s.get("codec_type") == "audio" for s in probe(raw, "stream=codec_type")["streams"])
     if has_audio:
         shutil.copy2(raw, voiced)
-    else:                                                   # depth UI renders silent: put the cut's voice under it
+    else:                                                   # a silent render: put the cut's voice under it
         run(["ffmpeg", "-v", "error", "-y", "-i", raw, "-i", W(vid, "assets", "voice.m4a"), "-map", "0:v", "-map", "1:a", "-c:v", "copy",
              "-c:a", "aac", "-b:a", "256k", "-shortest", voiced])
     final = voiced
@@ -376,41 +309,6 @@ def mix_business(P, voiced, tag):
     print(r.stdout[-800:], r.stderr[-800:])
     out = os.path.join(mx, "reel - 9x16 Reel (v - no music).mp4")
     return out if os.path.exists(out) else None
-
-
-def face_voice(vid):
-    """you full frame (cam_full) with the cut's voice: the host clip for fitted captions and the image formats."""
-    M = W(vid, "formats", "_media"); host = os.path.join(M, "face_voice.mp4")
-    if not os.path.exists(host):
-        run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(M, "cam_full.mp4"), "-i", W(vid, "assets", "voice.m4a"), "-map", "0:v",
-             "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k", "-shortest", host])
-    return host
-
-
-def render_script(vid, fmt, P, tag, draft):
-    """backdrop / grid / cluster: the skill's script draws the frames (PIL or headless Chrome) and encodes with the voice."""
-    S = os.path.join(FMT, FORMATS[fmt]["skill"], "scripts", FORMATS[fmt]["script"])
-    args = ["--plan", "plan.json", "--words", "words.json", "--work", "w"]
-    run([sys.executable, S, "sheet", *args, "--video", "clip.mp4"], cwd=P)
-    raw = os.path.join(P, "renders", tag + ".mp4"); os.makedirs(os.path.dirname(raw), exist_ok=True)
-    run([sys.executable, S, "preview" if draft else "final", *args, "--video", "clip.mp4", "--out", raw], cwd=P)
-    out = os.path.join(ROOT, "out")
-    run([sys.executable, os.path.join(TOOLS, "finish.py"), raw, os.path.join(out, tag + ".mp4"), "--sheet", os.path.join(out, tag + "-sheet.jpg")])
-    print("wrote", os.path.join(out, tag + ".mp4"))
-
-
-def render_fitted(vid, P, M, tag, draft):
-    """Fitted captions over a host video (plan.json "host": a path, default the face-only cut with the voice)."""
-    plan = json.load(open(os.path.join(P, "plan.json"), encoding="utf-8"))
-    host = plan.get("host") or face_voice(vid)
-    S = os.path.join(FMT, "fitted-stacked-captions", "scripts", "fit_captions.py")
-    run([sys.executable, S, "sheet", "--plan", "plan.json", "--words", "words.json", "--work", "w"], cwd=P)
-    raw = os.path.join(P, "renders", tag + ".mp4"); os.makedirs(os.path.dirname(raw), exist_ok=True)
-    run([sys.executable, S, "preview" if draft else "final", "--plan", "plan.json", "--words", "words.json", "--work", "w",
-         "--video", host, "--out", raw], cwd=P)
-    out = os.path.join(ROOT, "out")
-    run([sys.executable, os.path.join(TOOLS, "finish.py"), raw, os.path.join(out, tag + ".mp4"), "--sheet", os.path.join(out, tag + "-sheet.jpg")])
-    print("wrote", os.path.join(out, tag + ".mp4"))
 
 
 def gallery(vid):

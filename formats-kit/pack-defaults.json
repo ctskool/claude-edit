@@ -44,57 +44,12 @@
    "close_up_zoom": "off",
    "work_rule": "run to the end and report (build-first); show the draft render before any final"
   },
-  "depth-ui-reel": {
-   "working_style": "build-first",
-   "web_assets": "yes: real over drawn, every source listed in the report",
-   "never_show": "nothing listed",
-   "dim_level": "0.40",
-   "punch_max": "1.10",
-   "caption_size": "64",
-   "caption_y": "1146",
-   "emph_size": "132",
-   "head_box": "320 320 840 1120"
-  },
-  "fitted-stacked-captions": {
-   "lead_seconds": 0.22,
-   "anchor_px": 195,
-   "small_px": 48,
-   "bottom_limit": 1250,
-   "review_rule": "render the final straight after a clean layout sheet"
-  },
   "glass-explainer-reel": {
    "watermark": "off",
    "glass_look": "full",
    "sound_effects": "on",
    "web_assets": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed",
    "work_rule": "finish the best version, then report"
-  },
-  "visual-essay-reel": {
-   "web_assets": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed",
-   "work_rule": "run to the end, then report",
-   "glow_default": "bottom",
-   "title_font": "emphasis"
-  },
-  "cutout-backdrop-reel": {
-   "hook_label": "white",
-   "image_dirs": "work/<id>/shared",
-   "web_images": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed",
-   "review_rule": "render the final straight after a clean layout sheet"
-  },
-  "cutout-grid-reel": {
-   "paper": "#F2F0EC",
-   "hook_rule": "yes: a short text hook on a white label across the top images",
-   "web_images": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed"
-  },
-  "image-cluster-reel": {
-   "image_types": "real screenshots, product shots, logos and charts that carry the idea; metaphor images only when the creator supplies them",
-   "image_sources": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed",
-   "image_dirs": "work/<id>/shared",
-   "review_rule": "render the final straight after a clean layout sheet"
-  },
-  "ranking-format": {
-   "web_assets": "no web search without asking the creator: use their real assets first (work/<id>/shared shots, logos, stills/clips of their own screen recording), every source listed",
-   "work_rule": "build the preview and report; ask before changing the table placement"
   }
  }
 }

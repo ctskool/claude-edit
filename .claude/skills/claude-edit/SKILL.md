@@ -1,6 +1,6 @@
 ---
 name: claude-edit
-description: Recut a talking-head recording (a split-screen short with screen recording on top and face cam below, a plain 16:9 or 9:16 camera take, or raw takes it tight-cuts first) into one or more motion-graphics shorts in different looks from the edit menu (ivory = default, rotation, frost, popout, mosaic, layers, evidence, scenes, collage, wrap, tiers, cut, versus), transcript-synced and rendered with HyperFrames. Use when the user says "/claude-edit", "edit this video", "recut this short", "make motion graphics versions of this video", "give me 3 versions of this reel", "do this one in ivory and rotation", or hands over a recording and asks for an edit.
+description: Recut a talking-head recording (a split-screen short with screen recording on top and face cam below, a plain 16:9 or 9:16 camera take, or raw takes it tight-cuts first) into one or more motion-graphics shorts in different looks from the edit menu (ivory = default, rotation, frost, popout, cut, versus), transcript-synced and rendered with HyperFrames. Use when the user says "/claude-edit", "edit this video", "recut this short", "make motion graphics versions of this video", "give me 3 versions of this reel", "do this one in ivory and rotation", or hands over a recording and asks for an edit.
 argument-hint: <video or raw takes> [menu names, e.g. "ivory and rotation"]
 ---
 
@@ -32,23 +32,15 @@ brand drives the layout formats and any end card / handle on screen. Never guess
   | `rotation` | `business` | face / split / full-screen animation rotation | bundled |
   | `frost` | `glass` | panel layout with frosted glass cards | bundled + cut-out |
   | `popout` | `panel` | you in a rounded panel at the bottom, head popping above it | bundled + cut-out |
-  | `mosaic` | `grid` | cut-out over a 2x2 image grid | formats + cut-out |
-  | `layers` | `depth` | full frame, real interfaces behind your head | formats + cut-out |
-  | `evidence` | `essay` | cut-out low, evidence wall of real posts | formats + cut-out |
-  | `scenes` | `backdrop` | cut-out over one full-screen image per idea | formats + cut-out |
-  | `collage` | `cluster` | image cards above your head | formats + cut-out |
-  | `wrap` | `fitted` | caption layer: big anchor word, small words fitted around it | formats |
-  | `tiers` | `ranking` | tier list; only for videos that really rank things | formats |
   | `cut` | - | only the tight cut of raw takes (step 0b) | - |
   | `versus` | - | Raw vs Claude A/B: the speaker asks for edits out loud; see `/claude-edit-versus` | cut-out |
-  "all formats" = every format except tiers unless the video ranks things. Examples: "/claude-edit <video>" = ivory only;
-  "/claude-edit <video> mosaic and rotation"; "/claude-edit <video> ivory + all formats".
+  "all formats" = rotation, frost and popout. Examples: "/claude-edit <video>" = ivory only;
+  "/claude-edit <video> frost and rotation"; "/claude-edit <video> ivory + all formats".
   Shortcuts: `/claude-edit-<menu name> <video>` is this skill limited to one version (`.claude/skills/claude-edit-<name>/`).
   Gallery of what each looks like: `docs/index.html`.
 - "bundled" formats (rotation, frost, popout) ship in `pack/` and `setup.py` installs them into `formats/`; if they are
-  missing, run `python tools/import_formats.py`. The rest ("formats") come from the user's own copy of the Creator Skill
-  Pack: if missing, tell them and offer `python tools/import_formats.py <path to Creator-Skill-Pack/skills>`; offer ivory
-  or a bundled format meanwhile.
+  missing, run `python tools/import_formats.py`. Other layouts (mosaic, layers, evidence, scenes, collage, wrap, tiers) are
+  not in this repo yet: if asked for one, say so and offer the closest of the four.
 - "cut-out" = `tools/matte.py` (Robust Video Matting). NVIDIA: ~40 s per 50 s of 1080p; Apple Silicon: slower (MPS);
   CPU only: minutes per 10 s - say so before starting a cut-out version on a CPU machine.
 - Any URLs / repos / products mentioned that need real screenshots.
@@ -170,10 +162,9 @@ To add a style: copy a STYLE.md, change the numbers (palette, type, layout px, m
 reference frames, and a `templates/<style>` project once one has been built and polished.
 
 ## Formats: the other menu
-Styles change the skin of the split-screen layout. FORMATS change the layout itself - imported from the
-Creator Skill Pack into `formats/` (rotation, frost, popout from `pack/`; the rest from the user's own copy) (brand from `config/profile.json`; read `formats/README.md` after import). Image
-sourcing for scenes / mosaic / collage is the user's call: no image search for other people's pictures without their OK;
-screenshots of whatever the video names (repo, product, pricing, docs page) are always fair game via `capture_shots.py`.
+Styles change the skin of the split-screen layout. FORMATS change the layout itself - installed from the
+Creator Skill Pack copy in `pack/` into `formats/` (brand from `config/profile.json`; read `formats/README.md` after import). No image
+search for other people's pictures without the user's OK; screenshots of whatever the video names (repo, product, pricing, docs page) are always fair game via `capture_shots.py`.
 `python tools/formats.py list` shows them. Same prepped video, same facts/assets/beats as the styles:
 ```bash
 python tools/formats.py media  <id>                 # once: cut-outs, crops, 16:9 30 fps camera cut

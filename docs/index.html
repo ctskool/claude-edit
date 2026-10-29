@@ -70,16 +70,16 @@ a { color: var(--accent); }
 
 <div class="wrap">
   <header>
-    <div class="kicker">claude-edit · Claude Code + HyperFrames · one raw recording · 13 versions</div>
+    <div class="kicker">claude-edit · Claude Code + HyperFrames · one raw recording · 6 versions</div>
     <h1>The <em>edit</em> menu</h1>
     <p class="lede">One 50-second talking-head take (a video about the Kimi K3.1 Pro launch), cut from raw OBS footage and rendered every way claude-edit can edit it. Styles keep the split screen and change the look of the top half. Formats change the whole layout. Pick by what the video is about, then compare. <a href="https://github.com/ctskool/claude-edit">Get it on GitHub</a>.</p>
     <div class="how">
       <div><b>One skill, a shortcut per version</b><p>Everything runs through <code>/claude-edit</code>. Each card below also has its own shortcut that makes just that version.</p>
         <div class="cmd"><span id="c1">/claude-edit &lt;video&gt;</span><button type="button" data-copy="c1">Copy</button></div>
-        <div class="cmd"><span id="c4">/claude-edit-mosaic &lt;video&gt;</span><button type="button" data-copy="c4">Copy</button></div>
+        <div class="cmd"><span id="c4">/claude-edit-frost &lt;video&gt;</span><button type="button" data-copy="c4">Copy</button></div>
         <p style="margin-top:6px">No names = the Ivory style only. Type <code>/claude-edit</code> to see every shortcut.</p></div>
       <div><b>Ask for any mix</b><p>Short names from the cards below, in any combination.</p>
-        <div class="cmd"><span id="c2">/claude-edit &lt;video&gt; mosaic and rotation</span><button type="button" data-copy="c2">Copy</button></div>
+        <div class="cmd"><span id="c2">/claude-edit &lt;video&gt; frost and rotation</span><button type="button" data-copy="c2">Copy</button></div>
         <div class="cmd"><span id="c3">/claude-edit &lt;video&gt; ivory + all formats</span><button type="button" data-copy="c3">Copy</button></div></div>
       <div><b>What happens</b><p>Raw takes are cut and verified, facts are checked on the live web, screenshots are captured, then each edit is built and rendered. You get a side-by-side page like this one for every video.</p></div>
     </div>
@@ -108,7 +108,7 @@ a { color: var(--accent); }
   <div class="count" id="count"></div>
   <div class="grid" id="grid" style="margin-top:12px"></div>
 
-  <footer>Previews are 6-second silent loops; each card links to the full render with sound. Verdicts come from reviewing every render plus an independent second-model pass. Formats marked fair or niche mostly suffer from a camera framed tight for split screen, or need images you choose: Scenes, Mosaic and Collage here use only real screenshots. Rotation, frost and popout ship with the repo; the other layout formats need your own copy of the Creator Skill Pack (see the README).</footer>
+  <footer>Previews are 6-second silent loops; each card links to the full render with sound. Verdicts come from reviewing every render plus an independent second-model pass. More layout formats are being reworked and will be added once they are up to standard.</footer>
 </div>
 
 <script>
@@ -116,15 +116,8 @@ const EDITS = [
   {id:"cut", best:"Checking or hand-editing the cut before you pick versions. The only one with no graphics.", name:"The cut", kind:"start", cmd:"/claude-edit-cut <raw takes>", what:"Your raw takes after the tight cut: last good take of each line, pauses trimmed, verified word for word.", v:["good","Base"], note:"Every edit below starts from this."},
   {id:"editorial", best:"Everyday posts in one consistent look. The only style with serif headlines and rebuilt interface cards.", name:"Ivory", kind:"style", top:true, cmd:"/claude-edit-ivory <video>", what:"Ivory and clay, serif headline with an italic accent, rebuilt interface cards, mono caption chips on the seam.", v:["strong","The house style"], note:"Plain /claude-edit with no names gives you this."},
   {id:"business", best:"Almost any video. The only one that rotates between face, split screen and full-screen animation.", name:"Rotation", kind:"format", top:true, cmd:"/claude-edit-rotation <video>", what:"Rotates you full screen, split screen and full-screen animation, with every switch on a cut. Price rings, X post, stat columns, sound effects.", v:["strong","Best all-rounder"], note:"Ranked first in an independent review."},
-  {id:"grid", best:"Comparing several numbers or products at once. Four tiles change together around you.", name:"Mosaic", kind:"format", top:true, cmd:"/claude-edit-mosaic <video>", what:"You cut out in the centre over four tiles that change together: big stat tiles mixed with real screenshots.", v:["strong","Strong for numbers"], note:"Best when a video has several figures to compare."},
   {id:"glass", best:"Polished explainers with a few distinct points. Each point gets its own glass card.", name:"Frost", kind:"format", top:true, cmd:"/claude-edit-frost <video>", what:"You in a rounded panel at the bottom, glass cards above: notifications, score counters, price cards, calendar.", v:["strong","Polished explainer"], note:"Headings sit a little high for a phone app's top bar."},
   {id:"panel", best:"Step-by-step and how-it-works videos. Headings and diagrams build up above you.", name:"Pop-out", kind:"format", cmd:"/claude-edit-popout <video>", what:"You in a panel at the bottom with your head popping above it, red-block headings and diagrams building above.", v:["good","Clear structure"], note:"Same heading-position fix as Frost."},
-  {id:"essay", best:"Claims that need receipts. Every graphic carries its source line.", name:"Evidence", kind:"format", cmd:"/claude-edit-evidence <video>", what:"Dark frame, you cut out low, an evidence wall of real posts, charts and pricing with a source line on each.", v:["good","Credible, a bit sparse"], note:"Evidence text is small on a phone."},
-  {id:"backdrop", best:"Fast, punchy takes with one strong image per idea. The hardest-cutting edit.", name:"Scenes", kind:"format", cmd:"/claude-edit-scenes <video>", what:"You cut out in a corner over a full-screen image per idea, hard cuts every 1.5 to 3 seconds, hook over a collage.", v:["fair","Punchy, uneven"], note:"Scale jumps between shots; stronger with chosen images."},
-  {id:"depth", best:"Videos shot with a wider camera. The only one where graphics sit behind your head.", name:"Layers", kind:"format", cmd:"/claude-edit-layers <video>", what:"You full frame the whole time, real interfaces sliding in beside and behind your head, captions on your hair.", v:["fair","Squeezed by framing"], note:"Needs a wider camera shot to breathe."},
-  {id:"fitted", best:"Caption-led posts, or as the caption layer on another format. The words are the design.", name:"Wrap", kind:"format", cmd:"/claude-edit-wrap <video>", what:"A caption style: one big accent word with the small words fitted around its letters. Can sit on top of other formats.", v:["fair","Captions on your face"], note:"With this framing there is no room under your chin."},
-  {id:"cluster", best:"Metaphor or meme-driven videos. Small images change above your head while you talk.", name:"Collage", kind:"format", cmd:"/claude-edit-collage <video>", what:"Small image cards above your head that change every few seconds, tiny captions beside your cheek.", v:["niche","Needs images"], note:"Built for metaphor and meme images plus a wide shot."},
-  {id:"ranking", best:"Only videos that really rank things. The only one with a tier table that fills up.", name:"Tiers", kind:"format", cmd:"/claude-edit-tiers <video>", what:"An S-to-F tier table under a wide shot of you; item cards pop up when named and drop into their tier.", v:["niche","Ranking videos only"], note:"Here the tiers come from verified prices. Needs the formats."}
 ];
 const grid = document.getElementById("grid"), esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 grid.innerHTML = EDITS.map(e => `

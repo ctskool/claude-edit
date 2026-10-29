@@ -7,7 +7,6 @@ Type these in Claude Code, opened in this repo's folder. Paths can be absolute o
 ```text
 /claude-edit-setup                       check the install, then answer the brand questions
 redo my setup                            change your brand, colours or fonts later
-/claude-edit-setup --import-pack "D:/Downloads/Creator-Skill-Pack/skills"   add the other 7 layout formats (own pack)
 ```
 
 ## Make edits
@@ -15,11 +14,11 @@ redo my setup                            change your brand, colours or fonts lat
 ```text
 /claude-edit my-video.mp4                                 ivory (the default style)
 /claude-edit my-video.mp4 ivory and rotation              two versions to A/B test
-/claude-edit my-video.mp4 ivory + all formats             every version that fits (tiers only if you rank things)
+/claude-edit my-video.mp4 ivory + all formats             ivory, rotation, frost and popout
 /claude-edit "~/Movies/2026-10-27 20-25-26.mkv"           raw OBS take: tight-cut first, then ivory
 /claude-edit take1.mkv take2.mkv frost                    two raw takes of one short, frost format
 /claude-edit-cut take1.mkv take2.mkv                      just the verified tight cut, no graphics
-/claude-edit-mosaic my-video.mp4                          one format only (any /claude-edit-<menu name>)
+/claude-edit-popout my-video.mp4                          one format only (any /claude-edit-<menu name>)
 /claude-edit-versus take.mkv                              Raw vs Claude from one 16:9 take
 ```
 
@@ -38,7 +37,7 @@ polish the rotation version                               one more critic + fix 
 the captions cover my mouth at 0:12 in frost              targeted fix
 send me the phone previews                                the < 30 MB copies in out/preview/
 make a gallery page of every version of this video        out/<id>-formats.html
-render the final of mosaic                                draft -> final quality
+render the final of frost                                 draft -> final quality
 ```
 
 ## Raw vs Claude: what to say on camera
