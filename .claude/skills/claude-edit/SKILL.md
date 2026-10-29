@@ -29,9 +29,9 @@ brand drives the layout formats and any end card / handle on screen. Never guess
   | menu name | internal key | what it is | needs |
   |---|---|---|---|
   | `ivory` (DEFAULT) | `editorial` | split screen, ivory + clay graphics on top; house rules in `styles/editorial/STYLE.md` | - |
-  | `rotation` | `business` | face / split / full-screen animation rotation | formats imported |
-  | `frost` | `glass` | panel layout with frosted glass cards | formats + cut-out |
-  | `popout` | `panel` | you in a rounded panel at the bottom, head popping above it | formats + cut-out |
+  | `rotation` | `business` | face / split / full-screen animation rotation | bundled |
+  | `frost` | `glass` | panel layout with frosted glass cards | bundled + cut-out |
+  | `popout` | `panel` | you in a rounded panel at the bottom, head popping above it | bundled + cut-out |
   | `mosaic` | `grid` | cut-out over a 2x2 image grid | formats + cut-out |
   | `layers` | `depth` | full frame, real interfaces behind your head | formats + cut-out |
   | `evidence` | `essay` | cut-out low, evidence wall of real posts | formats + cut-out |
@@ -45,8 +45,10 @@ brand drives the layout formats and any end card / handle on screen. Never guess
   "/claude-edit <video> mosaic and rotation"; "/claude-edit <video> ivory + all formats".
   Shortcuts: `/claude-edit-<menu name> <video>` is this skill limited to one version (`.claude/skills/claude-edit-<name>/`).
   Gallery of what each looks like: `docs/index.html`.
-- Formats ("needs formats") come from the user's own copy of the Creator Skill Pack: if `formats/` is empty, tell them
-  and offer `python tools/import_formats.py <path to Creator-Skill-Pack/skills>`; offer ivory meanwhile.
+- "bundled" formats (rotation, frost, popout) ship in `pack/` and `setup.py` installs them into `formats/`; if they are
+  missing, run `python tools/import_formats.py`. The rest ("formats") come from the user's own copy of the Creator Skill
+  Pack: if missing, tell them and offer `python tools/import_formats.py <path to Creator-Skill-Pack/skills>`; offer ivory
+  or a bundled format meanwhile.
 - "cut-out" = `tools/matte.py` (Robust Video Matting). NVIDIA: ~40 s per 50 s of 1080p; Apple Silicon: slower (MPS);
   CPU only: minutes per 10 s - say so before starting a cut-out version on a CPU machine.
 - Any URLs / repos / products mentioned that need real screenshots.
@@ -168,8 +170,8 @@ To add a style: copy a STYLE.md, change the numbers (palette, type, layout px, m
 reference frames, and a `templates/<style>` project once one has been built and polished.
 
 ## Formats: the other menu
-Styles change the skin of the split-screen layout. FORMATS change the layout itself - imported from the user's copy of the
-Creator Skill Pack into `formats/` (brand from `config/profile.json`; read `formats/README.md` after import). Image
+Styles change the skin of the split-screen layout. FORMATS change the layout itself - imported from the
+Creator Skill Pack into `formats/` (rotation, frost, popout from `pack/`; the rest from the user's own copy) (brand from `config/profile.json`; read `formats/README.md` after import). Image
 sourcing for scenes / mosaic / collage is the user's call: no image search for other people's pictures without their OK;
 screenshots of whatever the video names (repo, product, pricing, docs page) are always fair game via `capture_shots.py`.
 `python tools/formats.py list` shows them. Same prepped video, same facts/assets/beats as the styles:

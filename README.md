@@ -30,9 +30,9 @@ post them, and compare which one works.
 | **ivory** (default) | split screen, ivory + clay graphics on top, serif headlines, rebuilt interface cards | `/claude-edit-ivory` |
 | **versus** | Raw vs Claude A/B: edits land on the word you name them | `/claude-edit-versus` |
 | **cut** | just the tight cut of your raw takes | `/claude-edit-cut` |
-| rotation | face / split / full-screen animation rotation | `/claude-edit-rotation` * |
-| frost | you in a rounded panel, frosted glass cards above | `/claude-edit-frost` * |
-| popout | you in a panel at the bottom, head popping above it | `/claude-edit-popout` * |
+| rotation | face / split / full-screen animation rotation | `/claude-edit-rotation` |
+| frost | you in a rounded panel, frosted glass cards above | `/claude-edit-frost` |
+| popout | you in a panel at the bottom, head popping above it | `/claude-edit-popout` |
 | mosaic | cut-out over a 2x2 grid of tiles | `/claude-edit-mosaic` * |
 | layers | full frame, real interfaces behind your head | `/claude-edit-layers` * |
 | evidence | cut-out low, an evidence wall of real posts | `/claude-edit-evidence` * |
@@ -41,8 +41,9 @@ post them, and compare which one works.
 | wrap | caption layer: big anchor word, small words fitted around it | `/claude-edit-wrap` * |
 | tiers | tier list (only for videos that rank things) | `/claude-edit-tiers` * |
 
-\* Layout formats: these need your own copy of the **Creator Skill Pack**, which is not included here because its licence
-does not allow redistribution. One command imports it and patches it for Windows and macOS (see Install, step 4).
+rotation, frost and popout come from the **Creator Skill Pack** and ship in `pack/`, with its author's permission;
+`setup.py` installs them. \* The other layout formats need your own copy of the pack: one command imports it and patches
+it for Windows and macOS (see Install, step 3 below).
 
 ## Install
 
@@ -82,7 +83,7 @@ Then, inside Claude Code:
 
 1. `/claude-edit-setup` asks for your brand (name, handle, colours, fonts) and writes `config/profile.json`.
 2. `/claude-edit my-video.mp4` makes your first edit.
-3. Optional, for the layout formats: `python setup.py --import-pack "<path to Creator-Skill-Pack>/skills"`.
+3. Optional, for the other seven layout formats: `python setup.py --import-pack "<path to Creator-Skill-Pack>/skills"`.
 
 **Platform status:** developed and tested on Windows 11 with an RTX 5090: setup plus smoke test pass, and the Raw vs
 Claude render reproduces the hand-built original (PSNR 49.8 dB). **The macOS paths are implemented but have not been run on a Mac yet**

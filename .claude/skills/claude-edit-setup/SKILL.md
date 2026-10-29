@@ -19,6 +19,7 @@ argument-hint: [--check] [--no-matte] [--import-pack <path>]
    or people names Whisper should spell right (`glossary`), anything that must never appear on screen (`never_show`),
    and optionally a square profile picture saved as `config/avatar.jpg`. Write the answers into `config/profile.json`
    (keys as in `config/profile.example.json`).
-4. Layout formats: if they own the Creator Skill Pack, `python tools/import_formats.py <path to Creator-Skill-Pack/skills>`;
+4. Layout formats: rotation, frost and popout are installed by `setup.py` (else `python tools/import_formats.py`). If they
+   own the Creator Skill Pack, `python tools/import_formats.py <path to Creator-Skill-Pack/skills>` adds the other seven;
    after a brand change with formats imported, `python tools/import_formats.py --refill`.
 5. Tell them what to try first: `/claude-edit <video>` (ivory), `/claude-edit-cut <raw takes>`, `/claude-edit-versus <take>`.

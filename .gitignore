@@ -12,8 +12,8 @@ Thumbs.db
 
 # downloaded at setup (licences: see THIRD_PARTY.md)
 vendor/
-assets/
-.claude/skills/media-use/audio/assets/sfx/*.mp3
+/assets/
+.claude/skills/media-use/audio/assets/
 formats/
 
 # your videos and renders

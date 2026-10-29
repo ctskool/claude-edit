@@ -8,3 +8,7 @@ the HyperFrames project (https://github.com/heygen-com/hyperframes), licensed un
 License 2.0 (licenses/Apache-2.0.txt). The only change: the bundled Pixabay sound effects in
 media-use/audio/assets/sfx are not committed; setup.py copies them from the installed hyperframes
 npm package. HyperFrames is a product of its authors; this project is not affiliated with them.
+
+pack/ holds three skills from the Creator Skill Pack (business-short-form-reels, glass-explainer-reel,
+explainer-panel-reel), redistributed with the permission of the pack's author. They are not covered by
+this repository's MIT licence. Changes from the pack: see pack/README.md.

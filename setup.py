@@ -6,7 +6,8 @@ everything the skills need, and writes config/config.json. Safe to re-run.
   python setup.py --yes        install without asking
   python setup.py --no-matte   skip the cut-out model (torch, ~1-3 GB); cut-out formats and /claude-edit-versus need it
   python setup.py --smoke      also run the smoke test: 5 s synthetic clip -> encode -> matte -> whisper -> 5 s render
-  python setup.py --import-pack <Creator-Skill-Pack/skills>   import your own copy of the pack's 10 layout formats
+  python setup.py --import-pack <Creator-Skill-Pack/skills>   all 10 layout formats from your own copy of the pack
+                                                              (rotation, frost and popout are bundled and imported anyway)
 
 Standard library only, Python 3.10+. macOS paths are implemented but have not been run on a Mac yet.
 """
@@ -467,10 +468,15 @@ def main():
             "cuBLAS + cuDNN installed" if r.returncode == 0 else "install failed - Whisper will run on the CPU")
     ensure_assets(a)
     cfg = write_config(info, enc, hw, torch_dev, a)
-    if a.import_pack:
-        r = subprocess.run([VPY if os.path.exists(VPY) else sys.executable, os.path.join(ROOT, "tools", "import_formats.py"),
-                            a.import_pack])
-        say("OK" if r.returncode == 0 else "FAIL", "layout formats", "imported" if r.returncode == 0 else "import failed")
+    have = all(os.path.isdir(os.path.join(ROOT, "formats", s))
+               for s in ("business-short-form-reels", "explainer-panel-reel", "glass-explainer-reel"))
+    if a.import_pack or (not have and not a.check and os.path.isdir(os.path.join(ROOT, "assets", "fonts"))):
+        r = subprocess.run([VPY if os.path.exists(VPY) else sys.executable, os.path.join(ROOT, "tools", "import_formats.py")]
+                           + ([a.import_pack] if a.import_pack else []))
+        what = "all 10 imported" if a.import_pack else "rotation, frost, popout installed"
+        say("OK" if r.returncode == 0 else "FAIL", "layout formats", what if r.returncode == 0 else "import failed")
+    elif have:
+        say("OK", "layout formats", "installed")
     if a.smoke and not a.check:
         smoke(cfg, not a.no_matte)
 

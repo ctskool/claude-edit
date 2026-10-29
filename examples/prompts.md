@@ -7,7 +7,7 @@ Type these in Claude Code, opened in this repo's folder. Paths can be absolute o
 ```text
 /claude-edit-setup                       check the install, then answer the brand questions
 redo my setup                            change your brand, colours or fonts later
-/claude-edit-setup --import-pack "D:/Downloads/Creator-Skill-Pack/skills"   add the layout formats
+/claude-edit-setup --import-pack "D:/Downloads/Creator-Skill-Pack/skills"   add the other 7 layout formats (own pack)
 ```
 
 ## Make edits

@@ -5,8 +5,9 @@ The claude-edit skill has two menus:
 - **Style** = the visual skin of the split-screen layout (`styles/`: `editorial` = menu name `ivory`).
 - **Format** = the layout itself and what moves (this folder, `formats/`).
 
-A format is one of the Creator Skill Pack's reel skills, imported from your own copy of the pack by
-`python tools/import_formats.py <pack>/skills`, filled with your brand from `config/profile.json` and patched to run on
+A format is one of the Creator Skill Pack's reel skills. rotation, frost and popout ship in `pack/` (with the pack
+author's permission) and are installed by `python tools/import_formats.py`; the other seven are imported from your own
+copy of the pack by `python tools/import_formats.py <pack>/skills`. Either way they are filled with your brand from `config/profile.json` and patched to run on
 Windows and macOS. Every format reads the same prepped video (the contract below), so one recording can be rendered as
 several kinds of edit and compared side by side.
 

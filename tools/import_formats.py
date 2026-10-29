@@ -1,12 +1,14 @@
-"""Import YOUR copy of the Creator Skill Pack's 10 layout formats into formats/ and make them run on Windows + macOS.
+"""Import the Creator Skill Pack layout formats into formats/ and make them run on Windows + macOS.
 
-  python tools/import_formats.py <path to Creator-Skill-Pack/skills>      (or: python setup.py --import-pack <path>)
+  python tools/import_formats.py                                          the 3 bundled formats (rotation, frost, popout)
+  python tools/import_formats.py <path to Creator-Skill-Pack/skills>      all 10, from your own copy of the pack
+                                                                          (or: python setup.py --import-pack <path>)
   python tools/import_formats.py --refill                                 re-apply config/profile.json to imported formats
 
-The pack is not included in this repo (it has no licence that allows redistribution). This script copies the ten
-skills the claude-edit menu uses, applies the port fixes below as pattern rules (no pack code is stored here), builds the
-pack profile in formats/profile/ from config/profile.json + formats-kit/pack-defaults.json, and fills every placeholder
-with the pack's own setup/apply_profile.py. formats/ is git-ignored.
+rotation, frost and popout ship in pack/ (redistributed with the pack author's permission; see pack/README.md). The other
+seven need your own copy of the pack. This script copies the skills, applies the port fixes below as pattern rules, builds
+the pack profile in formats/profile/ from config/profile.json + formats-kit/pack-defaults.json, and fills every
+placeholder with the pack's own setup/apply_profile.py. formats/ is git-ignored.
 
 Port fixes (each is a regex rule applied to engine/*.py and scripts/*.py):
   - GSAP from the project's assets/gsap.min.js instead of the jsDelivr CDN (renders offline, pinned 3.13)
@@ -31,6 +33,8 @@ from common import ROOT, profile  # noqa: E402
 FMT = os.path.join(ROOT, "formats")
 KIT = os.path.join(ROOT, "formats-kit")
 PROFILE_DIR = os.path.join(FMT, "profile")
+BUNDLED_DIR = os.path.join(ROOT, "pack")
+BUNDLED = ["business-short-form-reels", "explainer-panel-reel", "glass-explainer-reel"]   # rotation, popout, frost
 SKILLS = ["business-short-form-reels", "explainer-panel-reel", "depth-ui-reel", "fitted-stacked-captions", "glass-explainer-reel",
           "visual-essay-reel", "cutout-backdrop-reel", "cutout-grid-reel", "image-cluster-reel", "ranking-format"]
 # repo fonts (fontsource, OFL) under the file names the pack profile expects
@@ -138,21 +142,22 @@ def fill(skill):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("pack", nargs="?", help="the pack's skills/ folder (contains business-short-form-reels/ ...)")
+    ap.add_argument("pack", nargs="?", help="your pack's skills/ folder (all 10 formats); omit for the 3 bundled in pack/")
     ap.add_argument("--refill", action="store_true", help="only rebuild formats/profile and re-fill the imported formats")
     a = ap.parse_args()
     if not os.path.isdir(os.path.join(ROOT, "assets", "fonts")):
         sys.exit("assets/ missing: run `python setup.py` first")
     if not a.refill:
-        if not a.pack:
-            sys.exit(__doc__)
-        src = a.pack if os.path.isdir(os.path.join(a.pack, SKILLS[0])) else os.path.join(a.pack, "skills")
-        missing = [s for s in SKILLS if not os.path.isdir(os.path.join(src, s))]
-        if missing:
-            sys.exit(f"not a Creator Skill Pack skills folder (missing {', '.join(missing)}): {a.pack}")
+        if a.pack:
+            src, todo = (a.pack if os.path.isdir(os.path.join(a.pack, SKILLS[0])) else os.path.join(a.pack, "skills")), SKILLS
+            missing = [s for s in SKILLS if not os.path.isdir(os.path.join(src, s))]
+            if missing:
+                sys.exit(f"not a Creator Skill Pack skills folder (missing {', '.join(missing)}): {a.pack}")
+        else:
+            src, todo = BUNDLED_DIR, BUNDLED
         os.makedirs(FMT, exist_ok=True)
         total = {}
-        for s in SKILLS:
+        for s in todo:
             d = os.path.join(FMT, s)
             if os.path.exists(d):
                 shutil.rmtree(d)
@@ -161,7 +166,7 @@ def main():
                 total[k] = total.get(k, 0) + n
         unused = [k for k in range(len(RULES)) if k not in total]
         print(f"patched: {sum(total.values())} edits from {len(total)}/{len(RULES)} rules"
-              + (f" (rules {unused} matched nothing - the pack may have changed; check those formats)" if unused else ""))
+              + (f" (rules {unused} matched nothing - the pack may have changed; check those formats)" if unused and todo is SKILLS else ""))
         for f in ("README.md", "BUILDER_BRIEF.md"):
             shutil.copy2(os.path.join(KIT, f), os.path.join(FMT, f))
     if not os.path.isdir(FMT):

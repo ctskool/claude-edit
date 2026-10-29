@@ -7,8 +7,8 @@ Usage (run from the repo root):
   python tools/formats.py gallery <id>                     out/<id>-formats.html: the cut, every style and every format side by side
   python tools/formats.py list                             the formats and what each one needs
 
-Formats live in formats/<name>/: your own copy of the Creator Skill Pack skills, imported and patched for Windows + macOS by
-`python tools/import_formats.py <pack>/skills`, filled with your brand (config/profile.json -> formats/profile/profile.json)
+Formats live in formats/<name>/: Creator Skill Pack skills (rotation, frost, popout bundled in pack/, the rest from your own
+copy of the pack), imported and patched for Windows + macOS by `python tools/import_formats.py [<pack>/skills]`, filled with your brand (config/profile.json -> formats/profile/profile.json)
 by their setup/apply_profile.py; see formats/README.md.
 
 THE CONTRACT - what every format may read from work/<id>/ (written by tools/rawcut.py + tools/prep_source.py, and by the
@@ -41,7 +41,9 @@ FIX = profile().get("caption_fixes", {})   # misheard names on screen, e.g. {"Ki
 ENV = dict(os.environ, PYTHONUTF8="1", CREATOR_PROFILE_DIR=PROFILE, CLAUDE_EDIT_ROOT=ROOT, CLAUDE_EDIT_PY=MATTE_PY,
            CLAUDE_EDIT_CHROME=chrome_path() or "")
 if not os.path.isdir(os.path.join(FMT, "business-short-form-reels")) and sys.argv[1:2] != ["list"]:
-    sys.exit("No layout formats imported yet. They come from your own copy of the Creator Skill Pack:\n"
+    sys.exit("No layout formats imported yet. Install the bundled ones (rotation, frost, popout) with:\n"
+             "  python tools/import_formats.py\n"
+             "or all 10 from your own copy of the Creator Skill Pack:\n"
              "  python tools/import_formats.py <path to Creator-Skill-Pack/skills>")
 
 FORMATS = {
