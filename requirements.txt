@@ -1,4 +1,4 @@
-# Core imports found in tools/: numpy, PIL, cv2, playwright, faster_whisper.
+# Core imports found in tools/: numpy, PIL, cv2, playwright, faster_whisper (ctranslate2 comes with it).
 # Python 3.10+; use a virtual environment. See INSTALL.md for optional features.
 numpy
 Pillow

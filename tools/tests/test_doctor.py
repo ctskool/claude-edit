@@ -145,8 +145,8 @@ class Probes(unittest.TestCase):
 
 
 class Transcription(unittest.TestCase):
-    def probe(self, cuda=True, gpu_encode=True, cache=True, cpu=True):
-        calls = []
+    def script(self, mode, calls, cuda=True, gpu_encode=True, cache=True, cpu=True):
+        """Run one mode of the probe script in-process with fake modules; returns its stdout."""
         def dlls():
             calls.append("dlls")
         def compute(device):
@@ -175,44 +175,64 @@ class Transcription(unittest.TestCase):
         output = io.StringIO()
         before = list(sys.path)
         try:
-            with mock.patch.dict(sys.modules, modules), mock.patch.object(sys, "argv", ["probe", "tools"]), contextlib.redirect_stdout(output):
+            with mock.patch.dict(sys.modules, modules), mock.patch.object(sys, "argv", ["probe", "tools", mode]), contextlib.redirect_stdout(output):
                 try:
                     exec(compile(doctor.TRANSCRIPTION_PROBE, "probe", "exec"), {})
                 except SystemExit as e:
                     self.assertEqual(e.code, 0)
         finally:
             sys.path[:] = before
-        return json.loads(output.getvalue()), calls
+        return output.getvalue()
+
+    def probe(self, crash=False, **kw):
+        """check_transcription with each probe process faked; crash=True makes the CUDA process die without output."""
+        calls = []
+        def run(cmd, root, timeout=None):
+            mode = cmd[-1]
+            if mode == "cuda" and crash:
+                return 3221225477, ""
+            return 0, self.script(mode, calls, **kw)
+        with mock.patch.object(doctor, "run", side_effect=run):
+            return doctor.check_transcription(Path(".")), calls
 
     def test_gpu_probes_first_encode_after_dll_setup(self):
-        data, calls = self.probe()
-        self.assertEqual(data["status"], "PASS")
+        row, calls = self.probe()
+        self.assertEqual(row.status, "PASS")
         self.assertEqual(calls[:2], ["dlls", "cuda"])
         self.assertEqual(calls[2][0], "large-v3")
         self.assertTrue(calls[2][1]["local_files_only"])
 
     def test_mac_cpu_fallback_is_warning_and_turbo(self):
-        data, calls = self.probe(cuda=False)
-        self.assertEqual(data["status"], "WARN")
-        self.assertIn("slower", data["detail"])
+        row, calls = self.probe(cuda=False)
+        self.assertEqual(row.status, "WARN")
+        self.assertIn("slower", row.detail)
         self.assertEqual(calls[-1][0], "large-v3-turbo")
         self.assertEqual(calls[-1][1]["compute_type"], "int8")
 
     def test_lazy_dll_failure_does_not_claim_cuda_pass(self):
-        data, _ = self.probe(gpu_encode=False)
-        self.assertEqual(data["status"], "WARN")
-        self.assertIn("cublas", data["detail"])
+        row, _ = self.probe(gpu_encode=False)
+        self.assertEqual(row.status, "WARN")
+        self.assertIn("cublas", row.detail)
 
     def test_uncached_model_warns_without_downloading(self):
-        data, calls = self.probe(cuda=False, cache=False)
-        self.assertEqual(data["status"], "WARN")
-        self.assertIn("not verified", data["detail"])
+        row, calls = self.probe(cuda=False, cache=False)
+        self.assertEqual(row.status, "WARN")
+        self.assertIn("not verified", row.detail)
         for call in calls:
             if isinstance(call, tuple):
                 self.assertTrue(call[1]["local_files_only"])
 
     def test_no_runtime_fails(self):
-        self.assertEqual(self.probe(cuda=False, cpu=False)[0]["status"], "FAIL")
+        self.assertEqual(self.probe(cuda=False, cpu=False)[0].status, "FAIL")
+
+    def test_gpu_crash_warns_and_still_checks_cpu(self):
+        row, calls = self.probe(crash=True)
+        self.assertEqual(row.status, "WARN")
+        self.assertIn("crashed", row.detail)
+        self.assertEqual(calls[-1][0], "large-v3-turbo")
+
+    def test_gpu_crash_with_no_cpu_runtime_fails(self):
+        self.assertEqual(self.probe(crash=True, cpu=False)[0].status, "FAIL")
 
     def test_probe_timeout_and_malformed_output_fail(self):
         for response in ((1, "timeout"), (0, "not json")):

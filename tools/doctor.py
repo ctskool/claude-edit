@@ -29,6 +29,7 @@ PACKAGES = {
     "cv2": ("opencv-python", False),
     "playwright": ("playwright", False),
     "faster_whisper": ("faster-whisper", False),
+    "ctranslate2": ("faster-whisper", False),  # installed with faster-whisper; asr.py counts CUDA devices with it
     "torch": ("torch", True),
     "transformers": ('"transformers>=5.13,<6"', True),
     "soundfile": ("soundfile", True),
@@ -160,17 +161,17 @@ cuda_dll_dirs()
 import ctranslate2
 import numpy as np
 from faster_whisper import WhisperModel
-error = ""
-try:
-    types = ctranslate2.get_supported_compute_types("cuda")
-    if "float16" not in types:
-        raise RuntimeError("CUDA float16 unavailable")
-    m = WhisperModel("large-v3", device="cuda", compute_type="float16", local_files_only=True)
-    list(m.transcribe(np.zeros(16000, dtype=np.float32))[0])
-    print(json.dumps({"status": "PASS", "detail": "large-v3 CUDA float16: cached model encoded one second of silence"}))
+if sys.argv[2] == "cuda":
+    try:
+        types = ctranslate2.get_supported_compute_types("cuda")
+        if "float16" not in types:
+            raise RuntimeError("CUDA float16 unavailable")
+        m = WhisperModel("large-v3", device="cuda", compute_type="float16", local_files_only=True)
+        list(m.transcribe(np.zeros(16000, dtype=np.float32))[0])
+        print(json.dumps({"status": "PASS", "detail": "large-v3 CUDA float16: cached model encoded one second of silence"}))
+    except Exception as e:
+        print(json.dumps({"status": "WARN", "detail": str(e)[:240]}))
     sys.exit(0)
-except Exception as e:
-    error = str(e)[:240]
 try:
     types = ctranslate2.get_supported_compute_types("cpu")
     if "int8" not in types:
@@ -181,24 +182,41 @@ try:
         detail = "CPU large-v3-turbo int8 encoded silence"
     except Exception as e:
         detail = "CPU int8 runtime available; cached turbo model not verified: " + str(e)[:180]
-    print(json.dumps({"status": "WARN", "detail": detail + "; much slower (~20x on the author's GPU machine); CUDA large-v3 not verified: " + error}))
+    print(json.dumps({"status": "WARN", "detail": detail}))
 except Exception as e:
-    print(json.dumps({"status": "FAIL", "detail": "No usable CPU/CUDA runtime: " + str(e)[:240] + "; CUDA: " + error}))
+    print(json.dumps({"status": "FAIL", "detail": "No usable CPU/CUDA runtime: " + str(e)[:240]}))
 '''
 
 
-def check_transcription(root):
-    rc, out = run([sys.executable, "-B", "-c", TRANSCRIPTION_PROBE, str(root / "tools")], root, timeout=60)
-    data = None
+def transcription_probe(root, mode):
+    # Each device gets its own process: a GPU driver fault kills the process outright, and must not take the CPU check with it.
+    rc, out = run([sys.executable, "-B", "-c", TRANSCRIPTION_PROBE, str(root / "tools"), mode], root, timeout=60)
     for line in reversed(out.splitlines()):
         try:
             candidate = json.loads(line)
             if isinstance(candidate, dict) and candidate.get("status") in ("PASS", "WARN", "FAIL"):
-                data = candidate
-                break
+                return rc, candidate
         except ValueError:
             pass
-    data = data if rc == 0 and data else {"status": "FAIL", "detail": out[-500:] or "probe did not finish"}
+    return rc, None
+
+
+def check_transcription(root):
+    rc, data = transcription_probe(root, "cuda")
+    if rc == 0 and data and data["status"] == "PASS":
+        gpu = None
+    elif data is None:
+        gpu = (f"CUDA large-v3 probe crashed (exit code {rc}); often another app is using the GPU (a video export, a game). "
+               "Transcription will fall back to the CPU; rerun this check when the GPU is free")
+    else:
+        gpu = "CUDA large-v3 not verified: " + data["detail"]
+    if gpu is not None:
+        rc, cpu_data = transcription_probe(root, "cpu")
+        if rc == 0 and cpu_data and cpu_data["status"] == "WARN":
+            data = {"status": "WARN", "detail": cpu_data["detail"] + "; much slower (about 20x in testing); " + gpu}
+        else:
+            detail = cpu_data["detail"] if cpu_data else f"CPU probe did not finish (exit code {rc})"
+            data = {"status": "FAIL", "detail": detail + "; " + gpu}
     cpu = 'python -c "from faster_whisper import WhisperModel; WhisperModel(\'large-v3-turbo\', device=\'cpu\', compute_type=\'int8\')"'
     cuda = 'python -m pip install nvidia-cublas-cu12 "nvidia-cudnn-cu12>=9,<10"'
     if data["status"] == "PASS":
@@ -208,10 +226,13 @@ def check_transcription(root):
     elif data["status"] == "FAIL":
         win_fix = "python -m pip install --upgrade faster-whisper"
         cpu = win_fix
+    elif "crashed" in data["detail"]:
+        win_fix = "Close apps using the GPU (video exports, games), then rerun: python tools/doctor.py"
     else:
         win_fix = cpu
     return result(data["status"], "transcription", data["detail"], (win_fix, cpu),
-                  "No model downloads here. The normal loader tries large-v3 on CUDA, then turbo int8 on CPU, including on Apple Silicon. "
+                  "No model downloads here. The normal loader probes large-v3 on CUDA in a throwaway process, then falls back to turbo int8 on CPU "
+                  "(also on Apple Silicon), so a GPU driver crash slows a run down instead of stopping it. "
                   "Windows needs cuBLAS 12/cuDNN 9 DLL folders on PATH before lazy first encode: tools/asr.py already adds nvidia/*/bin and torch/lib. "
                   "See reports/transcription-2026-10-30/REPORT.md. GPU cache warmup is documented in INSTALL.md; never treat nvidia-smi alone as proof.")
 
