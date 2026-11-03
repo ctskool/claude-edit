@@ -1,13 +1,13 @@
 ---
 name: claude-edit
-description: A video editor for talking-head shorts. Takes your raw take through the spine and a one-minute cut listen to a whole first edit in the ivory template, a review render and a player where you leave notes at exact seconds. Claude changes only what you noted, you approve, then sound and the final.
+description: A video editor for talking-head videos. Takes your raw take through the spine and a one-minute cut listen to a whole first edit in the ivory template, a review render and a player where you leave notes at exact seconds. Claude changes only what you noted, you approve, then sound and the final.
 argument-hint: "<raw takes> [template] [notes]"
 disable-model-invocation: true
 ---
 
 # /claude-edit
 
-Chase Hannegan built this editor on his own shorts. In this skill and every rule file, **Chase (he, his) means the person running it: the user.** A `[Chase]` tag records where a rule came from. **No output counts toward a lock yet.**
+Chase Hannegan built this editor on his own videos. In this skill and every rule file, **Chase (he, his) means the person running it: the user.** A `[Chase]` tag records where a rule came from. **No output counts toward a lock yet.**
 
 Run it for: $ARGUMENTS
 

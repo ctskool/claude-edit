@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <b>A Claude Code skill that edits your talking-head shorts beat by beat.</b><br>
+  <b>A Claude Code skill that edits your talking-head videos beat by beat.</b><br>
   You watch your own edit, pause on a frame and leave a note. Claude changes only what you noted.
 </p>
 
@@ -31,12 +31,12 @@
 | | |
 |---|---|
 | **You give it** | A raw talking-head take (or several). Your screen on top, your face cam below, or just your face |
-| **You get** | A finished vertical MP4: cut tight, every beat edited in the ivory template, captioned, sounded and mastered |
+| **You get** | A finished MP4, vertical in today's ivory template: cut tight, every beat edited, captioned, sounded and mastered |
 | **Your part** | One minute to listen to the cut, notes in the player wherever you want a change, then approve |
 | **It stops for you** | After the cut, after every render, before sound, before the final. It never moves the picture while you're reviewing |
 | **It never** | Invents a number, generates your body or face, or changes something you didn't note |
 
-## Raw take in, edited short out
+## Raw take in, edited video out
 
 <table>
 <tr>
@@ -189,7 +189,7 @@ python tools/doctor.py
 
 Fix anything the doctor marks FAIL, then open Claude Code in this folder and type `/claude-edit` with the path to your raw take.
 
-**What to record.** A vertical take with your screen in the top half and your face cam in the bottom half, the way Chase records in OBS. A separate full-quality camera file beside it is optional. A plain face-only take works too: say so at the start.
+**What to record.** For today's vertical template, a vertical take with your screen in the top half and your face cam in the bottom half, the way Chase records in OBS. A separate full-quality camera file beside it is optional. A plain face-only take works too: say so at the start.
 
 **Codex is optional.** With [Codex](https://github.com/openai/codex) installed, Claude can generate scene images and a second model joins the defects round. Without it, every beat uses real captures and built cards, and two Claude reviewers run instead.
 
@@ -226,6 +226,7 @@ flowchart LR
 | Windows 11 | Tested. One raw take has gone the whole way, to an approved, sounded final |
 | Mac | **Untested.** The paths and process handling are written for it and the doctor checks it, but nobody has run an edit on a Mac yet. [Open an issue](https://github.com/ctskool/claude-edit/issues) and say how it goes |
 | Linux | Untested |
+| Widescreen | Ships with a vertical template today; a widescreen template is next. The ivory template, `prep_source.py` and the checks assume 1080x1920 |
 | A first run by someone else | Not done yet. Expect rough edges, and run `python tools/doctor.py --fix-hints` first |
 
 The status of every stage, from "works" to "not built", is in the table at the top of [SKILL.md](.claude/skills/claude-edit/SKILL.md).

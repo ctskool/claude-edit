@@ -2,7 +2,7 @@
   "name": "claude-edit",
   "version": "2.0.0",
   "private": true,
-  "description": "A Claude Code skill that edits talking-head shorts beat by beat, with a review player for notes at exact seconds.",
+  "description": "A Claude Code skill that edits talking-head videos beat by beat, with a review player for notes at exact seconds.",
   "license": "MIT",
   "scripts": {
     "doctor": "python tools/doctor.py",

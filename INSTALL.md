@@ -100,7 +100,7 @@ Each line is PASS, WARN or FAIL, with the Windows and macOS command that fixes i
 
 ## 5. Your first edit
 
-Record a vertical (9:16) take: your screen in the top half and your face cam in the bottom half. This is how Chase records in OBS. A separate full-quality camera file named `CAMERA-<same timestamp>.mkv` next to the take is optional; with it, the face clips come from the clean camera. A take that is just your face (no split) works too: tell Claude at intake.
+Today's template, ivory, is vertical, so record a vertical (9:16) take: your screen in the top half and your face cam in the bottom half. This is how Chase records in OBS. A separate full-quality camera file named `CAMERA-<same timestamp>.mkv` next to the take is optional; with it, the face clips come from the clean camera. A take that is just your face (no split) works too: tell Claude at intake.
 
 From the repo folder, with the Python environment selected:
 
