@@ -31,7 +31,8 @@ Trial ideas stay off. Open decisions stay open: keep current behaviour and flag 
 | Install and doctor | Partly | `tools/doctor.py`, `INSTALL.md`, `tools/paths.py`. Paths are project-relative and every workflow takes `root`. Doctor passes on a fresh clone on Windows. Never tried on a Mac, and no stranger has run a whole edit yet |
 | Research during the cut listen | Partly | `recut-plan.js` `stage: research` / `beats` (added 2026-11-02). Stub-tested, never real |
 | Plan check | Partly | Blockers vs warnings, two rounds at most (2026-11-02). Stub-tested; the top-five run is its first real use |
-| Parallel build | Partly | `recut-build-parallel.js` and `tools/beat_render/merge_chunks.py` (added 2026-11-02). 60 stub and merge tests; never a real run. `ownership.py` ignores `tools_local/chunks/` and `plan.parts/`, so a note round re-renders only what it touched |
+| Parallel build | Partly | `recut-build-parallel.js` and `tools/beat_render/merge_chunks.py` (added 2026-11-02). 60 stub and merge tests; never a real run. `ownership.py` ignores the chunk fragments since 2026-11-03, so note rounds re-render only what changed |
+| Effects from `/animate` and `/vfx` | Partly | Note-round bridge in section 7, written 2026-11-03 (render with the skill, drop in as a clip; `/vfx` makes that beat full-face). Both skills come from the Chase Animations pack. `/vfx` orbit run once for real on a later edit (43/43 beats re-rendered, 5.5 min; 0 findings). `/animate` not yet run |
 | Library and capture cache | Partly | `tools/library.py`, `templates/ivory/library/` (20 scenes from 1030-2 in 9 families), `tools/capture_cache.py` (added 2026-11-02). Tested; never used by a director yet |
 | Notes into rules | Partly | `tools/taste_from_notes.py`, `templates/ivory/CANDIDATES.md` (added 2026-11-02). Digest checked on 1030-2's notes; no candidate marked yet |
 | Geometry check | Partly | `tools/beat_check/geometry.py`, advisory in both build workflows' QA since 2026-11-02 (Chase: advisory for the next two videos, then a gate if it stays clean). Calibrated: 0 FAIL on the fixture (was 1102) and on 1030-2, 62 tests. Many checks read UNVERIFIED until plans give targets as boxes or selectors. Never run on a new build |
@@ -177,6 +178,26 @@ python -c "import json,sys; sys.path.insert(0,'tools/beat_review'); import revie
 3. **Make the smallest change that does what he said, in real sources, never generated HTML.** `index.html`, `ownership.json`, `beats.lock.json` and `events.json` are outputs. Do not tidy anything he did not mention.
 4. **Keep the copy in step.** A word changed in a graphic must also change that line in `work/<id>/beats.json` copy and its `COPY_BINDS` row in `owners.py`, or the source check reads FAIL. That FAIL is correct. A changed time moves its `plan.json` anchor and its `EVENT_BINDS` row with it, and keeps its `event_id`.
 5. **Rule conflicts.** A note that breaks real footage or verified numbers stops and is raised: no synthesized body pixels, and only numbers in `facts.json`. Leave that note undone and say why. Any other rule conflict: his note wins, and it is flagged in the report. A note asking for a full-screen face turns it on for this edit. Set `allow_full_face` true and `allow_full_face_source` to his exact words in `RUN.md`, `beats.json` and `plan.json`. Hard-link `work/<id>/assets/face_full.mp4` into `work/<id>/v2/editorial/assets`, then rebuild those beats. Never set it without his words.
+   **Effects from other skills** [Chase, 2026-11-03]. When a note names an effect from `/animate` or `/vfx` ("glass widgets here", "use the head-to-head from animate"), use that skill's real output. Never rebuild a look-alike in ivory's own style. These skills come from the separate Chase Animations pack (github.com/ctskool/chase-animations, set up with its `npm run setup`). If the skill isn't installed in this Claude Code, say so, and leave the note in `not_done` with that reason.
+   - **`/animate`:**
+     - Run `animate vars <name>`. Fill the vars with his words and only numbers in `facts.json`.
+     - Render it with `--output top` (1080x960, the top panel) for a split beat, or `--output full` for a full-graphic beat, no `--draft`.
+     - Copy the MP4 to `work/<id>/shared/clips/animate-<name>-<beat>.mp4` and run `new_project.py <id>` again to link it.
+     - Replace that beat's scene content with a `vplate` of it at the panel box. Hold its last frame with `stills` if it is shorter than the window.
+     - Bind the beat's anchor as `present` on the plate, since a clip's content cannot be measured.
+   - **`/vfx`:**
+     - It works on his whole frame, so that beat becomes a full-screen face beat. His note is the full-face request of step 5: record his words, and treat it as covering that beat only.
+     - Prep the vertical source once: `vfx prep work/<id>/raw/cut.mp4` for a face-only take, or `raw/cam_cut.mp4` when the take is a screen-over-face split. Check one frame first, since the camera file can be rotated. Composition time is cut time.
+     - Render with `--from`/`--to` set to the beat window and `--at` on the landing word's time, with his real words and names, no `--draft`. Check it with `/vfx`'s own contact sheet step.
+     - Copy the video to `work/<id>/shared/clips/vfx-<effect>-<beat>.mp4` and link it.
+     - Make that beat a `scene full`, with a muted `vplate` of it filling the frame. Voice and captions stay the edit's own.
+     - Move those beats' caption chunks to `position: "fullface"`. At the split's seam they sit on his chin. (Found on the first real orbit, 2026-11-03.)
+     - Bind the anchor to the first spoken word in the window, not the cut, or the event check fails. Use `--at` for the landing word.
+     - Card numbers (stars, counts) come from `facts.json`, never the effect's built-in defaults.
+     - End the HUD strip's run when the effect starts, since it covers the effect on full-frame beats. Chase noted it on the first real orbit, 2026-11-03.
+     - Every `/vfx` effect keeps his real pixels (a cut-out, never synthesized), so the real-footage rule holds.
+   - **Cost:** a clip the project hasn't used costs a new media plan; on 1030-2 one new clip re-rendered every beat. Tell him the render reach before running.
+   - **Record it:** put the skill, effect, vars, command and output path in `RUN.md`. The first real run of each is unproven, so step through those beats by eye before closing the round.
 6. **Rebuild.** From `$P`, `python tools_local/build.py`.
    - **Expect a build stop.** `BUILD STOPPED` means the change broke a rule of `tools/beat_render/confine.py`: a position that is not a number, a label, a chained tween, a region that is not one element, an id the shell uses. It writes no `ownership.json`, so `run.py` refuses until it is fixed. Its message names the owner, and `templates/ivory/build_kit/README.md` has the table. Fix the source and build again. Never edit `index.html` to get past it.
    - **Watch for a whole render.** `WHOLE RENDER: scene.sc-x stays in the shell` means a tag or call off confine's short list, and that any change to that scene re-renders every beat. A new line from this change is yours: write it with what is on the list. If his note truly needs it, keep it and tell him the cost in the report.

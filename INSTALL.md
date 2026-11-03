@@ -135,6 +135,7 @@ The build steps are written as workflow scripts in `tools/workflows/next/`. If y
 | Codex | Generated scene images, and a second-model reviewer in the defects round | `npm install -g @openai/codex`, then sign in. Without it, no beat is a generated image and two Claude reviewers run instead |
 | Word alignment | Tighter word timings than Whisper's | `python -m pip install torch "transformers>=5.13,<6"`. Slow on a CPU. Without it the tools keep Whisper's timings and say so |
 | Popout bottom | Your cut-out rising out of the bottom card instead of a plain split | NVIDIA GPU, `python -m pip install torch torchvision`, then [Robust Video Matting](https://github.com/PeterL1n/RobustVideoMatting) (GPL-3.0, from its own GitHub) into `vendor/RobustVideoMatting` and its `rvm_resnet50.pth` into `vendor/rvm-weights/`. Untested on a Mac |
+| `/animate` and `/vfx` effects | A note can call an animation or an effect on your own shot | Install the separate [Chase Animations](https://github.com/ctskool/chase-animations) pack with its `npm run setup`. Without it, Claude says the effect isn't installed and leaves that note open |
 | Reference sound stems | Measuring the sound in a reference reel | Demucs. Without it, use `python tools/reference.py measure ... --no-sound` |
 
 ## If something breaks

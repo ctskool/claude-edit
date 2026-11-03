@@ -17,10 +17,9 @@ from common import frame_of, overlaps, sha
 SCHEMA = 1
 NAME = "ownership.json"
 TEMPLATE = "ivory"
-IGNORED = ["renders/", "snaps", "verification/", ".hyperframes/", "tools_local/_bak/", "tools_local/__pycache__/",
+IGNORED = ["tools_local/chunks/", "plan.parts/", "plan.lead.json", "renders/", "snaps", "verification/", ".hyperframes/", "tools_local/_bak/", "tools_local/__pycache__/",
            "assets/sfx/", "assets/voice.m4a", "sound.json", "STORYBOARD.md", "CLAUDE.md",
-           "ownership.json", "beats.lock.json", "events.json",
-           "tools_local/chunks/", "plan.parts/", "plan.lead.json"]  # parallel-build inputs: merge_chunks.py writes the sources that count
+           "ownership.json", "beats.lock.json", "events.json"]
 DOM_MARK = re.compile(r"<!--@own ([\w.-]+)-->|<!--@/own-->")
 JS_MARK = re.compile(r'^[ \t]*own\((?:"([\w.-]+)"|null)\);[ \t]*$', re.M)
 ASSET = re.compile(r'src="(assets/[^"]+)"')

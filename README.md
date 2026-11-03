@@ -191,6 +191,8 @@ Fix anything the doctor marks FAIL, then open Claude Code in this folder and typ
 
 **What to record.** For today's vertical template, a vertical take with your screen in the top half and your face cam in the bottom half, the way Chase records in OBS. A separate full-quality camera file beside it is optional. A plain face-only take works too: say so at the start.
 
+**Effects from Chase Animations.** `/animate` and `/vfx` come from the separate [Chase Animations](https://github.com/ctskool/chase-animations) pack, installed with its `npm run setup`. With it installed, a note in the player can call one, like "put the orbit here", and Claude drops its real render into that beat.
+
 **Codex is optional.** With [Codex](https://github.com/openai/codex) installed, Claude can generate scene images and a second model joins the defects round. Without it, every beat uses real captures and built cards, and two Claude reviewers run instead.
 
 ## How it's built
