@@ -2,7 +2,7 @@
 
 `/claude-edit` is a project skill: it lives in this repo's `.claude/skills/claude-edit/` and runs the tools beside it. Clone the whole repo and open Claude Code inside it. Copying only `SKILL.md` into a global skills folder will not work.
 
-You need plain Claude Code. Codex is optional. Windows is tested; **macOS is untested**: the steps below are written for it, and the doctor checks a Mac, but no whole edit has run on one yet.
+You need plain Claude Code. Codex is optional. Windows is tested. **macOS is partly tested** on an Apple Silicon MacBook Air: install, doctor, the test suite, transcription, the cut and source prep all run, but no whole edit has run on a Mac yet.
 
 ## 1. System software
 
@@ -23,12 +23,13 @@ Close and reopen the terminal so PATH refreshes. Edge is enough; install Chrome 
 ### macOS (Terminal)
 
 ```bash
-brew install python@3.12 node ffmpeg git
+brew install python@3.12 node ffmpeg-full git
+brew link --force ffmpeg-full
 brew install --cask google-chrome
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
-Install [Homebrew](https://brew.sh/) first if you don't have it. Apple Silicon has no CUDA, so transcription runs on the CPU (slower, same result). [Claude Code setup reference](https://code.claude.com/docs/en/setup).
+Install [Homebrew](https://brew.sh/) first if you don't have it. Use `ffmpeg-full`, not `ffmpeg`: Homebrew's plain `ffmpeg` has no `drawtext` filter, and the final delivery's contact sheet needs it. If you already have plain `ffmpeg`, run `brew unlink ffmpeg` before the `brew link` line. Apple Silicon has no CUDA, so transcription runs on the CPU (slower, same result). [Claude Code setup reference](https://code.claude.com/docs/en/setup).
 
 ## 2. Clone and install
 

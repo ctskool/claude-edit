@@ -2,6 +2,8 @@
 
 Each child goes in a job object whose last handle is this process's. The system closes that handle however this process ends, and the job takes the child and everything it started with it,
 the browser and encoder included. Nothing outside that tree is ever touched. If the job cannot be made, a child runs untied, as any child would.
+
+On macOS and Linux each child leads its own process group, and a small watcher kills that group once this process is gone.
 """
 import ctypes
 import os
@@ -67,13 +69,28 @@ def tie(pid):
         return False
 
 
+# Waits while this process ($1) and the child's group ($2) are both alive; if this process went first, kills the group.
+WATCH = 'while kill -0 "$1" 2>/dev/null && kill -0 -- "-$2" 2>/dev/null; do sleep 0.5; done; kill -0 "$1" 2>/dev/null || kill -KILL -- "-$2" 2>/dev/null'
+
+
+def watch(pid):
+    """POSIX has no job object, and a child in its own session outlives a killed parent, so a watcher does the job's work.
+    It sits in a session of its own, so the Ctrl-C or kill that ends this process never reaches it. True if it started."""
+    try:
+        subprocess.Popen(["/bin/sh", "-c", WATCH, "sh", str(os.getpid()), str(pid)], start_new_session=True,
+                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return True
+    except OSError:
+        return False
+
+
 def spawn(args, **kwargs):
     grouped = os.name != "nt"
     if grouped:
         kwargs["start_new_session"] = True
     process = subprocess.Popen(args, **kwargs)
     process.grouped = grouped
-    process.tied = tie(process.pid) if os.name == "nt" else False
+    process.tied = tie(process.pid) if os.name == "nt" else watch(process.pid)
     return process
 
 

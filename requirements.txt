@@ -5,6 +5,8 @@ Pillow
 opencv-python
 playwright
 faster-whisper
+# PyAV 19 dropped the metadata_errors argument faster-whisper 1.2 passes when it decodes a file
+av<19
 
 # Optional alignment/popout: python -m pip install torch torchvision "transformers>=5.13,<6"
 # Optional sound-bank development: python -m pip install soundfile

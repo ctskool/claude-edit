@@ -134,6 +134,15 @@ class Probes(unittest.TestCase):
             self.assertEqual(doctor.check_ffmpeg_features(Path(".")).status, "PASS")
         self.assertEqual(run.call_args.args[0], ["ffmpeg", "-hide_banner", "-encoders"])
 
+    def test_missing_drawtext_fails(self):
+        with mock.patch.object(doctor.shutil, "which", return_value="ffmpeg"), \
+                mock.patch.object(doctor, "run", return_value=(0, " .. loudnorm  A->A  EBU R128")) as run:
+            self.assertEqual(doctor.check_ffmpeg_filters(Path(".")).status, "FAIL")
+        self.assertEqual(run.call_args.args[0], ["ffmpeg", "-hide_banner", "-filters"])
+        with mock.patch.object(doctor.shutil, "which", return_value="ffmpeg"), \
+                mock.patch.object(doctor, "run", return_value=(0, " T.. drawtext  V->V  Draw text")):
+            self.assertEqual(doctor.check_ffmpeg_filters(Path(".")).status, "PASS")
+
 
 class Transcription(unittest.TestCase):
     def probe(self, cuda=True, gpu_encode=True, cache=True, cpu=True):

@@ -19,7 +19,7 @@ class CaptureCache(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
         self.cache = self.root / "cache"
         self.output = self.root / "output"
         self.tool = self.root / "capture_shots.py"

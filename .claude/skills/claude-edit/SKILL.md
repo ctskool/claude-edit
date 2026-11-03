@@ -28,7 +28,7 @@ Trial ideas stay off. Open decisions stay open: keep current behaviour and flag 
 |---|---|---|
 | Raw plus notes | Works | `work/1030-2` finished the whole flow on 2026-11-01, the only one so far |
 | `run.json` state and metrics | Partly | `tools/run_state.py` (added 2026-11-02): state, `status` for resume, `metrics`, `report`. 30 tests on temp folders; no real run has used it yet |
-| Install and doctor | Partly | `tools/doctor.py`, `INSTALL.md`, `tools/paths.py`. Paths are project-relative and every workflow takes `root`. Doctor passes on a fresh clone on Windows. Never tried on a Mac, and no stranger has run a whole edit yet |
+| Install and doctor | Partly | `tools/doctor.py`, `INSTALL.md`, `tools/paths.py`. Paths are project-relative and every workflow takes `root`. Doctor passes on a fresh clone on Windows and on a Mac (2026-11-03, with `ffmpeg-full`). No whole edit has run on a Mac, and no stranger has run a whole edit yet |
 | Research during the cut listen | Partly | `recut-plan.js` `stage: research` / `beats` (added 2026-11-02). Stub-tested, never real |
 | Plan check | Partly | Blockers vs warnings, two rounds at most (2026-11-02). Stub-tested; the top-five run is its first real use |
 | Parallel build | Partly | `recut-build-parallel.js` and `tools/beat_render/merge_chunks.py` (added 2026-11-02). 60 stub and merge tests; never a real run. `ownership.py` ignores the chunk fragments since 2026-11-03, so note rounds re-render only what changed |

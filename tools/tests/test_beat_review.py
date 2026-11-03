@@ -106,7 +106,7 @@ class Project:
 class Base(unittest.TestCase):
     def setUp(self):
         self.dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)  # a still may still be decoding
-        self.p = Project(self.dir.name)
+        self.p = Project(Path(self.dir.name).resolve())
         self.project = self.p.project
 
     def tearDown(self):

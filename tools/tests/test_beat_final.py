@@ -99,7 +99,7 @@ class Base(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.work = Path(self.tmp.name) / "work"
+        self.work = Path(self.tmp.name).resolve() / "work"
         self.home = self.work / "p"
         self.project = self.home / "v2" / "editorial"
         (self.project / "assets").mkdir(parents=True)

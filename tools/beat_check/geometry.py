@@ -110,7 +110,7 @@ def safe_asset(project, relative):
     if not isinstance(relative, str):
         raise ValueError("asset path is not a string")
     path = (project / relative).resolve()
-    if not path.is_relative_to(project):
+    if not path.is_relative_to(Path(project).resolve()):
         raise ValueError("asset path leaves project")
     return path
 

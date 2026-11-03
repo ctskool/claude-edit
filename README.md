@@ -11,7 +11,7 @@
   <img src="https://img.shields.io/badge/skill-%2Fclaude--edit-24272d?style=flat-square" alt="Skill: /claude-edit">
   <img src="https://img.shields.io/badge/runs%20in-Claude%20Code-d77757?style=flat-square" alt="Runs in Claude Code">
   <img src="https://img.shields.io/badge/built%20with-HyperFrames-24272d?style=flat-square" alt="Built with HyperFrames">
-  <img src="https://img.shields.io/badge/tested%20on-Windows-ff6a3d?style=flat-square" alt="Tested on Windows; Mac untested">
+  <img src="https://img.shields.io/badge/tested%20on-Windows%20%7C%20Mac%20(partly)-ff6a3d?style=flat-square" alt="Tested on Windows; Mac partly tested">
 </p>
 
 <p align="center">
@@ -226,7 +226,7 @@ flowchart LR
 | | Status |
 |---|---|
 | Windows 11 | Tested. One raw take has gone the whole way, to an approved, sounded final |
-| Mac | **Untested.** The paths and process handling are written for it and the doctor checks it, but nobody has run an edit on a Mac yet. [Open an issue](https://github.com/ctskool/claude-edit/issues) and say how it goes |
+| Mac | **Partly tested** on an Apple Silicon MacBook Air: install, doctor, all tests, transcription on the CPU, the cut and source prep. A whole edit with the review player hasn't run on a Mac yet. Install `ffmpeg-full` from Homebrew, not `ffmpeg`. [Open an issue](https://github.com/ctskool/claude-edit/issues) and say how it goes |
 | Linux | Untested |
 | Widescreen | Ships with a vertical template today; a widescreen template is next. The ivory template, `prep_source.py` and the checks assume 1080x1920 |
 | A first run by someone else | Not done yet. Expect rough edges, and run `python tools/doctor.py --fix-hints` first |

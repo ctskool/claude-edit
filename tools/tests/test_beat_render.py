@@ -156,8 +156,8 @@ class CheckStatus(unittest.TestCase):
         self.assertLess(time.perf_counter() - started, 30)
 
 
-@unittest.skipUnless(os.name == "nt", "Windows job-object parent-death contract")
 class Tied(unittest.TestCase):
+    """Windows ties children with a job object; macOS and Linux with a watcher. Either way a killed parent takes them with it."""
     def test_a_child_dies_with_its_parent_and_a_grandchild_with_it(self):
         with tempfile.TemporaryDirectory() as d:
             pids = Path(d) / "pids.txt"
@@ -171,7 +171,10 @@ class Tied(unittest.TestCase):
                 time.sleep(0.1)
             child_pid, grandchild_pid = pids.read_text().split()
             self.assertTrue(store.alive(int(child_pid)))
-            subprocess.run(["taskkill", "/F", "/PID", str(run.pid)], capture_output=True)
+            if os.name == "nt":
+                subprocess.run(["taskkill", "/F", "/PID", str(run.pid)], capture_output=True)
+            else:
+                run.kill()
             run.wait()
             run.stdout.close()
             for _ in range(50):

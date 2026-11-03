@@ -18,6 +18,12 @@ taste = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(taste)
 
 
+def read_lf(path):
+    """Path.read_text(newline=) is Python 3.13+; this reads without newline translation on 3.10+."""
+    with open(path, encoding="utf-8", newline="\n") as f:
+        return f.read()
+
+
 def put_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8", newline="\n")
@@ -41,7 +47,7 @@ class Temporary(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
 
 
 class Digest(Temporary):
@@ -214,7 +220,7 @@ class Promote(Temporary):
         pending = candidate(3, "When a new panel arrives, do show the subject first.")
         self.write(candidate(keep="x"), candidate(2, "When captions swap, do keep them still.", strike="x"), pending)
         actions = taste.promote(self.root, "2026-11-02")
-        text = (self.root / "templates/ivory/layout.md").read_text(encoding="utf-8", newline="\n")
+        text = read_lf(self.root / "templates/ivory/layout.md")
         self.assertEqual(len(actions), 2)
         self.assertIn("Moved:", actions[0])
         self.assertIn("Struck:", actions[1])
@@ -223,7 +229,7 @@ class Promote(Temporary):
         self.assertIn('[notes one: b01, "keep the rows still"] Seen in: 1 video.', text)
         self.assertIn("  Why: A repeated entrance makes the join hitch. Met when: Rows do not move on the cut frame.", text)
         self.assertNotIn("When captions swap", text)
-        self.assertEqual(self.path.read_text(encoding="utf-8", newline="\n"), self.header + pending)
+        self.assertEqual(read_lf(self.path), self.header + pending)
         before = self.snapshot()
         self.assertEqual(taste.promote(self.root), [])
         self.assertEqual(before, self.snapshot())
@@ -234,7 +240,7 @@ class Promote(Temporary):
             path.write_text("# Rules\n\n## From his notes\n\n- **Old.** [Chase]\n\n## Later\n\nStay here.\n", encoding="utf-8", newline="\n")
             self.write(candidate(i, target=rel, keep="X"))
             taste.promote(self.root, "2026-11-02")
-            text = path.read_text(encoding="utf-8", newline="\n")
+            text = read_lf(path)
             self.assertEqual(text.count("## From his notes"), 1)
             self.assertLess(text.index("When a card continues"), text.index("## Later"))
             self.assertIn("Stay here.", text)
@@ -243,7 +249,7 @@ class Promote(Temporary):
         evidence = [('one', 'b01', 'Use "this" [not that].'), ('one', 'b02', 'Again'), ('two', 'video', 'Same rule')]
         self.write(candidate(evidence=evidence, count=2, keep="x"))
         taste.promote(self.root, "2026-11-02")
-        text = (self.root / "templates/ivory/layout.md").read_text(encoding="utf-8", newline="\n")
+        text = read_lf(self.root / "templates/ivory/layout.md")
         self.assertIn("Seen in: 2 videos.", text)
         self.assertEqual([json.loads(m[3]) for m in taste.NOTE_TAG.finditer(text)], [r[2] for r in evidence])
 
@@ -290,10 +296,10 @@ class Promote(Temporary):
             with self.assertRaises(OSError):
                 taste.promote(self.root, "2026-11-02")
         actions = taste.promote(self.root, "2026-11-03")
-        text = (self.root / "templates/ivory/layout.md").read_text(encoding="utf-8", newline="\n")
+        text = read_lf(self.root / "templates/ivory/layout.md")
         self.assertIn("Already present:", actions[0])
         self.assertEqual(text.count("**When a card continues"), 1)
-        self.assertEqual(self.path.read_text(encoding="utf-8", newline="\n"), self.header)
+        self.assertEqual(read_lf(self.path), self.header)
 
     def test_crlf_and_bom_are_preserved(self):
         self.write(candidate(keep="x"))
@@ -330,7 +336,7 @@ class RealEvidence(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "taste-digest.md"
             taste.digest(home, target)
-            first = target.read_text(encoding="utf-8", newline="\n")
+            first = read_lf(target)
             self.assertEqual(first, taste.digest_text(home))
             for note in taste.notes_of(home):
                 self.assertIn(taste.inline(note["text"]), first)

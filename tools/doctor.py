@@ -46,7 +46,7 @@ IMPORT_PROBES = {
 FIX = {
     "python": ("winget install --exact --id Python.Python.3.12", "brew install python@3.12"),
     "node": ("winget install --exact --id OpenJS.NodeJS.LTS", "brew install node"),
-    "ffmpeg": ("winget install --exact --id Gyan.FFmpeg", "brew install ffmpeg"),
+    "ffmpeg": ("winget install --exact --id Gyan.FFmpeg", "brew install ffmpeg-full && brew unlink ffmpeg; brew link --force ffmpeg-full"),
     "browser": ("winget install --exact --id Google.Chrome", "brew install --cask google-chrome"),
     "disk": ('Start-Process "ms-settings:storagesense"', 'open "x-apple.systempreferences:com.apple.settings.Storage"'),
 }
@@ -325,6 +325,15 @@ def check_ffmpeg_features(root):
                   FIX["ffmpeg"], "NVIDIA encoding is optional only after the rawcut software fallback in the audit is applied.")
 
 
+def check_ffmpeg_filters(root):
+    """Homebrew's plain ffmpeg has no drawtext, which finish.py's contact sheet needs; ffmpeg-full has it."""
+    rc, out = run([shutil.which("ffmpeg") or "ffmpeg", "-hide_banner", "-filters"], root)
+    ok = rc == 0 and re.search(r"\bdrawtext\b", out)
+    return result("PASS" if ok else "FAIL", "ffmpeg filters",
+                  "drawtext available (listed only)" if ok else "drawtext missing: the final delivery's contact sheet will fail",
+                  FIX["ffmpeg"], "On a Mac, Homebrew's ffmpeg lacks drawtext; use ffmpeg-full.")
+
+
 def check_optional_assets(root):
     missing = [p for p in ("vendor/RobustVideoMatting/model", "vendor/rvm-weights/rvm_resnet50.pth") if not (root / p).exists()]
     rows = [result("WARN" if missing else "PASS", "popout assets (optional)",
@@ -376,7 +385,7 @@ def collect(root):
         return rows  # inventory needs sys.stdlib_module_names (3.10).
     rows += check_packages(root)
     rows += [check_command("node", root, MIN_NODE), check_command("npm", root), check_hyperframes(root), check_node_packages(root)]
-    rows += [check_command("ffmpeg", root), check_command("ffprobe", root), check_ffmpeg_features(root), check_transcription(root)]
+    rows += [check_command("ffmpeg", root), check_command("ffprobe", root), check_ffmpeg_features(root), check_ffmpeg_filters(root), check_transcription(root)]
     rows += check_optional_assets(root)
     rows += check_browsers(root)
     rows += [check_command("claude", root), check_command("codex", root, optional=True), check_disk(root)]
