@@ -1,0 +1,15 @@
+@import url("/skins/05-carbon.css");
+
+/* HALFTONE — variable-radius newspaper screens; solid reading surfaces.
+   Only backgrounds of the stage and chrome are printed. No media selectors. */
+.stage { background-color: #1b1b1a; background-image: url("/skins/05-carbon-halftone.svg"); background-size: 240px 240px }
+header { background-image: url("/skins/05-carbon-halftone.svg"); background-size: 240px 240px; background-position: center 48%; border-bottom-style: dotted }
+header > h1, header > .pic, header > .end { background-color: #eeeee5 }
+.dock { box-shadow: none; border-top-style: dotted; border-top-color: var(--key); background-image: url("/skins/05-carbon-halftone.svg"); background-repeat: repeat-x; background-position: left top; background-size: 240px 6px }
+.rail { background-image: radial-gradient(circle, #aaa99b 1.25px, transparent 1.5px); background-size: 5px 5px; background-repeat: repeat-y; background-position: left top }
+.beat.cur { border-bottom-style: dotted; border-bottom-color: var(--key) }
+.tl { background: radial-gradient(circle, #c0beb4 1.25px, transparent 1.5px) 0 2px / 7px 4px repeat-x }
+.cue-lane { border-bottom-style: dotted }
+.cell[data-layout="full-graphic"] { background-image: radial-gradient(circle, #626258 .85px, transparent 1px); background-size: 4px 4px }
+/* Neutral cues stay bone; inherited orange remains reserved for review signals. */
+@media (forced-colors: active) { .stage, header, .dock, .rail, .tl, .cell { background-image: none } }

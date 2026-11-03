@@ -1,0 +1,1094 @@
+{
+  "video": "raw/cut.mp4",
+  "duration": 57.65,
+  "topic": "Claude renamed its Max plans on 2026-10-30: Max 5x became Max, Max 20x became Ultra. Prices and weekly limits stayed the same, and verified Ultra accounts lose the 5-hour limit. Chase explains why the old 20x name misled people. All checks as of 2026-11-01.",
+  "intake_notes": "Chase's cut listen answer: build as is. Keep every line, including the sued line, which is his hedged opinion: never present it as fact on screen. The source recording shows @claudeai's post on screen throughout; only numbers in facts.json go on screen. He says 'no more five-hour limits' while the post says verified Ultra accounts, and the close says 'plans' for limits: flag these, never correct his words.",
+  "facts": {
+    "rename": "Max 5x is now Max and Max 20x is now Ultra, announced by @claudeai on X on 2026-10-30 (17:29 UTC). Source: https://x.com/claudeai/status/2116220869479428500 (visible in his recording; timestamp from https://api.fxtwitter.com/claudeai/status/2116220869479428500). Plate: claude-post.",
+    "prices": "Max is $100/month and Ultra is $200/month, both unchanged by the rename. Source: https://x.com/claudeai/status/2116220869479428500 and https://claude.com/pricing, checked 2026-11-01. Plate: pricing-plans.",
+    "plan_lineup": "The plan page lists Free $0, Pro $20 billed monthly ($17/month on annual), Max $100/month, Ultra $200/month. Source: https://claude.com/pricing, checked 2026-11-01. Plate: pricing-plans. The Free, Pro, Max, Ultra art is also in the post image, plate post-hero-image.",
+    "subscribers_do_nothing": "Subscribers have nothing to do. Existing Max 20x subscribers move to Ultra automatically with no price change. Source: https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan, checked 2026-11-01 (page shows only 'Updated this week'). Plate: ultra-support.",
+    "five_hour_removed": "The 5-hour limit is removed for verified Ultra accounts, starting 2026-10-30 with most existing subscribers, rolling out in stages. Source: https://x.com/claudeai/status/2116220869479428500 and https://x.com/mboverell/status/2116221457252659275. Plate: claude-post.",
+    "pricing_footnote": "The plan page shows Ultra as No 5-hour limit, with a footnote limiting that to verified accounts. Source: https://claude.com/pricing, checked 2026-11-01. Plate: pricing-footnote.",
+    "newer_accounts": "Newer accounts keep a temporary limit until verified, which Claude says helps prevent fraud and abuse. They get an email when it is removed. Source: https://x.com/claudeai/status/2116220869479428500. Plate: claude-post.",
+    "verified_means": "Ultra accounts are verified automatically using factors like account and payment history. Phone verification at checkout does not remove the limit. No Current session bar under Settings > Usage means the account is verified. Source: https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan, checked 2026-11-01. Plate: ultra-verified.",
+    "weekly_unchanged": "Weekly limits are unchanged by this announcement. Source: https://x.com/claudeai/status/2116220869479428500. Plate: claude-post.",
+    "ultra_weekly_10x": "Ultra gives 10x Pro usage every week. Source: https://claude.com/pricing and https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan, checked 2026-11-01. Plate: pricing-compare.",
+    "max_weekly_5x": "Max gives 5x Pro usage every 5 hours and every week. Source: https://claude.com/pricing and https://support.claude.com/en/articles/11049741-what-is-the-max-plan, checked 2026-11-01. Plate: pricing-compare.",
+    "pro_baseline_1x": "The plan page's compare table shows Pro as 1x in both limit rows, the base the other multiples count from. Source: https://claude.com/pricing, checked 2026-11-01. Plate: pricing-compare.",
+    "max_keeps_five_hour": "Pro and Max keep a five-hour session limit plus a weekly limit. Only verified Ultra accounts drop the five-hour limit. Source: https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan, checked 2026-11-01. Plate: claude-code-support.",
+    "old_20x_meaning": "The top plan launched in April 2025 with one limit, a 5-hour limit at 20x Pro, which gave it the Max 20x name. Weekly limits were added later at 10x Pro while the 5-hour limit stayed at 20x. Source: Mike Overell (@mboverell), who leads product for Claude subscriptions, 2026-10-30, https://x.com/mboverell/status/2116221457252659275. Plate: overell-post.",
+    "ultra_double_max_weekly": "On the weekly limit, the old 20x plan and Ultra are double Max 5x: 10x Pro against 5x Pro. Arithmetic from ultra_weekly_10x and max_weekly_5x; Anthropic's pages do not use the word double. Backs his line 'only double the 5X plan'. Plate: pricing-compare.",
+    "four_x_is_the_assumption": "4x is 20x divided by 5x, true of the old 5-hour limit only and not of the weekly limit. Use it only as the figure he says people assumed, never as a usage figure for the week. Arithmetic from old_20x_meaning and max_weekly_5x. Plate: pricing-compare.",
+    "confusion_acknowledged": "Overell said some new users assumed 20x applied to both limits and apologized. Source: https://x.com/mboverell/status/2116221457252659275 (word checks on the post JSON, quotes via https://digg.com/ai/e1dnwnjk). Plate: overell-post.",
+    "limits_shared_with_claude_code": "Plan limits are shared across Claude and Claude Code, so the plan names and limits apply to Claude Code use. Source: https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan, checked 2026-11-01. Plate: claude-code-support.",
+    "codex_pro_no_five_hour": "OpenAI's Codex pricing doc says Pro plans currently have no five-hour limit. Source: https://learn.chatgpt.com/docs/pricing (redirect from https://developers.openai.com/codex/pricing), undated line, checked 2026-11-01. Plate: codex-pricing.",
+    "codex_plus_has_five_hour": "The same doc gives five-hour message estimates for Plus and Standard Business, and says weekly limits may also apply. Source: https://learn.chatgpt.com/docs/pricing, checked 2026-11-01. Plate: codex-pricing.",
+    "flag_verified_scope": "FLAG, never correct his words. At 15.0-17.6 he says 'with the Ultra plan, there is no more five-hour limits', while the post on screen limits this to verified Ultra accounts and newer accounts keep a temporary limit. Any graphic of ours follows five_hour_removed and carries the word verified. His spoken words and captions stay exact. Source: https://x.com/claudeai/status/2116220869479428500. Plate: claude-post.",
+    "flag_recap_unscoped": "FLAG, never correct his words. At 27.3-28.8 he says 'So no more five-hour limits' with no plan named, while Max and Pro keep theirs (max_keeps_five_hour). Source: https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan. Plate: claude-code-support.",
+    "flag_close_plans_for_limits": "FLAG, never correct his words. At 53.5-54.7 he says 'no more five-hour plans', meaning limits, not plans. No five-hour plan exists in the post or on the pricing page. Captions stay exact; any graphic of ours says limit. Source: https://claude.com/pricing. Plate: pricing-compare.",
+    "no_repos_or_apps": "No repo, license, stars, MCP server, desktop app, alternative-to or fastest-growing claim is spoken or shown, so the GitHub checks do not apply. Source: words.json and the 39 sampled frames in source_story."
+  },
+  "allow_full_face": false,
+  "allow_full_face_source": "template",
+  "cta_start": null,
+  "cta_start_source": "No CTA. Read all 201 words: the close, words 186-200 'So don't be surprised if you see that with your Claude Code pricing. These days.', is direct address that asks nothing of the viewer. No follow, comment, link, search or check-it-out request anywhere in the transcript. If Chase counts the close as his CTA, the value is 54.74 (word 186 'So').",
+  "beats": [
+    {
+      "id": "b01",
+      "start": 0.0,
+      "end": 2.2,
+      "words": [
+        0,
+        6
+      ],
+      "say": "So the Max 20X plan is gone,",
+      "layout_hint": "split",
+      "hint_why": "'So the Max 20X plan is gone,' - the hook opens split with the real announcement up on frame 0 while he talks to you",
+      "shape": "hook: rebuilt @claudeai post card fills the panel on frame 0 (header, title, both rename rows), already easing in. On 'Max 20X' 0.32 push straight to the rename rows and hold; on 'gone' 1.76 a clay strike draws across 'Max 20x' on the second row only",
+      "anchor": {
+        "word": 6,
+        "t": 1.76,
+        "what": "clay strike draws across 'Max 20x' on the rebuilt post row"
+      },
+      "copy": {
+        "strike": "Max 20x"
+      },
+      "assets": [
+        "posts/claude-post-tight-light.png (whole rect CSS 0,0 460x172; push rect CSS 8,104 200x75: rows 'Max 5x → Max' 16,119 and 'Max 20x → Ultra' 16,142)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "Hook choice 1, visual hook: 'the Max 20X plan' names a specific plan and the post that retires it exists, so the card fills the panel. Top row, so no lower row applies; a proof hook or lockup would come after it. Form: rebuilt card (post_card.py), not his dark recording, because it reads better on ivory and is the same text."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "rename"
+      ],
+      "note": "Frame 0 shows the subject, no empty panel. Text on the card is verbatim; the strike is our annotation on the rebuilt card, not a change to the post."
+    },
+    {
+      "id": "b02",
+      "start": 2.2,
+      "end": 5.167,
+      "words": [
+        7,
+        15
+      ],
+      "say": "and it has been replaced by the Ultra plan.",
+      "layout_hint": "split",
+      "hint_why": "'replaced by the Ultra plan.' - he explains the row already on screen, so the split holds",
+      "shape": "same card, no new visual: on 'replaced' 2.80 the row's arrow takes clay; on 'Ultra' 4.24 the word 'Ultra' takes a clay tint highlight and holds",
+      "anchor": {
+        "word": 14,
+        "t": 4.24,
+        "what": "'Ultra' on the same post row lights in clay tint"
+      },
+      "copy": {
+        "lit": "Ultra"
+      },
+      "assets": [
+        "posts/claude-post-tight-light.png (rect as b01; 'Max 20x → Ultra' row CSS 16,142 123x22)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "'the Ultra plan' names the same post row, so the hook card keeps going instead of a new device. Form: rebuilt card."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "rename"
+      ]
+    },
+    {
+      "id": "b03",
+      "start": 5.167,
+      "end": 7.5,
+      "words": [
+        16,
+        23
+      ],
+      "say": "So Claude just renamed both of their plans.",
+      "layout_hint": "split",
+      "hint_why": "'So Claude just renamed both of their plans.' - he points at the post title he is selecting on screen",
+      "shape": "his own dark recording in the white card: 'We’re renaming our Max plans:' sweeps blue 6.13-6.33 on 'renamed', exactly as he did it, and clears at 6.90 on 'both'",
+      "anchor": {
+        "word": 19,
+        "t": 5.92,
+        "what": "blue sweep starts 6.13, real time"
+      },
+      "copy": {},
+      "assets": [
+        "clips/title-highlight.mp4 (960x460, blue at local 0.83-1.60)"
+      ],
+      "visual": {
+        "type": "own_clip",
+        "why": "'renamed both of their plans' describes what he highlights on screen as he says it. real_shot does not fit first: the line names no post or page, it describes the rename he is marking. Form: real capture, his own recording. Local time = composition - 5.30, first frame held 0.133 s, 1x, no join in range."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: clips/title-highlight.mp4 on screen 5.167-7.500 is muted screen footage under narration (video stream only, checked with ffprobe).",
+      "fact_keys": [
+        "rename"
+      ],
+      "note": "Dark X inside the white ivory card. Optional trim in CUT-REPORT.md, kept by his 'build as is'."
+    },
+    {
+      "id": "b04",
+      "start": 7.5,
+      "end": 9.9,
+      "words": [
+        24,
+        31
+      ],
+      "say": "There's no longer Max 5X and Max 20X.",
+      "layout_hint": "takeover",
+      "hint_why": "'There's no longer Max 5X and Max 20X.' - before-after of the plan names; cut on the sentence start 'There's' 7.52",
+      "shape": "before: frame 0 shows both old names as pills, verbatim from the post; 'Max 5x' strikes on '5X' 8.32 and 'Max 20x' strikes on '20X.' 9.20",
+      "anchor": {
+        "word": 31,
+        "t": 9.2,
+        "what": "'Max 20x' takes its strike, the second of the two old names"
+      },
+      "copy": {
+        "before": [
+          "Max 5x",
+          "Max 20x"
+        ]
+      },
+      "assets": [
+        "posts/claude-post-tight-light.png (source of the wording: rows CSS 16,119 and 16,142)"
+      ],
+      "visual": {
+        "type": "compare",
+        "why": "'no longer Max 5X and Max 20X' opens a before-after, and a comparison takes its own row even with product names in it, using the real post wording. Form: built pills, words verbatim from the post."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over built pills, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "rename"
+      ],
+      "note": "Opens the 4.0 s takeover 7.50-11.50. The strike device carries over from b01."
+    },
+    {
+      "id": "b05",
+      "start": 9.9,
+      "end": 11.5,
+      "words": [
+        32,
+        36
+      ],
+      "say": "It's just Max and Ultra.",
+      "layout_hint": "takeover",
+      "hint_why": "'It's just Max and Ultra.' - the after state of the same before-after, so the takeover holds",
+      "shape": "after: under the struck pills, the post's own art in a white card: Max card lands on 'Max' 10.16; the Ultra card starts its arrival over Max's edge on 'and' 10.80, is settled on 'Ultra' 11.12 and holds flat to the cut at 11.50",
+      "anchor": {
+        "word": 36,
+        "t": 11.12,
+        "what": "the real Ultra card from the post art is settled on 'Ultra', its arrival started on 'and' 10.80"
+      },
+      "copy": {
+        "after": [
+          "Max",
+          "Ultra"
+        ]
+      },
+      "assets": [
+        "posts/post-hero-cards.png (image px rect 1198,47 to 3030,1175: Max 1198,103 to 1890,1115, Ultra 1888,47 to 3030,1175, Ultra overlaps Max)"
+      ],
+      "visual": {
+        "type": "compare",
+        "why": "'just Max and Ultra' is the pivot of the same before-after, so it develops b04 and keeps its template. Form: real artifact, the post's own art, names only, no green field as a panel."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the post's art, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "rename"
+      ],
+      "note": "Takeover ends 11.50, 0.42 s before 'Now' 11.92, to stay inside Chase's 2-4 s. It is a sentence boundary, so it is on his spot; the 0-0.08 s lead yields to the 4 s cap. The Ultra card starts at 10.80 because a start on 11.12 left 0.38 s, under STYLE's 0.55 s arrival: that arrival is about 93% done by 11.12 (power3.out), fully flat at 11.35."
+    },
+    {
+      "id": "b06",
+      "start": 11.5,
+      "end": 13.4,
+      "words": [
+        37,
+        40
+      ],
+      "say": "Now, the actual limits",
+      "layout_hint": "split",
+      "hint_why": "'Now, the actual limits' - setup line, back to split as he explains; sentence boundary after 'Ultra.'",
+      "shape": "the same post card returns on its lower strip (built from b01, not a new card): rect CSS 0,380 460x70, the weekly line and the link line only. On 'limits' 12.64 one straight push to rect CSS 8,388 257x39.1, the sentence 'Weekly limits remain unchanged.' whole, then hold. Nothing above y 380 is in frame",
+      "anchor": {
+        "word": 40,
+        "t": 12.64,
+        "what": "the post card pushes straight to the weekly line"
+      },
+      "copy": {
+        "line": "Weekly limits remain unchanged."
+      },
+      "assets": [
+        "posts/claude-post-tight-light.png (open rect CSS 0,380 460x70; push rect CSS 8,388 257x39.1, sentence whole, hard crop, right edge x 265 in the gap between 'unchanged.' ink end x 262.5 and 'View' ink start x 268)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "'the actual limits' points at the post's limit line, a specific post that exists. Form: rebuilt card. The same card returns because a later visual of something shown is built from it."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "weekly_unchanged"
+      ],
+      "note": "The 5-hour line above y 380 stays out of frame: it is the news b09 reveals at 15.67. The push rect is 257 wide, not the checker's 263: a right edge at x 271 would cut the 'V' of 'View' at x 268."
+    },
+    {
+      "id": "b07",
+      "start": 13.4,
+      "end": 14.567,
+      "words": [
+        41,
+        46
+      ],
+      "say": "per week haven't changed at all,",
+      "layout_hint": "split",
+      "hint_why": "'per week haven't changed at all,' - explains the line on screen, the split holds",
+      "shape": "same card held on b06's rect, the weekly sentence whole; a clay marker highlight runs across it, landing on 'changed' 14.16. Nothing above y 380 is in frame",
+      "anchor": {
+        "word": 44,
+        "t": 14.16,
+        "what": "marker highlight draws over 'Weekly limits remain unchanged.'"
+      },
+      "copy": {
+        "lit": "Weekly limits remain unchanged."
+      },
+      "assets": [
+        "posts/claude-post-tight-light.png (holds b06's push rect CSS 8,388 257x39.1, sentence whole, rect edges in the gutters around the row)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "'haven't changed at all' is the post's own line 'Weekly limits remain unchanged.', quoted verbatim in the shape it lives in. Form: rebuilt card."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "weekly_unchanged"
+      ],
+      "note": "No 10x here: the weekly figure is held for b22 so the payoff stays in order."
+    },
+    {
+      "id": "b08",
+      "start": 14.567,
+      "end": 15.667,
+      "words": [
+        47,
+        51
+      ],
+      "say": "but with the Ultra plan,",
+      "layout_hint": "takeover",
+      "hint_why": "'but with the Ultra plan,' - the big reveal of the video needs the whole frame; cut on 'but', where the sentence turns",
+      "shape": "real Ultra plan card from the pricing page, big, whole top part: icon, 'Ultra', 'Claude Code included', 'For your longest tasks', '$200'. Up on frame 0, 'Ultra' takes the clay outline on 'Ultra' 15.04",
+      "anchor": {
+        "word": 50,
+        "t": 15.04,
+        "what": "'Ultra' on the real plan card is the name he says"
+      },
+      "copy": {
+        "lit": "Ultra"
+      },
+      "assets": [
+        "shots/pricing-plans-light.png (rect CSS x 349-653, y 40-300; 'Ultra' 379,143 77x25; '$200' 379,229 56x20)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "'the Ultra plan' names a specific plan with a real page. Top row. Form: real capture of claude.com/pricing in the white card, zoomed to one card at about 2.9x so body text reads about 46 px."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the pricing capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "prices"
+      ],
+      "note": "OFF-SPOT read, flagged: 'but' is a clause boundary, picked as the word the line turns on so 'but with the Ultra plan' stays one phrase."
+    },
+    {
+      "id": "b09",
+      "start": 15.667,
+      "end": 18.367,
+      "words": [
+        52,
+        60
+      ],
+      "say": "there is no more five-hour limits, which is great.",
+      "layout_hint": "takeover",
+      "hint_why": "'there is no more five-hour limits,' - the news of the video, proof with its scope needs the whole frame, so the takeover holds",
+      "shape": "under the Ultra card a second white card lands: the real row 'No 5-hour limit‡' on 'no' 16.00, then the real footnote '‡No 5-hour limit for verified accounts.' on 'five-hour' 16.64, 'verified accounts' lit in clay. Both hold flat through 'which is great'",
+      "anchor": {
+        "word": 54,
+        "t": 16.0,
+        "what": "'No 5-hour limit' row lands, footnote follows on 'five-hour' 16.64"
+      },
+      "copy": {
+        "lit": "verified accounts"
+      },
+      "assets": [
+        "shots/pricing-plans-light.png (rect CSS x 349-653, y 430-497, crop bottom in the gutter above the 10x row; 'No 5-hour limit‡' 411,474 112x17)",
+        "shots/pricing-footnote-light.png ('verified accounts' 152,10 123x13)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "'no more five-hour limits' is the plan page's own row, and a real row beats a drawn timer. 'which is great' is under 1 s, so it rides this beat. Form: real capture. The footnote is required: the row alone drops the verified scope."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the pricing capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "five_hour_removed",
+        "pricing_footnote",
+        "newer_accounts",
+        "flag_verified_scope"
+      ],
+      "emphasis": true,
+      "note": "FLAG, never corrected: he says 'no more five-hour limits' for the Ultra plan, the post limits this to verified Ultra accounts and newer accounts keep a temporary limit. Caption stays exact; the graphic carries 'verified'. The 10x row stays out of the crop until b22."
+    },
+    {
+      "id": "b10",
+      "start": 18.367,
+      "end": 21.267,
+      "words": [
+        61,
+        73
+      ],
+      "say": "This is something that Codex was a lot better at than Claude Code.",
+      "layout_hint": "split",
+      "hint_why": "'This is something that Codex was a lot better at than Claude Code.' - his opinion, so back to split on the sentence start 'This' 18.40, quiet panel",
+      "shape": "the same white card and Codex doc b11 uses, up from the first frame with nothing lit; a clay outline draws round the card on 'better'",
+      "anchor": {
+        "word": 69,
+        "t": 19.76,
+        "what": "clay outline draws round the Codex doc card"
+      },
+      "copy": {
+        "doc": "The estimates below show local messages per five-hour"
+      },
+      "assets": [
+        "shots/codex-pricing-light.png",
+        "face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "Chase's note: replace the last repeating text panel. OpenAI's doc arrives early so the Codex side is on screen as he names it. The line stays his opinion: no winner is lit, and the doc only speaks to limits in b11-b12."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a docs capture, no clip on this beat and no product or demo sound.",
+      "note": "FLAG: 'a lot better' is his opinion and stays in the caption only. Nothing on screen names a winner or a measured result. Nothing is lit until b11, so 'Pro plans' keeps its scope.",
+      "fact_keys": [
+        "codex_pro_no_five_hour",
+        "codex_plus_has_five_hour"
+      ]
+    },
+    {
+      "id": "b11",
+      "start": 21.267,
+      "end": 22.367,
+      "words": [
+        74,
+        77
+      ],
+      "say": "There were no limits",
+      "layout_hint": "split",
+      "hint_why": "'There were no limits' - he points at what the doc says, the split holds and the plate fits whole",
+      "shape": "white card with OpenAI's whole paragraph, flat and readable, up on the frame; on 'no' 21.44 a clay marker highlights 'Pro plans' and 'currently have no five-hour limit.' as one unit",
+      "anchor": {
+        "word": 76,
+        "t": 21.44,
+        "what": "the highlight lands on the plate's 'Pro plans currently have no five-hour limit.'"
+      },
+      "copy": {
+        "lit": [
+          "Pro plans",
+          "currently have no five-hour limit."
+        ]
+      },
+      "assets": [
+        "shots/codex-pricing-light.png ('Pro plans' 276,32 69x14; 'currently have no five-hour limit.' 0,58 229x14; highlight both or neither)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "'no limits' points at a specific public doc line. Top row. Form: real capture of OpenAI's page in the white card, whole paragraph at about 35 px."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the docs capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "codex_pro_no_five_hour",
+        "codex_plus_has_five_hour"
+      ],
+      "note": "Runs with b12 as one held visual, 3.03 s. It fits split whole, so no takeover."
+    },
+    {
+      "id": "b12",
+      "start": 22.367,
+      "end": 24.3,
+      "words": [
+        78,
+        86
+      ],
+      "say": "on the Codex side when it came to hourly.",
+      "layout_hint": "split",
+      "hint_why": "'on the Codex side when it came to hourly.' - connective end of the same point, the split holds",
+      "shape": "same plate held flat for reading; mono source line 'Codex pricing doc, learn.chatgpt.com/docs/pricing' lands on 'Codex' 22.56 and the card keeps a slow drift",
+      "anchor": {
+        "word": 80,
+        "t": 22.56,
+        "what": "mono source label 'Codex' lands on the card, in type (no Codex mark exists)"
+      },
+      "copy": {
+        "source_line": "Codex pricing doc, learn.chatgpt.com/docs/pricing"
+      },
+      "assets": [
+        "shots/codex-pricing-light.png"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "Connective clause of the same doc line, so no new visual. 'Codex side' names the source. Form: real capture."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the docs capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "codex_pro_no_five_hour",
+        "codex_plus_has_five_hour"
+      ],
+      "note": "FLAG, never corrected: his line names no plan and the doc proves Pro only, Plus and Standard Business still have five-hour estimates. The 'Pro plans' words stay lit so the scope shows. Third-party dates stay off screen."
+    },
+    {
+      "id": "b13",
+      "start": 24.3,
+      "end": 27.3,
+      "words": [
+        87,
+        91
+      ],
+      "say": "Now Claude finally joined them.",
+      "layout_hint": "split",
+      "hint_why": "'Now Claude finally joined them.' - his framing and emphasis on 'finally', quiet panel; the plate clears on the sentence",
+      "shape": "two white cards: the Codex line from b11-b12 holds with 'Pro plans' lit, and Claude's help page lands under it on 'finally', its verified Ultra line lighting on 'joined'",
+      "anchor": {
+        "word": 89,
+        "t": 25.62,
+        "what": "Claude's help page card lands under the Codex card"
+      },
+      "copy": {
+        "labels": [
+          "Codex pricing doc",
+          "Claude Code help page"
+        ],
+        "lit": [
+          "Pro plans",
+          "currently have no five-hour limit.",
+          "verified Ultra accounts don't have a five-hour session limit."
+        ]
+      },
+      "assets": [
+        "shots/codex-pricing-light.png",
+        "shots/claude-code-support.png",
+        "face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "Chase's note: replace the repeating text panel. The Codex line from b11-b12 stays up and Claude's own help page lands under it, so 'joined them' is shown with both real docs. Scope stays visible: 'Pro plans' lit on Codex, 'verified Ultra accounts' lit on Claude."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over two doc captures, no clip on this beat and no product or demo sound.",
+      "note": "FLAG: 'joined them' is his framing. The facts hold it only against Codex Pro and only for verified Ultra accounts, and both scopes stay lit on screen. Split run 18.37-27.30 unchanged.",
+      "fact_keys": [
+        "codex_pro_no_five_hour",
+        "max_keeps_five_hour",
+        "five_hour_removed"
+      ]
+    },
+    {
+      "id": "b14",
+      "start": 27.3,
+      "end": 28.867,
+      "words": [
+        92,
+        96
+      ],
+      "say": "So no more five-hour limits,",
+      "layout_hint": "takeover",
+      "hint_why": "'So no more five-hour limits,' - first of a spoken list of 3, full-graphic; cut on the sentence start 'So' 27.30",
+      "shape": "list card with 3 empty check sockets and grey placeholder bars up on frame 0. Row 1 fills on 'five-hour' 27.94: check tile plus a verbatim crop of the post's whole sentence, at least 762 px wide so its text stays at or above the 31 px floor",
+      "anchor": {
+        "word": 95,
+        "t": 27.94,
+        "what": "row 1 lands with its check"
+      },
+      "copy": {
+        "row": "We’re also removing the 5-hour limit for verified Ultra accounts, starting today with most existing subscribers."
+      },
+      "assets": [
+        "posts/claude-post-tight-light.png (crop CSS 14,262 416x46, at least 762 px wide on the 1080 frame)"
+      ],
+      "visual": {
+        "type": "list",
+        "why": "'no more five-hour limits, same weekly limits, and no more confusion' names 3 items in a row, and that is what the line turns on, so the list row wins over the product name. Form: rebuilt card crops carried over from the post card, each with a check."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post crops, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "five_hour_removed",
+        "max_keeps_five_hour",
+        "flag_recap_unscoped"
+      ],
+      "note": "FLAG, never corrected: he says it with no plan named and Max and Pro keep theirs. The row carries 'verified Ultra accounts'."
+    },
+    {
+      "id": "b15",
+      "start": 28.867,
+      "end": 30.2,
+      "words": [
+        97,
+        99
+      ],
+      "say": "same weekly limits,",
+      "layout_hint": "takeover",
+      "hint_why": "'same weekly limits,' - list item 2 of 3",
+      "shape": "Row 2 lands: check tile plus the verbatim post line 'Weekly limits remain unchanged.'",
+      "anchor": {
+        "word": 98,
+        "t": 29.3,
+        "what": "row 2 lands with its check"
+      },
+      "copy": {
+        "row": "Weekly limits remain unchanged."
+      },
+      "assets": [
+        "posts/claude-post-tight-light.png (crop CSS 14,402 250x23)"
+      ],
+      "visual": {
+        "type": "list",
+        "why": "'same weekly limits' is list item 2 of 3, on its own beat. Form: rebuilt card crop, same as b07's line."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post crops, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "weekly_unchanged"
+      ]
+    },
+    {
+      "id": "b16",
+      "start": 30.2,
+      "end": 31.3,
+      "words": [
+        100,
+        103
+      ],
+      "say": "and no more confusion,",
+      "layout_hint": "takeover",
+      "hint_why": "'and no more confusion,' - list item 3 of 3",
+      "shape": "Row 3 lands on 'no' 30.58: check tile plus the post's whole row 'Max 20x → Ultra', a verbatim excerpt of its two rename rows, held 0.72 s to the cut at 31.30",
+      "anchor": {
+        "word": 101,
+        "t": 30.58,
+        "what": "row 3 lands with its check"
+      },
+      "copy": {
+        "row": "Max 20x → Ultra"
+      },
+      "assets": [
+        "posts/claude-post-tight-light.png (crop CSS 14,142 126x22, the whole row 'Max 20x → Ultra')"
+      ],
+      "visual": {
+        "type": "list",
+        "why": "'no more confusion' is list item 3 of 3. The post's row 'Max 20x → Ultra' is the concrete thing that clears it, and 'because Max 20X' picks it up on the next line. Form: rebuilt card crop, one whole row, a marked verbatim excerpt of the post's two rename rows."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post crops, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "rename"
+      ],
+      "note": "Takeover 27.30-31.30 is 4.0 s. Beat starts 30.20 in the pause after 'limits,' so it reaches 1.1 s. The row lands on 'no' 30.58, still on its own item 'no more confusion', because a landing on 'confusion' 30.82 left only 0.48 s before the 4 s cap."
+    },
+    {
+      "id": "b17",
+      "start": 31.3,
+      "end": 32.967,
+      "words": [
+        104,
+        106
+      ],
+      "say": "because Max 20X",
+      "layout_hint": "split",
+      "hint_why": "'because Max 20X' - he points at the name he is selecting, back to split as the list ends",
+      "shape": "his own recording in the white card: 'Max 20x' fills blue 31.47-31.80, full on 'Max', cut while still blue",
+      "anchor": {
+        "word": 105,
+        "t": 31.78,
+        "what": "'Max 20x' fills blue under his own selection"
+      },
+      "copy": {},
+      "assets": [
+        "clips/max20x-highlight.mp4 (960x460)"
+      ],
+      "visual": {
+        "type": "own_clip",
+        "why": "'Max 20X' is what he selects on screen at this line. His selection is the real action, the post card already carried the name. Form: real capture, his own recording. First frame held 0.10 s from 31.30, then local time = composition - 31.40, so the clip runs local 0-1.567, 0.40 s behind real time."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: clips/max20x-highlight.mp4 on screen 31.300-32.967 is muted screen footage under narration (video stream only, checked with ffprobe).",
+      "fact_keys": [
+        "rename"
+      ],
+      "note": "OFF-SPOT read, flagged: 'because' is a clause boundary where the list ends. On screen 1.67 s of a 2.00 s clip, 1x, no join in range. Frame-stepped: the sweep is local frames 2-12 and blue ends after local frame 52, so the clip runs local 0-1.567, 0.40 s behind real time, and ends still blue. Short of Chase's 2-4 s by what the line allows."
+    },
+    {
+      "id": "b18",
+      "start": 32.967,
+      "end": 34.567,
+      "words": [
+        107,
+        111
+      ],
+      "say": "didn't actually give you 4X",
+      "layout_hint": "takeover",
+      "hint_why": "'didn't actually give you 4X' - the line turns on one number, full-graphic; cut on the stressed 'didn't' 32.98 after his pause",
+      "shape": "built card: pills 'Max 20x' ÷ 'Max 5x' up on frame 0, '= 4x' lands big on '4X' 33.86, thin clay strike draws through it before the word ends, about 34.30",
+      "anchor": {
+        "word": 111,
+        "t": 33.86,
+        "what": "'= 4x' lands on the card"
+      },
+      "copy": {
+        "equation": [
+          "Max 20x",
+          "÷",
+          "Max 5x",
+          "="
+        ],
+        "figure": "4x",
+        "label": "THE ASSUMED MATH",
+        "source_line": "From the plan names, not a usage figure"
+      },
+      "assets": [
+        "built card, no plate"
+      ],
+      "visual": {
+        "type": "number",
+        "why": "'4X' is the one figure the line turns on. No higher row fits: no real plate shows 4x, and ASSETS.md rules that out on purpose. Form: built graphic, arithmetic from the two plan names, labelled as the assumed math and struck so it never reads as a usage figure."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a built card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "four_x_is_the_assumption",
+        "old_20x_meaning",
+        "max_weekly_5x"
+      ],
+      "note": "4x may appear only as the assumed figure (four_x_is_the_assumption). Label and source line are Claude's words, list them in the handoff. The figure is always shown struck or as the assumption, so no 4x usage claim is made."
+    },
+    {
+      "id": "b19",
+      "start": 34.567,
+      "end": 36.617,
+      "words": [
+        112,
+        116
+      ],
+      "say": "the usage of Max 5X.",
+      "layout_hint": "takeover",
+      "hint_why": "'the usage of Max 5X.' - same takeover, he is selecting the plan he names; the join at 35.32 falls inside, face hidden",
+      "shape": "the struck equation lifts to the top; below it his own clip lands in a white card: the drag runs through 'Max 5x' as he says it and is selected by the end",
+      "anchor": {
+        "word": 115,
+        "t": 35.54,
+        "what": "'Max 5x' drag selection starts on the word 'Max'"
+      },
+      "copy": {},
+      "assets": [
+        "clips/drag-select-max5x.mp4 (960x460, drag starts local 0.90)"
+      ],
+      "visual": {
+        "type": "own_clip",
+        "why": "'Max 5X' is what he drags over on screen. real_shot would repeat the post card, and his action is the demo here. Form: real capture, his own recording, 1x, played from its first frame with local time = composition - 34.633, so the drag starts on 'Max' 35.54."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: clips/drag-select-max5x.mp4 on screen 34.567-36.617 is muted screen footage under narration (video stream only, checked with ffprobe).",
+      "fact_keys": [
+        "rename"
+      ],
+      "note": "Placed 1.43 s later than real time so the drag lands on his words. Marked excerpt: the real drag runs on past the 35.32 join and the clip stops before it. No join inside the clip's source range. A takeover holds both a number and a clip, so it earns the frame."
+    },
+    {
+      "id": "b20",
+      "start": 36.617,
+      "end": 38.633,
+      "words": [
+        117,
+        122
+      ],
+      "say": "Yeah, it gave you 20X usage",
+      "layout_hint": "split",
+      "hint_why": "'Yeah, it gave you 20X usage' - he explains it against a source on screen; cut on the sentence start, on the join at 36.617",
+      "shape": "rebuilt post card of Mike Overell, who leads product for Claude subscriptions, whole first two paragraphs, flat; clay marker lands on 'It gave you 20x Pro's limit' on '20X' 37.86",
+      "anchor": {
+        "word": 121,
+        "t": 37.86,
+        "what": "'It gave you 20x Pro's limit' lights on the card"
+      },
+      "copy": {
+        "lit": "It gave you 20x Pro's limit"
+      },
+      "assets": [
+        "posts/overell-post-tight-light.png (rect CSS 0,0 460x262, paragraph ends at the gutter under '20x).'; 'It gave you 20x Pro's limit...' 16,166 398x45)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "'it gave you 20X usage' is what this post says word for word, and it exists. Top row. Form: rebuilt card (post_card.py), about 33 px at 900 wide."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "old_20x_meaning"
+      ],
+      "note": "Word 'usage' has a bad timing in words.json (38.62-38.66) right after '20X'. The paragraph is kept whole, so '10x Pro's' is on the card unlit before b22; nothing lights it until then."
+    },
+    {
+      "id": "b21",
+      "start": 38.633,
+      "end": 39.95,
+      "words": [
+        123,
+        126
+      ],
+      "say": "for their five-hour limit,",
+      "layout_hint": "split",
+      "hint_why": "'for their five-hour limit,' - same card, he keeps explaining it, the split holds",
+      "shape": "same card held; second marker lands on 'a single limit: 5 hours.' on 'five-hour' 38.90",
+      "anchor": {
+        "word": 125,
+        "t": 38.9,
+        "what": "'a single limit: 5 hours.' lights on the card"
+      },
+      "copy": {
+        "lit": "a single limit: 5 hours."
+      },
+      "assets": [
+        "posts/overell-post-tight-light.png ('single limit' 16,142 404x45)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "'five-hour limit' is the same post's line 'it had a single limit: 5 hours.', so the card extends. Form: rebuilt card."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "old_20x_meaning"
+      ]
+    },
+    {
+      "id": "b22",
+      "start": 39.95,
+      "end": 42.567,
+      "words": [
+        127,
+        137
+      ],
+      "say": "not for the weekly. It was only double the 5X plan,",
+      "layout_hint": "takeover",
+      "hint_why": "'not for the weekly. It was only double the 5X plan,' - A vs B on one figure, full-graphic; cut on the stressed 'not', on the join at 39.950",
+      "shape": "real compare table, whole, flat, big in the white card, footnote plate under it. 'Limit every week' row lights on 'weekly' 40.34. On 'double' 41.30 the Max 5x and Ultra 10x pills take a clay outline and a bracket between them lands with the word 'double'. 5x and 10x are the page's own pills",
+      "anchor": {
+        "word": 134,
+        "t": 41.3,
+        "what": "bracket from 5x to 10x with 'double' lands"
+      },
+      "copy": {
+        "bracket": "double",
+        "source_line": "Weekly limit, claude.com/pricing"
+      },
+      "assets": [
+        "shots/pricing-compare-light.png (whole plate; 'Limit every week' 17,185 136x14; Max 5x pill 239,229 32x22; Ultra 10x pill 338,229 37x22)",
+        "shots/pricing-footnote-light.png"
+      ],
+      "visual": {
+        "type": "compare",
+        "why": "'only double the 5X plan' sets 5x against 10x, a comparison line taking its row with the real table. 'not for the weekly' is under 1 s, so it rides this beat. Form: real capture of claude.com/pricing, 31-40 px at 900 wide, with the footnote plate because the table shows 'No 5-hour limit‡'."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the pricing capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "ultra_double_max_weekly",
+        "ultra_weekly_10x",
+        "max_weekly_5x",
+        "pro_baseline_1x",
+        "pricing_footnote"
+      ],
+      "emphasis": true,
+      "note": "'double' is his word and arithmetic from facts; Anthropic's pages do not use it. Plate reads Ultra because Max 20x is now Ultra and the weekly figure is the same (ultra_double_max_weekly). The plate stays whole, so Pro's 1x shows unlit in both limit rows (pro_baseline_1x)."
+    },
+    {
+      "id": "b23",
+      "start": 42.567,
+      "end": 44.183,
+      "words": [
+        138,
+        144
+      ],
+      "say": "which people got kind of pissed at.",
+      "layout_hint": "split",
+      "hint_why": "Chase's note: replace the repeating caption panel with Overell's admission, pushed in for phone reading and highlighted on pissed. No reaction count.",
+      "shape": "White ivory card with a tight Overell post crop; two-part clay highlight on the admission; chip on the seam",
+      "anchor": {
+        "word": 143,
+        "t": 43.62,
+        "what": "Highlight the Overell admission on pissed"
+      },
+      "copy": {
+        "quote": "I get that some new users assumed 20x applied to both limits.",
+        "context": "We could have done better here, and I'm sorry."
+      },
+      "assets": [
+        "assets/posts/overell-post-tight-light.png",
+        "assets/face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "Chase's note: replace the repeating caption panel with Overell's admission, pushed in for phone reading and highlighted on pissed. No reaction count."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a source capture or assumed-math graphic.",
+      "note": "Reaction size remains unmeasured. The real post acknowledges confusion; it supplies no lawsuit claim.",
+      "fact_keys": [
+        "confusion_acknowledged"
+      ]
+    },
+    {
+      "id": "b24",
+      "start": 44.183,
+      "end": 46.7,
+      "words": [
+        145,
+        156
+      ],
+      "say": "And I think that's what kind of led to this name change,",
+      "layout_hint": "split",
+      "hint_why": "Chase's note: replace the caption panel with his real rename selection. This shows the rename only; it does not prove his claimed cause.",
+      "shape": "White ivory card framing his own muted rename selection clip; chip on the seam",
+      "anchor": {
+        "word": 155,
+        "t": 45.78,
+        "what": "His real blue selection covers Max 20x → Ultra on name"
+      },
+      "copy": {
+        "rename": "Max 20x → Ultra"
+      },
+      "assets": [
+        "assets/clips/rename-line-highlight.mp4",
+        "assets/face_half.mp4 (bottom half, original punch-in unchanged)"
+      ],
+      "visual": {
+        "type": "clip",
+        "why": "Chase's note: replace the caption panel with his real rename selection. This shows the rename only; it does not prove his claimed cause."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: narration only; source clip muted.",
+      "note": "FLAG: his claim that anger or a suit caused the rename remains hedged opinion. No source proves that cause. The clip proves only the rename.",
+      "fact_keys": [
+        "rename"
+      ]
+    },
+    {
+      "id": "b25",
+      "start": 46.7,
+      "end": 49.433,
+      "words": [
+        157,
+        166
+      ],
+      "say": "because I'm pretty sure they were getting sued for that.",
+      "layout_hint": "split",
+      "hint_why": "Chase's note: replace the repeating text panel with the support page's rename facts and a small hedge tag. The capture provides no evidence for his lawsuit opinion.",
+      "shape": "White ivory card with the real support-page rename section and highlight; small hedge tag on sure; chip on the seam",
+      "anchor": {
+        "word": 160,
+        "t": 47.62,
+        "what": "Small tag I'm pretty sure appears on sure"
+      },
+      "copy": {
+        "heading": "What changed from Max 20x?",
+        "rename": "The Max 20x plan is now called the Ultra plan.",
+        "context": "Existing Max 20x subscribers move to Ultra automatically, with no price change.",
+        "tag": "I'm pretty sure"
+      },
+      "assets": [
+        "assets/shots/ultra-support.png",
+        "assets/face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "Chase's note: replace the repeating text panel with the support page's rename facts and a small hedge tag. The capture provides no evidence for his lawsuit opinion."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a source capture or assumed-math graphic.",
+      "note": "FLAG: the sued line stays his hedged opinion. Sued appears only in the unchanged caption. No lawsuit figure, case number, date, document or proof is shown; the page crop shows rename facts only.",
+      "fact_keys": [
+        "rename",
+        "subscribers_do_nothing"
+      ]
+    },
+    {
+      "id": "b26",
+      "start": 49.433,
+      "end": 52.067,
+      "words": [
+        167,
+        177
+      ],
+      "say": "I think everyone assumed it was actually 4X when it wasn't.",
+      "layout_hint": "split",
+      "hint_why": "Chase's note: replace the caption panel with the large assumed 4x from sc-four and strike it on wasn't. The figure is an assumption, never weekly usage or lawsuit evidence.",
+      "shape": "White ivory card with the sc-four serif 4x callback and THE ASSUMED MATH label; clay strike on wasn't; chip on the seam",
+      "anchor": {
+        "word": 177,
+        "t": 51.78,
+        "what": "Strike the assumed 4x on wasn't"
+      },
+      "copy": {
+        "label": "THE ASSUMED MATH",
+        "figure": "4x"
+      },
+      "assets": [
+        "assets/face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "visual": {
+        "type": "graphic",
+        "why": "Chase's note: replace the caption panel with the large assumed 4x from sc-four and strike it on wasn't. The figure is an assumption, never weekly usage or lawsuit evidence."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a source capture or assumed-math graphic.",
+      "note": "FLAG: everyone is his opinion; Overell says some new users. 4x stays only the assumed math. Nothing here proves a lawsuit or a cause for the rename. The strike has 0.287 seconds before the fixed cut, with an 8-frame hold.",
+      "fact_keys": [
+        "four_x_is_the_assumption"
+      ]
+    },
+    {
+      "id": "b27",
+      "start": 52.067,
+      "end": 54.7,
+      "words": [
+        178,
+        185
+      ],
+      "say": "Well, now it's Ultra, no more five-hour plans.",
+      "layout_hint": "split",
+      "hint_why": "Chase's note: replace the caption panel with the post's real plan art, moving into Ultra on its word. The graphic explicitly says limit and verified.",
+      "shape": "White ivory card containing the real post art, pushing into Ultra on Ultra, with a verified limit line; chip on the seam",
+      "anchor": {
+        "word": 181,
+        "t": 52.74,
+        "what": "Move into the Ultra card on Ultra; other cards leave the view"
+      },
+      "copy": {
+        "names": [
+          "Free",
+          "Pro",
+          "Max",
+          "Ultra"
+        ],
+        "scope": "No 5-hour limit, verified"
+      },
+      "assets": [
+        "assets/posts/post-hero-cards.png",
+        "assets/face_half.mp4 (bottom half, original punch-in unchanged)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "Chase's note: replace the caption panel with the post's real plan art, moving into Ultra on its word. The graphic explicitly says limit and verified."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a source capture or assumed-math graphic.",
+      "fact_keys": [
+        "plan_lineup",
+        "five_hour_removed",
+        "flag_close_plans_for_limits"
+      ],
+      "emphasis": true,
+      "note": "FLAG: his spoken five-hour plans remains exact in captions. Our line says No 5-hour limit, verified. The original join punch-in remains unchanged."
+    },
+    {
+      "id": "b28",
+      "start": 54.7,
+      "end": 56.067,
+      "words": [
+        186,
+        193
+      ],
+      "say": "So don't be surprised if you see that",
+      "layout_hint": "split",
+      "hint_why": "Chase's note: replace the repeating caption panel with pricing arriving early, using the same name rows and positions as the untouched b29. Cropped above the limit line.",
+      "shape": "White ivory card with the pricing page Max and Ultra name rows already in b29 positions; chip on the seam",
+      "anchor": {
+        "word": 189,
+        "t": 55.14,
+        "what": "The pricing capture name rows are already present, leading into b29"
+      },
+      "copy": {
+        "names": [
+          "Max",
+          "Ultra"
+        ],
+        "tag": "Claude Code included"
+      },
+      "assets": [
+        "assets/shots/pricing-plans-light.png",
+        "assets/face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "Chase's note: replace the repeating caption panel with pricing arriving early, using the same name rows and positions as the untouched b29. Cropped above the limit line."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a source capture or assumed-math graphic.",
+      "note": "Only plan-name rows and Claude Code included tags are visible. No 5-hour limit wording is in either crop.",
+      "fact_keys": [
+        "rename",
+        "limits_shared_with_claude_code"
+      ]
+    },
+    {
+      "id": "b29",
+      "start": 56.067,
+      "end": 57.65,
+      "words": [
+        194,
+        200
+      ],
+      "say": "with your Claude Code pricing. These days.",
+      "layout_hint": "split",
+      "hint_why": "'with your Claude Code pricing. These days.' - he points at what you will see, split through the last frame",
+      "shape": "white card with two real rows from the pricing page, stacked: 'Max' with its 'Claude Code included' tag and 'Ultra' with its tag, up on the clause's first frame, the tags lit on 'pricing' 56.82, held through the final frame",
+      "anchor": {
+        "word": 198,
+        "t": 56.82,
+        "what": "the two real plan rows hold in the white card"
+      },
+      "copy": {
+        "rows": [
+          "Max",
+          "Ultra"
+        ],
+        "tag": "Claude Code included"
+      },
+      "assets": [
+        "shots/pricing-plans-light.png (rect CSS x 16-320, y 125-175: 'Max' 45,143 69x25, tag 126,146 140x22; rect CSS x 349-653, y 125-175: 'Ultra' 379,143 77x25, tag 468,146 140x22)"
+      ],
+      "visual": {
+        "type": "real_shot",
+        "why": "'your Claude Code pricing' names a specific price page that exists, and this clause is not opinion or payoff, so the row applies. Form: real capture of claude.com/pricing, cropped to the name rows at about 2.9x; the tag reads about 43 px."
+      },
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the pricing capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "limits_shared_with_claude_code",
+        "rename"
+      ],
+      "note": "Nothing exits before the final frame. The crop stops above the limit rows, so no ‡ line shows."
+    }
+  ]
+}

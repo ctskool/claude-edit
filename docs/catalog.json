@@ -1,0 +1,57 @@
+{
+  "note": "The gallery's source of truth. scripts/build-gallery.mjs reads it, cuts each clip from the source files under --from (the author's own project folder; nothing there ships), and writes docs/index.html and the README cards. An item with pending: true shows as a slot and needs no media.",
+  "groups": [
+    {
+      "name": "The whole flow",
+      "note": "One raw take, edited start to finish. Chase approved this edit after four note rounds.",
+      "items": [
+        {
+          "slug": "before-after-max-ultra",
+          "kind": "before-after",
+          "aspect": "9/8",
+          "sound": true,
+          "before": "work/1030-2/raw/cut.mp4",
+          "after": "out/1030-2_ivory_final_v2.mp4",
+          "name": "Max is now Ultra: raw vs edited",
+          "does": "Left, the raw take after the cut. Right, the delivered edit. Same seconds, same voice",
+          "key": "57 s, 29 beats, four note rounds, approved and sounded",
+          "cardFrom": 7.2,
+          "cardTo": 12.4
+        },
+        {
+          "slug": "player-note",
+          "kind": "clip",
+          "aspect": "16/10",
+          "source": "renders/player-note.mp4",
+          "local": true,
+          "name": "A note at the exact second",
+          "does": "The review player: pause on the frame, press N, type the note. It saves with the picture it was left on",
+          "key": "A note at 16.2 s on beat b09, made by scripts/capture-player.py on a scratch copy of the edit",
+          "cardFrom": 3.2,
+          "cardTo": 9.2
+        }
+      ]
+    },
+    {
+      "name": "Proven components",
+      "note": "Each one came out of an approved edit, so the next edit can start from it. They live in templates/ivory/library/.",
+      "items": [
+        { "slug": "post-card", "kind": "clip", "source": "out/1030-2_ivory_final_v2.mp4", "from": 0, "to": 5.17, "name": "Post card", "does": "The real post, rebuilt sharp on an ivory card, with the old name struck out", "key": "Beats b01-b02, the hook" },
+        { "slug": "clip-card", "kind": "clip", "source": "out/1030-2_ivory_final_v2.mp4", "from": 5.17, "to": 7.5, "name": "Clip card", "does": "A piece of his own screen recording on a card, with the running strip popping in", "key": "Beat b03" },
+        { "slug": "before-after", "kind": "clip", "source": "out/1030-2_ivory_final_v2.mp4", "from": 7.5, "to": 11.5, "name": "Before and after", "does": "Two built pills for the old names, struck through as the new ones land", "key": "Beats b04-b05" },
+        { "slug": "stacked-capture", "kind": "clip", "source": "out/1030-2_ivory_final_v2.mp4", "from": 14.57, "to": 18.37, "name": "Stacked capture", "does": "One real plan card from the pricing page, zoomed, with a drawn outline", "key": "Beats b08-b09" },
+        { "slug": "docs-card", "kind": "clip", "source": "out/1030-2_ivory_final_v2.mp4", "from": 18.37, "to": 21.27, "name": "Docs card", "does": "The real help page on a white card, one phrase outlined as he says it", "key": "Beat b10" },
+        { "slug": "list-card", "kind": "clip", "source": "out/1030-2_ivory_final_v2.mp4", "from": 27.3, "to": 31.3, "name": "List card", "does": "Rows that check off one by one, each with a crop of the real post", "key": "Beats b14-b16" },
+        { "slug": "number-card", "kind": "clip", "source": "out/1030-2_ivory_final_v2.mp4", "from": 32.97, "to": 36.62, "name": "Number card", "does": "An equation in pills and a big serif figure, struck when he corrects it", "key": "Beats b18-b19" },
+        { "slug": "compare-table", "kind": "clip", "source": "out/1030-2_ivory_final_v2.mp4", "from": 39.95, "to": 42.57, "name": "Compare table", "does": "The real pricing table with pill outlines, a drawn bracket and its footnote", "key": "Beat b22" },
+        { "slug": "art-card", "kind": "clip", "source": "out/1030-2_ivory_final_v2.mp4", "from": 52.07, "to": 54.7, "name": "Art card", "does": "The post's own art, pushing in on the new plan as he names it", "key": "Beat b27" }
+      ]
+    },
+    {
+      "name": "Coming next",
+      "items": [
+        { "slug": "top-five-skills", "pending": true, "name": "Top five skills", "does": "The second edit through the whole flow, added once it's approved", "key": "In note rounds now" }
+      ]
+    }
+  ]
+}

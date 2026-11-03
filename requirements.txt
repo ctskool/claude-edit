@@ -1,0 +1,12 @@
+# Core imports found in tools/: numpy, PIL, cv2, playwright, faster_whisper.
+# Python 3.10+; use a virtual environment. See INSTALL.md for optional features.
+numpy
+Pillow
+opencv-python
+playwright
+faster-whisper
+
+# Optional alignment/popout: python -m pip install torch torchvision "transformers>=5.13,<6"
+# Optional sound-bank development: python -m pip install soundfile
+# earshot and demucs.hf are local checkouts, not guessed PyPI package names.
+# CUDA DLL wheels on Windows only: see INSTALL.md; never install these on a Mac.

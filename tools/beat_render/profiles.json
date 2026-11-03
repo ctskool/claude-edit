@@ -1,0 +1,14 @@
+{"workers": {"review": 4, "final": null},
+ "profiles": {
+  "review": {"name": "review", "width": 540, "height": 960, "dpr": 0.5, "fps": 30,
+    "capture": {"method": "screenshot", "format": "jpeg", "quality": 80, "gpu": "hardware"},
+    "extraction": "auto",
+    "encoder": {"lib": "libx264", "preset": "ultrafast", "crf": 20, "pix_fmt": "yuv420p", "gop": "closed-per-segment", "bframes": 0},
+    "threads": {"decoder": 1, "filter": 1, "encoder": 2},
+    "page_rotate_frames": 240},
+  "final": {"name": "final", "width": 1080, "height": 1920, "dpr": 1, "fps": 30,
+    "capture": {"method": "screenshot", "format": "jpeg", "quality": 100, "gpu": "hardware"},
+    "extraction": "auto",
+    "encoder": {"lib": "libx264", "preset": "medium", "crf": 16, "pix_fmt": "yuv420p", "gop": "closed-per-segment", "bframes": 0},
+    "threads": {"decoder": 1, "filter": 1, "encoder": 2},
+    "page_rotate_frames": 240}}}

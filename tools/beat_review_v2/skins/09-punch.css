@@ -1,0 +1,124 @@
+/* Punch
+   A continuous-feed impact-printer log: tractor holes, greenbar paper and dot-matrix lettering.
+   References: IBM 3270 https://bitsavers.computerhistory.org/pdf/ibm/3270/950-I048-3270_1985.pdf ; Actual Source https://actualsource.org/products/the-art-of-computer-designing ; vault Journey ASCII
+*/
+@import url("https://fonts.googleapis.com/css2?family=Doto:wght@700;900&family=DotGothic16&family=Atkinson+Hyperlegible:wght@400;700&family=Courier+Prime:wght@400;700&display=swap");
+
+:root[data-theme] {
+  --bg: #ecebd8;
+  --panel: #f9f7e9;
+  --ink: #15291d;
+  --mute: #3d5137;
+  --line: #aab09a;
+  --split: #f8f5dd;
+  --graphic: #a9c696;
+  --face: #c4d9b2;
+  --key: #25472b;
+  --selected: #d3dfbd;
+  --chrome: #e3e6cd;
+  --body: "Atkinson Hyperlegible", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Courier Prime", "Geist Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --display: "Doto", "DotGothic16", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mute2: var(--mute); --on: var(--bg);
+  --accent: #7f2607; --bad: #7f2607; --warn: var(--mute);
+  color-scheme: light;
+}
+
+/* The player's geometry, visibility rules and true-colour media are inherited.
+   --key is navigation; --accent / --bad are exclusively review attention. */
+body { background: var(--bg); color: var(--ink); font-family: var(--body) }
+button, select, label, kbd, .mono { font-family: var(--mono) }
+button, select, input, textarea { color: var(--ink) }
+button { background: var(--panel); border-color: var(--line) }
+button:hover:not(:disabled) { border-color: var(--key) }
+button:disabled { color: var(--mute) }
+button.primary { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+button.primary:disabled { background: transparent; color: var(--mute); border-color: var(--line) }
+button.plain, .sound-row .sound-go, .go, .cue { background: transparent }
+:focus-visible { outline-color: var(--key) }
+h1 { font-size: 21px; line-height: 1.1 }
+h2 { color: var(--ink) }
+.pic, .mute, .quiet, .keys, #saved, #why, #theme, .empty { color: var(--mute) }
+.go .i, .go .t { color: var(--mute) }
+.beat.cur { background: var(--selected) }
+.go:hover { background: var(--selected) }
+.beat.cur .i { color: var(--ink) }
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--key) }
+.pill.PASS, .pill.UNVERIFIED, .tag.ok, .tag.q, .tag { color: var(--mute) }
+#head { background: var(--key); box-shadow: 0 0 0 1px var(--bg) }
+.cell { color: var(--ink) }
+.cell.cur { outline-color: var(--key) }
+.cue { border-left-color: var(--key) }
+.meter i { background: var(--key) }
+.legend { color: var(--mute) }
+kbd { background: var(--panel); color: var(--mute); border-color: var(--line) }
+#composer textarea, .ask input { background: var(--panel); color: var(--ink); border-color: var(--key) }
+textarea::placeholder, input::placeholder { color: var(--mute); opacity: 1 }
+#sound-btn[aria-pressed="true"] { color: var(--ink); border-color: var(--key); box-shadow: inset 0 -2px var(--key) }
+.note.flash { background: var(--selected) }
+dialog { color: var(--ink); background: var(--bg); border-color: var(--key); box-shadow: 0 12px 64px #0006 }
+dialog::backdrop { background: #000b }
+#tip { background: var(--ink); color: var(--bg) }
+
+
+/* Continuous feed: dark platen gutters, large perforations and real green bars. */
+header { position: relative; isolation: isolate; background: #e8ebd3; border-bottom-style: dashed; box-shadow: inset 0 3px #25472b }
+header::before { content: "CONTINUOUS FEED"; position: absolute; z-index: -1; pointer-events: none; inset: 0 18% 0 34%; overflow: hidden; white-space: nowrap; font: 400 57px/.9 var(--display); letter-spacing: .04em; color: #25472b25 }
+h1 { font-family: var(--display); font-size: 21px; letter-spacing: .02em; font-weight: 900 }
+.stage { background-color: #f8f5dd; background-image: radial-gradient(circle at center,#15291d 0 4px,#829674 4px 5px,transparent 5px),radial-gradient(circle at center,#15291d 0 4px,#829674 4px 5px,transparent 5px),repeating-linear-gradient(0deg,#c4d9b2 0 37px,#f8f5dd 37px 74px); background-size: 14px 25px,14px 25px,100% 74px; background-position: left top,right top,0 0; background-repeat: repeat-y,repeat-y,repeat; box-shadow: inset 14px 0 #e0dfc8,inset -14px 0 #e0dfc8 }
+/* Perforation strips are restricted to the stage's 16px side gutters. */
+.stage::before, .stage::after { content: ""; position: absolute; pointer-events: none; top: 0; bottom: 0; width: 14px; background: radial-gradient(circle,#15291d 0 4px,#829674 4px 5px,transparent 5px) 0 0/14px 25px repeat-y }
+.stage::before { left: 0; border-right: 1px dashed #7c8f69 }
+.stage::after { right: 0; border-left: 1px dashed #7c8f69 }
+#beats { background: #f8f5dd; box-shadow: inset 8px 0 #25472b }
+#beats h2 { background: #e8ebd3; box-shadow: inset 0 -1px #25472b }
+h2 { font-family: var(--display); font-size: 16px; line-height: .9375; letter-spacing: .08em }
+.beat { background: #f8f5dd; border-bottom: 1px dotted #7c8f69; border-left-color: #90b07c }
+.beat:nth-child(2n) { background: #c4d9b2 }
+.beat.cur { background: #a9c696; box-shadow: inset 5px 0 #25472b,inset 0 0 0 1px #25472b }
+.go .i { font-weight: 700 }
+.rail { background: repeating-linear-gradient(0deg,#c4d9b2 0 37px,#f8f5dd 37px 74px); border-left-style: dashed; box-shadow: inset 7px 0 #e0dfc8 }
+.rail > .panel { background: #f8f5dded }
+.rail-tabs { background: #e8ebd3; border-bottom: 1px dashed #25472b }
+button { background: #f8f5dd; border-color: #63745a; border-style: dashed; box-shadow: inset 0 -3px #25472b1c }
+button:hover:not(:disabled) { background: #c4d9b2; border-style: solid }
+.go, .sound-go, .cue, button.plain { box-shadow: none }
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] { background: #25472b; color: #f8f5dd; border-bottom-color: #25472b }
+.dock { position: relative; isolation: isolate; background-color: #e8ebd3; background-image: radial-gradient(circle,#15291d 0 4px,#829674 4px 5px,transparent 5px); background-size: 14px 25px; background-repeat: repeat-y; box-shadow: inset 0 3px #25472b }
+.dock::after { content: "PUNCH / FEED"; position: absolute; z-index: -1; pointer-events: none; right: 20px; top: 0; height: 49px; overflow: hidden; white-space: nowrap; font: 400 57px/.9 var(--display); letter-spacing: .04em; color: #25472b20 }
+#play { background: #25472b; color: #f8f5dd; border-color: #25472b; border-style: solid; font-weight: 700 }
+.tl { background: repeating-linear-gradient(90deg,#25472b 0 1px,transparent 1px 12px) 0 0/100% 5px no-repeat }
+.cell { background-color: #f8f5dd; border-right-color: #25472b; background-image: repeating-linear-gradient(0deg,#25472b22 0 1px,transparent 1px 4px) }
+.cell[data-layout="full-face"] { background-color: #c4d9b2; background-image: radial-gradient(#25472b42 .8px,transparent 1px); background-size: 3px 3px }
+.cell[data-layout="full-graphic"] { background-color: #a9c696; background-image: repeating-linear-gradient(90deg,#25472b38 0 1px,transparent 1px 4px) }
+.cell.cur { outline: 2px solid #25472b; outline-offset: -2px }
+#head { background: #15291d; box-shadow: 1px 0 #f8f5dd }
+#head::before { content: ""; position: absolute; pointer-events: none; top: -1px; left: -5px; width: 12px; height: 11px; background: #25472b; clip-path: polygon(0 0,100% 0,100% 60%,50% 100%,0 60%) }
+.cue { border-left-color: #25472b; border-bottom: 1px dotted #7c8f69; background: #f8f5dd }
+.lane i:not(.bad):not(.old) { border-radius: 0; background: #25472b; box-shadow: inset 0 0 0 2px #f8f5dd; outline: 1px solid #25472b }
+kbd { border-style: dotted; border-color: #63745a; background: #f8f5dd }
+
+
+/* Solid islands protect live labels from the large background lettering. */
+header > h1, header > .pic, header > .end, #transport > span, #composer .hint, #composer .at, .legend { background: #e8ebd3 }
+
+/* Shared review signal, intentionally after all decorative rules.
+   The DOM has no separate count span inside tabs. :has() colours the Notes
+   label from the player's ready state or an open/pending sound-note control;
+   zero/closed counts and the Sound cue total remain neutral. */
+.go .ch, .pill.FAIL, .tag.bad, .job.bad, #saved.bad, #sound-status.bad,
+#changed-line, #changed-line button, #go-hint, #go-line { color: var(--bad) }
+.cell.ch { box-shadow: inset 0 3px 0 var(--bad) }
+.lane i.bad, .cue i { background: var(--bad) }
+#notes:has(#go-line:not([hidden]), .note .when > .tag:first-child ~ button[title^="Take this note back"], .note .when > .tag:first-child ~ button.plain.mono:last-child) #note-count,
+#checks:has(.finding .tag.bad) #check-count { color: var(--bad) }
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"] { color: var(--bad) }
+/* Keep attention labels readable even in an inverted selected tab. */
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"][aria-selected="true"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"][aria-selected="true"] { background: var(--panel) }
+/* Static materials; no new animation. Attention is never used decoratively. */
+@media (forced-colors: active) {
+  .beat.cur, .cell.cur { outline: 1px solid Highlight; outline-offset: -1px }
+  .cell.ch { border-top: 3px solid LinkText }
+}

@@ -1,0 +1,18 @@
+{
+ "2 Write 1, stroke at 0.70 s": "yes",
+ "7 Write 5, stroke at 0.62 s": "yes",
+ "16 pencil foley 1, stroke at 9.70 s": "no",
+ "15 pencil foley 1, stroke at 7.19 s (cut to 0.5 s)": "no",
+ "14 pencil on thick paper, stroke at 14.16 s": "no",
+ "13 pencil on thick paper, stroke at 5.56 s (cut to 0.5 s)": "no",
+ "12 Write 7, stroke at 4.11 s (cut to 0.5 s)": "no",
+ "11 Write 7, stroke at 3.58 s": "no",
+ "10 Write 7, stroke at 1.92 s": "no",
+ "8 Write 5, stroke at 2.23 s": "no",
+ "9 Write 7, stroke at 0.04 s (cut to 0.5 s)": "no",
+ "6 Write 5, stroke at 0.03 s": "no",
+ "5 Write 3, stroke at 1.99 s (cut to 0.5 s)": "no",
+ "4 Write 3, stroke at 0.89 s": "no",
+ "3 Write 2, stroke at 0.03 s (cut to 0.5 s)": "no",
+ "1 Write 1, stroke at 0.02 s (cut to 0.5 s)": "no"
+}

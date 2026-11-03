@@ -1,0 +1,21 @@
+{
+  "note": "Sounds whose licence lets you use them in videos but not pass the files on. They never ship: tools/fetch_sounds.py downloads them on each machine and cuts their slices. Pixabay Content License: https://pixabay.com/service/license-summary/",
+  "files": [
+    {
+      "sounds": ["pencil-a"],
+      "dir": "work/sfx-sources/pixabay-pencil",
+      "file": "floraphonic-pencil-foley-write-1-162850.mp3",
+      "url": "https://cdn.pixabay.com/download/audio/2023/08/19/audio_4e5bcc2ef4.mp3?filename=floraphonic-pencil-foley-write-1-162850.mp3",
+      "page": "https://pixabay.com/sound-effects/film-special-effects-pencil-foley-write-1-162850/",
+      "sha256": "2f63b26af216cd7ea135d588c49135acc38310bcb85c9f96e3337fe628b48a45"
+    },
+    {
+      "sounds": ["pencil-b"],
+      "dir": "work/sfx-sources/pixabay-pencil",
+      "file": "floraphonic-pencil-foley-write-5-162854.mp3",
+      "url": "https://cdn.pixabay.com/download/audio/2023/08/19/audio_be56fdc4fe.mp3?filename=floraphonic-pencil-foley-write-5-162854.mp3",
+      "page": "https://pixabay.com/sound-effects/film-special-effects-pencil-foley-write-5-162854/",
+      "sha256": "030b376b77eb77c0ea042dfb0d9b292050355435d10c93df0fff9ab7fadf733a"
+    }
+  ]
+}

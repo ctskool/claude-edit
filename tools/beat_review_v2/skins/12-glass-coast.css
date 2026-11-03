@@ -1,0 +1,188 @@
+/* Glass Coast — graphite smoked glass over a dusk sea cliff.
+   Geometry, panel visibility and all media styling belong to the player.
+   Hanken Grotesk / Geist Mono are already loaded by index.html.
+   Backdrop generated with the built-in image tool: a softly defocused
+   brutalist concrete sea-cliff house at dusk, pine, pink-grey sky and
+   breaking waves; no people, text, logos or interface. */
+:root[data-theme] {
+  --bg: #2d3135;
+  --panel: #3a3f43;
+  --ink: #f7f7f3;
+  --mute: #dde0e1;
+  --mute2: var(--mute);
+  --line: rgb(240 246 249 / 24%);
+  --on: #111518;
+  --accent: #ffb296;
+  --bad: #ffb296;
+  --warn: var(--mute);
+  --split: rgb(240 246 249 / 6%);
+  --graphic: rgb(240 246 249 / 10%);
+  --face: rgb(240 246 249 / 14%);
+  --body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: var(--body);
+  --mono: "Geist Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --coast-glass: rgb(47 51 55 / 90%);
+  --coast-selected: rgb(13 17 21 / 24%);
+  --coast-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='%23fff' opacity='.025' filter='url(%23n)' d='M0 0h160v160H0z'/%3E%3C/svg%3E");
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg) url("/skins/12-glass-coast-bg.png") center / cover fixed no-repeat;
+  color: var(--ink);
+  font-family: var(--body);
+}
+.app { padding: 12px; gap: 8px; min-width: 0 }
+
+/* Texture is a panel background, never a layer above the picture.
+   The 90% graphite floor keeps text above 4.5:1 even over white,
+   including the highlight, grain and brightest control/chip fills. */
+header, .stage, #beats, .rail, .dock, dialog {
+  background-color: var(--coast-glass);
+  background-image: var(--coast-grain), linear-gradient(135deg, rgb(240 246 249 / 3%), transparent 65%);
+  border: 1px solid var(--line);
+  border-radius: 16px !important;
+  box-shadow: inset 0 1px 0 rgb(245 249 252 / 8%), 0 8px 26px rgb(8 13 18 / 12%);
+  -webkit-backdrop-filter: blur(22px) saturate(.75);
+  backdrop-filter: blur(22px) saturate(.75);
+}
+header { border-bottom-style: solid }
+.stage { padding-right: 16px }
+#beats, .rail { scrollbar-width: thin; scrollbar-color: #a6afb5 transparent }
+h1 { font-family: var(--display); font-weight: 600; letter-spacing: .01em }
+h2 { font: 600 13px/1.2 var(--display); letter-spacing: .015em }
+h2 span { color: var(--mute) }
+.pic, .mute, .quiet, .keys, #saved, #why, #theme, .empty { color: var(--mute) }
+
+/* Solid smoked sticky headings prevent scrolling text showing through. */
+#beats h2, .rail-tabs {
+  background: #3c4145;
+  border-bottom-color: var(--line);
+}
+.rail-tabs { border-bottom-style: solid }
+.rail-tabs button, .tabs button {
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0;
+  color: var(--mute);
+}
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] {
+  border-bottom-color: var(--ink);
+  color: var(--ink);
+}
+
+/* Override the base player's intentionally square controls. */
+button, select, input, textarea { border-radius: 7px !important }
+button {
+  color: var(--ink);
+  background: rgb(240 246 249 / 5%);
+  border-color: var(--line);
+  font-family: var(--display);
+}
+button:hover:not(:disabled) { background-color: rgb(13 17 21 / 18%); border-color: rgb(240 246 249 / 58%) }
+button:disabled { color: var(--mute) }
+button.small, .step button { border-radius: 6px !important }
+button.plain { background: transparent }
+button.primary, #approve.primary {
+  background: #fff;
+  border-color: #fff;
+  color: #111518;
+  border-radius: 999px !important;
+  font-weight: 600;
+}
+#approve.primary:hover:not(:disabled) { background: #e9edef; border-color: #e9edef }
+#approve.primary:disabled { background: #fff; border-color: #fff; color: #5d6265 }
+#theme { background: rgb(240 246 249 / 5%); border-color: var(--line); font-family: var(--display); padding-inline: 8px }
+#theme option { background: var(--bg); color: var(--ink) }
+:focus-visible { outline: 2px solid #f7f7f3; outline-offset: 2px }
+kbd { border-radius: 4px !important; background: rgb(240 246 249 / 5%); color: var(--mute) }
+.pill { border-radius: 4px !important }
+.pill.PASS, .pill.UNVERIFIED, .tag, .tag.ok, .tag.q { color: var(--mute) }
+
+.beat { border-left-color: var(--split) }
+.beat.cur {
+  background: var(--coast-selected);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgb(240 246 249 / 36%);
+}
+.go { background: transparent; border-radius: 7px !important }
+.go:hover:not(:disabled) { background: rgb(13 17 21 / 18%) }
+.go .i, .go .t { color: var(--mute) }
+.beat.cur .i { color: var(--ink) }
+.acts button { background: rgb(240 246 249 / 6%) }
+.sound-row { background: rgb(13 17 21 / 17%); border-radius: 6px }
+.sound-row .sound-go { background: transparent; border-radius: 5px !important }
+.sound-row .sound-go:hover { background: rgb(13 17 21 / 12%) }
+.note.flash { background: var(--coast-selected) }
+#banner, .go-line { background: #3c4145; border-radius: 8px !important }
+#composer textarea, .ask input {
+  background: rgb(13 17 21 / 35%);
+  border-color: rgb(240 246 249 / 58%);
+  color: var(--ink);
+}
+textarea::placeholder, input::placeholder { color: var(--mute); opacity: 1 }
+#sound-btn[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); box-shadow: inset 0 -2px var(--ink) }
+
+/* Navigation and layout chips stay neutral; warm orange is review attention only. */
+.cells { border-radius: 5px !important }
+.cell {
+  border: 1px solid rgb(240 246 249 / 13%);
+  border-radius: 4px;
+  color: var(--ink);
+  background: var(--split);
+}
+.cell[data-layout="full-graphic"] { background: var(--graphic) }
+.cell[data-layout="full-face"] { background: var(--face) }
+.cell.cur { background: rgb(13 17 21 / 30%); outline-color: var(--ink) }
+#head { background: var(--ink); box-shadow: 0 0 0 1px rgb(25 30 34 / 40%) }
+#tip { background: #f7f7f3; color: #252a2e; border-radius: 6px !important }
+.cue-lane { background: rgb(13 17 21 / 17%); border-bottom-style: solid; border-radius: 0 0 5px 5px }
+.cue { background: transparent; border-left-color: var(--mute); border-radius: 0 !important }
+.cue:hover:not(:disabled) { background: rgb(13 17 21 / 20%) }
+.meter i { background: var(--ink) }
+.legend i { border-radius: 2px !important; border: 1px solid rgb(240 246 249 / 22%) }
+dialog { background-color: #2d3135f5 }
+dialog::backdrop { background: rgb(8 13 18 / 64%) }
+
+/* Small warm signals mark changed beats, failures and open review work.
+   A light orange keeps these labels legible directly on the graphite glass. */
+.go .ch, .pill.FAIL, .tag.bad, .job.bad, #saved.bad, #sound-status.bad,
+#changed-line, #go-hint, #go-line, #why[style*="--bad"] {
+  color: var(--bad);
+  border-radius: 4px;
+}
+#changed-line button { color: var(--bad) }
+.cell.ch { box-shadow: inset 0 3px 0 var(--bad) }
+.lane i.bad, .cue i { background: var(--bad); box-shadow: 0 0 0 1px #292e32 }
+#notes:has(#go-line:not([hidden]), .note .when > .tag:first-child ~ button[title^="Take this note back"], .note .when > .tag:first-child ~ button.plain.mono:last-child) #note-count,
+#checks:has(.finding .tag.bad) #check-count,
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"] {
+  color: var(--bad);
+  border-radius: 4px !important;
+}
+
+/* In the two-column player, .rail becomes display:contents. The existing
+   .panels wrapper supplies glass to every tab; keep its visibility rules. */
+@media (max-width: 1099px) {
+  .app { padding: 8px; gap: 8px }
+  .panels {
+    background-color: var(--coast-glass);
+    background-image: var(--coast-grain), linear-gradient(135deg, rgb(240 246 249 / 3%), transparent 65%);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgb(245 249 252 / 8%), 0 8px 26px rgb(8 13 18 / 12%);
+    -webkit-backdrop-filter: blur(22px) saturate(.75);
+    backdrop-filter: blur(22px) saturate(.75);
+  }
+  #beats, .rail { background: transparent; border: 0; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none }
+  .tabs { border-bottom-style: solid }
+}
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) {
+  .app { padding: 6px; gap: 6px }
+}
+@media (forced-colors: active) {
+  .beat.cur, .cell.cur { outline: 1px solid Highlight; outline-offset: -1px }
+  .cell.ch { border-top: 3px solid LinkText }
+  :focus-visible { outline-color: Highlight }
+}

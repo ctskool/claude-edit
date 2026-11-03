@@ -1,0 +1,32 @@
+@import url("/skins/05-carbon.css");
+@import url("https://fonts.googleapis.com/css2?family=Doto:wght@700;800&display=swap");
+
+/* MATRIX — perforated rules and dot-built instrument labels.
+   The transcript and body retain Carbon's Hanken Grotesk. Doto has mono fallback. */
+header, .note, .finding, .round, .result, .sound-row, .rail-tabs, .tabs, .cue-lane { border-bottom-style: dotted }
+.stage { border-right-style: dotted }
+.rail { border-left-style: dotted }
+.dock { border-top-style: dotted }
+.beat { border-left-style: dotted; border-bottom-style: dotted }
+button, select, input, textarea, kbd, dialog, .pill { border-style: dotted }
+.rail-tabs button, .tabs button { border-bottom-style: dotted }
+:focus-visible { outline-style: dotted }
+header .pic, header #saved, h2, h2 span, .go .i, .go .t, #readout,
+.rail-tabs button, .tabs button, #theme, #composer .at, .sound-go .mono {
+  font-family: "Doto", var(--mono); font-weight: 800; font-variant-numeric: tabular-nums;
+}
+.stage { background-image: radial-gradient(circle, #a6a699 1px, transparent 1.25px); background-size: 6px 6px }
+.dock { box-shadow: none; border-top-color: var(--key) }
+.beat { border-left-color: #96968a }
+.beat[data-layout="full-graphic"] { border-left-color: #b7b6a7 }
+.beat[data-layout="full-face"] { border-left-color: #d8d6c3 }
+.beat.cur { box-shadow: none; border-left-color: var(--key); border-bottom-color: var(--key) }
+#head { background: radial-gradient(circle, var(--key) .95px, transparent 1px) center top / 2px 5px repeat-y; box-shadow: none }
+.tl { background: radial-gradient(circle, var(--key) 1px, transparent 1.2px) left 2px / 6px 3px repeat-x }
+.cue { border-left-style: dotted }
+.cell { border-right-style: dotted }
+.cell.cur { outline-style: dotted }
+.cell[data-layout="full-graphic"] { background-image: none }
+.meter i { background: radial-gradient(circle, var(--key) 1px, transparent 1.2px) left center / 4px 3px repeat-x }
+#sound-btn[aria-pressed="true"] { box-shadow: none; border-bottom-style: dotted; border-bottom-color: var(--key) }
+@media (forced-colors: active) { .stage, .tl { background-image: none } #head, .meter i { background: Highlight } }

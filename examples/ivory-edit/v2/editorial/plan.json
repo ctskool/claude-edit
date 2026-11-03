@@ -1,0 +1,6089 @@
+{
+  "project": "1030-2 editorial v2 (Claude renames Max to Max and Ultra: what changed and why the 20x name misled people)",
+  "role": "director plan; builder starts from templates/ivory/build_kit, reads work/beat-fixture/v2/editorial for how a plan becomes code, and reads HOUSE.md and the ivory rule files before this file",
+  "duration": 57.65,
+  "composition_duration": 57.65,
+  "layout_targets": {
+    "note": "none. Rules win over donor targets: switches follow the words. Donor figures stay in REFERENCE-ANALYSIS.md for comparison only",
+    "seam": "hard edge at y960; face_half y960-1920; no fade, no border",
+    "first_frame": "post card up and moving on frame 0, chip on frame 0"
+  },
+  "computed_stats": {
+    "note": "read-outs from this plan, never targets; switching follows what is said",
+    "split_pct": 68.7,
+    "full_graphic_pct": 31.3,
+    "full_face_pct": 0.0,
+    "layout_runs": [
+      [
+        0.0,
+        7.5,
+        "split"
+      ],
+      [
+        7.5,
+        11.5,
+        "full-graphic"
+      ],
+      [
+        11.5,
+        14.567,
+        "split"
+      ],
+      [
+        14.567,
+        18.367,
+        "full-graphic"
+      ],
+      [
+        18.367,
+        27.3,
+        "split"
+      ],
+      [
+        27.3,
+        31.3,
+        "full-graphic"
+      ],
+      [
+        31.3,
+        32.967,
+        "split"
+      ],
+      [
+        32.967,
+        36.617,
+        "full-graphic"
+      ],
+      [
+        36.617,
+        39.95,
+        "split"
+      ],
+      [
+        39.95,
+        42.567,
+        "full-graphic"
+      ],
+      [
+        42.567,
+        57.65,
+        "split"
+      ]
+    ],
+    "layout_switches": 10,
+    "layout_switches_per_30s": 5.2,
+    "min_switch_gap_s": 1.667,
+    "takeovers": 5,
+    "takeover_lengths_s": [
+      4.0,
+      3.8,
+      4.0,
+      3.65,
+      2.617
+    ],
+    "takeover_median_s": 3.8,
+    "takeovers_per_min": 5.2,
+    "longest_split_run_s": 15.083,
+    "split_runs_over_8s": [
+      8.933,
+      15.083
+    ],
+    "longest_face_absence_s": 4.0,
+    "beats": 29,
+    "beat_median_s": 1.933,
+    "beat_p90_s": 2.733,
+    "beat_max_s": 3.0,
+    "beat_min_s": 1.1,
+    "beats_over_1_5s_pct": 75.9,
+    "visible_changes": 72,
+    "visible_change_interval_median_s": 0.693,
+    "visible_change_interval_p90_s": 1.44,
+    "visible_change_interval_max_s": 2.047,
+    "static_band_estimate_s": 40.7,
+    "static_band_estimate_s_per_30s": 21.18,
+    "longest_hold_estimate_s": 1.8,
+    "longest_hold_at_s": 50.3,
+    "holds_over_1_5s": [
+      [
+        47.9,
+        1.6
+      ],
+      [
+        50.3,
+        1.8
+      ],
+      [
+        53.0,
+        1.7
+      ]
+    ],
+    "chips": 81,
+    "chip_words_pct": {
+      "1": 1.2,
+      "2": 51.9,
+      "3": 44.4,
+      "4": 2.5
+    },
+    "chip_dur_median_s": 0.6,
+    "chip_dur_p10_s": 0.333,
+    "chip_dur_p90_s": 1.1,
+    "chip_dur_min_s": 0.233,
+    "accent_pct": 9.9,
+    "widest_chip_px": 884
+  },
+  "globals": {
+    "canvas": "1080x1920, 30 fps preview. Composition 57.65 s = 1730 frames. voice = assets/voice.m4a, all videos muted",
+    "palette": {
+      "ivory_panel": "#EEEEE7",
+      "grid": "STYLE: 40 px cells, 1 px lines rgba(0,0,0,.035), kit's slow drift",
+      "card": "#FFFFFF",
+      "card_border": "#E4E2DA",
+      "ink": "#1F1E1D",
+      "secondary": "#5E5D59",
+      "muted_label": "#8A887F",
+      "clay": "#D97757",
+      "clay_deep": "#C15F3C",
+      "clay_tint": "#F6E3DA",
+      "marker": "rgba(217,119,87,.28)",
+      "dark_panel": "#1F1E1C",
+      "check_green": "#2E9E5B, b14-b16 checks only",
+      "chip_bg": "#1B1D1D",
+      "chip_text": "#F5F4EE",
+      "chip_accent": "#E0907E",
+      "hud_dot_on": "#D97757 clay"
+    },
+    "fonts": "assets/fonts: Newsreader 500 + 500 italic (the clay word), Inter 500/600/700, JetBrains Mono 400/500/700. Kit's @font-face block",
+    "layers": [
+      "bg ivory + drifting grid",
+      "face_half.mp4 y960-1920, object-fit cover, HARD edge, continuous, data-media-start 0, kit's #face-wrap. 1280x1092 file, covers 1080x960, 22 px cropped each side",
+      "scene sections: sc-hook, sc-title, sc-names, sc-week, sc-ultra, sc-q10, sc-codex, sc-q13, sc-list, sc-max20, sc-four, sc-over, sc-table, sc-q23, sc-q24, sc-q25, sc-q26, sc-q27, sc-q28, sc-close",
+      "HUD strip",
+      "caption chip, top layer"
+    ],
+    "scene_windows": [
+      [
+        "#sc-hook",
+        0.0,
+        5.167
+      ],
+      [
+        "#sc-title",
+        5.167,
+        7.5
+      ],
+      [
+        "#sc-names",
+        7.5,
+        11.5
+      ],
+      [
+        "#sc-week",
+        11.5,
+        14.567
+      ],
+      [
+        "#sc-ultra",
+        14.567,
+        18.367
+      ],
+      [
+        "#sc-q10",
+        18.367,
+        21.267
+      ],
+      [
+        "#sc-codex",
+        21.267,
+        24.3
+      ],
+      [
+        "#sc-q13",
+        24.3,
+        27.3
+      ],
+      [
+        "#sc-list",
+        27.3,
+        31.3
+      ],
+      [
+        "#sc-max20",
+        31.3,
+        32.967
+      ],
+      [
+        "#sc-four",
+        32.967,
+        36.617
+      ],
+      [
+        "#sc-over",
+        36.617,
+        39.95
+      ],
+      [
+        "#sc-table",
+        39.95,
+        42.567
+      ],
+      [
+        "#sc-q23",
+        42.567,
+        44.183
+      ],
+      [
+        "#sc-q24",
+        44.183,
+        46.7
+      ],
+      [
+        "#sc-q25",
+        46.7,
+        49.433
+      ],
+      [
+        "#sc-q26",
+        49.433,
+        52.067
+      ],
+      [
+        "#sc-q27",
+        52.067,
+        54.7
+      ],
+      [
+        "#sc-q28",
+        54.7,
+        56.067
+      ],
+      [
+        "#sc-close",
+        56.067,
+        57.65
+      ]
+    ],
+    "card_standard": "STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Capture plates sit inside with r12, padding 18, straight-on, no filter. Light plates only, chosen for ivory; dark stay on file. Split zone x60-1020, y130-760 once the strip is up; takeover zone y130-1330 above the strip slot",
+    "safe_area": "split y120-880, x60-1020; takeover content y130-1330, strip slot y1350-1450, chip y1477-1573",
+    "rects": "rect_css is the plate's CSS px from ASSETS.md; rect_src is the same box in image px, which is what scenes.py plate() takes. box_frame and overlay boxes are frame px at rest",
+    "hud": {
+      "component": "kit power strip, three sockets. style.css only: #strip left 288px, width 505px; #strip-s width 576px (262 + 2x120 + 47 + 27 padding, at .877). #count { display: none; } is already in the project's tools_local/style.css: keep it, and bind HUD rows to plugs and rings, never #count. Label 'THE RENAME'",
+      "positions": {
+        "split_rest": "x288-793, y780-880",
+        "full_graphic": "x288-793, y1350-1450"
+      },
+      "counts": "the three things he recaps at 27.3-31.3, seated where each is first said. No number is printed: #count is hidden, and sockets, plugs and rings show the state. What it counts is an open decision",
+      "rows": [
+        [
+          "strip",
+          5.44
+        ],
+        [
+          "seat0",
+          5.92
+        ],
+        [
+          "seat1",
+          14.16
+        ],
+        [
+          "seat2",
+          16.64
+        ],
+        [
+          "ring2",
+          27.94
+        ],
+        [
+          "ring1",
+          29.3
+        ],
+        [
+          "ring0",
+          30.58
+        ]
+      ],
+      "plugs": [
+        [
+          "logo-claude",
+          "mk"
+        ],
+        [
+          "i-calendar",
+          "ic"
+        ],
+        [
+          "i-slash",
+          "ic"
+        ]
+      ],
+      "logos": [
+        "claude"
+      ]
+    },
+    "caption_positions": {
+      "seam": "chip y912-1008, centred on the composed seam y960. Hair top measured about y1020-1040 on face_half across the clip, gap to chip bottom 12 px or more",
+      "takeover": "chip y1477-1573 (text centre 1525)"
+    },
+    "motion": {
+      "pop": "scale .6 -> 1 back.out(1.7), opacity over the first .1 s, .26 s",
+      "slot_pop": "back.out(2) .35 s",
+      "card_cut_in": "opaque on frame 1, y +33 -> 0, scale .975 -> 1, .11 s power2.out",
+      "slow_push": "s(t)=1+0.0052(t-t_in), below the luma gate, kept for the look",
+      "titles": "fade + scale .9 -> 1 + rise 5 px, .2 s",
+      "marker": "marker: rgba(217,119,87,.28), r6, inside the plate's pin so it travels with the push, scaleX 0 -> 1 from the left, .3 s power2.out",
+      "strike": "clay line, scaleX 0 -> 1 from the left, .3 s",
+      "layout_switch": "hard cut, always",
+      "panel_swap": "hard cut, outgoing scene gone on the incoming scene's first frame",
+      "no": "no blur-heavy effects, glow, shake, whip pans, tilted reads, word slams"
+    },
+    "signature_move": "b14-b16: each recap row lands and its HUD socket rings, so the list reads as built from what the strip has carried since 5.92",
+    "big_type": "each named so Chase can strike it: b18 figure '4x' (number, type by design); serif lines on the face beats b10, b13, b23, b24, b25, b26, b27, b28, exempt under picker.md",
+    "audio": "voice only at this stage. Sound is authored after picture approval",
+    "verified_text_only": "Every figure on screen is a real plate as captured or a facts.json entry: 4x (four_x_is_the_assumption, always labelled, struck from 34.30), 5x and 10x on the real table, $200 on the real card. The HUD prints no counter: #count is hidden in tools_local/style.css, so no HUD number is on screen"
+  },
+  "beats": [
+    {
+      "id": "b01",
+      "start": 0.0,
+      "end": 2.2,
+      "dur": 2.2,
+      "say": "So the Max 20X plan is gone,",
+      "words": [
+        0,
+        6
+      ],
+      "scene": "sc-hook",
+      "anchor": {
+        "word_i": 6,
+        "t": 1.76,
+        "phrase": "gone,",
+        "what": "clay strike draws across 'Max 20x' on the rebuilt post row",
+        "event_id": "b01.e1"
+      },
+      "sub_anchors": [
+        {
+          "word_i": 2,
+          "t": 0.32,
+          "phrase": "Max",
+          "what": "push to the rename rows starts on 'Max 20X'",
+          "event_id": "b01.e2"
+        }
+      ],
+      "layout": "split",
+      "layout_why": "'So the Max 20X plan is gone,' - the hook opens split with the real announcement up on frame 0 while he talks to you",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "post card plate (STYLE Card + plate()), rebuilt @claudeai post, strike line (STYLE Strike / X)",
+      "slots": {
+        "strike": "Max 20x"
+      },
+      "assets": [
+        "assets/posts/claude-post-tight-light.png (open rect CSS 0,0 460x172; push rect CSS 8,104 200x75)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/claude-post-tight-light.png",
+          "rect_css": [
+            0,
+            0,
+            460,
+            172
+          ],
+          "dpr": 2,
+          "rect_src": [
+            0,
+            0,
+            920,
+            344
+          ],
+          "box_frame": [
+            90,
+            286,
+            900,
+            337
+          ],
+          "scale": 1.957,
+          "read_px": "text about 33 px",
+          "state": "open, 0.00-0.32"
+        },
+        {
+          "asset": "assets/posts/claude-post-tight-light.png",
+          "rect_css": [
+            8,
+            104,
+            200,
+            75
+          ],
+          "dpr": 2,
+          "rect_src": [
+            16,
+            208,
+            400,
+            150
+          ],
+          "box_frame": [
+            90,
+            286,
+            900,
+            337
+          ],
+          "scale": 4.5,
+          "read_px": "rows about 76 px",
+          "state": "pushed, from 0.92"
+        }
+      ],
+      "geometry": "Card x72-1008, y268-640, unchanged through b01-b02. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Plate bg #fff. Window fixed at x90-990, y286-623 through b01-b02, so only the pin moves. Rect edges sit in the gutters: top y104 is under the title line (ink ends 94), bottom y179 is above the prices line (ink starts 193.5). Strike box [121.5, 505.5, 297.0, 6.0], clay #D97757.",
+      "transition_in": "none, opening frame",
+      "actions": [
+        {
+          "t": 0.0,
+          "what": "FRAME 0 composed: ivory + grid, white card, post plate on its whole rect (header, title, both rename rows), plate slow push 1.00 -> 1.01 already running to 0.32, chip lit",
+          "enter": 1,
+          "dur": 0.32,
+          "gate": false,
+          "event_id": "b01.e3"
+        },
+        {
+          "t": 0.32,
+          "what": "on 'Max': one straight push, .6 s power2.inOut, pin only, window fixed: rect CSS 0,0 460x172 -> 8,104 200x75. Title line and prices line leave the window through their gutters, no cut glyph at rest",
+          "enter": 1,
+          "dur": 0.6,
+          "gate": true,
+          "word_i": 2,
+          "event_id": "b01.e4"
+        },
+        {
+          "t": 1.76,
+          "what": "on 'gone,': clay strike, 6 px, scaleX 0 -> 1 from the left, .3 s, across 'Max 20x' on the second row only",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 6,
+          "event_id": "b01.e5"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              0,
+              1
+            ],
+            "text": "SO THE",
+            "accent": false,
+            "on": 0.0,
+            "off": 0.267
+          },
+          {
+            "words": [
+              2,
+              3
+            ],
+            "text": "MAX 20X",
+            "accent": true,
+            "on": 0.267,
+            "off": 1.133
+          },
+          {
+            "words": [
+              4,
+              5,
+              6
+            ],
+            "text": "PLAN IS GONE",
+            "accent": false,
+            "on": 1.133,
+            "off": 2.2
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "holds into b02",
+      "motion_carrier": "push, then the strike",
+      "hud": "not up yet",
+      "ref_shot": "ref-B @0.0-2.0 (subject on frame 0)",
+      "why": "Hook choice 1, visual hook: 'the Max 20X plan' names a specific plan and the post that retires it exists, so the card fills the panel. Top row, so no lower row applies; a proof hook or lockup would come after it. Form: rebuilt card (post_card.py), not his dark recording, because it reads better on ivory and is the same text.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "rename"
+      ],
+      "overlays": {
+        "strike": [
+          121.5,
+          505.5,
+          297.0,
+          6.0
+        ]
+      },
+      "beat_note": "Frame 0 shows the subject, no empty panel. Text on the card is verbatim; the strike is our annotation on the rebuilt card, not a change to the post."
+    },
+    {
+      "id": "b02",
+      "start": 2.2,
+      "end": 5.167,
+      "dur": 2.967,
+      "say": "and it has been replaced by the Ultra plan.",
+      "words": [
+        7,
+        15
+      ],
+      "scene": "sc-hook",
+      "anchor": {
+        "word_i": 14,
+        "t": 4.24,
+        "phrase": "Ultra",
+        "what": "'Ultra' on the same post row lights in clay tint",
+        "event_id": "b02.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "'replaced by the Ultra plan.' - he explains the row already on screen, so the split holds",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "same post card continues: arrow tint, 'Ultra' tint",
+      "slots": {
+        "lit": "Ultra"
+      },
+      "assets": [
+        "assets/posts/claude-post-tight-light.png (push rect as b01)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/claude-post-tight-light.png",
+          "rect_css": [
+            8,
+            104,
+            200,
+            75
+          ],
+          "dpr": 2,
+          "rect_src": [
+            16,
+            208,
+            400,
+            150
+          ],
+          "box_frame": [
+            90,
+            286,
+            900,
+            337
+          ],
+          "scale": 4.5,
+          "read_px": "rows about 76 px",
+          "state": "pushed, held"
+        }
+      ],
+      "geometry": "As b01 pushed. marker: rgba(217,119,87,.28), r6, inside the plate's pin so it travels with the push, scaleX 0 -> 1 from the left, .3 s power2.out. Arrow box [427.5, 470.2, 69.8, 76.4], Ultra box [513.0, 465.7, 168.8, 85.4].",
+      "transition_in": "same card continues, no cut",
+      "actions": [
+        {
+          "t": 2.2,
+          "what": "same card holds, no cut; plate slow push resumes, s(t)=1+0.0052(t-2.2), origin 50% 50%, rect edges stay in their gutters",
+          "enter": 0,
+          "dur": 2.967,
+          "gate": false,
+          "event_id": "b02.e2"
+        },
+        {
+          "t": 2.8,
+          "what": "on 'replaced': clay tint draws over the arrow on the 'Max 20x → Ultra' row",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 11,
+          "event_id": "b02.e3"
+        },
+        {
+          "t": 4.24,
+          "what": "on 'Ultra': clay tint draws over the word 'Ultra' on the same row and holds to the cut",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 14,
+          "event_id": "b02.e4"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              7,
+              8,
+              9
+            ],
+            "text": "AND IT HAS",
+            "accent": false,
+            "on": 2.2,
+            "off": 2.6
+          },
+          {
+            "words": [
+              10,
+              11
+            ],
+            "text": "BEEN REPLACED",
+            "accent": false,
+            "on": 2.6,
+            "off": 3.7
+          },
+          {
+            "words": [
+              12,
+              13
+            ],
+            "text": "BY THE",
+            "accent": false,
+            "on": 3.7,
+            "off": 4.2
+          },
+          {
+            "words": [
+              14,
+              15
+            ],
+            "text": "ULTRA PLAN",
+            "accent": true,
+            "on": 4.2,
+            "off": 5.167
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "card swap on 'So' 5.167, same layout, hard cut",
+      "motion_carrier": "two tints on their words, slow push",
+      "hud": "not up yet",
+      "ref_shot": "ref-A @10.0-12.0 (card holds, next element joins)",
+      "why": "'the Ultra plan' names the same post row, so the hook card keeps going instead of a new device. Form: rebuilt card.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "rename"
+      ],
+      "overlays": {
+        "arrow": [
+          427.5,
+          470.2,
+          69.8,
+          76.4
+        ],
+        "ultra": [
+          513.0,
+          465.7,
+          168.8,
+          85.4
+        ]
+      }
+    },
+    {
+      "id": "b03",
+      "start": 5.167,
+      "end": 7.5,
+      "dur": 2.333,
+      "say": "So Claude just renamed both of their plans.",
+      "words": [
+        16,
+        23
+      ],
+      "scene": "sc-title",
+      "anchor": {
+        "word_i": 19,
+        "t": 5.92,
+        "phrase": "renamed",
+        "what": "blue sweep starts 6.13, real time",
+        "event_id": "b03.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "'So Claude just renamed both of their plans.' - he points at the post title he is selecting on screen",
+      "visual_type": "own_clip",
+      "treatment": "animate",
+      "signature": false,
+      "component": "plateCard with his clip, vplate stills for the held first frame, HUD strip pop-in",
+      "slots": {},
+      "assets": [
+        "assets/clips/title-highlight.mp4 data-start 5.30, data-media-start 0, muted, 960x460"
+      ],
+      "crops": [
+        {
+          "asset": "assets/clips/title-highlight.mp4",
+          "rect_css": [
+            0,
+            0,
+            960,
+            460
+          ],
+          "dpr": 1,
+          "rect_src": [
+            0,
+            0,
+            960,
+            460
+          ],
+          "box_frame": [
+            90,
+            230,
+            900,
+            431
+          ],
+          "scale": 0.938,
+          "read_px": "post text about 43 px, 1x, no join in range"
+        }
+      ],
+      "geometry": "Card x72-1008, y212-679, padding 18. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Plate r12, dark, as filmed. Strip at rest x288-793, y780-880. Held first frame: ffmpeg -i assets/clips/title-highlight.mp4 -frames:v 1 -update 1 assets/held/title-highlight-first.png, passed as vplate stills.",
+      "transition_in": "card swap inside split on the clause start 'So', hard cut, no layout switch",
+      "actions": [
+        {
+          "t": 5.167,
+          "what": "hook card gone on this frame; white card up opaque (cut in: y +33 -> 0, scale .975 -> 1, .11 s), his recording's first frame held as a still",
+          "enter": 1,
+          "dur": 0.2,
+          "gate": true,
+          "event_id": "b03.e2"
+        },
+        {
+          "t": 5.3,
+          "what": "clip starts at 1x, data-start 5.30, data-media-start 0, data-duration 2.2, local = composition - 5.30, ends on the cut",
+          "enter": 0,
+          "dur": 2.2,
+          "gate": false,
+          "event_id": "b03.e3"
+        },
+        {
+          "t": 5.44,
+          "what": "on 'Claude': HUD strip pops in at rest, sockets empty (STYLE HUD, back.out(1.7) .4 s)",
+          "enter": 1,
+          "dur": 0.4,
+          "gate": true,
+          "word_i": 17,
+          "hud_row": "strip",
+          "event_id": "b03.e4"
+        },
+        {
+          "t": 5.92,
+          "what": "on 'renamed': first plug seats (the name)",
+          "enter": 1,
+          "dur": 0.35,
+          "gate": true,
+          "word_i": 19,
+          "hud_row": "seat0",
+          "event_id": "b03.e5"
+        },
+        {
+          "t": 6.13,
+          "what": "his real blue sweep across the title line runs 6.13-6.33, frame-stepped on the clip (local frames 25-31)",
+          "enter": 0,
+          "dur": 0.2,
+          "gate": true,
+          "event_id": "b03.e6"
+        },
+        {
+          "t": 6.9,
+          "what": "his selection clears on 'both' (local frame 48), as filmed",
+          "enter": 0,
+          "dur": 0.1,
+          "gate": true,
+          "event_id": "b03.e7"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              16,
+              17
+            ],
+            "text": "SO CLAUDE",
+            "accent": false,
+            "on": 5.167,
+            "off": 5.7
+          },
+          {
+            "words": [
+              18,
+              19
+            ],
+            "text": "JUST RENAMED",
+            "accent": false,
+            "on": 5.7,
+            "off": 6.667
+          },
+          {
+            "words": [
+              20,
+              21
+            ],
+            "text": "BOTH OF",
+            "accent": false,
+            "on": 6.667,
+            "off": 7.0
+          },
+          {
+            "words": [
+              22,
+              23
+            ],
+            "text": "THEIR PLANS",
+            "accent": false,
+            "on": 7.0,
+            "off": 7.5
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "hard cut to full-graphic on 'There's'",
+      "motion_carrier": "his own sweep at 1x, strip pop, first plug",
+      "hud": "at rest, pops in 5.44, seat 1 on 5.92",
+      "ref_shot": "ref-B @24.0-26.0 (real page card in split), ref-B @0.0-2.0 (power strip)",
+      "why": "'renamed both of their plans' describes what he highlights on screen as he says it. real_shot does not fit first: the line names no post or page, it describes the rename he is marking. Form: real capture, his own recording. Local time = composition - 5.30, first frame held 0.133 s, 1x, no join in range.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: clips/title-highlight.mp4 on screen 5.167-7.500 is muted screen footage under narration (video stream only, checked with ffprobe).",
+      "fact_keys": [
+        "rename"
+      ],
+      "beat_note": "Dark X inside the white ivory card. Optional trim in CUT-REPORT.md, kept by his 'build as is'. ASSETS.md says blue at .95-1.70 local. Frame-stepped: .83-1.60, as beats.json says."
+    },
+    {
+      "id": "b04",
+      "start": 7.5,
+      "end": 9.9,
+      "dur": 2.4,
+      "say": "There's no longer Max 5X and Max 20X.",
+      "words": [
+        24,
+        31
+      ],
+      "scene": "sc-names",
+      "anchor": {
+        "word_i": 31,
+        "t": 9.2,
+        "phrase": "20X.",
+        "what": "'Max 20x' takes its strike, the second of the two old names",
+        "event_id": "b04.e1"
+      },
+      "sub_anchors": [
+        {
+          "word_i": 28,
+          "t": 8.32,
+          "phrase": "5X",
+          "what": "'Max 5x' takes its strike",
+          "event_id": "b04.e2"
+        }
+      ],
+      "layout": "full-graphic",
+      "layout_why": "'There's no longer Max 5X and Max 20X.' - before-after of the plan names; cut on the sentence start 'There's' 7.52",
+      "visual_type": "compare",
+      "treatment": "animate",
+      "signature": false,
+      "component": "compare before-state: two built pills (.pillw) + strike lines carried from b01",
+      "slots": {
+        "before": [
+          "Max 5x",
+          "Max 20x"
+        ]
+      },
+      "assets": [],
+      "crops": [],
+      "geometry": "Pill A x190-890, y530-690; pill B x190-890, y750-910. r22, white, 2 px #E4E2DA, Inter 600 84 px ink, words verbatim from the post. Strike: text width + 24 px, centred on the text, inside each pill so it travels with it.",
+      "transition_in": "hard cut, layout switch at 7.5 (split -> full-graphic) on sentence start 'There's'; chip breaks on the same frame",
+      "actions": [
+        {
+          "t": 7.5,
+          "what": "hard cut to full-graphic: both pills up and opaque on the first frame, stacked and big, no strike yet; face hidden, chip drops, strip goes to its takeover slot",
+          "enter": 1,
+          "dur": 0.05,
+          "gate": true,
+          "event_id": "b04.e3"
+        },
+        {
+          "t": 8.32,
+          "what": "on '5X': 6 px clay strike draws across 'Max 5x', .3 s",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 28,
+          "event_id": "b04.e4"
+        },
+        {
+          "t": 9.2,
+          "what": "on '20X.': 6 px clay strike draws across 'Max 20x', .3 s",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 31,
+          "event_id": "b04.e5"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              24,
+              25,
+              26
+            ],
+            "text": "THERE'S NO LONGER",
+            "accent": false,
+            "on": 7.5,
+            "off": 7.933
+          },
+          {
+            "words": [
+              27,
+              28
+            ],
+            "text": "MAX 5X",
+            "accent": false,
+            "on": 7.933,
+            "off": 8.833
+          },
+          {
+            "words": [
+              29,
+              30,
+              31
+            ],
+            "text": "AND MAX 20X",
+            "accent": true,
+            "on": 8.833,
+            "off": 9.9
+          }
+        ],
+        "position": "full-graphic: chip y1477-1573 (text centre 1525)"
+      },
+      "exit": "pills lift at 9.9, same takeover",
+      "motion_carrier": "two strikes on their words",
+      "hud": "takeover slot",
+      "ref_shot": "ref-B @15.0-16.0 (clay X strike over a card)",
+      "why": "'no longer Max 5X and Max 20X' opens a before-after, and a comparison takes its own row even with product names in it, using the real post wording. Form: built pills, words verbatim from the post.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over built pills, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "rename"
+      ],
+      "beat_note": "Opens the 4.0 s takeover 7.50-11.50. The strike device carries over from b01."
+    },
+    {
+      "id": "b05",
+      "start": 9.9,
+      "end": 11.5,
+      "dur": 1.6,
+      "say": "It's just Max and Ultra.",
+      "words": [
+        32,
+        36
+      ],
+      "scene": "sc-names",
+      "anchor": {
+        "word_i": 36,
+        "t": 11.12,
+        "phrase": "Ultra.",
+        "what": "the real Ultra card from the post art is settled on 'Ultra', its arrival started on 'and' 10.80",
+        "event_id": "b05.e1",
+        "lead_frames": 10
+      },
+      "sub_anchors": [],
+      "layout": "full-graphic",
+      "layout_why": "'It's just Max and Ultra.' - the after state of the same before-after, so the takeover holds",
+      "visual_type": "compare",
+      "treatment": "animate",
+      "signature": false,
+      "component": "compare after-state: pill row + the post's own art in a white card, two windows of one image",
+      "slots": {
+        "after": [
+          "Max",
+          "Ultra"
+        ]
+      },
+      "assets": [
+        "assets/posts/post-hero-cards.png (image px rect 1198,47 to 3030,1175)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/post-hero-cards.png",
+          "rect_css": [
+            1198,
+            47,
+            692,
+            1128
+          ],
+          "dpr": 1,
+          "rect_src": [
+            1198,
+            47,
+            692,
+            1128
+          ],
+          "box_frame": [
+            90,
+            523,
+            340,
+            554
+          ],
+          "scale": 0.491,
+          "read_px": "names about 62 px cap",
+          "state": "Max window, r 12 0 0 12"
+        },
+        {
+          "asset": "assets/posts/post-hero-cards.png",
+          "rect_css": [
+            1888,
+            47,
+            1142,
+            1128
+          ],
+          "dpr": 1,
+          "rect_src": [
+            1888,
+            47,
+            1142,
+            1128
+          ],
+          "box_frame": [
+            429,
+            523,
+            561,
+            554
+          ],
+          "scale": 0.491,
+          "read_px": "names about 62 px cap",
+          "state": "Ultra window, r 0 12 12 0"
+        }
+      ],
+      "geometry": "Card x72-1008, y505-1095. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Both windows hold the source's own geometry, so at rest they are one image with Ultra over Max's edge. Plate bg #fff, thin green margin is the art's own and is kept small, never a panel. Pill row y363-467.",
+      "transition_in": "same takeover continues, no cut",
+      "actions": [
+        {
+          "t": 9.9,
+          "what": "pills shrink to .65 and lift to one row, .24 s power2.out, strikes kept: A centre (300,415), B centre (780,415)",
+          "enter": 0,
+          "dur": 0.24,
+          "gate": true,
+          "event_id": "b05.e2"
+        },
+        {
+          "t": 10.16,
+          "what": "on 'Max': white art card and the real Max card land together, card opaque on its first frame (cut in)",
+          "enter": 1,
+          "dur": 0.25,
+          "gate": true,
+          "word_i": 34,
+          "event_id": "b05.e3"
+        },
+        {
+          "t": 10.8,
+          "what": "on 'and': real Ultra card starts its arrival, y +24 -> 0, opacity 0 -> 1, .55 s power3.out, over Max's right edge",
+          "enter": 1,
+          "dur": 0.55,
+          "gate": true,
+          "word_i": 35,
+          "event_id": "b05.e4"
+        },
+        {
+          "t": 11.12,
+          "what": "on 'Ultra.': Ultra card settled, about 93% through the arrival, and fully flat at 11.35; holds to the cut",
+          "enter": 0,
+          "dur": 0.23,
+          "gate": true,
+          "word_i": 36,
+          "lead_frames": 10,
+          "event_id": "b05.e5"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              32,
+              33,
+              34
+            ],
+            "text": "IT'S JUST MAX",
+            "accent": false,
+            "on": 9.9,
+            "off": 10.733
+          },
+          {
+            "words": [
+              35,
+              36
+            ],
+            "text": "AND ULTRA",
+            "accent": true,
+            "on": 10.733,
+            "off": 11.5
+          }
+        ],
+        "position": "full-graphic: chip y1477-1573 (text centre 1525)"
+      },
+      "exit": "hard cut to split at 11.5, sentence boundary",
+      "motion_carrier": "pill lift, two real cards landing",
+      "hud": "takeover slot",
+      "ref_shot": "ref-B @26.8-29.3 (takeover)",
+      "why": "'just Max and Ultra' is the pivot of the same before-after, so it develops b04 and keeps its template. Form: real artifact, the post's own art, names only, no green field as a panel.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the post's art, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "rename"
+      ],
+      "beat_note": "Takeover ends 11.50, 0.42 s before 'Now' 11.92, to stay inside Chase's 2-4 s. It is a sentence boundary, so it is on his spot; the 0-0.08 s lead yields to the 4 s cap. The Ultra card starts at 10.80 because a start on 11.12 left 0.38 s, under STYLE's 0.55 s arrival: that arrival is about 93% done by 11.12 (power3.out), fully flat at 11.35."
+    },
+    {
+      "id": "b06",
+      "start": 11.5,
+      "end": 13.4,
+      "dur": 1.9,
+      "say": "Now, the actual limits",
+      "words": [
+        37,
+        40
+      ],
+      "scene": "sc-week",
+      "anchor": {
+        "word_i": 40,
+        "t": 12.64,
+        "phrase": "limits",
+        "what": "the post card pushes straight to the weekly line",
+        "event_id": "b06.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "'Now, the actual limits' - setup line, back to split as he explains; sentence boundary after 'Ultra.'",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "same post card rebuilt on its lower strip (STYLE Card + plate())",
+      "slots": {
+        "line": "Weekly limits remain unchanged."
+      },
+      "assets": [
+        "assets/posts/claude-post-tight-light.png (open rect CSS 0,380 460x70; push rect CSS 8,388 257x39.1)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/claude-post-tight-light.png",
+          "rect_css": [
+            0,
+            380,
+            460,
+            70
+          ],
+          "dpr": 2,
+          "rect_src": [
+            0,
+            760,
+            920,
+            140
+          ],
+          "box_frame": [
+            90,
+            377,
+            900,
+            137
+          ],
+          "scale": 1.957,
+          "read_px": "text about 33 px",
+          "state": "open"
+        },
+        {
+          "asset": "assets/posts/claude-post-tight-light.png",
+          "rect_css": [
+            8,
+            388,
+            257,
+            39.1
+          ],
+          "dpr": 2,
+          "rect_src": [
+            16,
+            776,
+            514,
+            78.2
+          ],
+          "box_frame": [
+            90,
+            377,
+            900,
+            137
+          ],
+          "scale": 3.502,
+          "read_px": "sentence about 60 px",
+          "state": "pushed, from 13.14"
+        }
+      ],
+      "geometry": "Card x72-1008, y359-532, padding 18, unchanged through b06-b07. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Right edge x265 sits in the gap between 'unchanged.' (ink ends 262.5) and 'View' (ink starts 268). Window fixed at x90-990, y377-514. Rect bottom y427.1 is above the link line (ink starts 429), top y388 is under the line above (ink ends 375).",
+      "transition_in": "hard cut, layout switch at 11.5 (full-graphic -> split); chip breaks; seam empty to 11.867",
+      "actions": [
+        {
+          "t": 11.5,
+          "what": "hard cut back to split: post card returns on its lower strip, rect CSS 0,380 460x70, the weekly line and the link line, nothing above y380 in frame",
+          "enter": 1,
+          "dur": 0.2,
+          "gate": true,
+          "event_id": "b06.e2"
+        },
+        {
+          "t": 12.64,
+          "what": "on 'limits': one straight push, .5 s power2.inOut, pin only, window fixed: rect CSS 0,380 460x70 -> 8,388 257x39.1, the sentence whole",
+          "enter": 1,
+          "dur": 0.5,
+          "gate": true,
+          "word_i": 40,
+          "event_id": "b06.e3"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              37,
+              38
+            ],
+            "text": "NOW THE",
+            "accent": false,
+            "on": 11.867,
+            "off": 12.2
+          },
+          {
+            "words": [
+              39,
+              40
+            ],
+            "text": "ACTUAL LIMITS",
+            "accent": false,
+            "on": 12.2,
+            "off": 13.4
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "holds into b07",
+      "motion_carrier": "one straight push",
+      "hud": "at rest",
+      "ref_shot": "ref-B @15.0-16.0 (push on a real page)",
+      "why": "'the actual limits' points at the post's limit line, a specific post that exists. Form: rebuilt card. The same card returns because a later visual of something shown is built from it.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "weekly_unchanged"
+      ],
+      "beat_note": "The 5-hour line above y 380 stays out of frame: it is the news b09 reveals at 15.67. The push rect is 257 wide, not the checker's 263: a right edge at x 271 would cut the 'V' of 'View' at x 268."
+    },
+    {
+      "id": "b07",
+      "start": 13.4,
+      "end": 14.567,
+      "dur": 1.167,
+      "say": "per week haven't changed at all,",
+      "words": [
+        41,
+        46
+      ],
+      "scene": "sc-week",
+      "anchor": {
+        "word_i": 44,
+        "t": 14.16,
+        "phrase": "changed",
+        "what": "marker highlight draws over 'Weekly limits remain unchanged.'",
+        "event_id": "b07.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "'per week haven't changed at all,' - explains the line on screen, the split holds",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "same card, marker over the post's own sentence, HUD seat",
+      "slots": {
+        "lit": "Weekly limits remain unchanged."
+      },
+      "assets": [
+        "assets/posts/claude-post-tight-light.png (holds rect CSS 8,388 257x39.1)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/claude-post-tight-light.png",
+          "rect_css": [
+            8,
+            388,
+            257,
+            39.1
+          ],
+          "dpr": 2,
+          "rect_src": [
+            16,
+            776,
+            514,
+            78.2
+          ],
+          "box_frame": [
+            90,
+            377,
+            900,
+            137
+          ],
+          "scale": 3.502,
+          "read_px": "sentence about 60 px",
+          "state": "pushed, held"
+        }
+      ],
+      "geometry": "As b06 pushed. marker: rgba(217,119,87,.28), r6, inside the plate's pin so it travels with the push, scaleX 0 -> 1 from the left, .3 s power2.out. Marker box [112.8, 429.6, 873.7, 73.6].",
+      "transition_in": "same card continues, no cut",
+      "actions": [
+        {
+          "t": 13.4,
+          "what": "same card holds on the pushed rect, sentence whole and flat",
+          "enter": 0,
+          "dur": 1.16,
+          "gate": false,
+          "event_id": "b07.e2"
+        },
+        {
+          "t": 14.16,
+          "what": "on 'changed': clay marker draws across 'Weekly limits remain unchanged.', .3 s",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 44,
+          "event_id": "b07.e3"
+        },
+        {
+          "t": 14.16,
+          "what": "second plug seats on the same word (the weekly limit)",
+          "enter": 1,
+          "dur": 0.35,
+          "gate": false,
+          "word_i": 44,
+          "hud_row": "seat1",
+          "event_id": "b07.e4"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              41,
+              42,
+              43
+            ],
+            "text": "PER WEEK HAVEN'T",
+            "accent": false,
+            "on": 13.4,
+            "off": 14.1
+          },
+          {
+            "words": [
+              44,
+              45,
+              46
+            ],
+            "text": "CHANGED AT ALL",
+            "accent": false,
+            "on": 14.1,
+            "off": 14.567
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "hard cut to full-graphic on 'but'",
+      "motion_carrier": "marker, plug",
+      "hud": "at rest, seat 2 on 14.16",
+      "ref_shot": "ref-A @16.0-18.0 (row lights in a card)",
+      "why": "'haven't changed at all' is the post's own line 'Weekly limits remain unchanged.', quoted verbatim in the shape it lives in. Form: rebuilt card.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "weekly_unchanged"
+      ],
+      "overlays": {
+        "marker": [
+          112.8,
+          429.6,
+          873.7,
+          73.6
+        ]
+      },
+      "beat_note": "No 10x here: the weekly figure is held for b22 so the payoff stays in order."
+    },
+    {
+      "id": "b08",
+      "start": 14.567,
+      "end": 15.667,
+      "dur": 1.1,
+      "say": "but with the Ultra plan,",
+      "words": [
+        47,
+        51
+      ],
+      "scene": "sc-ultra",
+      "anchor": {
+        "word_i": 50,
+        "t": 15.04,
+        "phrase": "Ultra",
+        "what": "'Ultra' on the real plan card is the name he says",
+        "event_id": "b08.e1"
+      },
+      "sub_anchors": [],
+      "layout": "full-graphic",
+      "layout_why": "'but with the Ultra plan,' - the big reveal of the video needs the whole frame; cut on 'but', where the sentence turns",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "plateCard, one real plan card zoomed, drawn clay outline",
+      "slots": {
+        "lit": "Ultra"
+      },
+      "assets": [
+        "assets/shots/pricing-plans-light.png (rect CSS x349-653, y40-300)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/shots/pricing-plans-light.png",
+          "rect_css": [
+            349,
+            40,
+            304,
+            260
+          ],
+          "dpr": 4,
+          "rect_src": [
+            1396,
+            160,
+            1216,
+            1040
+          ],
+          "box_frame": [
+            90,
+            345,
+            900,
+            770
+          ],
+          "scale": 2.961,
+          "read_px": "body text about 50 px",
+          "state": "centred, b08"
+        }
+      ],
+      "geometry": "Card x72-1008, y327-1133, padding 18. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Rect sits inside the page card's borders (x345.8-346.8, x654.8-655.8), so no hairline. Outline box [167.0, 638.2, 251.6, 97.7] (.ol.bare or drawn()).",
+      "transition_in": "hard cut, layout switch at 14.567 (split -> full-graphic) on 'but'; chip breaks; off-spot read flagged in beats.json",
+      "actions": [
+        {
+          "t": 14.567,
+          "what": "hard cut to full-graphic: real Ultra plan card up and opaque, big, centred, whole top part",
+          "enter": 1,
+          "dur": 0.05,
+          "gate": true,
+          "event_id": "b08.e2"
+        },
+        {
+          "t": 15.04,
+          "what": "on 'Ultra': 3 px clay outline draws round the name, .3 s",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 50,
+          "event_id": "b08.e3"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              47,
+              48,
+              49
+            ],
+            "text": "BUT WITH THE",
+            "accent": false,
+            "on": 14.567,
+            "off": 15.0
+          },
+          {
+            "words": [
+              50,
+              51
+            ],
+            "text": "ULTRA PLAN",
+            "accent": false,
+            "on": 15.0,
+            "off": 15.667
+          }
+        ],
+        "position": "full-graphic: chip y1477-1573 (text centre 1525)"
+      },
+      "exit": "card lifts at 16.0, same takeover",
+      "motion_carrier": "outline draw",
+      "hud": "takeover slot",
+      "ref_shot": "ref-B @40.5-44.6 (real page takeover)",
+      "why": "'the Ultra plan' names a specific plan with a real page. Top row. Form: real capture of claude.com/pricing in the white card, zoomed to one card at about 2.9x so body text reads about 46 px.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the pricing capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "prices"
+      ],
+      "overlays": {
+        "name_outline": [
+          167.0,
+          638.2,
+          251.6,
+          97.7
+        ]
+      },
+      "beat_note": "OFF-SPOT read, flagged: 'but' is a clause boundary, picked as the word the line turns on so 'but with the Ultra plan' stays one phrase."
+    },
+    {
+      "id": "b09",
+      "start": 15.667,
+      "end": 18.367,
+      "dur": 2.7,
+      "say": "there is no more five-hour limits, which is great.",
+      "words": [
+        52,
+        60
+      ],
+      "scene": "sc-ultra",
+      "anchor": {
+        "word_i": 54,
+        "t": 16.0,
+        "phrase": "no",
+        "what": "'No 5-hour limit' row lands, footnote follows on 'five-hour' 16.64",
+        "event_id": "b09.e1"
+      },
+      "sub_anchors": [],
+      "layout": "full-graphic",
+      "layout_why": "'there is no more five-hour limits,' - the news of the video, proof with its scope needs the whole frame, so the takeover holds",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "plateCard stack: real row + real footnote, tint on the scope words",
+      "slots": {
+        "lit": "verified accounts"
+      },
+      "assets": [
+        "assets/shots/pricing-plans-light.png (rect CSS x349-653, y430-497)",
+        "assets/shots/pricing-footnote-light.png (whole plate)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/shots/pricing-plans-light.png",
+          "rect_css": [
+            349,
+            40,
+            304,
+            260
+          ],
+          "dpr": 4,
+          "rect_src": [
+            1396,
+            160,
+            1216,
+            1040
+          ],
+          "box_frame": [
+            90,
+            148,
+            900,
+            770
+          ],
+          "scale": 2.961,
+          "read_px": "body text about 50 px",
+          "state": "lifted, from 16.3"
+        },
+        {
+          "asset": "assets/shots/pricing-plans-light.png",
+          "rect_css": [
+            349,
+            430,
+            304,
+            67
+          ],
+          "dpr": 4,
+          "rect_src": [
+            1396,
+            1720,
+            1216,
+            268
+          ],
+          "box_frame": [
+            90,
+            974,
+            900,
+            198
+          ],
+          "scale": 2.961,
+          "read_px": "row about 50 px"
+        },
+        {
+          "asset": "assets/shots/pricing-footnote-light.png",
+          "rect_css": [
+            0,
+            0,
+            294,
+            27
+          ],
+          "dpr": 4,
+          "rect_src": [
+            0,
+            0,
+            1176,
+            108
+          ],
+          "box_frame": [
+            90,
+            1222,
+            900,
+            83
+          ],
+          "scale": 3.061,
+          "read_px": "about 44 px"
+        }
+      ],
+      "geometry": "Card 1 x72-1008, y130-936. Card 2 x72-1008, y956-1190. Card 3 x72-1008, y1204-1323. marker: rgba(217,119,87,.28), r6, inside the plate's pin so it travels with the push, scaleX 0 -> 1 from the left, .3 s power2.out. Tint box [552.2, 1243.5, 381.1, 52.3]. All above the strip slot y1350. Crop bottom y497 is the gutter above the 10x row, which stays out until b22.",
+      "transition_in": "same takeover continues, no cut",
+      "actions": [
+        {
+          "t": 16.0,
+          "what": "on 'no': Ultra card lifts 197 px to y130, .3 s power3.out; second white card lands below with the real row 'No 5-hour limit‡', y +40 -> 0, .3 s",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 54,
+          "event_id": "b09.e2"
+        },
+        {
+          "t": 16.64,
+          "what": "on 'five-hour': real footnote lands in its own white card, '‡No 5-hour limit for verified accounts.'; third plug seats",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 56,
+          "hud_row": "seat2",
+          "event_id": "b09.e3"
+        },
+        {
+          "t": 17.2,
+          "what": "on 'limits,': clay tint draws over 'verified accounts', .3 s",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 57,
+          "event_id": "b09.e4"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              52,
+              53
+            ],
+            "text": "THERE IS",
+            "accent": false,
+            "on": 15.667,
+            "off": 15.933
+          },
+          {
+            "words": [
+              54,
+              55
+            ],
+            "text": "NO MORE",
+            "accent": false,
+            "on": 15.933,
+            "off": 16.6
+          },
+          {
+            "words": [
+              56,
+              57
+            ],
+            "text": "FIVE-HOUR LIMITS",
+            "accent": false,
+            "on": 16.6,
+            "off": 17.533
+          },
+          {
+            "words": [
+              58,
+              59,
+              60
+            ],
+            "text": "WHICH IS GREAT",
+            "accent": false,
+            "on": 17.533,
+            "off": 18.367
+          }
+        ],
+        "position": "full-graphic: chip y1477-1573 (text centre 1525)"
+      },
+      "exit": "hard cut to split on 'This'",
+      "motion_carrier": "cards landing on words, tint, plug",
+      "hud": "takeover slot, seat 3 on 16.64",
+      "ref_shot": "ref-B @9.0-13.0 (rows land)",
+      "why": "'no more five-hour limits' is the plan page's own row, and a real row beats a drawn timer. 'which is great' is under 1 s, so it rides this beat. Form: real capture. The footnote is required: the row alone drops the verified scope.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the pricing capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "five_hour_removed",
+        "pricing_footnote",
+        "newer_accounts",
+        "flag_verified_scope"
+      ],
+      "overlays": {
+        "verified": [
+          552.2,
+          1243.5,
+          381.1,
+          52.3
+        ]
+      },
+      "beat_note": "FLAG, never corrected: he says 'no more five-hour limits' for the Ultra plan, the post limits this to verified Ultra accounts and newer accounts keep a temporary limit. Caption stays exact; the graphic carries 'verified'. The 10x row stays out of the crop until b22."
+    },
+    {
+      "id": "b10",
+      "start": 18.367,
+      "end": 21.267,
+      "dur": 2.9,
+      "say": "This is something that Codex was a lot better at than Claude Code.",
+      "words": [
+        61,
+        73
+      ],
+      "scene": "sc-q10",
+      "anchor": {
+        "word_i": 69,
+        "t": 19.76,
+        "phrase": "better",
+        "what": "clay outline draws round the Codex doc card",
+        "event_id": "b10.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "Chase's note: replace the last repeating text panel. OpenAI's doc arrives early so the Codex side is on screen as he names it. The line stays his opinion: no winner is lit, and the doc only speaks to limits in b11-b12.",
+      "visual_type": "real_shot",
+      "treatment": "ivory card",
+      "signature": false,
+      "component": "White ivory card with the real Codex doc, same box as b11; clay outline on 'better'; chip on the seam",
+      "slots": {
+        "doc": "The estimates below show local messages per five-hour"
+      },
+      "assets": [
+        "assets/shots/codex-pricing-light.png",
+        "assets/face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/shots/codex-pricing-light.png",
+          "rect_src": [
+            0,
+            0,
+            812,
+            360
+          ],
+          "box_frame": [
+            90,
+            218,
+            900,
+            399
+          ],
+          "dpr": 2,
+          "read_px": "about 35 px"
+        }
+      ],
+      "geometry": "Card [72,200,936,435], plate [90,218,900,399], the same as sc-codex. Outline on the card, 3 px clay. Group slow push 1 to 1.01508, and sc-codex continues from there.",
+      "transition_in": "Hard cut from the takeover into split at 18.367",
+      "actions": [
+        {
+          "t": 18.367,
+          "what": "Codex doc card on this frame, nothing lit; group slow push s(t)=1+0.0052(t-t_in)",
+          "enter": 1,
+          "dur": 0.1,
+          "gate": true,
+          "event_id": "b10.e2"
+        },
+        {
+          "t": 19.76,
+          "what": "on 'better': clay outline draws round the card",
+          "enter": 1,
+          "dur": 0.2,
+          "gate": true,
+          "word_i": 69,
+          "event_id": "b10.e4"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              61,
+              62,
+              63
+            ],
+            "text": "THIS IS SOMETHING",
+            "accent": false,
+            "on": 18.367,
+            "off": 18.733
+          },
+          {
+            "words": [
+              64,
+              65
+            ],
+            "text": "THAT CODEX",
+            "accent": false,
+            "on": 18.733,
+            "off": 19.3
+          },
+          {
+            "words": [
+              66,
+              67,
+              68
+            ],
+            "text": "WAS A LOT",
+            "accent": false,
+            "on": 19.3,
+            "off": 19.7
+          },
+          {
+            "words": [
+              69,
+              70
+            ],
+            "text": "BETTER AT",
+            "accent": false,
+            "on": 19.7,
+            "off": 20.6
+          },
+          {
+            "words": [
+              71,
+              72,
+              73
+            ],
+            "text": "THAN CLAUDE CODE",
+            "accent": false,
+            "on": 20.6,
+            "off": 21.267
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "card swap on 'There' 21.267, same layout",
+      "motion_carrier": "The slow push, then the outline on his word",
+      "hud": "at rest",
+      "ref_shot": "ref-B @1.0-3.0 (serif title)",
+      "why": "Chase's note: replace the last repeating text panel. OpenAI's doc arrives early so the Codex side is on screen as he names it. The line stays his opinion: no winner is lit, and the doc only speaks to limits in b11-b12.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a docs capture.",
+      "fact_keys": [
+        "codex_pro_no_five_hour",
+        "codex_plus_has_five_hour"
+      ],
+      "beat_note": "FLAG: 'a lot better' is his opinion, caption only, no winner lit."
+    },
+    {
+      "id": "b11",
+      "start": 21.267,
+      "end": 22.367,
+      "dur": 1.1,
+      "say": "There were no limits",
+      "words": [
+        74,
+        77
+      ],
+      "scene": "sc-codex",
+      "anchor": {
+        "word_i": 76,
+        "t": 21.44,
+        "phrase": "no",
+        "what": "the highlight lands on the plate's 'Pro plans currently have no five-hour limit.'",
+        "event_id": "b11.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "'There were no limits' - he points at what the doc says, the split holds and the plate fits whole",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "plateCard, whole docs paragraph, two-part marker",
+      "slots": {
+        "lit": [
+          "Pro plans",
+          "currently have no five-hour limit."
+        ]
+      },
+      "assets": [
+        "assets/shots/codex-pricing-light.png (whole plate, CSS 406x180)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/shots/codex-pricing-light.png",
+          "rect_css": [
+            0,
+            0,
+            406,
+            180
+          ],
+          "dpr": 2,
+          "rect_src": [
+            0,
+            0,
+            812,
+            360
+          ],
+          "box_frame": [
+            90,
+            218,
+            900,
+            399
+          ],
+          "scale": 2.217,
+          "read_px": "about 35 px"
+        }
+      ],
+      "geometry": "Card x72-1008, y200-635, padding 18, plate bg #fff (the card supplies the side padding). STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). marker: rgba(217,119,87,.28), r6, inside the plate's pin so it travels with the push, scaleX 0 -> 1 from the left, .3 s power2.out. Boxes [706.3, 284.5, 151.8, 42.1] and [90.0, 342.1, 512.1, 42.1]: both or neither.",
+      "transition_in": "No move at the join: the same card and box hold from b10, and the push carries on",
+      "actions": [
+        {
+          "t": 21.267,
+          "what": "white card with OpenAI's whole paragraph up and opaque on its first frame (cut in), flat, plate slow push starts, s(t)=1+0.0052(t-t_in)",
+          "enter": 1,
+          "dur": 0.2,
+          "gate": true,
+          "event_id": "b11.e2"
+        },
+        {
+          "t": 21.44,
+          "what": "on 'no': clay marker draws over 'Pro plans' and 'currently have no five-hour limit.' on the same frame, one unit, .3 s",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 76,
+          "event_id": "b11.e3"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              74,
+              75,
+              76,
+              77
+            ],
+            "text": "THERE WERE NO LIMITS",
+            "accent": false,
+            "on": 21.267,
+            "off": 22.367
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "holds into b12",
+      "motion_carrier": "marker, slow push",
+      "hud": "at rest",
+      "ref_shot": "ref-B @24.0-26.0 (real page crop in a card)",
+      "why": "'no limits' points at a specific public doc line. Top row. Form: real capture of OpenAI's page in the white card, whole paragraph at about 35 px.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the docs capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "codex_pro_no_five_hour",
+        "codex_plus_has_five_hour"
+      ],
+      "overlays": {
+        "pro_plans": [
+          706.3,
+          284.5,
+          151.8,
+          42.1
+        ],
+        "no_limit": [
+          90.0,
+          342.1,
+          512.1,
+          42.1
+        ]
+      },
+      "beat_note": "Runs with b12 as one held visual, 3.03 s. It fits split whole, so no takeover."
+    },
+    {
+      "id": "b12",
+      "start": 22.367,
+      "end": 24.3,
+      "dur": 1.933,
+      "say": "on the Codex side when it came to hourly.",
+      "words": [
+        78,
+        86
+      ],
+      "scene": "sc-codex",
+      "anchor": {
+        "word_i": 80,
+        "t": 22.56,
+        "phrase": "Codex",
+        "what": "mono source label 'Codex' lands on the card, in type (no Codex mark exists)",
+        "event_id": "b12.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "'on the Codex side when it came to hourly.' - connective end of the same point, the split holds",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "same card, mono source label in type (no Codex mark exists)",
+      "slots": {
+        "source_line": "Codex pricing doc, learn.chatgpt.com/docs/pricing"
+      },
+      "assets": [
+        "assets/shots/codex-pricing-light.png (whole plate, CSS 406x180)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/shots/codex-pricing-light.png",
+          "rect_css": [
+            0,
+            0,
+            406,
+            180
+          ],
+          "dpr": 2,
+          "rect_src": [
+            0,
+            0,
+            812,
+            360
+          ],
+          "box_frame": [
+            90,
+            218,
+            900,
+            399
+          ],
+          "scale": 2.217,
+          "read_px": "about 35 px"
+        }
+      ],
+      "geometry": "As b11. Source line centred x540, top y655, inside the y760 line above the strip. Third-party dates stay off screen.",
+      "transition_in": "same card continues, no cut",
+      "actions": [
+        {
+          "t": 22.367,
+          "what": "same plate held flat for reading, slow push keeps running",
+          "enter": 0,
+          "dur": 1.93,
+          "gate": false,
+          "event_id": "b12.e2"
+        },
+        {
+          "t": 22.56,
+          "what": "on 'Codex': mono source line lands under the card, 'Codex pricing doc, learn.chatgpt.com/docs/pricing' (.src, JetBrains Mono 400 26 px, #8A887F), rise 12 px .2 s",
+          "enter": 1,
+          "dur": 0.25,
+          "gate": true,
+          "word_i": 80,
+          "event_id": "b12.e3"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              78,
+              79,
+              80
+            ],
+            "text": "ON THE CODEX",
+            "accent": true,
+            "on": 22.367,
+            "off": 22.833
+          },
+          {
+            "words": [
+              81,
+              82,
+              83
+            ],
+            "text": "SIDE WHEN IT",
+            "accent": false,
+            "on": 22.833,
+            "off": 23.233
+          },
+          {
+            "words": [
+              84,
+              85,
+              86
+            ],
+            "text": "CAME TO HOURLY",
+            "accent": false,
+            "on": 23.233,
+            "off": 24.3
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "panel swap to the quiet line at 24.3, in his pause",
+      "motion_carrier": "source line, slow push, read hold about 2.7 s",
+      "hud": "at rest",
+      "ref_shot": "ref-A @10.0-12.0 (card holds, next element joins)",
+      "why": "Connective clause of the same doc line, so no new visual. 'Codex side' names the source. Form: real capture.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the docs capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "codex_pro_no_five_hour",
+        "codex_plus_has_five_hour"
+      ],
+      "beat_note": "FLAG, never corrected: his line names no plan and the doc proves Pro only, Plus and Standard Business still have five-hour estimates. The 'Pro plans' words stay lit so the scope shows. Third-party dates stay off screen."
+    },
+    {
+      "id": "b13",
+      "start": 24.3,
+      "end": 27.3,
+      "dur": 3.0,
+      "say": "Now Claude finally joined them.",
+      "words": [
+        87,
+        91
+      ],
+      "scene": "sc-q13",
+      "anchor": {
+        "word_i": 89,
+        "t": 25.62,
+        "phrase": "finally",
+        "what": "Claude's help page card lands under the Codex card",
+        "event_id": "b13.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "Chase's note: replace the repeating text panel. The Codex line from b11-b12 stays up and Claude's own help page lands under it, so 'joined them' is shown with both real docs. Scope stays visible: 'Pro plans' lit on Codex, 'verified Ultra accounts' lit on Claude.",
+      "visual_type": "real_shot",
+      "treatment": "ivory card",
+      "signature": false,
+      "component": "Two white ivory cards with real doc captures and highlights; chip on the seam",
+      "slots": {
+        "labels": [
+          "Codex pricing doc",
+          "Claude Code help page"
+        ],
+        "lit": [
+          "Pro plans",
+          "currently have no five-hour limit.",
+          "verified Ultra accounts don't have a five-hour session limit."
+        ]
+      },
+      "assets": [
+        "assets/shots/codex-pricing-light.png",
+        "assets/shots/claude-code-support.png",
+        "assets/face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/shots/codex-pricing-light.png",
+          "rect_src": [
+            0,
+            46,
+            812,
+            120
+          ],
+          "box_frame": [
+            90,
+            200,
+            900,
+            133
+          ],
+          "dpr": 2,
+          "read_px": "about 35 px"
+        },
+        {
+          "asset": "assets/shots/claude-code-support.png",
+          "rect_src": [
+            20,
+            160,
+            1330,
+            205
+          ],
+          "box_frame": [
+            90,
+            442,
+            900,
+            139
+          ],
+          "dpr": 3,
+          "read_px": "about 30 px"
+        }
+      ],
+      "geometry": "Card A [72,140,936,218], plate [90,200,900,133]. Card B [72,382,936,230], plate [90,442,900,139]. Mono labels 26 px. The whole group takes the slow push.",
+      "transition_in": "Hard cut inside the fixed split window",
+      "actions": [
+        {
+          "t": 24.3,
+          "what": "Codex card on this frame with 'Pro plans' and its limit line lit; group slow push s(t)=1+0.0052(t-t_in)",
+          "enter": 1,
+          "dur": 0.1,
+          "gate": true,
+          "event_id": "b13.e2"
+        },
+        {
+          "t": 25.62,
+          "what": "on 'finally': Claude's help page card rises in under it",
+          "enter": 1,
+          "dur": 0.2,
+          "gate": true,
+          "word_i": 89,
+          "event_id": "b13.e3"
+        },
+        {
+          "t": 26.66,
+          "what": "on 'joined': the verified Ultra line lights",
+          "enter": 1,
+          "dur": 0.2,
+          "gate": true,
+          "word_i": 90,
+          "event_id": "b13.e4"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              87,
+              88
+            ],
+            "text": "NOW CLAUDE",
+            "accent": false,
+            "on": 24.433,
+            "off": 25.567
+          },
+          {
+            "words": [
+              89,
+              90,
+              91
+            ],
+            "text": "FINALLY JOINED THEM",
+            "accent": false,
+            "on": 25.567,
+            "off": 27.3
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "hard cut to full-graphic on 'So'",
+      "motion_carrier": "Second card landing on his word, then the highlight",
+      "hud": "at rest",
+      "ref_shot": "ref-B @1.0-3.0 (serif title)",
+      "why": "Chase's note: replace the repeating text panel. The Codex line from b11-b12 stays up and Claude's own help page lands under it, so 'joined them' is shown with both real docs. Scope stays visible: 'Pro plans' lit on Codex, 'verified Ultra accounts' lit on Claude.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over two doc captures.",
+      "fact_keys": [
+        "codex_pro_no_five_hour",
+        "max_keeps_five_hour",
+        "five_hour_removed"
+      ],
+      "beat_note": "FLAG: 'joined them' is his framing. Scope stays lit on both docs."
+    },
+    {
+      "id": "b14",
+      "start": 27.3,
+      "end": 28.867,
+      "dur": 1.567,
+      "say": "So no more five-hour limits,",
+      "words": [
+        92,
+        96
+      ],
+      "scene": "sc-list",
+      "anchor": {
+        "word_i": 95,
+        "t": 27.94,
+        "phrase": "five-hour",
+        "what": "row 1 lands with its check",
+        "event_id": "b14.e1"
+      },
+      "sub_anchors": [],
+      "layout": "full-graphic",
+      "layout_why": "'So no more five-hour limits,' - first of a spoken list of 3, full-graphic; cut on the sentence start 'So' 27.30",
+      "visual_type": "list",
+      "treatment": "animate",
+      "signature": true,
+      "component": "list card: socket + check + real post crop per row",
+      "slots": {
+        "row": "We’re also removing the 5-hour limit for verified Ultra accounts, starting today with most existing subscribers."
+      },
+      "assets": [
+        "assets/posts/claude-post-tight-light.png (crop CSS 14,262 416x46, sentence whole)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/claude-post-tight-light.png",
+          "rect_css": [
+            14,
+            262,
+            416,
+            46
+          ],
+          "dpr": 2,
+          "rect_src": [
+            28,
+            524,
+            832,
+            92
+          ],
+          "box_frame": [
+            206,
+            466.7,
+            784.0,
+            86.7
+          ],
+          "scale": 1.885,
+          "read_px": "about 32 px, floor 31"
+        }
+      ],
+      "geometry": "Card x72-1008, y400-1060. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Rows centred y510, y730, y950, hairlines #E4E2DA at y620 and y840. Socket 84 px circle at x102, 2 px dashed #D9D6CC; check glyph green #2E9E5B, 5 px stroke. Placeholder bars .skel x206-766, 28 px tall. All three crops share one scale, 1.885.",
+      "transition_in": "hard cut, layout switch at 27.3 (split -> full-graphic) on sentence start 'So'; chip breaks",
+      "actions": [
+        {
+          "t": 27.3,
+          "what": "hard cut to full-graphic: list card up on the first frame with 3 empty check sockets and grey placeholder bars",
+          "enter": 1,
+          "dur": 0.05,
+          "gate": true,
+          "event_id": "b14.e2"
+        },
+        {
+          "t": 27.94,
+          "what": "on 'five-hour': row 1 lands, placeholder swaps for the post's whole sentence (rise 12 px .2 s), green check pops (back.out(2) .35 s); HUD socket 3 rings",
+          "enter": 1,
+          "dur": 0.35,
+          "gate": true,
+          "word_i": 95,
+          "hud_row": "ring2",
+          "event_id": "b14.e3"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              92,
+              93,
+              94
+            ],
+            "text": "SO NO MORE",
+            "accent": false,
+            "on": 27.3,
+            "off": 27.9
+          },
+          {
+            "words": [
+              95,
+              96
+            ],
+            "text": "FIVE-HOUR LIMITS",
+            "accent": false,
+            "on": 27.9,
+            "off": 28.867
+          }
+        ],
+        "position": "full-graphic: chip y1477-1573 (text centre 1525)"
+      },
+      "exit": "holds, next row lands",
+      "motion_carrier": "row + check on its word, socket ring",
+      "hud": "takeover slot, socket 3 rings 27.94",
+      "ref_shot": "ref-A @41.0-43.0 (list takeover), ref-B @22.0-24.0 (rows active)",
+      "why": "'no more five-hour limits, same weekly limits, and no more confusion' names 3 items in a row, and that is what the line turns on, so the list row wins over the product name. Form: rebuilt card crops carried over from the post card, each with a check.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post crops, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "five_hour_removed",
+        "max_keeps_five_hour",
+        "flag_recap_unscoped"
+      ],
+      "beat_note": "FLAG, never corrected: he says it with no plan named and Max and Pro keep theirs. The row carries 'verified Ultra accounts'. The sockets are empty, not numbered, because the intake allows only numbers from facts.json on screen."
+    },
+    {
+      "id": "b15",
+      "start": 28.867,
+      "end": 30.2,
+      "dur": 1.333,
+      "say": "same weekly limits,",
+      "words": [
+        97,
+        99
+      ],
+      "scene": "sc-list",
+      "anchor": {
+        "word_i": 98,
+        "t": 29.3,
+        "phrase": "weekly",
+        "what": "row 2 lands with its check",
+        "event_id": "b15.e1"
+      },
+      "sub_anchors": [],
+      "layout": "full-graphic",
+      "layout_why": "'same weekly limits,' - list item 2 of 3",
+      "visual_type": "list",
+      "treatment": "animate",
+      "signature": true,
+      "component": "same list card, row 2",
+      "slots": {
+        "row": "Weekly limits remain unchanged."
+      },
+      "assets": [
+        "assets/posts/claude-post-tight-light.png (crop CSS 14,402 250x23)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/claude-post-tight-light.png",
+          "rect_css": [
+            14,
+            402,
+            250,
+            23
+          ],
+          "dpr": 2,
+          "rect_src": [
+            28,
+            804,
+            500,
+            46
+          ],
+          "box_frame": [
+            206,
+            708.3,
+            471.2,
+            43.3
+          ],
+          "scale": 1.885,
+          "read_px": "about 32 px"
+        }
+      ],
+      "geometry": "As b14. Same crop scale as row 1. Rect right edge x264 stays left of 'View' (ink starts 268).",
+      "transition_in": "same card continues, no cut",
+      "actions": [
+        {
+          "t": 29.3,
+          "what": "on 'weekly': row 2 lands with its check, verbatim 'Weekly limits remain unchanged.'; HUD socket 2 rings",
+          "enter": 1,
+          "dur": 0.35,
+          "gate": true,
+          "word_i": 98,
+          "hud_row": "ring1",
+          "event_id": "b15.e2"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              97,
+              98,
+              99
+            ],
+            "text": "SAME WEEKLY LIMITS",
+            "accent": false,
+            "on": 28.867,
+            "off": 30.367
+          }
+        ],
+        "position": "full-graphic: chip y1477-1573 (text centre 1525)"
+      },
+      "exit": "holds, next row lands",
+      "motion_carrier": "row + check on its word, socket ring",
+      "hud": "takeover slot, socket 2 rings 29.30",
+      "ref_shot": "ref-A @41.0-43.0 (list takeover), ref-B @22.0-24.0 (rows active)",
+      "why": "'same weekly limits' is list item 2 of 3, on its own beat. Form: rebuilt card crop, same as b07's line.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post crops, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "weekly_unchanged"
+      ]
+    },
+    {
+      "id": "b16",
+      "start": 30.2,
+      "end": 31.3,
+      "dur": 1.1,
+      "say": "and no more confusion,",
+      "words": [
+        100,
+        103
+      ],
+      "scene": "sc-list",
+      "anchor": {
+        "word_i": 101,
+        "t": 30.58,
+        "phrase": "no",
+        "what": "row 3 lands with its check",
+        "event_id": "b16.e1"
+      },
+      "sub_anchors": [],
+      "layout": "full-graphic",
+      "layout_why": "'and no more confusion,' - list item 3 of 3",
+      "visual_type": "list",
+      "treatment": "animate",
+      "signature": true,
+      "component": "same list card, row 3",
+      "slots": {
+        "row": "Max 20x → Ultra"
+      },
+      "assets": [
+        "assets/posts/claude-post-tight-light.png (crop CSS 14,142 126x22, whole row)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/claude-post-tight-light.png",
+          "rect_css": [
+            14,
+            142,
+            126,
+            22
+          ],
+          "dpr": 2,
+          "rect_src": [
+            28,
+            284,
+            252,
+            44
+          ],
+          "box_frame": [
+            206,
+            929.3,
+            237.5,
+            41.5
+          ],
+          "scale": 1.885,
+          "read_px": "about 32 px"
+        }
+      ],
+      "geometry": "As b14. Same crop scale as row 1.",
+      "transition_in": "same card continues, no cut",
+      "actions": [
+        {
+          "t": 30.58,
+          "what": "on 'no': row 3 lands with its check, the post's whole row 'Max 20x → Ultra'; HUD socket 1 rings; holds .72 s to the cut",
+          "enter": 1,
+          "dur": 0.35,
+          "gate": true,
+          "word_i": 101,
+          "hud_row": "ring0",
+          "event_id": "b16.e2"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              100,
+              101
+            ],
+            "text": "AND NO",
+            "accent": false,
+            "on": 30.367,
+            "off": 30.7
+          },
+          {
+            "words": [
+              102,
+              103
+            ],
+            "text": "MORE CONFUSION",
+            "accent": false,
+            "on": 30.7,
+            "off": 31.3
+          }
+        ],
+        "position": "full-graphic: chip y1477-1573 (text centre 1525)"
+      },
+      "exit": "hard cut to split on 'because'",
+      "motion_carrier": "row + check on its word, socket ring",
+      "hud": "takeover slot, socket 1 rings 30.58",
+      "ref_shot": "ref-A @41.0-43.0 (list takeover), ref-B @22.0-24.0 (rows active)",
+      "why": "'no more confusion' is list item 3 of 3. The post's row 'Max 20x → Ultra' is the concrete thing that clears it, and 'because Max 20X' picks it up on the next line. Form: rebuilt card crop, one whole row, a marked verbatim excerpt of the post's two rename rows.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post crops, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "rename"
+      ],
+      "beat_note": "Takeover 27.30-31.30 is 4.0 s. Beat starts 30.20 in the pause after 'limits,' so it reaches 1.1 s. The row lands on 'no' 30.58, still on its own item 'no more confusion', because a landing on 'confusion' 30.82 left only 0.48 s before the 4 s cap. Excerpt route: both rename rows could not be read in 0.72 s, so this is one whole row of three tokens, the row already on screen at about 76 px through b01-b02. It holds flat about 0.5 s after the .2 s rise, still short of picker.md's about 2 s, because the 4 s cap and the cut do not move. See flags."
+    },
+    {
+      "id": "b17",
+      "start": 31.3,
+      "end": 32.967,
+      "dur": 1.667,
+      "say": "because Max 20X",
+      "words": [
+        104,
+        106
+      ],
+      "scene": "sc-max20",
+      "anchor": {
+        "word_i": 105,
+        "t": 31.78,
+        "phrase": "Max",
+        "what": "'Max 20x' fills blue under his own selection",
+        "event_id": "b17.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "'because Max 20X' - he points at the name he is selecting, back to split as the list ends",
+      "visual_type": "own_clip",
+      "treatment": "animate",
+      "signature": false,
+      "component": "plateCard with his clip, vplate stills for the held first frame",
+      "slots": {},
+      "assets": [
+        "assets/clips/max20x-highlight.mp4 data-start 31.40, data-media-start 0, muted, 960x460"
+      ],
+      "crops": [
+        {
+          "asset": "assets/clips/max20x-highlight.mp4",
+          "rect_css": [
+            0,
+            0,
+            960,
+            460
+          ],
+          "dpr": 1,
+          "rect_src": [
+            0,
+            0,
+            960,
+            460
+          ],
+          "box_frame": [
+            90,
+            230,
+            900,
+            431
+          ],
+          "scale": 0.938,
+          "read_px": "post text about 43 px, 1x, no join in range"
+        }
+      ],
+      "geometry": "Card and plate as b03. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Held first frame: ffmpeg -i assets/clips/max20x-highlight.mp4 -frames:v 1 -update 1 assets/held/max20x-highlight-first.png, passed as vplate stills.",
+      "transition_in": "hard cut, layout switch at 31.3 (full-graphic -> split) on 'because'; chip breaks; off-spot read flagged in beats.json",
+      "actions": [
+        {
+          "t": 31.3,
+          "what": "hard cut to split: white card up with his recording's first frame held as a still",
+          "enter": 1,
+          "dur": 0.2,
+          "gate": true,
+          "event_id": "b17.e2"
+        },
+        {
+          "t": 31.4,
+          "what": "clip starts at 1x, data-start 31.40, data-media-start 0, data-duration 1.567, local = composition - 31.40",
+          "enter": 0,
+          "dur": 1.567,
+          "gate": false,
+          "event_id": "b17.e3"
+        },
+        {
+          "t": 31.78,
+          "what": "on 'Max': 'Max 20x' is filled blue, his real selection, sweep 31.47-31.80 (local frames 2-12), still blue at the cut",
+          "enter": 0,
+          "dur": 0.1,
+          "gate": true,
+          "word_i": 105,
+          "event_id": "b17.e4"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              104,
+              105,
+              106
+            ],
+            "text": "BECAUSE MAX 20X",
+            "accent": true,
+            "on": 31.3,
+            "off": 32.967
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "hard cut to full-graphic on 'didn't'",
+      "motion_carrier": "his own selection at 1x",
+      "hud": "at rest",
+      "ref_shot": "ref-B @24.0-26.0 (real page card in split)",
+      "why": "'Max 20X' is what he selects on screen at this line. His selection is the real action, the post card already carried the name. Form: real capture, his own recording. First frame held 0.10 s from 31.30, then local time = composition - 31.40, so the clip runs local 0-1.567, 0.40 s behind real time.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: clips/max20x-highlight.mp4 on screen 31.300-32.967 is muted screen footage under narration (video stream only, checked with ffprobe).",
+      "fact_keys": [
+        "rename"
+      ],
+      "beat_note": "OFF-SPOT read, flagged: 'because' is a clause boundary where the list ends. On screen 1.67 s of a 2.00 s clip, 1x, no join in range. Frame-stepped: the sweep is local frames 2-12 and blue ends after local frame 52, so the clip runs local 0-1.567, 0.40 s behind real time, and ends still blue. Short of Chase's 2-4 s by what the line allows."
+    },
+    {
+      "id": "b18",
+      "start": 32.967,
+      "end": 34.567,
+      "dur": 1.6,
+      "say": "didn't actually give you 4X",
+      "words": [
+        107,
+        111
+      ],
+      "scene": "sc-four",
+      "anchor": {
+        "word_i": 111,
+        "t": 33.86,
+        "phrase": "4X",
+        "what": "'= 4x' lands on the card",
+        "event_id": "b18.e1"
+      },
+      "sub_anchors": [],
+      "layout": "full-graphic",
+      "layout_why": "'didn't actually give you 4X' - the line turns on one number, full-graphic; cut on the stressed 'didn't' 32.98 after his pause",
+      "visual_type": "number",
+      "treatment": "animate",
+      "signature": false,
+      "component": "number card, built: equation pills + serif figure + strike (STYLE Strike / X)",
+      "slots": {
+        "equation": [
+          "Max 20x",
+          "÷",
+          "Max 5x",
+          "="
+        ],
+        "figure": "4x",
+        "label": "THE ASSUMED MATH",
+        "source_line": "From the plan names, not a usage figure"
+      },
+      "assets": [],
+      "crops": [],
+      "geometry": "Card x72-1008, y360-1100. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Label JetBrains Mono 500 30 px, tracking .14em, #8A887F, centred, top y405. Pills x130-470 and x610-950, y470-590, Inter 600 60 px, r18, 2 px #E4E2DA. '÷' Newsreader 500 96 px ink, centred x540. '=' Newsreader 500 200 px, '4x' Newsreader 500 260 px, ink, one centred row y640-900; no clay on the figure, clay is the strike, 8 px, 24 px past the glyphs each side. Source line JetBrains Mono 400 28 px, #8A887F, centred, top y990. The figure is never on screen without the label, and from 34.30 never without the strike.",
+      "transition_in": "hard cut, layout switch at 32.967 (split -> full-graphic) on stressed 'didn't'; chip breaks",
+      "actions": [
+        {
+          "t": 32.967,
+          "what": "hard cut to full-graphic: built card up, 'THE ASSUMED MATH' label, 'Max 20x' ÷ 'Max 5x' pills and the source line all up on the first frame",
+          "enter": 1,
+          "dur": 0.05,
+          "gate": true,
+          "event_id": "b18.e2"
+        },
+        {
+          "t": 33.86,
+          "what": "on '4X': '=' and big '4x' land (STYLE pop, scale .6 -> 1 back.out(1.7), .26 s)",
+          "enter": 1,
+          "dur": 0.26,
+          "gate": true,
+          "word_i": 111,
+          "event_id": "b18.e3"
+        },
+        {
+          "t": 34.3,
+          "what": "thin clay strike draws through '4x', scaleX 0 -> 1, .25 s, before the word ends; the figure is struck from here to the end of the scene",
+          "enter": 1,
+          "dur": 0.25,
+          "gate": true,
+          "event_id": "b18.e4"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              107,
+              108
+            ],
+            "text": "DIDN'T ACTUALLY",
+            "accent": false,
+            "on": 32.967,
+            "off": 33.5
+          },
+          {
+            "words": [
+              109,
+              110,
+              111
+            ],
+            "text": "GIVE YOU 4X",
+            "accent": false,
+            "on": 33.5,
+            "off": 34.567
+          }
+        ],
+        "position": "full-graphic: chip y1477-1573 (text centre 1525)"
+      },
+      "exit": "card lifts at 34.567, same takeover",
+      "motion_carrier": "figure pop, strike",
+      "hud": "takeover slot",
+      "ref_shot": "ref-A @42.0-44.0 (big figure on a takeover)",
+      "why": "'4X' is the one figure the line turns on. No higher row fits: no real plate shows 4x, and ASSETS.md rules that out on purpose. Form: built graphic, arithmetic from the two plan names, labelled as the assumed math and struck so it never reads as a usage figure.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a built card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "four_x_is_the_assumption",
+        "old_20x_meaning",
+        "max_weekly_5x"
+      ],
+      "beat_note": "4x may appear only as the assumed figure (four_x_is_the_assumption). Label and source line are Claude's words, list them in the handoff. The figure is always shown struck or as the assumption, so no 4x usage claim is made."
+    },
+    {
+      "id": "b19",
+      "start": 34.567,
+      "end": 36.617,
+      "dur": 2.05,
+      "say": "the usage of Max 5X.",
+      "words": [
+        112,
+        116
+      ],
+      "scene": "sc-four",
+      "anchor": {
+        "word_i": 115,
+        "t": 35.54,
+        "phrase": "Max",
+        "what": "'Max 5x' drag selection starts on the word 'Max'",
+        "event_id": "b19.e1"
+      },
+      "sub_anchors": [],
+      "layout": "full-graphic",
+      "layout_why": "'the usage of Max 5X.' - same takeover, he is selecting the plan he names; the join at 35.32 falls inside, face hidden",
+      "visual_type": "own_clip",
+      "treatment": "animate",
+      "signature": false,
+      "component": "struck equation + plateCard with his clip",
+      "slots": {},
+      "assets": [
+        "assets/clips/drag-select-max5x.mp4 data-start 34.633, data-media-start 0, muted, 960x460"
+      ],
+      "crops": [
+        {
+          "asset": "assets/clips/drag-select-max5x.mp4",
+          "rect_css": [
+            0,
+            0,
+            960,
+            460
+          ],
+          "dpr": 1,
+          "rect_src": [
+            0,
+            0,
+            960,
+            460
+          ],
+          "box_frame": [
+            90,
+            708,
+            900,
+            431
+          ],
+          "scale": 0.938,
+          "read_px": "post text about 43 px, 1x, no join in range"
+        }
+      ],
+      "geometry": "Struck card at rest x204-876, y130-663, origin 50% 0. Clip card x72-1008, y690-1157. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Held first frame: ffmpeg -i assets/clips/drag-select-max5x.mp4 -frames:v 1 -update 1 assets/held/drag-select-max5x-first.png, passed as vplate stills. Join 35.317 sits inside this takeover with the face hidden; no cover needed, the chip breaks on it.",
+      "transition_in": "same takeover continues, no cut",
+      "actions": [
+        {
+          "t": 34.567,
+          "what": "struck card scales to .72 and lifts to y130, .3 s power3.out; clip card lands below, opaque on its first frame (cut in), his first frame held as a still",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "event_id": "b19.e2"
+        },
+        {
+          "t": 34.633,
+          "what": "clip starts at 1x, data-start 34.633, data-media-start 0, data-duration 1.984, local = composition - 34.633",
+          "enter": 0,
+          "dur": 1.984,
+          "gate": false,
+          "event_id": "b19.e3"
+        },
+        {
+          "t": 35.54,
+          "what": "on 'Max': his real drag selection starts (local frame 27, composition frame 1066), 'Max' selected by 35.73",
+          "enter": 0,
+          "dur": 0.2,
+          "gate": true,
+          "word_i": 115,
+          "event_id": "b19.e4"
+        },
+        {
+          "t": 36.233,
+          "what": "'Max 5x' fully selected (local frame 48), holds to the cut",
+          "enter": 0,
+          "dur": 0.1,
+          "gate": true,
+          "event_id": "b19.e5"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              112,
+              113
+            ],
+            "text": "THE USAGE",
+            "accent": false,
+            "on": 34.567,
+            "off": 35.333
+          },
+          {
+            "words": [
+              114,
+              115,
+              116
+            ],
+            "text": "OF MAX 5X",
+            "accent": false,
+            "on": 35.333,
+            "off": 36.633
+          }
+        ],
+        "position": "full-graphic: chip y1477-1573 (text centre 1525)"
+      },
+      "exit": "hard cut to split on 'Yeah,', on the join 36.617",
+      "motion_carrier": "his own drag at 1x",
+      "hud": "takeover slot",
+      "ref_shot": "ref-B @40.5-44.6 (demo takeover)",
+      "why": "'Max 5X' is what he drags over on screen. real_shot would repeat the post card, and his action is the demo here. Form: real capture, his own recording, 1x, played from its first frame with local time = composition - 34.633, so the drag starts on 'Max' 35.54.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: clips/drag-select-max5x.mp4 on screen 34.567-36.617 is muted screen footage under narration (video stream only, checked with ffprobe).",
+      "fact_keys": [
+        "rename"
+      ],
+      "beat_note": "Placed 1.43 s later than real time so the drag lands on his words. Marked excerpt: the real drag runs on past the 35.32 join and the clip stops before it. No join inside the clip's source range. A takeover holds both a number and a clip, so it earns the frame. Measured on the clip: the first selection is local frame 27 (0.90 s), not 1.05 as ASSETS.md says. The clip starts at 34.633, 2 frames into the beat, so that frame lands on 'Max' 35.54, and the first frame holds for those 2 frames."
+    },
+    {
+      "id": "b20",
+      "start": 36.617,
+      "end": 38.633,
+      "dur": 2.016,
+      "say": "Yeah, it gave you 20X usage",
+      "words": [
+        117,
+        122
+      ],
+      "scene": "sc-over",
+      "anchor": {
+        "word_i": 121,
+        "t": 37.86,
+        "phrase": "20X",
+        "what": "'It gave you 20x Pro's limit' lights on the card",
+        "event_id": "b20.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "'Yeah, it gave you 20X usage' - he explains it against a source on screen; cut on the sentence start, on the join at 36.617",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "post card plate, rebuilt @mboverell post, marker",
+      "slots": {
+        "lit": "It gave you 20x Pro's limit"
+      },
+      "assets": [
+        "assets/posts/overell-post-tight-light.png (rect CSS 0,0 460x262)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/overell-post-tight-light.png",
+          "rect_css": [
+            0,
+            0,
+            460,
+            262
+          ],
+          "dpr": 2,
+          "rect_src": [
+            0,
+            0,
+            920,
+            524
+          ],
+          "box_frame": [
+            90,
+            168,
+            900,
+            513
+          ],
+          "scale": 1.957,
+          "read_px": "about 33 px"
+        }
+      ],
+      "geometry": "Card x72-1008, y150-699, padding 18. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). marker: rgba(217,119,87,.28), r6, inside the plate's pin so it travels with the push, scaleX 0 -> 1 from the left, .3 s power2.out. Marker box [422.6, 498.9, 376.6, 41.1]. Rect bottom y262 is the gutter under '20x).'.",
+      "transition_in": "hard cut, layout switch at 36.617 (full-graphic -> split) on the sentence start and the join; chip breaks",
+      "actions": [
+        {
+          "t": 36.617,
+          "what": "hard cut to split on the join: Overell post card up and opaque on its first frame (cut in), whole first two paragraphs, flat, slow push starts",
+          "enter": 1,
+          "dur": 0.2,
+          "gate": true,
+          "event_id": "b20.e2"
+        },
+        {
+          "t": 37.86,
+          "what": "on '20X': clay marker draws over 'It gave you 20x Pro's limit', .3 s",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 121,
+          "event_id": "b20.e3"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              117,
+              118
+            ],
+            "text": "YEAH IT",
+            "accent": false,
+            "on": 36.633,
+            "off": 37.167
+          },
+          {
+            "words": [
+              119,
+              120
+            ],
+            "text": "GAVE YOU",
+            "accent": false,
+            "on": 37.167,
+            "off": 37.8
+          },
+          {
+            "words": [
+              121,
+              122
+            ],
+            "text": "20X USAGE",
+            "accent": false,
+            "on": 37.8,
+            "off": 38.633
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "holds into b21",
+      "motion_carrier": "marker, slow push",
+      "hud": "at rest",
+      "ref_shot": "ref-B @24.0-26.0 (real page crop in a card)",
+      "why": "'it gave you 20X usage' is what this post says word for word, and it exists. Top row. Form: rebuilt card (post_card.py), about 33 px at 900 wide.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "old_20x_meaning"
+      ],
+      "overlays": {
+        "lit": [
+          422.6,
+          498.9,
+          376.6,
+          41.1
+        ]
+      },
+      "beat_note": "Word 'usage' has a bad timing in words.json (38.62-38.66) right after '20X'. The paragraph is kept whole, so '10x Pro's' is on the card unlit before b22; nothing lights it until then."
+    },
+    {
+      "id": "b21",
+      "start": 38.633,
+      "end": 39.95,
+      "dur": 1.317,
+      "say": "for their five-hour limit,",
+      "words": [
+        123,
+        126
+      ],
+      "scene": "sc-over",
+      "anchor": {
+        "word_i": 125,
+        "t": 38.9,
+        "phrase": "five-hour",
+        "what": "'a single limit: 5 hours.' lights on the card",
+        "event_id": "b21.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "'for their five-hour limit,' - same card, he keeps explaining it, the split holds",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "same card, second marker",
+      "slots": {
+        "lit": "a single limit: 5 hours."
+      },
+      "assets": [
+        "assets/posts/overell-post-tight-light.png (rect CSS 0,0 460x262)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/overell-post-tight-light.png",
+          "rect_css": [
+            0,
+            0,
+            460,
+            262
+          ],
+          "dpr": 2,
+          "rect_src": [
+            0,
+            0,
+            920,
+            524
+          ],
+          "box_frame": [
+            90,
+            168,
+            900,
+            513
+          ],
+          "scale": 1.957,
+          "read_px": "about 33 px"
+        }
+      ],
+      "geometry": "As b20. Boxes [893.2, 451.9, 21.5, 41.1] and [119.3, 498.9, 296.4, 41.1]: the phrase wraps, so it is two tints. '10x Pro's' stays unlit on the card until b22.",
+      "transition_in": "same card continues, no cut",
+      "actions": [
+        {
+          "t": 38.9,
+          "what": "on 'five-hour': second marker draws over 'a single limit: 5 hours.', both line parts on the same frame, .3 s",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 125,
+          "event_id": "b21.e2"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              123,
+              124,
+              125,
+              126
+            ],
+            "text": "FOR THEIR FIVE-HOUR LIMIT",
+            "accent": false,
+            "on": 38.633,
+            "off": 39.967
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "hard cut to full-graphic on 'not', on the join 39.95",
+      "motion_carrier": "marker, slow push",
+      "hud": "at rest",
+      "ref_shot": "ref-A @16.0-18.0 (row lights in a card)",
+      "why": "'five-hour limit' is the same post's line 'it had a single limit: 5 hours.', so the card extends. Form: rebuilt card.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the rebuilt post card, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "old_20x_meaning"
+      ],
+      "overlays": {
+        "lit_a": [
+          893.2,
+          451.9,
+          21.5,
+          41.1
+        ],
+        "lit_b": [
+          119.3,
+          498.9,
+          296.4,
+          41.1
+        ]
+      }
+    },
+    {
+      "id": "b22",
+      "start": 39.95,
+      "end": 42.567,
+      "dur": 2.617,
+      "say": "not for the weekly. It was only double the 5X plan,",
+      "words": [
+        127,
+        137
+      ],
+      "scene": "sc-table",
+      "anchor": {
+        "word_i": 134,
+        "t": 41.3,
+        "phrase": "double",
+        "what": "bracket from 5x to 10x with 'double' lands",
+        "event_id": "b22.e1"
+      },
+      "sub_anchors": [],
+      "layout": "full-graphic",
+      "layout_why": "'not for the weekly. It was only double the 5X plan,' - A vs B on one figure, full-graphic; cut on the stressed 'not', on the join at 39.950",
+      "visual_type": "compare",
+      "treatment": "animate",
+      "signature": false,
+      "component": "compare: real table plate + pill outlines + drawn bracket + footnote plate + source line",
+      "slots": {
+        "bracket": "double",
+        "source_line": "Weekly limit, claude.com/pricing"
+      },
+      "assets": [
+        "assets/shots/pricing-compare-light.png (whole plate, CSS 408x265)",
+        "assets/shots/pricing-footnote-light.png (whole plate)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/shots/pricing-compare-light.png",
+          "rect_css": [
+            0,
+            0,
+            408,
+            265
+          ],
+          "dpr": 3,
+          "rect_src": [
+            0,
+            0,
+            1224,
+            795
+          ],
+          "box_frame": [
+            90,
+            310,
+            900,
+            585
+          ],
+          "scale": 2.206,
+          "read_px": "31-40 px"
+        },
+        {
+          "asset": "assets/shots/pricing-footnote-light.png",
+          "rect_css": [
+            0,
+            0,
+            294,
+            27
+          ],
+          "dpr": 4,
+          "rect_src": [
+            0,
+            0,
+            1176,
+            108
+          ],
+          "box_frame": [
+            140,
+            994,
+            800,
+            73
+          ],
+          "scale": 2.721,
+          "read_px": "about 40 px"
+        }
+      ],
+      "geometry": "Card x72-1008, y292-1085, padding 18. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Row tint box [90.0, 685.3, 900.0, 209.7], rgba(217,119,87,.14). Outline boxes [612.8, 811.1, 79.4, 57.4] and [831.2, 811.1, 90.4, 57.4], .ol.bare. Bracket: SVG path M652 874 V914 H876 V874, 3 px clay, dash-drawn. 'double' Newsreader 500 italic clay 56 px, centred x764, top y924. Footnote plate [140, 994, 800, 73], r12. Source line JetBrains Mono 400 28 px, #8A887F, centred, top y1104. All above the strip slot y1350. Pro's 1x stays unlit.",
+      "transition_in": "hard cut, layout switch at 39.95 (split -> full-graphic) on stressed 'not' and the join; chip breaks",
+      "actions": [
+        {
+          "t": 39.95,
+          "what": "hard cut to full-graphic on the join: real compare table whole and flat, footnote plate and source line up on the first frame",
+          "enter": 1,
+          "dur": 0.05,
+          "gate": true,
+          "event_id": "b22.e2"
+        },
+        {
+          "t": 40.34,
+          "what": "on 'weekly.': 'Limit every week' row takes a clay tint, wipe left to right, .3 s",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 130,
+          "event_id": "b22.e3"
+        },
+        {
+          "t": 41.3,
+          "what": "on 'double': Max 5x and Ultra 10x pills take 3 px clay outlines, the bracket draws between them (.3 s) and 'double' lands under it",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 134,
+          "event_id": "b22.e4"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              127,
+              128
+            ],
+            "text": "NOT FOR",
+            "accent": false,
+            "on": 39.967,
+            "off": 40.2
+          },
+          {
+            "words": [
+              129,
+              130
+            ],
+            "text": "THE WEEKLY",
+            "accent": false,
+            "on": 40.2,
+            "off": 40.7
+          },
+          {
+            "words": [
+              131,
+              132,
+              133
+            ],
+            "text": "IT WAS ONLY",
+            "accent": false,
+            "on": 40.7,
+            "off": 41.233
+          },
+          {
+            "words": [
+              134,
+              135
+            ],
+            "text": "DOUBLE THE",
+            "accent": false,
+            "on": 41.233,
+            "off": 41.733
+          },
+          {
+            "words": [
+              136,
+              137
+            ],
+            "text": "5X PLAN",
+            "accent": false,
+            "on": 41.733,
+            "off": 42.567
+          }
+        ],
+        "position": "full-graphic: chip y1477-1573 (text centre 1525)"
+      },
+      "exit": "hard cut to split on 'which'",
+      "motion_carrier": "row tint, outlines, bracket",
+      "hud": "takeover slot",
+      "ref_shot": "ref-B @30.0-33.0 (active state on one item)",
+      "why": "'only double the 5X plan' sets 5x against 10x, a comparison line taking its row with the real table. 'not for the weekly' is under 1 s, so it rides this beat. Form: real capture of claude.com/pricing, 31-40 px at 900 wide, with the footnote plate because the table shows 'No 5-hour limit‡'.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the pricing capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "ultra_double_max_weekly",
+        "ultra_weekly_10x",
+        "max_weekly_5x",
+        "pro_baseline_1x",
+        "pricing_footnote"
+      ],
+      "overlays": {
+        "week_row": [
+          90.0,
+          685.3,
+          900.0,
+          209.7
+        ],
+        "pill_5x": [
+          612.8,
+          811.1,
+          79.4,
+          57.4
+        ],
+        "pill_10x": [
+          831.2,
+          811.1,
+          90.4,
+          57.4
+        ]
+      },
+      "beat_note": "'double' is his word and arithmetic from facts; Anthropic's pages do not use it. Plate reads Ultra because Max 20x is now Ultra and the weekly figure is the same (ultra_double_max_weekly). The plate stays whole, so Pro's 1x shows unlit in both limit rows (pro_baseline_1x)."
+    },
+    {
+      "id": "b23",
+      "start": 42.567,
+      "end": 44.183,
+      "dur": 1.616,
+      "say": "which people got kind of pissed at.",
+      "words": [
+        138,
+        144
+      ],
+      "scene": "sc-q23",
+      "anchor": {
+        "word_i": 143,
+        "t": 43.62,
+        "phrase": "pissed",
+        "what": "Highlight the Overell admission on pissed",
+        "event_id": "b23.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "Chase's note: replace the repeating caption panel with Overell's admission, pushed in for phone reading and highlighted on pissed. No reaction count.",
+      "visual_type": "real_shot",
+      "treatment": "ivory card",
+      "signature": false,
+      "component": "White ivory card with a tight Overell post crop; two-part clay highlight on the admission; chip on the seam",
+      "slots": {
+        "quote": "I get that some new users assumed 20x applied to both limits.",
+        "context": "We could have done better here, and I'm sorry."
+      },
+      "assets": [
+        "assets/posts/overell-post-tight-light.png",
+        "assets/face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/overell-post-tight-light.png",
+          "rect_css": [
+            8.0,
+            274.0,
+            440.0,
+            70.4
+          ],
+          "dpr": 2,
+          "rect_src": [
+            16,
+            548,
+            880,
+            140.8
+          ],
+          "box_frame": [
+            90,
+            318,
+            900,
+            144
+          ],
+          "scale": 2.0455,
+          "read_px": "about 33 px"
+        }
+      ],
+      "geometry": "Card [72,300,936,180], plate [90,318,900,144]. Source rect [16,548,880,140.8]. Mark source [32,566,830,45] and [32,613,88,45]; wipe 0.2 s on pissed. Text holds flat.",
+      "transition_in": "Hard cut inside the fixed split window",
+      "actions": [
+        {
+          "event_id": "b23.e2",
+          "t": 42.567,
+          "what": "Tight Overell admission and apology appear in the white ivory card",
+          "enter": 1,
+          "dur": 0.1,
+          "gate": true
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              138,
+              139
+            ],
+            "text": "WHICH PEOPLE",
+            "accent": false,
+            "on": 42.567,
+            "off": 43.1
+          },
+          {
+            "words": [
+              140,
+              141,
+              142
+            ],
+            "text": "GOT KIND OF",
+            "accent": false,
+            "on": 43.1,
+            "off": 43.567
+          },
+          {
+            "words": [
+              143,
+              144
+            ],
+            "text": "PISSED AT",
+            "accent": false,
+            "on": 43.567,
+            "off": 44.2
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "Hard cut at the fixed beat boundary",
+      "motion_carrier": "Highlight the Overell admission on pissed",
+      "hud": "at rest",
+      "ref_shot": "ref-B @1.0-3.0 (serif title)",
+      "why": "Chase's note: replace the repeating caption panel with Overell's admission, pushed in for phone reading and highlighted on pissed. No reaction count.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a source capture or assumed-math graphic.",
+      "fact_keys": [
+        "confusion_acknowledged"
+      ],
+      "beat_note": "Reaction size remains unmeasured. The real post acknowledges confusion; it supplies no lawsuit claim."
+    },
+    {
+      "id": "b24",
+      "start": 44.183,
+      "end": 46.7,
+      "dur": 2.517,
+      "say": "And I think that's what kind of led to this name change,",
+      "words": [
+        145,
+        156
+      ],
+      "scene": "sc-q24",
+      "anchor": {
+        "word_i": 155,
+        "t": 45.78,
+        "phrase": "name",
+        "what": "His real blue selection covers Max 20x → Ultra on name",
+        "event_id": "b24.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "Chase's note: replace the caption panel with his real rename selection. This shows the rename only; it does not prove his claimed cause.",
+      "visual_type": "clip",
+      "treatment": "ivory card",
+      "signature": false,
+      "component": "White ivory card framing his own muted rename selection clip; chip on the seam",
+      "slots": {
+        "rename": "Max 20x → Ultra"
+      },
+      "assets": [
+        "assets/clips/rename-line-highlight.mp4",
+        "assets/face_half.mp4 (bottom half, original punch-in unchanged)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/clips/rename-line-highlight.mp4",
+          "rect_css": [
+            0.0,
+            0.0,
+            960.0,
+            460.0
+          ],
+          "dpr": 1,
+          "rect_src": [
+            0,
+            0,
+            960,
+            460
+          ],
+          "box_frame": [
+            90,
+            230,
+            900,
+            431
+          ],
+          "scale": 0.9375,
+          "read_px": "about 43 px; 1x; no join in source",
+          "media_start": 0,
+          "clip_start": 44.183,
+          "clip_duration": 2.517
+        }
+      ],
+      "geometry": "Card [72,212,936,467], clip [90,230,900,431], full 960x460 source. Plays 44.183-46.7, local 0-2.517 of 2.666667 seconds. No held still needed. Original bottom-half punch-in unchanged.",
+      "transition_in": "Hard cut inside the fixed split window",
+      "actions": [
+        {
+          "event_id": "b24.e2",
+          "t": 44.183,
+          "what": "Rename clip and white ivory card appear; play at 1x from source 0 for 2.517 seconds",
+          "enter": 1,
+          "dur": 2.517,
+          "gate": true
+        },
+        {
+          "t": 44.183,
+          "what": "bottom-half punch-in",
+          "enter": 0,
+          "dur": 0.04,
+          "gate": false,
+          "scale": 1.08,
+          "end": 46.667,
+          "origin": "50% 8%",
+          "reset_tween": "tl.to #face scale 1, .16 s power2.out, at 46.5, in his pause after 'change,'; tl.set scale 1 at A(46.667)",
+          "hold_frames": 69,
+          "detail": "Covers the visible jump at 44.183: largest single-frame change in the clip, about 28 px head shift on the 1080 frame. Real face_half pixels in the clipped #face-wrap only. EXTRA_ROOTS {'scene.sc-q24': ['#face']}. tl.set('#face', {scale: 1.08, transformOrigin: '50% 8%'}, A(44.183)). Origin 50% 8% keeps his hair top where it is, so nothing grows into the chip. Bind as change on #face, hold_frames 69, ending before the reset.",
+          "event_id": "b24.e7"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              145,
+              146,
+              147
+            ],
+            "text": "AND I THINK",
+            "accent": false,
+            "on": 44.2,
+            "off": 44.7
+          },
+          {
+            "words": [
+              148,
+              149,
+              150
+            ],
+            "text": "THAT'S WHAT KIND",
+            "accent": false,
+            "on": 44.7,
+            "off": 45.1
+          },
+          {
+            "words": [
+              151,
+              152,
+              153
+            ],
+            "text": "OF LED TO",
+            "accent": false,
+            "on": 45.1,
+            "off": 45.567
+          },
+          {
+            "words": [
+              154,
+              155,
+              156
+            ],
+            "text": "THIS NAME CHANGE",
+            "accent": false,
+            "on": 45.567,
+            "off": 46.7
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "Hard cut at the fixed beat boundary",
+      "motion_carrier": "His real blue selection covers Max 20x → Ultra on name",
+      "hud": "at rest",
+      "ref_shot": "ref-B @1.0-3.0 (serif title)",
+      "why": "Chase's note: replace the caption panel with his real rename selection. This shows the rename only; it does not prove his claimed cause.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: narration only; source clip muted.",
+      "fact_keys": [
+        "rename"
+      ],
+      "beat_note": "FLAG: his claim that anger or a suit caused the rename remains hedged opinion. No source proves that cause. The clip proves only the rename."
+    },
+    {
+      "id": "b25",
+      "start": 46.7,
+      "end": 49.433,
+      "dur": 2.733,
+      "say": "because I'm pretty sure they were getting sued for that.",
+      "words": [
+        157,
+        166
+      ],
+      "scene": "sc-q25",
+      "anchor": {
+        "word_i": 160,
+        "t": 47.62,
+        "phrase": "sure",
+        "what": "Small tag I'm pretty sure appears on sure",
+        "event_id": "b25.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "Chase's note: replace the repeating text panel with the support page's rename facts and a small hedge tag. The capture provides no evidence for his lawsuit opinion.",
+      "visual_type": "real_shot",
+      "treatment": "ivory card",
+      "signature": false,
+      "component": "White ivory card with the real support-page rename section and highlight; small hedge tag on sure; chip on the seam",
+      "slots": {
+        "heading": "What changed from Max 20x?",
+        "rename": "The Max 20x plan is now called the Ultra plan.",
+        "context": "Existing Max 20x subscribers move to Ultra automatically, with no price change.",
+        "tag": "I'm pretty sure"
+      },
+      "assets": [
+        "assets/shots/ultra-support.png",
+        "assets/face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/shots/ultra-support.png",
+          "rect_css": [
+            0.0,
+            0.0,
+            464.0,
+            100.0
+          ],
+          "dpr": 3,
+          "rect_src": [
+            0,
+            0,
+            1392,
+            300
+          ],
+          "box_frame": [
+            90,
+            240,
+            900,
+            194
+          ],
+          "scale": 1.9397,
+          "read_px": "body about 31 px; rename section only"
+        }
+      ],
+      "geometry": "Card [72,222,936,373], plate [90,240,900,194], source [0,0,1392,300]. Clay highlight source [24,158,956,58] across the rename sentence from entry. Tag x116 y512, Inter 600 34 px, padding 14px 18px, pale clay, enters on sure at 47.62.",
+      "transition_in": "Hard cut inside the fixed split window",
+      "actions": [
+        {
+          "event_id": "b25.e2",
+          "t": 46.7,
+          "what": "Support rename section appears with the rename sentence highlighted",
+          "enter": 1,
+          "dur": 0.1,
+          "gate": true
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              157,
+              158
+            ],
+            "text": "BECAUSE I'M",
+            "accent": false,
+            "on": 46.7,
+            "off": 47.333
+          },
+          {
+            "words": [
+              159,
+              160
+            ],
+            "text": "PRETTY SURE",
+            "accent": false,
+            "on": 47.333,
+            "off": 47.8
+          },
+          {
+            "words": [
+              161,
+              162,
+              163
+            ],
+            "text": "THEY WERE GETTING",
+            "accent": false,
+            "on": 47.8,
+            "off": 48.367
+          },
+          {
+            "words": [
+              164,
+              165,
+              166
+            ],
+            "text": "SUED FOR THAT",
+            "accent": false,
+            "on": 48.367,
+            "off": 49.433
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "Hard cut at the fixed beat boundary",
+      "motion_carrier": "Small tag I'm pretty sure appears on sure",
+      "hud": "at rest",
+      "ref_shot": "ref-B @1.0-3.0 (serif title)",
+      "why": "Chase's note: replace the repeating text panel with the support page's rename facts and a small hedge tag. The capture provides no evidence for his lawsuit opinion.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a source capture or assumed-math graphic.",
+      "fact_keys": [
+        "rename",
+        "subscribers_do_nothing"
+      ],
+      "beat_note": "FLAG: the sued line stays his hedged opinion. Sued appears only in the unchanged caption. No lawsuit figure, case number, date, document or proof is shown; the page crop shows rename facts only."
+    },
+    {
+      "id": "b26",
+      "start": 49.433,
+      "end": 52.067,
+      "dur": 2.634,
+      "say": "I think everyone assumed it was actually 4X when it wasn't.",
+      "words": [
+        167,
+        177
+      ],
+      "scene": "sc-q26",
+      "anchor": {
+        "word_i": 177,
+        "t": 51.78,
+        "phrase": "wasn't.",
+        "what": "Strike the assumed 4x on wasn't",
+        "event_id": "b26.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "Chase's note: replace the caption panel with the large assumed 4x from sc-four and strike it on wasn't. The figure is an assumption, never weekly usage or lawsuit evidence.",
+      "visual_type": "graphic",
+      "treatment": "ivory card",
+      "signature": false,
+      "component": "White ivory card with the sc-four serif 4x callback and THE ASSUMED MATH label; clay strike on wasn't; chip on the seam",
+      "slots": {
+        "label": "THE ASSUMED MATH",
+        "figure": "4x"
+      },
+      "assets": [
+        "assets/face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "crops": [],
+      "geometry": "Card [72,200,936,510]. Label y245, JetBrains Mono 500 30 px. Figure row [72,345,936,260], Newsreader 500 260 px. Same sc-four strike geometry: left/right -24, top107, height8; wipe 0.2 s at 51.78. 4x is only the assumed figure.",
+      "transition_in": "Hard cut inside the fixed split window",
+      "actions": [
+        {
+          "event_id": "b26.e2",
+          "t": 49.433,
+          "what": "White ivory card, THE ASSUMED MATH and the large 4x callback appear",
+          "enter": 1,
+          "dur": 0.1,
+          "gate": true
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              167,
+              168,
+              169
+            ],
+            "text": "I THINK EVERYONE",
+            "accent": false,
+            "on": 49.433,
+            "off": 49.967
+          },
+          {
+            "words": [
+              170,
+              171,
+              172
+            ],
+            "text": "ASSUMED IT WAS",
+            "accent": false,
+            "on": 49.967,
+            "off": 50.433
+          },
+          {
+            "words": [
+              173,
+              174
+            ],
+            "text": "ACTUALLY 4X",
+            "accent": false,
+            "on": 50.433,
+            "off": 51.233
+          },
+          {
+            "words": [
+              175,
+              176,
+              177
+            ],
+            "text": "WHEN IT WASN'T",
+            "accent": false,
+            "on": 51.233,
+            "off": 52.067
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "Hard cut at the fixed beat boundary",
+      "motion_carrier": "Strike the assumed 4x on wasn't",
+      "hud": "at rest",
+      "ref_shot": "ref-B @1.0-3.0 (serif title)",
+      "why": "Chase's note: replace the caption panel with the large assumed 4x from sc-four and strike it on wasn't. The figure is an assumption, never weekly usage or lawsuit evidence.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a source capture or assumed-math graphic.",
+      "fact_keys": [
+        "four_x_is_the_assumption"
+      ],
+      "beat_note": "FLAG: everyone is his opinion; Overell says some new users. 4x stays only the assumed math. Nothing here proves a lawsuit or a cause for the rename. The strike has 0.287 seconds before the fixed cut, with an 8-frame hold."
+    },
+    {
+      "id": "b27",
+      "start": 52.067,
+      "end": 54.7,
+      "dur": 2.633,
+      "say": "Well, now it's Ultra, no more five-hour plans.",
+      "words": [
+        178,
+        185
+      ],
+      "scene": "sc-q27",
+      "anchor": {
+        "word_i": 181,
+        "t": 52.74,
+        "phrase": "Ultra,",
+        "what": "Move into the Ultra card on Ultra; other cards leave the view",
+        "event_id": "b27.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "Chase's note: replace the caption panel with the post's real plan art, moving into Ultra on its word. The graphic explicitly says limit and verified.",
+      "visual_type": "real_shot",
+      "treatment": "ivory card",
+      "signature": false,
+      "component": "White ivory card containing the real post art, pushing into Ultra on Ultra, with a verified limit line; chip on the seam",
+      "slots": {
+        "names": [
+          "Free",
+          "Pro",
+          "Max",
+          "Ultra"
+        ],
+        "scope": "No 5-hour limit, verified"
+      },
+      "assets": [
+        "assets/posts/post-hero-cards.png",
+        "assets/face_half.mp4 (bottom half, original punch-in unchanged)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/posts/post-hero-cards.png",
+          "rect_css": [
+            0.0,
+            0.0,
+            3080.0,
+            1250.0
+          ],
+          "dpr": 1,
+          "rect_src": [
+            0,
+            0,
+            3080,
+            1250
+          ],
+          "box_frame": [
+            90,
+            180,
+            900,
+            365.26
+          ],
+          "scale": 0.2922,
+          "read_px": "whole art before Ultra"
+        },
+        {
+          "asset": "assets/posts/post-hero-cards.png",
+          "rect_css": [
+            1888.0,
+            450.0,
+            1142.0,
+            463.474
+          ],
+          "dpr": 1,
+          "rect_src": [
+            1888,
+            450,
+            1142,
+            463.474
+          ],
+          "box_frame": [
+            90,
+            180,
+            900,
+            365.26
+          ],
+          "scale": 0.7881,
+          "read_px": "Ultra fills the card after the push",
+          "from_time": 52.74
+        }
+      ],
+      "geometry": "Card [72,162,936,530], plate [90,180,900,365.26]. Pin origin 0 0; on Ultra at 52.74, x0 y0 s1 to x-1487.916 y-354.641 s2.697023 over 0.45 s power3.inOut. Ultra fills the window, other cards leave. Own-type line x116 y615, Inter 600 34 px: No 5-hour limit, verified. Original bottom-half punch-in unchanged.",
+      "transition_in": "Hard cut inside the fixed split window",
+      "actions": [
+        {
+          "event_id": "b27.e2",
+          "t": 52.067,
+          "what": "White ivory card, complete plan art and No 5-hour limit, verified appear",
+          "enter": 1,
+          "dur": 0.1,
+          "gate": true
+        },
+        {
+          "t": 52.383,
+          "what": "bottom-half punch-in",
+          "enter": 0,
+          "dur": 0.04,
+          "gate": false,
+          "scale": 1.08,
+          "end": 53.467,
+          "origin": "50% 8%",
+          "reset_tween": "tl.to #face scale 1, .16 s power2.out, at 53.3, in his pause after 'Ultra,'; tl.set scale 1 at A(53.467)",
+          "hold_frames": 27,
+          "detail": "Covers the visible jump at 52.383: one-frame step, about 14 px head shift on the 1080 frame, 5x its neighbours. Real face_half pixels only. EXTRA_ROOTS {'scene.sc-q27': ['#face']}. tl.set('#face', {scale: 1.08, transformOrigin: '50% 8%'}, A(52.383)). Bind as change on #face, hold_frames 27, ending before the reset. The beat starts .317 s before the join, so the punch-in is an action inside b27, not a beat start.",
+          "event_id": "b27.e4"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              178
+            ],
+            "text": "WELL",
+            "accent": false,
+            "on": 52.067,
+            "off": 52.4
+          },
+          {
+            "words": [
+              179,
+              180,
+              181
+            ],
+            "text": "NOW IT'S ULTRA",
+            "accent": true,
+            "on": 52.4,
+            "off": 53.5
+          },
+          {
+            "words": [
+              182,
+              183
+            ],
+            "text": "NO MORE",
+            "accent": false,
+            "on": 53.5,
+            "off": 53.8
+          },
+          {
+            "words": [
+              184,
+              185
+            ],
+            "text": "FIVE-HOUR PLANS",
+            "accent": false,
+            "on": 53.8,
+            "off": 54.7
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "Hard cut at the fixed beat boundary",
+      "motion_carrier": "Move into the Ultra card on Ultra; other cards leave the view",
+      "hud": "at rest",
+      "ref_shot": "ref-B @1.0-3.0 (serif title)",
+      "why": "Chase's note: replace the caption panel with the post's real plan art, moving into Ultra on its word. The graphic explicitly says limit and verified.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a source capture or assumed-math graphic.",
+      "fact_keys": [
+        "plan_lineup",
+        "five_hour_removed",
+        "flag_close_plans_for_limits"
+      ],
+      "beat_note": "FLAG: his spoken five-hour plans remains exact in captions. Our line says No 5-hour limit, verified. The original join punch-in remains unchanged."
+    },
+    {
+      "id": "b28",
+      "start": 54.7,
+      "end": 56.067,
+      "dur": 1.367,
+      "say": "So don't be surprised if you see that",
+      "words": [
+        186,
+        193
+      ],
+      "scene": "sc-q28",
+      "anchor": {
+        "word_i": 189,
+        "t": 55.14,
+        "phrase": "surprised",
+        "what": "The pricing capture name rows are already present, leading into b29",
+        "event_id": "b28.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "Chase's note: replace the repeating caption panel with pricing arriving early, using the same name rows and positions as the untouched b29. Cropped above the limit line.",
+      "visual_type": "real_shot",
+      "treatment": "ivory card",
+      "signature": false,
+      "component": "White ivory card with the pricing page Max and Ultra name rows already in b29 positions; chip on the seam",
+      "slots": {
+        "names": [
+          "Max",
+          "Ultra"
+        ],
+        "tag": "Claude Code included"
+      },
+      "assets": [
+        "assets/shots/pricing-plans-light.png",
+        "assets/face_half.mp4 (bottom half, no punch-in)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/shots/pricing-plans-light.png",
+          "rect_css": [
+            16.0,
+            125.0,
+            304.0,
+            50.0
+          ],
+          "dpr": 4,
+          "rect_src": [
+            64,
+            500,
+            1216,
+            200
+          ],
+          "box_frame": [
+            90,
+            272,
+            900,
+            148
+          ],
+          "scale": 2.9605,
+          "read_px": "same Max row as b29"
+        },
+        {
+          "asset": "assets/shots/pricing-plans-light.png",
+          "rect_css": [
+            349.0,
+            125.0,
+            304.0,
+            50.0
+          ],
+          "dpr": 4,
+          "rect_src": [
+            1396,
+            500,
+            1216,
+            200
+          ],
+          "box_frame": [
+            90,
+            484,
+            900,
+            148
+          ],
+          "scale": 2.9605,
+          "read_px": "same Ultra row as b29"
+        }
+      ],
+      "geometry": "Card [72,254,936,396]. Max source [64,500,1216,200] to [90,272,900,148]; Ultra source [1396,500,1216,200] to [90,484,900,148]. Divider y452. Crops stay above the No 5-hour limit line. No annotations; exact alignment leads to b29.",
+      "transition_in": "Hard cut inside the fixed split window",
+      "actions": [
+        {
+          "event_id": "b28.e2",
+          "t": 54.7,
+          "what": "Pricing capture Max and Ultra name rows appear early at the b29 positions",
+          "enter": 1,
+          "dur": 0.1,
+          "gate": true
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              186,
+              187,
+              188
+            ],
+            "text": "SO DON'T BE",
+            "accent": false,
+            "on": 54.7,
+            "off": 55.1
+          },
+          {
+            "words": [
+              189,
+              190
+            ],
+            "text": "SURPRISED IF",
+            "accent": false,
+            "on": 55.1,
+            "off": 55.633
+          },
+          {
+            "words": [
+              191,
+              192,
+              193
+            ],
+            "text": "YOU SEE THAT",
+            "accent": false,
+            "on": 55.633,
+            "off": 56.067
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "Hard cut at the fixed beat boundary",
+      "motion_carrier": "The pricing capture name rows are already present, leading into b29",
+      "hud": "at rest",
+      "ref_shot": "ref-B @1.0-3.0 (serif title)",
+      "why": "Chase's note: replace the repeating caption panel with pricing arriving early, using the same name rows and positions as the untouched b29. Cropped above the limit line.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over a source capture or assumed-math graphic.",
+      "fact_keys": [
+        "rename",
+        "limits_shared_with_claude_code"
+      ],
+      "beat_note": "Only plan-name rows and Claude Code included tags are visible. No 5-hour limit wording is in either crop."
+    },
+    {
+      "id": "b29",
+      "start": 56.067,
+      "end": 57.65,
+      "dur": 1.583,
+      "say": "with your Claude Code pricing. These days.",
+      "words": [
+        194,
+        200
+      ],
+      "scene": "sc-close",
+      "anchor": {
+        "word_i": 198,
+        "t": 56.82,
+        "phrase": "pricing.",
+        "what": "the two real plan rows hold in the white card",
+        "event_id": "b29.e1"
+      },
+      "sub_anchors": [],
+      "layout": "split",
+      "layout_why": "'with your Claude Code pricing. These days.' - he points at what you will see, split through the last frame",
+      "visual_type": "real_shot",
+      "treatment": "animate",
+      "signature": false,
+      "component": "plateCard, two real name rows stacked, drawn outlines",
+      "slots": {
+        "rows": [
+          "Max",
+          "Ultra"
+        ],
+        "tag": "Claude Code included"
+      },
+      "assets": [
+        "assets/shots/pricing-plans-light.png (rects CSS x16-320 and x349-653, y125-175)"
+      ],
+      "crops": [
+        {
+          "asset": "assets/shots/pricing-plans-light.png",
+          "rect_css": [
+            16,
+            125,
+            304,
+            50
+          ],
+          "dpr": 4,
+          "rect_src": [
+            64,
+            500,
+            1216,
+            200
+          ],
+          "box_frame": [
+            90,
+            272,
+            900,
+            148
+          ],
+          "scale": 2.961,
+          "read_px": "tag about 40 px"
+        },
+        {
+          "asset": "assets/shots/pricing-plans-light.png",
+          "rect_css": [
+            349,
+            125,
+            304,
+            50
+          ],
+          "dpr": 4,
+          "rect_src": [
+            1396,
+            500,
+            1216,
+            200
+          ],
+          "box_frame": [
+            90,
+            484,
+            900,
+            148
+          ],
+          "scale": 2.961,
+          "read_px": "tag about 40 px"
+        }
+      ],
+      "geometry": "Card x72-1008, y254-650, hairline #E4E2DA at y452. STYLE Card: white #FFFFFF, r22, 1px #E4E2DA, shadow 0 12px 32px rgba(40,30,20,.07). Plate bg #fff. Boxes [409.7, 328.2, 426.3, 77.0] and [436.4, 540.2, 426.3, 77.0]. Crop stops above the limit rows, so no ‡ line shows. Nothing exits before the final frame.",
+      "transition_in": "card swap inside split on the clause start 'with', hard cut",
+      "actions": [
+        {
+          "t": 56.067,
+          "what": "white card with two real rows up and opaque on its first frame (cut in), slow push runs to the last frame",
+          "enter": 1,
+          "dur": 0.2,
+          "gate": true,
+          "event_id": "b29.e2"
+        },
+        {
+          "t": 56.82,
+          "what": "on 'pricing.': both 'Claude Code included' tags take 3 px clay outlines, drawn .3 s, held through the final frame",
+          "enter": 1,
+          "dur": 0.3,
+          "gate": true,
+          "word_i": 198,
+          "event_id": "b29.e3"
+        }
+      ],
+      "caption": {
+        "chunks": [
+          {
+            "words": [
+              194,
+              195
+            ],
+            "text": "WITH YOUR",
+            "accent": false,
+            "on": 56.067,
+            "off": 56.3
+          },
+          {
+            "words": [
+              196,
+              197,
+              198
+            ],
+            "text": "CLAUDE CODE PRICING",
+            "accent": true,
+            "on": 56.3,
+            "off": 57.1
+          },
+          {
+            "words": [
+              199,
+              200
+            ],
+            "text": "THESE DAYS",
+            "accent": false,
+            "on": 57.1,
+            "off": 57.65
+          }
+        ],
+        "position": "split: chip y912-1008, centred on the seam (y960)"
+      },
+      "exit": "holds through the final frame",
+      "motion_carrier": "outlines, slow push",
+      "hud": "at rest",
+      "ref_shot": "ref-A @55.0-58.0 (real rows hold in a card)",
+      "why": "'your Claude Code pricing' names a specific price page that exists, and this clause is not opinion or payoff, so the row applies. Form: real capture of claude.com/pricing, cropped to the name rows at about 2.9x; the tag reads about 43 px.",
+      "proof_span": null,
+      "proof_span_source": "No proof audio: voice over the pricing capture, no clip on this beat and no product or demo sound.",
+      "fact_keys": [
+        "limits_shared_with_claude_code",
+        "rename"
+      ],
+      "overlays": {
+        "tag_max": [
+          409.7,
+          328.2,
+          426.3,
+          77.0
+        ],
+        "tag_ultra": [
+          436.4,
+          540.2,
+          426.3,
+          77.0
+        ]
+      },
+      "beat_note": "Nothing exits before the final frame. The crop stops above the limit rows, so no ‡ line shows."
+    }
+  ],
+  "captions": {
+    "variant": "captions.md default: JetBrains Mono 500 UPPERCASE, tracking .04em, ~52 px text, ~96 px chip, radius 10, text #F5F4EE on #1B1D1D, centred x540, padding 0 26 px",
+    "accent": "clay #E0907E on product names only, from the chunk's first frame. None on the b24-b26 chips, and none on his unscoped limit lines",
+    "build": "hard swap, no animation",
+    "timing": "on = first word's frame - 2. A first word 5 frames or fewer after a layout switch, join or panel swap opens on that cut frame. off = next chip's on when it starts within 1.0 s of the last word, else last word + .45 s. Never past a layout switch or join. At a panel swap the chip stops only if his speech ended before it. Chips stay inside their own beat's words, and spoken units stay whole: MAX 20X, MAX 5X, FIVE-HOUR, CLAUDE CODE",
+    "breaks": [
+      7.5,
+      11.5,
+      14.567,
+      18.367,
+      27.3,
+      31.3,
+      32.967,
+      35.317,
+      36.617,
+      39.95,
+      42.567,
+      44.183,
+      52.383
+    ],
+    "positions": {
+      "seam": "chip y912-1008",
+      "takeover": "chip y1477-1573"
+    },
+    "title_only_spans": [],
+    "chunks": [
+      {
+        "i": 0,
+        "beat": "b01",
+        "text": "SO THE",
+        "words": [
+          0,
+          1
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 0.0,
+        "off": 0.267,
+        "dur": 0.267
+      },
+      {
+        "i": 1,
+        "beat": "b01",
+        "text": "MAX 20X",
+        "words": [
+          2,
+          3
+        ],
+        "accent": true,
+        "accent_words": [
+          "MAX",
+          "20X"
+        ],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 0.267,
+        "off": 1.133,
+        "dur": 0.866
+      },
+      {
+        "i": 2,
+        "beat": "b01",
+        "text": "PLAN IS GONE",
+        "words": [
+          4,
+          5,
+          6
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 1.133,
+        "off": 2.2,
+        "dur": 1.067
+      },
+      {
+        "i": 3,
+        "beat": "b02",
+        "text": "AND IT HAS",
+        "words": [
+          7,
+          8,
+          9
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 2.2,
+        "off": 2.6,
+        "dur": 0.4
+      },
+      {
+        "i": 4,
+        "beat": "b02",
+        "text": "BEEN REPLACED",
+        "words": [
+          10,
+          11
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 2.6,
+        "off": 3.7,
+        "dur": 1.1
+      },
+      {
+        "i": 5,
+        "beat": "b02",
+        "text": "BY THE",
+        "words": [
+          12,
+          13
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 3.7,
+        "off": 4.2,
+        "dur": 0.5
+      },
+      {
+        "i": 6,
+        "beat": "b02",
+        "text": "ULTRA PLAN",
+        "words": [
+          14,
+          15
+        ],
+        "accent": true,
+        "accent_words": [
+          "ULTRA"
+        ],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 4.2,
+        "off": 5.167,
+        "dur": 0.967
+      },
+      {
+        "i": 7,
+        "beat": "b03",
+        "text": "SO CLAUDE",
+        "words": [
+          16,
+          17
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 5.167,
+        "off": 5.7,
+        "dur": 0.533
+      },
+      {
+        "i": 8,
+        "beat": "b03",
+        "text": "JUST RENAMED",
+        "words": [
+          18,
+          19
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 5.7,
+        "off": 6.667,
+        "dur": 0.967
+      },
+      {
+        "i": 9,
+        "beat": "b03",
+        "text": "BOTH OF",
+        "words": [
+          20,
+          21
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 6.667,
+        "off": 7.0,
+        "dur": 0.333
+      },
+      {
+        "i": 10,
+        "beat": "b03",
+        "text": "THEIR PLANS",
+        "words": [
+          22,
+          23
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 7.0,
+        "off": 7.5,
+        "dur": 0.5
+      },
+      {
+        "i": 11,
+        "beat": "b04",
+        "text": "THERE'S NO LONGER",
+        "words": [
+          24,
+          25,
+          26
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": true,
+        "on": 7.5,
+        "off": 7.933,
+        "dur": 0.433
+      },
+      {
+        "i": 12,
+        "beat": "b04",
+        "text": "MAX 5X",
+        "words": [
+          27,
+          28
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 7.933,
+        "off": 8.833,
+        "dur": 0.9
+      },
+      {
+        "i": 13,
+        "beat": "b04",
+        "text": "AND MAX 20X",
+        "words": [
+          29,
+          30,
+          31
+        ],
+        "accent": true,
+        "accent_words": [
+          "MAX",
+          "20X"
+        ],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 8.833,
+        "off": 9.9,
+        "dur": 1.067
+      },
+      {
+        "i": 14,
+        "beat": "b05",
+        "text": "IT'S JUST MAX",
+        "words": [
+          32,
+          33,
+          34
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 9.9,
+        "off": 10.733,
+        "dur": 0.833
+      },
+      {
+        "i": 15,
+        "beat": "b05",
+        "text": "AND ULTRA",
+        "words": [
+          35,
+          36
+        ],
+        "accent": true,
+        "accent_words": [
+          "ULTRA"
+        ],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 10.733,
+        "off": 11.5,
+        "dur": 0.767
+      },
+      {
+        "i": 16,
+        "beat": "b06",
+        "text": "NOW THE",
+        "words": [
+          37,
+          38
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 11.867,
+        "off": 12.2,
+        "dur": 0.333
+      },
+      {
+        "i": 17,
+        "beat": "b06",
+        "text": "ACTUAL LIMITS",
+        "words": [
+          39,
+          40
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 12.2,
+        "off": 13.4,
+        "dur": 1.2
+      },
+      {
+        "i": 18,
+        "beat": "b07",
+        "text": "PER WEEK HAVEN'T",
+        "words": [
+          41,
+          42,
+          43
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 13.4,
+        "off": 14.1,
+        "dur": 0.7
+      },
+      {
+        "i": 19,
+        "beat": "b07",
+        "text": "CHANGED AT ALL",
+        "words": [
+          44,
+          45,
+          46
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 14.1,
+        "off": 14.567,
+        "dur": 0.467
+      },
+      {
+        "i": 20,
+        "beat": "b08",
+        "text": "BUT WITH THE",
+        "words": [
+          47,
+          48,
+          49
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": true,
+        "on": 14.567,
+        "off": 15.0,
+        "dur": 0.433
+      },
+      {
+        "i": 21,
+        "beat": "b08",
+        "text": "ULTRA PLAN",
+        "words": [
+          50,
+          51
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 15.0,
+        "off": 15.667,
+        "dur": 0.667
+      },
+      {
+        "i": 22,
+        "beat": "b09",
+        "text": "THERE IS",
+        "words": [
+          52,
+          53
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 15.667,
+        "off": 15.933,
+        "dur": 0.266
+      },
+      {
+        "i": 23,
+        "beat": "b09",
+        "text": "NO MORE",
+        "words": [
+          54,
+          55
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 15.933,
+        "off": 16.6,
+        "dur": 0.667
+      },
+      {
+        "i": 24,
+        "beat": "b09",
+        "text": "FIVE-HOUR LIMITS",
+        "words": [
+          56,
+          57
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 16.6,
+        "off": 17.533,
+        "dur": 0.933
+      },
+      {
+        "i": 25,
+        "beat": "b09",
+        "text": "WHICH IS GREAT",
+        "words": [
+          58,
+          59,
+          60
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 17.533,
+        "off": 18.367,
+        "dur": 0.834
+      },
+      {
+        "i": 26,
+        "beat": "b10",
+        "text": "THIS IS SOMETHING",
+        "words": [
+          61,
+          62,
+          63
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 18.367,
+        "off": 18.733,
+        "dur": 0.366
+      },
+      {
+        "i": 27,
+        "beat": "b10",
+        "text": "THAT CODEX",
+        "words": [
+          64,
+          65
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 18.733,
+        "off": 19.3,
+        "dur": 0.567
+      },
+      {
+        "i": 28,
+        "beat": "b10",
+        "text": "WAS A LOT",
+        "words": [
+          66,
+          67,
+          68
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 19.3,
+        "off": 19.7,
+        "dur": 0.4
+      },
+      {
+        "i": 29,
+        "beat": "b10",
+        "text": "BETTER AT",
+        "words": [
+          69,
+          70
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 19.7,
+        "off": 20.6,
+        "dur": 0.9
+      },
+      {
+        "i": 30,
+        "beat": "b10",
+        "text": "THAN CLAUDE CODE",
+        "words": [
+          71,
+          72,
+          73
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 20.6,
+        "off": 21.267,
+        "dur": 0.667
+      },
+      {
+        "i": 31,
+        "beat": "b11",
+        "text": "THERE WERE NO LIMITS",
+        "words": [
+          74,
+          75,
+          76,
+          77
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 21.267,
+        "off": 22.367,
+        "dur": 1.1
+      },
+      {
+        "i": 32,
+        "beat": "b12",
+        "text": "ON THE CODEX",
+        "words": [
+          78,
+          79,
+          80
+        ],
+        "accent": true,
+        "accent_words": [
+          "CODEX"
+        ],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 22.367,
+        "off": 22.833,
+        "dur": 0.466
+      },
+      {
+        "i": 33,
+        "beat": "b12",
+        "text": "SIDE WHEN IT",
+        "words": [
+          81,
+          82,
+          83
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 22.833,
+        "off": 23.233,
+        "dur": 0.4
+      },
+      {
+        "i": 34,
+        "beat": "b12",
+        "text": "CAME TO HOURLY",
+        "words": [
+          84,
+          85,
+          86
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 23.233,
+        "off": 24.3,
+        "dur": 1.067
+      },
+      {
+        "i": 35,
+        "beat": "b13",
+        "text": "NOW CLAUDE",
+        "words": [
+          87,
+          88
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 24.433,
+        "off": 25.567,
+        "dur": 1.134
+      },
+      {
+        "i": 36,
+        "beat": "b13",
+        "text": "FINALLY JOINED THEM",
+        "words": [
+          89,
+          90,
+          91
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 25.567,
+        "off": 27.3,
+        "dur": 1.733
+      },
+      {
+        "i": 37,
+        "beat": "b14",
+        "text": "SO NO MORE",
+        "words": [
+          92,
+          93,
+          94
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": true,
+        "on": 27.3,
+        "off": 27.9,
+        "dur": 0.6
+      },
+      {
+        "i": 38,
+        "beat": "b14",
+        "text": "FIVE-HOUR LIMITS",
+        "words": [
+          95,
+          96
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 27.9,
+        "off": 28.867,
+        "dur": 0.967
+      },
+      {
+        "i": 39,
+        "beat": "b15",
+        "text": "SAME WEEKLY LIMITS",
+        "words": [
+          97,
+          98,
+          99
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 28.867,
+        "off": 30.367,
+        "dur": 1.5
+      },
+      {
+        "i": 40,
+        "beat": "b16",
+        "text": "AND NO",
+        "words": [
+          100,
+          101
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 30.367,
+        "off": 30.7,
+        "dur": 0.333
+      },
+      {
+        "i": 41,
+        "beat": "b16",
+        "text": "MORE CONFUSION",
+        "words": [
+          102,
+          103
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 30.7,
+        "off": 31.3,
+        "dur": 0.6
+      },
+      {
+        "i": 42,
+        "beat": "b17",
+        "text": "BECAUSE MAX 20X",
+        "words": [
+          104,
+          105,
+          106
+        ],
+        "accent": true,
+        "accent_words": [
+          "MAX",
+          "20X"
+        ],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 31.3,
+        "off": 32.967,
+        "dur": 1.667
+      },
+      {
+        "i": 43,
+        "beat": "b18",
+        "text": "DIDN'T ACTUALLY",
+        "words": [
+          107,
+          108
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": true,
+        "on": 32.967,
+        "off": 33.5,
+        "dur": 0.533
+      },
+      {
+        "i": 44,
+        "beat": "b18",
+        "text": "GIVE YOU 4X",
+        "words": [
+          109,
+          110,
+          111
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 33.5,
+        "off": 34.567,
+        "dur": 1.067
+      },
+      {
+        "i": 45,
+        "beat": "b19",
+        "text": "THE USAGE",
+        "words": [
+          112,
+          113
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 34.567,
+        "off": 35.333,
+        "dur": 0.766
+      },
+      {
+        "i": 46,
+        "beat": "b19",
+        "text": "OF MAX 5X",
+        "words": [
+          114,
+          115,
+          116
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": true,
+        "on": 35.333,
+        "off": 36.633,
+        "dur": 1.3
+      },
+      {
+        "i": 47,
+        "beat": "b20",
+        "text": "YEAH IT",
+        "words": [
+          117,
+          118
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 36.633,
+        "off": 37.167,
+        "dur": 0.534
+      },
+      {
+        "i": 48,
+        "beat": "b20",
+        "text": "GAVE YOU",
+        "words": [
+          119,
+          120
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 37.167,
+        "off": 37.8,
+        "dur": 0.633
+      },
+      {
+        "i": 49,
+        "beat": "b20",
+        "text": "20X USAGE",
+        "words": [
+          121,
+          122
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 37.8,
+        "off": 38.633,
+        "dur": 0.833
+      },
+      {
+        "i": 50,
+        "beat": "b21",
+        "text": "FOR THEIR FIVE-HOUR LIMIT",
+        "words": [
+          123,
+          124,
+          125,
+          126
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 38.633,
+        "off": 39.967,
+        "dur": 1.334
+      },
+      {
+        "i": 51,
+        "beat": "b22",
+        "text": "NOT FOR",
+        "words": [
+          127,
+          128
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": true,
+        "on": 39.967,
+        "off": 40.2,
+        "dur": 0.233
+      },
+      {
+        "i": 52,
+        "beat": "b22",
+        "text": "THE WEEKLY",
+        "words": [
+          129,
+          130
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 40.2,
+        "off": 40.7,
+        "dur": 0.5
+      },
+      {
+        "i": 53,
+        "beat": "b22",
+        "text": "IT WAS ONLY",
+        "words": [
+          131,
+          132,
+          133
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 40.7,
+        "off": 41.233,
+        "dur": 0.533
+      },
+      {
+        "i": 54,
+        "beat": "b22",
+        "text": "DOUBLE THE",
+        "words": [
+          134,
+          135
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 41.233,
+        "off": 41.733,
+        "dur": 0.5
+      },
+      {
+        "i": 55,
+        "beat": "b22",
+        "text": "5X PLAN",
+        "words": [
+          136,
+          137
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "takeover",
+        "opens_on_cut": false,
+        "on": 41.733,
+        "off": 42.567,
+        "dur": 0.834
+      },
+      {
+        "i": 56,
+        "beat": "b23",
+        "text": "WHICH PEOPLE",
+        "words": [
+          138,
+          139
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 42.567,
+        "off": 43.1,
+        "dur": 0.533
+      },
+      {
+        "i": 57,
+        "beat": "b23",
+        "text": "GOT KIND OF",
+        "words": [
+          140,
+          141,
+          142
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 43.1,
+        "off": 43.567,
+        "dur": 0.467
+      },
+      {
+        "i": 58,
+        "beat": "b23",
+        "text": "PISSED AT",
+        "words": [
+          143,
+          144
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 43.567,
+        "off": 44.2,
+        "dur": 0.633
+      },
+      {
+        "i": 59,
+        "beat": "b24",
+        "text": "AND I THINK",
+        "words": [
+          145,
+          146,
+          147
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 44.2,
+        "off": 44.7,
+        "dur": 0.5
+      },
+      {
+        "i": 60,
+        "beat": "b24",
+        "text": "THAT'S WHAT KIND",
+        "words": [
+          148,
+          149,
+          150
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 44.7,
+        "off": 45.1,
+        "dur": 0.4
+      },
+      {
+        "i": 61,
+        "beat": "b24",
+        "text": "OF LED TO",
+        "words": [
+          151,
+          152,
+          153
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 45.1,
+        "off": 45.567,
+        "dur": 0.467
+      },
+      {
+        "i": 62,
+        "beat": "b24",
+        "text": "THIS NAME CHANGE",
+        "words": [
+          154,
+          155,
+          156
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 45.567,
+        "off": 46.7,
+        "dur": 1.133
+      },
+      {
+        "i": 63,
+        "beat": "b25",
+        "text": "BECAUSE I'M",
+        "words": [
+          157,
+          158
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 46.7,
+        "off": 47.333,
+        "dur": 0.633
+      },
+      {
+        "i": 64,
+        "beat": "b25",
+        "text": "PRETTY SURE",
+        "words": [
+          159,
+          160
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 47.333,
+        "off": 47.8,
+        "dur": 0.467
+      },
+      {
+        "i": 65,
+        "beat": "b25",
+        "text": "THEY WERE GETTING",
+        "words": [
+          161,
+          162,
+          163
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 47.8,
+        "off": 48.367,
+        "dur": 0.567
+      },
+      {
+        "i": 66,
+        "beat": "b25",
+        "text": "SUED FOR THAT",
+        "words": [
+          164,
+          165,
+          166
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 48.367,
+        "off": 49.433,
+        "dur": 1.066
+      },
+      {
+        "i": 67,
+        "beat": "b26",
+        "text": "I THINK EVERYONE",
+        "words": [
+          167,
+          168,
+          169
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 49.433,
+        "off": 49.967,
+        "dur": 0.534
+      },
+      {
+        "i": 68,
+        "beat": "b26",
+        "text": "ASSUMED IT WAS",
+        "words": [
+          170,
+          171,
+          172
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 49.967,
+        "off": 50.433,
+        "dur": 0.466
+      },
+      {
+        "i": 69,
+        "beat": "b26",
+        "text": "ACTUALLY 4X",
+        "words": [
+          173,
+          174
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 50.433,
+        "off": 51.233,
+        "dur": 0.8
+      },
+      {
+        "i": 70,
+        "beat": "b26",
+        "text": "WHEN IT WASN'T",
+        "words": [
+          175,
+          176,
+          177
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 51.233,
+        "off": 52.067,
+        "dur": 0.834
+      },
+      {
+        "i": 71,
+        "beat": "b27",
+        "text": "WELL",
+        "words": [
+          178
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 52.067,
+        "off": 52.4,
+        "dur": 0.333
+      },
+      {
+        "i": 72,
+        "beat": "b27",
+        "text": "NOW IT'S ULTRA",
+        "words": [
+          179,
+          180,
+          181
+        ],
+        "accent": true,
+        "accent_words": [
+          "ULTRA"
+        ],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 52.4,
+        "off": 53.5,
+        "dur": 1.1
+      },
+      {
+        "i": 73,
+        "beat": "b27",
+        "text": "NO MORE",
+        "words": [
+          182,
+          183
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 53.5,
+        "off": 53.8,
+        "dur": 0.3
+      },
+      {
+        "i": 74,
+        "beat": "b27",
+        "text": "FIVE-HOUR PLANS",
+        "words": [
+          184,
+          185
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 53.8,
+        "off": 54.7,
+        "dur": 0.9
+      },
+      {
+        "i": 75,
+        "beat": "b28",
+        "text": "SO DON'T BE",
+        "words": [
+          186,
+          187,
+          188
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 54.7,
+        "off": 55.1,
+        "dur": 0.4
+      },
+      {
+        "i": 76,
+        "beat": "b28",
+        "text": "SURPRISED IF",
+        "words": [
+          189,
+          190
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 55.1,
+        "off": 55.633,
+        "dur": 0.533
+      },
+      {
+        "i": 77,
+        "beat": "b28",
+        "text": "YOU SEE THAT",
+        "words": [
+          191,
+          192,
+          193
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 55.633,
+        "off": 56.067,
+        "dur": 0.434
+      },
+      {
+        "i": 78,
+        "beat": "b29",
+        "text": "WITH YOUR",
+        "words": [
+          194,
+          195
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": true,
+        "on": 56.067,
+        "off": 56.3,
+        "dur": 0.233
+      },
+      {
+        "i": 79,
+        "beat": "b29",
+        "text": "CLAUDE CODE PRICING",
+        "words": [
+          196,
+          197,
+          198
+        ],
+        "accent": true,
+        "accent_words": [
+          "CLAUDE",
+          "CODE"
+        ],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 56.3,
+        "off": 57.1,
+        "dur": 0.8
+      },
+      {
+        "i": 80,
+        "beat": "b29",
+        "text": "THESE DAYS",
+        "words": [
+          199,
+          200
+        ],
+        "accent": false,
+        "accent_words": [],
+        "position": "seam",
+        "opens_on_cut": false,
+        "on": 57.1,
+        "off": 57.65,
+        "dur": 0.55
+      }
+    ]
+  },
+  "frame_checks": {
+    "protocol": "pull by frame index from the encoded mp4 (ffmpeg select='eq(n,N)'), step every cut frame by eye, sheets past 48 s cut by hand",
+    "anchor_frames": [
+      {
+        "beat": "b01",
+        "word": "gone,",
+        "t": 1.76,
+        "frame": 53
+      },
+      {
+        "beat": "b02",
+        "word": "Ultra",
+        "t": 4.24,
+        "frame": 128
+      },
+      {
+        "beat": "b03",
+        "word": "renamed",
+        "t": 5.92,
+        "frame": 178
+      },
+      {
+        "beat": "b04",
+        "word": "20X.",
+        "t": 9.2,
+        "frame": 276
+      },
+      {
+        "beat": "b05",
+        "word": "Ultra.",
+        "t": 11.12,
+        "frame": 334
+      },
+      {
+        "beat": "b06",
+        "word": "limits",
+        "t": 12.64,
+        "frame": 380
+      },
+      {
+        "beat": "b07",
+        "word": "changed",
+        "t": 14.16,
+        "frame": 425
+      },
+      {
+        "beat": "b08",
+        "word": "Ultra",
+        "t": 15.04,
+        "frame": 452
+      },
+      {
+        "beat": "b09",
+        "word": "no",
+        "t": 16.0,
+        "frame": 480
+      },
+      {
+        "beat": "b10",
+        "word": "better",
+        "t": 19.76,
+        "frame": 593
+      },
+      {
+        "beat": "b11",
+        "word": "no",
+        "t": 21.44,
+        "frame": 644
+      },
+      {
+        "beat": "b12",
+        "word": "Codex",
+        "t": 22.56,
+        "frame": 677
+      },
+      {
+        "beat": "b13",
+        "word": "finally",
+        "t": 25.62,
+        "frame": 769
+      },
+      {
+        "beat": "b14",
+        "word": "five-hour",
+        "t": 27.94,
+        "frame": 839
+      },
+      {
+        "beat": "b15",
+        "word": "weekly",
+        "t": 29.3,
+        "frame": 879
+      },
+      {
+        "beat": "b16",
+        "word": "no",
+        "t": 30.58,
+        "frame": 918
+      },
+      {
+        "beat": "b17",
+        "word": "Max",
+        "t": 31.78,
+        "frame": 954
+      },
+      {
+        "beat": "b18",
+        "word": "4X",
+        "t": 33.86,
+        "frame": 1016
+      },
+      {
+        "beat": "b19",
+        "word": "Max",
+        "t": 35.54,
+        "frame": 1067
+      },
+      {
+        "beat": "b20",
+        "word": "20X",
+        "t": 37.86,
+        "frame": 1136
+      },
+      {
+        "beat": "b21",
+        "word": "five-hour",
+        "t": 38.9,
+        "frame": 1167
+      },
+      {
+        "beat": "b22",
+        "word": "double",
+        "t": 41.3,
+        "frame": 1239
+      },
+      {
+        "beat": "b23",
+        "word": "pissed",
+        "t": 43.62,
+        "frame": 1309
+      },
+      {
+        "beat": "b24",
+        "word": "think",
+        "t": 44.5,
+        "frame": 1335
+      },
+      {
+        "beat": "b25",
+        "word": "sure",
+        "t": 47.62,
+        "frame": 1429
+      },
+      {
+        "beat": "b26",
+        "word": "assumed",
+        "t": 50.02,
+        "frame": 1501
+      },
+      {
+        "beat": "b27",
+        "word": "Ultra,",
+        "t": 52.74,
+        "frame": 1583
+      },
+      {
+        "beat": "b28",
+        "word": "surprised",
+        "t": 55.14,
+        "frame": 1655
+      },
+      {
+        "beat": "b29",
+        "word": "pricing.",
+        "t": 56.82,
+        "frame": 1705
+      }
+    ],
+    "cut_frames": [
+      {
+        "t": 7.5,
+        "frame": 225,
+        "kind": "layout switch"
+      },
+      {
+        "t": 11.5,
+        "frame": 345,
+        "kind": "layout switch"
+      },
+      {
+        "t": 14.567,
+        "frame": 437,
+        "kind": "layout switch"
+      },
+      {
+        "t": 18.367,
+        "frame": 551,
+        "kind": "layout switch"
+      },
+      {
+        "t": 27.3,
+        "frame": 819,
+        "kind": "layout switch"
+      },
+      {
+        "t": 31.3,
+        "frame": 939,
+        "kind": "layout switch"
+      },
+      {
+        "t": 32.967,
+        "frame": 989,
+        "kind": "layout switch"
+      },
+      {
+        "t": 35.317,
+        "frame": 1060,
+        "kind": "join"
+      },
+      {
+        "t": 36.617,
+        "frame": 1099,
+        "kind": "layout switch + join"
+      },
+      {
+        "t": 39.95,
+        "frame": 1199,
+        "kind": "layout switch + join"
+      },
+      {
+        "t": 42.567,
+        "frame": 1277,
+        "kind": "layout switch"
+      },
+      {
+        "t": 44.183,
+        "frame": 1326,
+        "kind": "join"
+      },
+      {
+        "t": 52.383,
+        "frame": 1572,
+        "kind": "join"
+      }
+    ],
+    "must_see": [
+      "frame 0: post card up, rows and header whole, chip on the seam",
+      "0.92: pushed rows, no half-line at the window's top or bottom",
+      "13.14: weekly sentence whole, link line gone, nothing above y380 at any time",
+      "15.667-16.3: Ultra card lifts, 10x row never in frame",
+      "16.64 on: footnote up with the word verified",
+      "33.86-34.3: 4x never without THE ASSUMED MATH",
+      "36.617 and 39.95: join on the switch frame, no bare panel",
+      "44.2 and 52.4: scale 1.08 on the join frame, hair clear of the chip, hard edge at y960",
+      "46.667 and 53.467: scale back at 1, inside the window",
+      "57.64: last frame, face not black, nothing exited"
+    ]
+  },
+  "flags": [
+    "PUNCH-INS ADDED, one word reverts them. rawcut marks every join not BIG and no hint_why asks for a cover, so the first content plan had none. beats.json b24 and b27 assets now read 'punch-in on the join'; their hint_why stays as written. Measured on face_half.mp4, 44.183 is the largest single-frame change in the whole clip (8.5 against about 1.3 around it, head shift about 28 px on the 1080 frame) and 52.383 is a one-frame step of 5.9 against about 0.9 (about 14 px). Both sit in split with his face showing, so Chase's 'every visible jump cut' rule applies. Plan adds a bottom-half punch-in at each: b24.e7 at 44.183 and b27.e4 at 52.383. The b27 one sits inside the beat, .317 s after it starts, which is not the listed form, a split beat starting on the join. The other three joins are covered: 35.317 is inside a takeover, 36.617 and 39.95 are layout switches.",
+    "WHOLE RENDER cost of the punch-ins: EXTRA_ROOTS puts #face on sc-q24 and sc-q27. Any note on sc-q24 re-renders from 44.183 to the end: 6 of 29 beats, b24-b29, 13.47 s, 404 of 1730 frames, 23.4% of the video. sc-q27's note re-renders from 52.067: b27-b29, 5.58 s. The earliest cost is the one that counts. Build prints it; RUN.md carries it.",
+    "Two scenes sharing the extra root #face is untested: the proving project had one. If build or --audit refuses it, merge sc-q24 and sc-q27 into one scene with two windows and report that.",
+    "HUD open decision, layout.md: what it counts, when it first appears, whether every short needs one. Plan keeps the ivory behaviour because the Keep list holds HUD continuity and layout.md says the HUD keeps running on quiet panels. It counts the three things he recaps at 27.3-31.3: the name, the weekly limit, the five-hour limit, each seated where he first says it, and each socket rings when its recap row lands. Label 'THE RENAME' is Claude's word. No counter shows: the intake allows only facts.json numbers on screen, so the project's own tools_local/style.css carries #count { display: none; }. The shared kit and facts.json are untouched. Strip, label, sockets, plugs and rings stay, so HUD continuity holds and what it counts stays open. Say the word and the strip comes out: nothing else depends on it.",
+    "HUD icons come from the build's fixed set: Claude mark for the name, calendar for the week, slash for the five-hour limit. No clock symbol exists and build.py stays untouched.",
+    "Intake flags, his words uncorrected. b09 and b14 say 'no more five-hour limits' for no verified scope: both graphics carry verified. b27 says 'five-hour plans': our graphic says 'No 5-hour limit, verified'. Per Chase's note b24-b26 show rename facts and the assumed 4x callback. The sued line remains his hedged opinion; no lawsuit proof is on screen, and 'sued' stays on the chip alone with no accent.",
+    "Carried from beats.json: b12 names no plan and the doc proves Pro only, so 'Pro plans' stays lit. b26 'everyone' against the post's 'some new users': caption exact; 4x is labeled THE ASSUMED MATH and struck on wasn't, never a usage claim. b10 serif line is his opinion, verbatim excerpt, not a measured result.",
+    "Carried: split run 18.367-27.3 is 8.93 s and 42.567-57.65 is 15.08 s, both past the soft 8 s guardrail; no line earns a break. Chase's note replaces the six quiet panels at 42.567-56.067 with source artifacts and the assumed-math callback. Off-spot reads b08, b17, b23 kept.",
+    "cta_start is null, carried with its reason. If Chase counts the close as his CTA the value is 54.74 and b29's card becomes a content graphic inside the CTA, which layout.md rules out; b29 would need another look.",
+    "Clip data differs from ASSETS.md: title-highlight blue is local .83-1.60 (ASSETS .95-1.70), drag-select starts local .90 (ASSETS 1.05). Measured by frame step, plan uses the measured times. The ASSETS.md lines are left for the owner of that file.",
+    "face_half.mp4 has 1729 frames and the composition has 1730. Frame 1729 at 57.633 has no source frame, and #face-wrap's background is #111. Builder: snapshot 57.64 and confirm the last frame is not black before calling the build done. The plan duration stays 57.65 as required.",
+    "Captions: 'WELL' is a one-word chip, forced by the join at 52.383. Seam stays empty 11.5-11.867 (layout switch, 'Now' is .42 s away) and 24.3-24.433 (panel swap in his pause, a chip may open at most 5 frames early). Chip length stays 2-3 words, since chunk length is an open decision, with two four-word chips: 'THERE WERE NO LIMITS' (b11) and 'FOR THEIR FIVE-HOUR LIMIT' (b21), because two-word splits there last under .2 s and the spoken unit stays whole. Four chips stay near .23-.27 s: SO THE, THERE IS, NOT FOR, WITH YOUR. Chips stay inside their own beat; the fixture has none crossing one.",
+    "Measured on face_half at the seam: hair top is about y1020-1040 across the clip, 12 px or more below the chip bottom y1008. A punch-in about the recipe's 50% 50% would push hair to about y992, into the chip, so both punch-ins use origin 50% 8%.",
+    "Pre-note estimate, not remeasured after the b23-b28 replacement: Static read-out is 21.18 s per 30 s in this plan's model, over STYLE's 8 and CALIBRATION's 14 for calm cards. Longest hold 1.8 s, inside STYLE's 2.5. About a quarter of it falls in the quiet run 42.567-56.067 and about a third across all eight quiet beats; the rest is card and clip holds between planned changes, where only slow pushes move, which the model counts as static. Nothing was invented to lower it. gates.py on the render is the real number and it only warns.",
+    "b01, b06 and b07 use the plan's push rects, now in beats.json too, same text: b01 8,104 200x75 replaces 8,108 300x64, b06 and b07 8,388 257x39.1 replace 8,394 257x34. The old rects did not match the window's aspect, so holding them needed a window-height tween, and at 3x the b01 rows sat in the left half of the card. These rects keep the window fixed, stay in measured gutters and take the b01 rows from about 51 px to 76 px, per 'bigger, more centred, tighter'. Plate is DPR 2, so at publish the push is about 4.5x source: if it reads soft, post_card.py at DPR 4 is the fix, not a smaller rect.",
+    "Warn-only band: ink above y200 on b09 (card from y130) and b20 (card from y150). STYLE's y120 stands, logged as on the fixture.",
+    "b14 uses empty sockets, not numbered slots, and beats.json now says so: the intake allows only facts.json numbers on screen, and slot digits would be more figures in a video about multipliers.",
+    "Open decisions kept, not settled: rebuilt cards stay the look, and each beat's why names its form. No scene beats, so whether isometric scenes stay is untouched and no images were generated. Loudness, tail padding and hook line moves untouched. Sound is a later stage: no cues authored here.",
+    "On-screen words Claude wrote, for the handoff: 'THE RENAME', 'THE ASSUMED MATH', 'From the plan names, not a usage figure', 'Weekly limit, claude.com/pricing', 'Codex pricing doc, learn.chatgpt.com/docs/pricing', 'double' is his own word, carried to the bracket. Chase's note adds the small tag 'I'm pretty sure' and the scope line 'No 5-hour limit, verified'.",
+    "b16 is one whole row now, 'Max 20x → Ultra', crop CSS 14,142 126x22, a marked verbatim excerpt of the post's two rename rows, because both rows could not be read in 0.72 s. 'Max 5x → Max' is off this row. The row holds flat about 0.5 s, still short of picker.md's about 2 s: the 4 s cap and the cut do not move, so it leans on the same row having been on screen at about 76 px through b01-b02.",
+    "Setup ran during direction. tools_local did not exist, and new_project.py skips its whole kit copy when that folder exists, so writing style.css alone would have left the builder with no build.py, fonts or GSAP. new_project.py 1030-2 ran first and style.css then took the one #count rule. The builder's Setup keeps it. No index.html, scenes.py, timeline.js or owners.py work was done."
+  ],
+  "cta_start": null,
+  "cta_start_source": "No CTA. Read all 201 words: the close, words 186-200 'So don't be surprised if you see that with your Claude Code pricing. These days.', is direct address that asks nothing of the viewer. No follow, comment, link, search or check-it-out request anywhere in the transcript. If Chase counts the close as his CTA, the value is 54.74 (word 186 'So').",
+  "allow_full_face": false,
+  "allow_full_face_source": "template",
+  "composition_files": [
+    "tools_local/build.py",
+    "tools_local/scenes.py",
+    "tools_local/timeline.js",
+    "tools_local/style.css",
+    "tools_local/owners.py"
+  ],
+  "plan_check": {
+    "by": "director's own script, not an independent checker",
+    "failures": [],
+    "revision": "Revision for 3 plan-check issues, re-run against the pre-revision files: all 113 event ids, times and fields unchanged; captions, layout runs, beat times and computed totals unchanged, so the static band read-out stands; no N/3 left in plan.json or this file; beats.json changed only in the named strings; project style.css differs from the kit by the one #count rule; b16 crop has no ink on any edge, measured on the plate."
+  }
+}

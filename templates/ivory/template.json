@@ -1,0 +1,13 @@
+{
+  "name": "ivory",
+  "tool_name": "editorial",
+  "full_face": false,
+  "popout": {
+    "card_x": 60,
+    "card_w": 960,
+    "clear_y": 1048,
+    "radius": 36,
+    "card_css": "background: #111; border: 1px solid var(--bd); box-shadow: 0 12px 32px rgba(40, 30, 20, .10);",
+    "note": "clear_y: the seam chip ends at y 1008, plus 40 px. The head never rises above it."
+  }
+}

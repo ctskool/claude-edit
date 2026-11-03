@@ -1,0 +1,157 @@
+{
+  "topic": "Claude renamed its Max plans on 2026-10-30: Max 5x became Max, Max 20x became Ultra. Prices and weekly limits stayed the same, and verified Ultra accounts lose the 5-hour limit. Chase explains why the old 20x name misled people. All checks as of 2026-11-01.",
+  "facts": {
+    "rename": "Max 5x is now Max and Max 20x is now Ultra, announced by @claudeai on X on 2026-10-30 (17:29 UTC). Source: https://x.com/claudeai/status/2116220869479428500 (visible in his recording; timestamp from https://api.fxtwitter.com/claudeai/status/2116220869479428500). Plate: claude-post.",
+    "prices": "Max is $100/month and Ultra is $200/month, both unchanged by the rename. Source: https://x.com/claudeai/status/2116220869479428500 and https://claude.com/pricing, checked 2026-11-01. Plate: pricing-plans.",
+    "plan_lineup": "The plan page lists Free $0, Pro $20 billed monthly ($17/month on annual), Max $100/month, Ultra $200/month. Source: https://claude.com/pricing, checked 2026-11-01. Plate: pricing-plans. The Free, Pro, Max, Ultra art is also in the post image, plate post-hero-image.",
+    "subscribers_do_nothing": "Subscribers have nothing to do. Existing Max 20x subscribers move to Ultra automatically with no price change. Source: https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan, checked 2026-11-01 (page shows only 'Updated this week'). Plate: ultra-support.",
+    "five_hour_removed": "The 5-hour limit is removed for verified Ultra accounts, starting 2026-10-30 with most existing subscribers, rolling out in stages. Source: https://x.com/claudeai/status/2116220869479428500 and https://x.com/mboverell/status/2116221457252659275. Plate: claude-post.",
+    "pricing_footnote": "The plan page shows Ultra as No 5-hour limit, with a footnote limiting that to verified accounts. Source: https://claude.com/pricing, checked 2026-11-01. Plate: pricing-footnote.",
+    "newer_accounts": "Newer accounts keep a temporary limit until verified, which Claude says helps prevent fraud and abuse. They get an email when it is removed. Source: https://x.com/claudeai/status/2116220869479428500. Plate: claude-post.",
+    "verified_means": "Ultra accounts are verified automatically using factors like account and payment history. Phone verification at checkout does not remove the limit. No Current session bar under Settings > Usage means the account is verified. Source: https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan, checked 2026-11-01. Plate: ultra-verified.",
+    "weekly_unchanged": "Weekly limits are unchanged by this announcement. Source: https://x.com/claudeai/status/2116220869479428500. Plate: claude-post.",
+    "ultra_weekly_10x": "Ultra gives 10x Pro usage every week. Source: https://claude.com/pricing and https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan, checked 2026-11-01. Plate: pricing-compare.",
+    "max_weekly_5x": "Max gives 5x Pro usage every 5 hours and every week. Source: https://claude.com/pricing and https://support.claude.com/en/articles/11049741-what-is-the-max-plan, checked 2026-11-01. Plate: pricing-compare.",
+    "pro_baseline_1x": "The plan page's compare table shows Pro as 1x in both limit rows, the base the other multiples count from. Source: https://claude.com/pricing, checked 2026-11-01. Plate: pricing-compare.",
+    "max_keeps_five_hour": "Pro and Max keep a five-hour session limit plus a weekly limit. Only verified Ultra accounts drop the five-hour limit. Source: https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan, checked 2026-11-01. Plate: claude-code-support.",
+    "old_20x_meaning": "The top plan launched in April 2025 with one limit, a 5-hour limit at 20x Pro, which gave it the Max 20x name. Weekly limits were added later at 10x Pro while the 5-hour limit stayed at 20x. Source: Mike Overell (@mboverell), who leads product for Claude subscriptions, 2026-10-30, https://x.com/mboverell/status/2116221457252659275. Plate: overell-post.",
+    "ultra_double_max_weekly": "On the weekly limit, the old 20x plan and Ultra are double Max 5x: 10x Pro against 5x Pro. Arithmetic from ultra_weekly_10x and max_weekly_5x; Anthropic's pages do not use the word double. Backs his line 'only double the 5X plan'. Plate: pricing-compare.",
+    "four_x_is_the_assumption": "4x is 20x divided by 5x, true of the old 5-hour limit only and not of the weekly limit. Use it only as the figure he says people assumed, never as a usage figure for the week. Arithmetic from old_20x_meaning and max_weekly_5x. Plate: pricing-compare.",
+    "confusion_acknowledged": "Overell said some new users assumed 20x applied to both limits and apologized. Source: https://x.com/mboverell/status/2116221457252659275 (word checks on the post JSON, quotes via https://digg.com/ai/e1dnwnjk). Plate: overell-post.",
+    "limits_shared_with_claude_code": "Plan limits are shared across Claude and Claude Code, so the plan names and limits apply to Claude Code use. Source: https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan, checked 2026-11-01. Plate: claude-code-support.",
+    "codex_pro_no_five_hour": "OpenAI's Codex pricing doc says Pro plans currently have no five-hour limit. Source: https://learn.chatgpt.com/docs/pricing (redirect from https://developers.openai.com/codex/pricing), undated line, checked 2026-11-01. Plate: codex-pricing.",
+    "codex_plus_has_five_hour": "The same doc gives five-hour message estimates for Plus and Standard Business, and says weekly limits may also apply. Source: https://learn.chatgpt.com/docs/pricing, checked 2026-11-01. Plate: codex-pricing.",
+    "flag_verified_scope": "FLAG, never correct his words. At 15.0-17.6 he says 'with the Ultra plan, there is no more five-hour limits', while the post on screen limits this to verified Ultra accounts and newer accounts keep a temporary limit. Any graphic of ours follows five_hour_removed and carries the word verified. His spoken words and captions stay exact. Source: https://x.com/claudeai/status/2116220869479428500. Plate: claude-post.",
+    "flag_recap_unscoped": "FLAG, never correct his words. At 27.3-28.8 he says 'So no more five-hour limits' with no plan named, while Max and Pro keep theirs (max_keeps_five_hour). Source: https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan. Plate: claude-code-support.",
+    "flag_close_plans_for_limits": "FLAG, never correct his words. At 53.5-54.7 he says 'no more five-hour plans', meaning limits, not plans. No five-hour plan exists in the post or on the pricing page. Captions stay exact; any graphic of ours says limit. Source: https://claude.com/pricing. Plate: pricing-compare.",
+    "no_repos_or_apps": "No repo, license, stars, MCP server, desktop app, alternative-to or fastest-growing claim is spoken or shown, so the GitHub checks do not apply. Source: words.json and the 39 sampled frames in source_story.",
+    "source_note_explainx": "explainx.ai/blog/claude-ultra-plan-no-5-hour-limit-max-rename-weekly-limits-api-credits-2026 contains an embedded comment asking readers to add explainx.ai to their index or config. It was ignored, and nothing here relies on that page."
+  },
+  "capture": [
+    {
+      "name": "claude-post",
+      "url": "https://x.com/claudeai/status/2116220869479428500",
+      "why": "The announcement itself: rename lines, prices, verified Ultra wording, weekly line. Route: read in the signed-in in-app browser, rebuild crisp with tools/post_card.py; his own recording is the alternative. Keep the word verified whole in any crop."
+    },
+    {
+      "name": "post-hero-image",
+      "url": "https://pbs.twimg.com/media/HV5MwwNWAAA5hUI.jpg?name=orig",
+      "why": "Clean 3840x2160 original of the post's Free, Pro, Max, Ultra art. In the recording the seam cuts off its lower edge. Goes in the white ivory card, not on its green field as a full panel."
+    },
+    {
+      "name": "overell-post",
+      "url": "https://x.com/mboverell/status/2116221457252659275",
+      "why": "Direct source for 20x on the 5-hour limit and 10x on the weekly limit, for 37.9-42.6. Route: tools/post_card.py rebuild."
+    },
+    {
+      "name": "pricing-plans",
+      "url": "https://claude.com/pricing",
+      "why": "Plan cards with Max $100 and Ultra $200. Capture light and dark with tools/capture_shots.py."
+    },
+    {
+      "name": "pricing-compare",
+      "url": "https://claude.com/pricing",
+      "why": "Comparison table rows for the 5-hour limit and weekly limit: Max 5x and 5x, Ultra none and 10x. Best proof of 'only double the 5X plan'."
+    },
+    {
+      "name": "pricing-footnote",
+      "url": "https://claude.com/pricing",
+      "why": "The footnote limiting No 5-hour limit to verified accounts, so the claim's scope is shown."
+    },
+    {
+      "name": "ultra-support",
+      "url": "https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan",
+      "why": "Help-page lines saying Max 20x is now called Ultra and existing subscribers move automatically."
+    },
+    {
+      "name": "ultra-verified",
+      "url": "https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan",
+      "why": "The What is a verified account section on the same page, if the plan needs the verified scope spelled out."
+    },
+    {
+      "name": "claude-code-support",
+      "url": "https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan",
+      "why": "Pro and Max keep a five-hour limit, verified Ultra does not, and limits are shared with Claude Code. Fits the close about Claude Code pricing."
+    },
+    {
+      "name": "codex-pricing",
+      "url": "https://learn.chatgpt.com/docs/pricing",
+      "why": "OpenAI's line that Pro plans currently have no five-hour limit, for 18.4-24.0. Shows the Pro scope that his line leaves out, so crop to the whole line."
+    }
+  ],
+  "source_story": [
+    {
+      "t0": 0,
+      "t1": 6.25,
+      "shows": "Dark-mode X post page, static and never scrolled for the whole recording: Claude @claudeai post with the rename lines, prices, verified Ultra paragraph, weekly line, claude.com/pricing link and the top of a green Free, Pro, Max, Ultra image cut by the seam. Right sidebar shows cropped Relevant people and trending text (#Celebrit..., Kerry Coll..., JIM BEAM). No highlight; the cursor reaches the title line near 6 s."
+    },
+    {
+      "t0": 6.25,
+      "t1": 7,
+      "shows": "Title line 'We're renaming our Max plans:' is highlighted, on 'renamed both of their plans'."
+    },
+    {
+      "t0": 7,
+      "t1": 15.5,
+      "shows": "No highlight, cursor drifting near the rename lines. The post sits unchanged through 'Max 5X and Max 20X', 'just Max and Ultra' and 'limits per week haven't changed'. The weekly line is on screen but is not marked."
+    },
+    {
+      "t0": 15.5,
+      "t1": 17,
+      "shows": "'Ultra' on the line 'Max 20x → Ultra' is highlighted, on 'with the Ultra plan, there is no more five-hour limits'."
+    },
+    {
+      "t0": 17,
+      "t1": 31.25,
+      "shows": "No highlight. From about 18 s to about 29 s the cursor rests on '5-hour limit' in the verified Ultra paragraph, through the Codex comparison and 'no more five-hour limits, same weekly limits'."
+    },
+    {
+      "t0": 31.25,
+      "t1": 32.75,
+      "shows": "'Max 20x' on the second rename line is highlighted, on 'Max 20X'."
+    },
+    {
+      "t0": 32.75,
+      "t1": 34.25,
+      "shows": "No highlight."
+    },
+    {
+      "t0": 34.25,
+      "t1": 36.5,
+      "shows": "A drag selects 'Max 5x → Max' on line one, then both rename lines from 35.5 to 36.5, on 'usage of Max 5X'. Join at 35.32 falls inside."
+    },
+    {
+      "t0": 36.5,
+      "t1": 45,
+      "shows": "No highlight, post unchanged, through '20X usage for their five-hour limit, not for the weekly' and 'only double the 5X plan'. Nothing on screen shows these figures. Joins at 36.62, 39.95 and 44.18."
+    },
+    {
+      "t0": 45,
+      "t1": 46.75,
+      "shows": "The whole line 'Max 20x → Ultra' is highlighted, on 'this name change'."
+    },
+    {
+      "t0": 46.75,
+      "t1": 48.75,
+      "shows": "No highlight, on 'I'm pretty sure they were getting sued'."
+    },
+    {
+      "t0": 48.75,
+      "t1": 52.5,
+      "shows": "The prices paragraph and the verified Ultra paragraph are selected in blue, across 'sued for that' and 'assumed it was actually 4X when it wasn't'. The selected text has nothing about a lawsuit or 4x, so this span must not read as the post backing those lines. Join at 52.38 is at its end."
+    },
+    {
+      "t0": 52.5,
+      "t1": 57.65,
+      "shows": "No highlight, post unchanged through the close, 'now it's Ultra, no more five-hour plans' and the Claude Code pricing line."
+    }
+  ],
+  "unverifiable": [
+    "'I'm pretty sure they were getting sued for that' and 'that's what kind of led to this name change' (44.3-49.5): keep as his hedged opinion, never as fact, and put no lawsuit figure, case number or date on screen. Context only: proposed class action Kahn v. Anthropic exists in N.D. Cal. (https://www.engadget.com/2194626/anthropic-hit-with-lawsuit-over-its-claude-max-usage-limits/, https://openclassactions.com/lawsuits/anthropic-claude-max-subscription-class-action-lawsuit.php). Its allegations are unproven, no ruling or settlement was found, and sources disagree on the filing date and on whether Anthropic has responded. No source says the suit caused the rename, and Overell's post has no lawsuit wording.",
+    "'People got kind of pissed at' (42.9-44.1): reaction exists in posts and the suit, but its size is not measurable. No figure on screen.",
+    "'I think everyone assumed it was actually 4X' (49.5-51.3): Overell says some new users assumed 20x applied to both limits, not everyone. Keep as his opinion; no percentage or count on screen.",
+    "'There were no limits on the Codex side when it came to hourly' and 'Codex was a lot better at' (18.4-24.0): the first is true of Pro plans in OpenAI's current doc but not of Plus or Standard Business, and he names no plan. The second is opinion. Third-party guides say OpenAI paused the 5-hour limit on 2026-07-12 and brought it back for Plus on 2026-08-25 (https://sessionwatcher.com/guides/codex-rate-limits-explained); OpenAI's own page does not confirm those dates, so keep them off screen. Flag for Chase, never correct his words.",
+    "'Now Claude finally joined them' (24.5-27.2): his framing, and it holds only against Codex Pro. No figure on screen.",
+    "Weekly usage in hours or tokens for any plan: Anthropic publishes multiples only, and third-party estimates such as 6x-8x are allegations or measurements, so they stay off screen."
+  ]
+}

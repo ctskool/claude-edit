@@ -1,0 +1,99 @@
+/* Alloy
+   A machined graphite console with silver keycaps and recessed timecode.
+   References: Teenage Engineering TP-7 https://teenage.engineering/products/tp-7 ; Resolve panels https://www.blackmagicdesign.com/products/davinciresolve/panels
+*/
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+:root[data-theme] {
+  --bg: #212322;
+  --panel: #2c302e;
+  --ink: #f0f2eb;
+  --mute: #bec5bb;
+  --line: #515b52;
+  --split: #333a34;
+  --graphic: #414c42;
+  --face: #4e5c4f;
+  --key: #d4e6c4;
+  --selected: #38443a;
+  --chrome: #292d2a;
+  --body: "IBM Plex Sans", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", "Geist Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --display: "IBM Plex Sans Condensed", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mute2: var(--mute); --on: var(--bg);
+  --accent: #ff995d; --bad: #ff995d; --warn: var(--mute);
+  color-scheme: dark;
+}
+
+/* The player's geometry, visibility rules and true-colour media are inherited.
+   --key is navigation; --accent / --bad are exclusively review attention. */
+body { background: var(--bg); color: var(--ink); font-family: var(--body) }
+button, select, label, kbd, .mono { font-family: var(--mono) }
+button, select, input, textarea { color: var(--ink) }
+button { background: var(--panel); border-color: var(--line) }
+button:hover:not(:disabled) { border-color: var(--key) }
+button:disabled { color: var(--mute) }
+button.primary { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+button.primary:disabled { background: transparent; color: var(--mute); border-color: var(--line) }
+button.plain, .sound-row .sound-go, .go, .cue { background: transparent }
+:focus-visible { outline-color: var(--key) }
+h1 { font-size: 21px; line-height: 1.1 }
+h2 { color: var(--ink) }
+.pic, .mute, .quiet, .keys, #saved, #why, #theme, .empty { color: var(--mute) }
+.go .i, .go .t { color: var(--mute) }
+.beat.cur { background: var(--selected) }
+.go:hover { background: var(--selected) }
+.beat.cur .i { color: var(--ink) }
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--key) }
+.pill.PASS, .pill.UNVERIFIED, .tag.ok, .tag.q, .tag { color: var(--mute) }
+#head { background: var(--key); box-shadow: 0 0 0 1px var(--bg) }
+.cell { color: var(--ink) }
+.cell.cur { outline-color: var(--key) }
+.cue { border-left-color: var(--key) }
+.meter i { background: var(--key) }
+.legend { color: var(--mute) }
+kbd { background: var(--panel); color: var(--mute); border-color: var(--line) }
+#composer textarea, .ask input { background: var(--panel); color: var(--ink); border-color: var(--key) }
+textarea::placeholder, input::placeholder { color: var(--mute); opacity: 1 }
+#sound-btn[aria-pressed="true"] { color: var(--ink); border-color: var(--key); box-shadow: inset 0 -2px var(--key) }
+.note.flash { background: var(--selected) }
+dialog { color: var(--ink); background: var(--bg); border-color: var(--key); box-shadow: 0 12px 64px #0006 }
+dialog::backdrop { background: #000b }
+#tip { background: var(--ink); color: var(--bg) }
+
+/* Alloy: material, typography and navigation. */
+
+header { background: linear-gradient(#353a36, #282b29); box-shadow: inset 0 1px #6c756a }
+h1 { font-family: var(--display); font-weight: 600; letter-spacing: .015em }
+.stage { background: #191c1a }
+.rail, .rail-tabs { background: #262b27 }
+button:not(.go):not(.plain):not(.sound-go):not(.cue) { box-shadow: inset 0 1px #ffffff16, 0 1px 0 #0008 }
+button.primary { background: #d4e6c4; color: #182017; border-color: #d4e6c4 }
+#readout { background: #111a13; color: #d4e6c4; box-shadow: 0 0 0 4px #111a13, 0 0 0 5px #5c6b5b }
+.dock { background: linear-gradient(#343a35, #252a26); box-shadow: inset 0 1px #697365 }
+#play { background: #d4e6c4; color: #182017; border-color: #d4e6c4; font-weight: 600 }
+.cell { border-right-color: #1b211c; box-shadow: inset 0 -3px #0004 }
+.beat.cur { box-shadow: inset 3px 0 var(--key), inset 0 0 0 1px #647861 }
+kbd { background: #171f18; border-color: #647161; color: #dce6d4 }
+
+
+/* Shared review signal, intentionally after all decorative rules.
+   The DOM has no separate count span inside tabs. :has() colours the Notes
+   label from the player's ready state or an open/pending sound-note control;
+   zero/closed counts and the Sound cue total remain neutral. */
+.go .ch, .pill.FAIL, .tag.bad, .job.bad, #saved.bad, #sound-status.bad,
+#changed-line, #changed-line button, #go-hint, #go-line { color: var(--bad) }
+.cell.ch { box-shadow: inset 0 3px 0 var(--bad) }
+.lane i.bad, .cue i { background: var(--bad) }
+#notes:has(#go-line:not([hidden]), .note .when > .tag:first-child ~ button[title^="Take this note back"], .note .when > .tag:first-child ~ button.plain.mono:last-child) #note-count,
+#checks:has(.finding .tag.bad) #check-count { color: var(--bad) }
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"] { color: var(--bad) }
+/* Keep attention labels readable even in an inverted selected tab. */
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"][aria-selected="true"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"][aria-selected="true"] { background: var(--panel) }
+/* No perpetual animation is introduced. Text stays on solid reading grounds;
+   texture is confined to the surrounding chrome and low-amplitude cell fills. */
+@media (forced-colors: active) {
+  .beat.cur, .cell.cur { outline: 1px solid Highlight; outline-offset: -1px }
+  .cell.ch { border-top: 3px solid LinkText }
+}

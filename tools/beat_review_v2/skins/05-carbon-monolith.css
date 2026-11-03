@@ -1,0 +1,13 @@
+@import url("/skins/05-carbon.css");
+
+/* MONOLITH — one continuous oversized dot relief, cropped by the picture.
+   Analytic, variable-radius dots form slow light/dark waves in the stage margin.
+   No overlay, mask, pseudo-element or treatment is attached to the picture. */
+.stage { background-color: #181818; background-image: url("/skins/05-carbon-monolith.svg"); background-size: 460px 1000px; background-position: center 38%; background-repeat: repeat-y; border-right-color: #a6a699 }
+header { background-image: url("/skins/05-carbon-monolith.svg"); background-size: 460px 1000px; background-position: left 38%; background-repeat: no-repeat; border-bottom-style: dotted }
+header > h1, header > .pic, header > .end { background-color: #eeeee5 }
+/* A quiet graphite desk makes the sculptural field the single loud gesture. */
+.dock { box-shadow: none; border-top-color: #a6a699 }
+.tl { background: radial-gradient(circle, #a6a699 .8px, transparent 1px) left 2px / 12px 3px repeat-x }
+.cell[data-layout="full-graphic"] { background-image: none }
+@media (forced-colors: active) { .stage, header, .tl { background-image: none } }

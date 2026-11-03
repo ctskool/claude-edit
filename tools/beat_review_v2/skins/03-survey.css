@@ -1,0 +1,100 @@
+/* Survey
+   A pale sage field instrument with plotting ticks and precise geometric type.
+   References: Tektronix 555 https://collection.sciencemuseumgroup.org.uk/objects/co424239/dual-beam-oscilloscope ; vault DRONE Mapping OS, Spade
+*/
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap");
+
+:root[data-theme] {
+  --bg: #e6ebe2;
+  --panel: #f3f6ef;
+  --ink: #1c3028;
+  --mute: #4b5f52;
+  --line: #a5b5a7;
+  --split: #d5ded0;
+  --graphic: #c1d2c1;
+  --face: #afc5b2;
+  --key: #245547;
+  --selected: #d2e1d1;
+  --chrome: #dce5d8;
+  --body: "Space Grotesk", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Space Mono", "Geist Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --display: "Space Grotesk", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mute2: var(--mute); --on: var(--bg);
+  --accent: #a8390b; --bad: #a8390b; --warn: var(--mute);
+  color-scheme: light;
+}
+
+/* The player's geometry, visibility rules and true-colour media are inherited.
+   --key is navigation; --accent / --bad are exclusively review attention. */
+body { background: var(--bg); color: var(--ink); font-family: var(--body) }
+button, select, label, kbd, .mono { font-family: var(--mono) }
+button, select, input, textarea { color: var(--ink) }
+button { background: var(--panel); border-color: var(--line) }
+button:hover:not(:disabled) { border-color: var(--key) }
+button:disabled { color: var(--mute) }
+button.primary { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+button.primary:disabled { background: transparent; color: var(--mute); border-color: var(--line) }
+button.plain, .sound-row .sound-go, .go, .cue { background: transparent }
+:focus-visible { outline-color: var(--key) }
+h1 { font-size: 21px; line-height: 1.1 }
+h2 { color: var(--ink) }
+.pic, .mute, .quiet, .keys, #saved, #why, #theme, .empty { color: var(--mute) }
+.go .i, .go .t { color: var(--mute) }
+.beat.cur { background: var(--selected) }
+.go:hover { background: var(--selected) }
+.beat.cur .i { color: var(--ink) }
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--key) }
+.pill.PASS, .pill.UNVERIFIED, .tag.ok, .tag.q, .tag { color: var(--mute) }
+#head { background: var(--key); box-shadow: 0 0 0 1px var(--bg) }
+.cell { color: var(--ink) }
+.cell.cur { outline-color: var(--key) }
+.cue { border-left-color: var(--key) }
+.meter i { background: var(--key) }
+.legend { color: var(--mute) }
+kbd { background: var(--panel); color: var(--mute); border-color: var(--line) }
+#composer textarea, .ask input { background: var(--panel); color: var(--ink); border-color: var(--key) }
+textarea::placeholder, input::placeholder { color: var(--mute); opacity: 1 }
+#sound-btn[aria-pressed="true"] { color: var(--ink); border-color: var(--key); box-shadow: inset 0 -2px var(--key) }
+.note.flash { background: var(--selected) }
+dialog { color: var(--ink); background: var(--bg); border-color: var(--key); box-shadow: 0 12px 64px #0006 }
+dialog::backdrop { background: #000b }
+#tip { background: var(--ink); color: var(--bg) }
+
+/* Survey: material, typography and navigation. */
+
+header { background: var(--chrome); box-shadow: inset 0 3px 0 var(--key) }
+h1 { font-family: var(--display); font-weight: 600; letter-spacing: -.06em }
+.stage { background-color: #d4ded0; background-image: linear-gradient(#24554712 1px, transparent 1px), linear-gradient(90deg, #24554712 1px, transparent 1px); background-size: 24px 24px }
+.rail { background-color: var(--panel); background-image: repeating-linear-gradient(0deg, var(--line) 0 1px, transparent 1px 8px); background-size: 4px 100%; background-repeat: no-repeat }
+.rail-tabs { background: var(--panel) }
+#beats h2 { box-shadow: inset 0 -1px 0 var(--key) }
+.beat { border-bottom-style: dotted }
+.beat.cur { box-shadow: inset 4px 0 var(--key), inset 0 0 0 1px var(--key) }
+.dock { background: var(--chrome); box-shadow: inset 0 3px var(--key) }
+.tl { background-image: repeating-linear-gradient(90deg, #24554770 0 1px, transparent 1px 8px); background-size: 100% 5px; background-repeat: no-repeat }
+#play { border-color: var(--key); background: var(--key); color: #f3f6ef }
+.cell[data-layout="full-graphic"] { background-image: repeating-linear-gradient(90deg, transparent 0 5px, #2455470c 5px 6px) }
+#head::before { content: ""; position: absolute; top: 0; left: -4px; width: 10px; height: 6px; background: var(--key) }
+
+
+/* Shared review signal, intentionally after all decorative rules.
+   The DOM has no separate count span inside tabs. :has() colours the Notes
+   label from the player's ready state or an open/pending sound-note control;
+   zero/closed counts and the Sound cue total remain neutral. */
+.go .ch, .pill.FAIL, .tag.bad, .job.bad, #saved.bad, #sound-status.bad,
+#changed-line, #changed-line button, #go-hint, #go-line { color: var(--bad) }
+.cell.ch { box-shadow: inset 0 3px 0 var(--bad) }
+.lane i.bad, .cue i { background: var(--bad) }
+#notes:has(#go-line:not([hidden]), .note .when > .tag:first-child ~ button[title^="Take this note back"], .note .when > .tag:first-child ~ button.plain.mono:last-child) #note-count,
+#checks:has(.finding .tag.bad) #check-count { color: var(--bad) }
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"] { color: var(--bad) }
+/* Keep attention labels readable even in an inverted selected tab. */
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"][aria-selected="true"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"][aria-selected="true"] { background: var(--panel) }
+/* No perpetual animation is introduced. Text stays on solid reading grounds;
+   texture is confined to the surrounding chrome and low-amplitude cell fills. */
+@media (forced-colors: active) {
+  .beat.cur, .cell.cur { outline: 1px solid Highlight; outline-offset: -1px }
+  .cell.ch { border-top: 3px solid LinkText }
+}

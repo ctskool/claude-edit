@@ -1,0 +1,10 @@
+[
+ {"name": "claude-pricing-light", "url": "https://claude.com/pricing", "theme": "light", "width": 1440, "height": 1000, "full_page": true},
+ {"name": "claude-pricing-dark", "url": "https://claude.com/pricing", "theme": "dark", "width": 1440, "height": 1000, "full_page": true},
+ {"name": "ultra-support-light", "url": "https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan", "theme": "light", "width": 480, "height": 900, "full_page": true},
+ {"name": "ultra-support-dark", "url": "https://support.claude.com/en/articles/17728952-what-is-the-ultra-plan", "theme": "dark", "width": 480, "height": 900, "full_page": true},
+ {"name": "claude-code-support-light", "url": "https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan", "theme": "light", "width": 480, "height": 900, "full_page": true},
+ {"name": "claude-code-support-dark", "url": "https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-max-or-ultra-plan", "theme": "dark", "width": 480, "height": 900, "full_page": true},
+ {"name": "codex-pricing-light", "url": "https://learn.chatgpt.com/docs/pricing", "theme": "light", "width": 480, "height": 900, "element": "p:has-text('Pro plans currently have no five-hour limit')"},
+ {"name": "codex-pricing-dark", "url": "https://learn.chatgpt.com/docs/pricing", "theme": "dark", "width": 480, "height": 900, "element": "p:has-text('Pro plans currently have no five-hour limit')"}
+]

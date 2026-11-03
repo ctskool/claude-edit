@@ -1,0 +1,122 @@
+/* Phosphor
+   An oscilloscope after midnight: green phosphor, raster chrome and a luminous cursor.
+   References: Tektronix 555 https://collection.sciencemuseumgroup.org.uk/objects/co424239/dual-beam-oscilloscope ; IBM 3270 https://bitsavers.computerhistory.org/pdf/ibm/3270/950-I048-3270_1985.pdf
+*/
+@import url("https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
+
+:root[data-theme] {
+  --bg: #06170e;
+  --panel: #10291e;
+  --ink: #d5ffdf;
+  --mute: #a4d9b3;
+  --line: #376b4a;
+  --split: #153c28;
+  --graphic: #205536;
+  --face: #306944;
+  --key: #93ffb1;
+  --selected: #1a3f2b;
+  --chrome: #0d2318;
+  --body: "IBM Plex Sans", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", "Geist Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --display: "VT323", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mute2: var(--mute); --on: var(--bg);
+  --accent: #ffab70; --bad: #ffab70; --warn: var(--mute);
+  color-scheme: dark;
+}
+
+/* The player's geometry, visibility rules and true-colour media are inherited.
+   --key is navigation; --accent / --bad are exclusively review attention. */
+body { background: var(--bg); color: var(--ink); font-family: var(--body) }
+button, select, label, kbd, .mono { font-family: var(--mono) }
+button, select, input, textarea { color: var(--ink) }
+button { background: var(--panel); border-color: var(--line) }
+button:hover:not(:disabled) { border-color: var(--key) }
+button:disabled { color: var(--mute) }
+button.primary { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+button.primary:disabled { background: transparent; color: var(--mute); border-color: var(--line) }
+button.plain, .sound-row .sound-go, .go, .cue { background: transparent }
+:focus-visible { outline-color: var(--key) }
+h1 { font-size: 21px; line-height: 1.1 }
+h2 { color: var(--ink) }
+.pic, .mute, .quiet, .keys, #saved, #why, #theme, .empty { color: var(--mute) }
+.go .i, .go .t { color: var(--mute) }
+.beat.cur { background: var(--selected) }
+.go:hover { background: var(--selected) }
+.beat.cur .i { color: var(--ink) }
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--key) }
+.pill.PASS, .pill.UNVERIFIED, .tag.ok, .tag.q, .tag { color: var(--mute) }
+#head { background: var(--key); box-shadow: 0 0 0 1px var(--bg) }
+.cell { color: var(--ink) }
+.cell.cur { outline-color: var(--key) }
+.cue { border-left-color: var(--key) }
+.meter i { background: var(--key) }
+.legend { color: var(--mute) }
+kbd { background: var(--panel); color: var(--mute); border-color: var(--line) }
+#composer textarea, .ask input { background: var(--panel); color: var(--ink); border-color: var(--key) }
+textarea::placeholder, input::placeholder { color: var(--mute); opacity: 1 }
+#sound-btn[aria-pressed="true"] { color: var(--ink); border-color: var(--key); box-shadow: inset 0 -2px var(--key) }
+.note.flash { background: var(--selected) }
+dialog { color: var(--ink); background: var(--bg); border-color: var(--key); box-shadow: 0 12px 64px #0006 }
+dialog::backdrop { background: #000b }
+#tip { background: var(--ink); color: var(--bg) }
+
+
+/* Static CRT glass lives in the chrome. No layer covers the frame or picture. */
+header { position: relative; isolation: isolate; background: #031009; box-shadow: inset 0 2px #93ffb1, inset 0 -2px #497a51, 0 3px 18px #70ff981f }
+header::before { content: "PHOSPHOR"; position: absolute; pointer-events: none; z-index: -1; inset: 0 18% 0 34%; overflow: hidden; font: 84px/.7 var(--display); letter-spacing: .08em; color: #87ffa41b; white-space: nowrap }
+h1 { font: 400 28px/1 var(--display); letter-spacing: .02em; color: #d5ffdf; text-shadow: 0 0 2px #93ffb1, 0 0 12px #7cff9b, 0 0 25px #7cff9b70 }
+header, .dock { background-image: repeating-linear-gradient(0deg, #93ffb10c 0 1px, transparent 1px 4px) }
+.stage { background-color: #031009; background-image: radial-gradient(ellipse at center, #154b2b, #031009 75%), repeating-linear-gradient(0deg, #93ffb1 0 1px, transparent 1px 6px); box-shadow: inset 0 0 22px #000 }
+/* The two pseudo-elements fit only inside the inherited 16px side gutters. */
+.stage::before, .stage::after { content: ""; position: absolute; pointer-events: none; top: 0; bottom: 0; width: 12px; background: repeating-linear-gradient(0deg, #93ffb1 0 2px, transparent 2px 24px); opacity: .65 }
+.stage::before { left: 1px; box-shadow: inset 2px 0 #93ffb1 }
+.stage::after { right: 1px; box-shadow: inset -2px 0 #93ffb1 }
+#beats, .rail { background-color: #06170e; background-image: repeating-linear-gradient(0deg, #93ffb109 0 1px, transparent 1px 4px); box-shadow: inset 0 0 35px #0008 }
+#beats h2, .rail-tabs { background: #031009; color: var(--key); box-shadow: inset 0 -2px #93ffb1, 0 2px 10px #93ffb127 }
+h2, .rail-tabs, #readout, .go .i { text-shadow: 0 0 8px #78ff9c80 }
+h2 { font-family: var(--display); font-size: 18px; line-height: .83334; letter-spacing: .1em }
+/* Crisp glyphs, low-amplitude raster beneath the transcript. */
+.go { text-shadow: none }
+.beat { border-bottom-color: #244b32 }
+.beat.cur { background: #163923; box-shadow: inset 4px 0 #93ffb1, inset 0 0 15px #93ffb117 }
+button { border-color: #578d63; box-shadow: inset 0 0 0 2px #031009, inset 0 -4px #0005 }
+button:hover:not(:disabled) { box-shadow: inset 0 0 0 1px #93ffb1, 0 0 10px #93ffb13b }
+.go, .sound-go, .cue, button.plain { box-shadow: none }
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] { background: #193d25; box-shadow: inset 0 -3px var(--key) }
+.dock { background-color: #031009; box-shadow: inset 0 3px #93ffb1, inset 0 6px #275438, 0 -4px 22px #93ffb12b }
+#play { background: #b4ffc7; color: #031009; border-color: #b4ffc7; font-weight: 600; text-shadow: none; box-shadow: 0 0 14px #93ffb150, inset 0 -4px #68bc80 }
+.tl { background: repeating-linear-gradient(90deg, #93ffb1 0 1px, transparent 1px 10px) 0 0/100% 7px no-repeat }
+.cell { background-color: #102d1c; background-image: repeating-linear-gradient(0deg, #93ffb117 0 1px, transparent 1px 4px); border-right-color: #93ffb177; text-shadow: 0 0 4px #93ffb18c }
+.cell[data-layout="full-face"] { background-color: #234c30; background-image: radial-gradient(#406f4c 1px, transparent 1px); background-size: 4px 4px }
+.cell[data-layout="full-graphic"] { background-color: #153c28; background-image: repeating-linear-gradient(135deg, #386345 0 2px, transparent 2px 6px) }
+.cell.cur { outline: 2px solid #d5ffdf; outline-offset: -2px }
+#head { background: #d5ffdf; box-shadow: 0 0 4px 2px #93ffb1, 0 0 19px 5px #93ffb188 }
+#head::before { content: ""; position: absolute; pointer-events: none; top: 0; left: -6px; width: 14px; height: 8px; background: #d5ffdf; box-shadow: 0 0 12px #93ffb1; clip-path: polygon(0 0,100% 0,50% 100%) }
+.cue { border-left-color: #93ffb1; color: #d5ffdf; background: repeating-linear-gradient(0deg, #93ffb108 0 1px, transparent 1px 4px) }
+.lane i:not(.bad):not(.old) { background: var(--key); box-shadow: 0 0 6px var(--key) }
+kbd { color: #c3ffcf; background: #102d1c; border-color: #578d63; box-shadow: inset 0 -2px #031009 }
+
+
+/* Solid islands protect live labels from the large background lettering. */
+header > h1, header > .pic, header > .end, #transport > span, #composer .hint, #composer .at, .legend { background: #031009 }
+
+/* Shared review signal, intentionally after all decorative rules.
+   The DOM has no separate count span inside tabs. :has() colours the Notes
+   label from the player's ready state or an open/pending sound-note control;
+   zero/closed counts and the Sound cue total remain neutral. */
+.go .ch, .pill.FAIL, .tag.bad, .job.bad, #saved.bad, #sound-status.bad,
+#changed-line, #changed-line button, #go-hint, #go-line { color: var(--bad) }
+.cell.ch { box-shadow: inset 0 3px 0 var(--bad) }
+.lane i.bad, .cue i { background: var(--bad) }
+#notes:has(#go-line:not([hidden]), .note .when > .tag:first-child ~ button[title^="Take this note back"], .note .when > .tag:first-child ~ button.plain.mono:last-child) #note-count,
+#checks:has(.finding .tag.bad) #check-count { color: var(--bad) }
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"] { color: var(--bad) }
+/* Keep attention labels readable even in an inverted selected tab. */
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"][aria-selected="true"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"][aria-selected="true"] { background: var(--panel) }
+/* Static materials; no new animation. Attention is never used decoratively. */
+@media (forced-colors: active) {
+  .beat.cur, .cell.cur { outline: 1px solid Highlight; outline-offset: -1px }
+  .cell.ch { border-top: 3px solid LinkText }
+}

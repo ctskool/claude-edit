@@ -1,0 +1,122 @@
+/* Blueprint
+   A saturated cyanotype drafting sheet with ruled margins and white drafting brackets.
+   References: Cyanotype UK https://cyanotype.co.uk/cyanotype-process ; vault DRONE From Above, Break the Pattern
+*/
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow:wght@400;500;600&family=Azeret+Mono:wght@400;500;600&display=swap");
+
+:root[data-theme] {
+  --bg: #102f70;
+  --panel: #193c7d;
+  --ink: #f0f6ff;
+  --mute: #d0e4fa;
+  --line: #597bb0;
+  --split: #234682;
+  --graphic: #2a5294;
+  --face: #365fa1;
+  --key: #d3ebff;
+  --selected: #284f91;
+  --chrome: #0b255b;
+  --body: "Barlow", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Azeret Mono", "Geist Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --display: "Space Mono", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mute2: var(--mute); --on: var(--bg);
+  --accent: #ffb775; --bad: #ffb775; --warn: var(--mute);
+  color-scheme: dark;
+}
+
+/* The player's geometry, visibility rules and true-colour media are inherited.
+   --key is navigation; --accent / --bad are exclusively review attention. */
+body { background: var(--bg); color: var(--ink); font-family: var(--body) }
+button, select, label, kbd, .mono { font-family: var(--mono) }
+button, select, input, textarea { color: var(--ink) }
+button { background: var(--panel); border-color: var(--line) }
+button:hover:not(:disabled) { border-color: var(--key) }
+button:disabled { color: var(--mute) }
+button.primary { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+button.primary:disabled { background: transparent; color: var(--mute); border-color: var(--line) }
+button.plain, .sound-row .sound-go, .go, .cue { background: transparent }
+:focus-visible { outline-color: var(--key) }
+h1 { font-size: 21px; line-height: 1.1 }
+h2 { color: var(--ink) }
+.pic, .mute, .quiet, .keys, #saved, #why, #theme, .empty { color: var(--mute) }
+.go .i, .go .t { color: var(--mute) }
+.beat.cur { background: var(--selected) }
+.go:hover { background: var(--selected) }
+.beat.cur .i { color: var(--ink) }
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--key) }
+.pill.PASS, .pill.UNVERIFIED, .tag.ok, .tag.q, .tag { color: var(--mute) }
+#head { background: var(--key); box-shadow: 0 0 0 1px var(--bg) }
+.cell { color: var(--ink) }
+.cell.cur { outline-color: var(--key) }
+.cue { border-left-color: var(--key) }
+.meter i { background: var(--key) }
+.legend { color: var(--mute) }
+kbd { background: var(--panel); color: var(--mute); border-color: var(--line) }
+#composer textarea, .ask input { background: var(--panel); color: var(--ink); border-color: var(--key) }
+textarea::placeholder, input::placeholder { color: var(--mute); opacity: 1 }
+#sound-btn[aria-pressed="true"] { color: var(--ink); border-color: var(--key); box-shadow: inset 0 -2px var(--key) }
+.note.flash { background: var(--selected) }
+dialog { color: var(--ink); background: var(--bg); border-color: var(--key); box-shadow: 0 12px 64px #0006 }
+dialog::backdrop { background: #000b }
+#tip { background: var(--ink); color: var(--bg) }
+
+
+/* Cyanotype paper: full-sheet major/minor grid, ruled edges, dimension furniture. */
+header { position: relative; isolation: isolate; background: #08265d; box-shadow: inset 0 2px #e5f5ff, inset 0 -3px #e5f5ff }
+header::before { content: "BLUEPRINT"; position: absolute; z-index: -1; pointer-events: none; inset: 0 18% 0 34%; overflow: hidden; white-space: nowrap; font: 600 68px/.8 var(--display); color: #cceaff22; letter-spacing: -.04em }
+h1 { font-family: var(--display); font-size: 21px; font-weight: 600; letter-spacing: -.02em; text-shadow: 1px 1px #08265d, 2px 2px #92caff }
+.stage, #beats, .rail, .dock { background-color: #0b3275; background-image: linear-gradient(#cceaff36 1px, transparent 1px), linear-gradient(90deg, #cceaff36 1px, transparent 1px), linear-gradient(#cceaff15 1px, transparent 1px), linear-gradient(90deg, #cceaff15 1px, transparent 1px); background-size: 96px 96px,96px 96px,16px 16px,16px 16px }
+/* Gutter-only dimension rails; no marks intrude into .frame. */
+.stage::before, .stage::after { content: ""; position: absolute; pointer-events: none; width: 12px; top: 7px; bottom: 7px; border-top: 1px solid #e5f5ff; border-bottom: 1px solid #e5f5ff; background: linear-gradient(90deg, transparent 5px,#cceaff 5px 6px,transparent 6px), repeating-linear-gradient(0deg,#cceaff 0 1px,transparent 1px 16px) 0 0/7px 100% no-repeat }
+.stage::before { left: 1px }
+.stage::after { right: 1px }
+#beats h2 { background: #08265d; box-shadow: inset 0 -2px #e5f5ff; text-decoration: underline; text-underline-offset: 4px }
+#beat-list { background: #0b2d69ed }
+.beat { border-bottom-style: dashed; border-bottom-color: #6c92bb; border-left-color: #6e9bce }
+.beat.cur { background: #234b89; box-shadow: inset 0 0 0 1px #e5f5ff, inset 5px 0 #e5f5ff }
+.rail { box-shadow: inset 6px 0 #cceaff, inset 9px 0 #08265d }
+.rail > .panel { background: #08265df5 }
+.rail-tabs { background: #08265d; box-shadow: inset 0 -1px #e5f5ff }
+h2 { font-weight: 600; letter-spacing: .1em }
+button { background: #103a7b; border-color: #a4cae8; box-shadow: inset 0 0 0 2px #08265d }
+button:hover:not(:disabled) { background: #254c89 }
+.go, .sound-go, .cue, button.plain { background: transparent; box-shadow: none }
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] { background: #e5f5ff; color: #08265d; box-shadow: inset 0 0 0 2px #08265d; border-bottom-color: #e5f5ff }
+.dock { box-shadow: inset 0 3px #e5f5ff, inset 0 6px #08265d; background-color: #08265d }
+#transport { background: #08265df5 }
+#play { background: #e5f5ff; color: #08265d; font-weight: 600; border-color: #e5f5ff }
+.tl { background: repeating-linear-gradient(90deg, #cceaff 0 1px, transparent 1px 8px) 0 0/100% 8px no-repeat }
+.cell { background-color: #123576; border-right-color: #cceaff; background-image: repeating-linear-gradient(90deg, #40639b 0 1px, transparent 1px 5px) }
+.cell[data-layout="full-face"] { background-color: #234981; background-image: radial-gradient(#4567a4 .8px,transparent 1px); background-size: 4px 4px }
+.cell[data-layout="full-graphic"] { background-color: #1d427c; background-image: repeating-linear-gradient(45deg,#4567a4 0 1px,transparent 1px 5px),repeating-linear-gradient(-45deg,#4567a4 0 1px,transparent 1px 5px) }
+.cell.cur { outline: 2px solid #e5f5ff; outline-offset: -2px }
+#head { background: #e5f5ff; box-shadow: 0 0 0 1px #08265d }
+#head::before { content: ""; position: absolute; pointer-events: none; width: 15px; height: 15px; left: -6px; top: -3px; border: 1px solid #e5f5ff; border-radius: 50%; background: linear-gradient(#e5f5ff,#e5f5ff) center/1px 100% no-repeat,linear-gradient(90deg,#e5f5ff,#e5f5ff) center/100% 1px no-repeat,#08265d }
+.cue { border-left-color: #e5f5ff; background: #08265df5 }
+.cue::before { content: ""; pointer-events: none; position: absolute; top: 0; left: 0; width: 7px; height: 7px; border-top: 1px solid #e5f5ff; border-right: 1px solid #e5f5ff }
+kbd { border-color: #a4cae8; background: #08265d }
+
+
+/* Solid islands protect live labels from the large background lettering. */
+header > h1, header > .pic, header > .end, #transport > span, #composer .hint, #composer .at, .legend { background: #08265d }
+
+/* Shared review signal, intentionally after all decorative rules.
+   The DOM has no separate count span inside tabs. :has() colours the Notes
+   label from the player's ready state or an open/pending sound-note control;
+   zero/closed counts and the Sound cue total remain neutral. */
+.go .ch, .pill.FAIL, .tag.bad, .job.bad, #saved.bad, #sound-status.bad,
+#changed-line, #changed-line button, #go-hint, #go-line { color: var(--bad) }
+.cell.ch { box-shadow: inset 0 3px 0 var(--bad) }
+.lane i.bad, .cue i { background: var(--bad) }
+#notes:has(#go-line:not([hidden]), .note .when > .tag:first-child ~ button[title^="Take this note back"], .note .when > .tag:first-child ~ button.plain.mono:last-child) #note-count,
+#checks:has(.finding .tag.bad) #check-count { color: var(--bad) }
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"] { color: var(--bad) }
+/* Keep attention labels readable even in an inverted selected tab. */
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"][aria-selected="true"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"][aria-selected="true"] { background: var(--panel) }
+/* Static materials; no new animation. Attention is never used decoratively. */
+@media (forced-colors: active) {
+  .beat.cur, .cell.cur { outline: 1px solid Highlight; outline-offset: -1px }
+  .cell.ch { border-top: 3px solid LinkText }
+}

@@ -1,0 +1,125 @@
+/* Optik
+   A kinetic-poster control desk frozen in place: sulfur, black optical stripes and geometric cuts.
+   References: Cooper Hewitt / Troxler https://www.cooperhewitt.org/2015/05/27/jazz-typography/ ; Weltformat https://www.cooperhewitt.org/2014/10/15/all-torn-up/ ; Actual Source Greed https://actualsource.org/products/greed-specimen
+*/
+@import url("https://fonts.googleapis.com/css2?family=Unbounded:wght@600&family=Barlow:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap");
+
+:root[data-theme] {
+  --bg: #f3f3e8;
+  --panel: #ffffff;
+  --ink: #161b13;
+  --mute: #404a35;
+  --line: #9da68f;
+  --split: #f5f4e9;
+  --graphic: #efff3c;
+  --face: #d3df9c;
+  --key: #161b13;
+  --selected: #e8ecb7;
+  --chrome: #efff3c;
+  --body: "Barlow", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "DM Mono", "Geist Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --display: "Unbounded", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mute2: var(--mute); --on: var(--bg);
+  --accent: #a53608; --bad: #a53608; --warn: var(--mute);
+  color-scheme: light;
+}
+
+/* The player's geometry, visibility rules and true-colour media are inherited.
+   --key is navigation; --accent / --bad are exclusively review attention. */
+body { background: var(--bg); color: var(--ink); font-family: var(--body) }
+button, select, label, kbd, .mono { font-family: var(--mono) }
+button, select, input, textarea { color: var(--ink) }
+button { background: var(--panel); border-color: var(--line) }
+button:hover:not(:disabled) { border-color: var(--key) }
+button:disabled { color: var(--mute) }
+button.primary { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+button.primary:disabled { background: transparent; color: var(--mute); border-color: var(--line) }
+button.plain, .sound-row .sound-go, .go, .cue { background: transparent }
+:focus-visible { outline-color: var(--key) }
+h1 { font-size: 21px; line-height: 1.1 }
+h2 { color: var(--ink) }
+.pic, .mute, .quiet, .keys, #saved, #why, #theme, .empty { color: var(--mute) }
+.go .i, .go .t { color: var(--mute) }
+.beat.cur { background: var(--selected) }
+.go:hover { background: var(--selected) }
+.beat.cur .i { color: var(--ink) }
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--key) }
+.pill.PASS, .pill.UNVERIFIED, .tag.ok, .tag.q, .tag { color: var(--mute) }
+#head { background: var(--key); box-shadow: 0 0 0 1px var(--bg) }
+.cell { color: var(--ink) }
+.cell.cur { outline-color: var(--key) }
+.cue { border-left-color: var(--key) }
+.meter i { background: var(--key) }
+.legend { color: var(--mute) }
+kbd { background: var(--panel); color: var(--mute); border-color: var(--line) }
+#composer textarea, .ask input { background: var(--panel); color: var(--ink); border-color: var(--key) }
+textarea::placeholder, input::placeholder { color: var(--mute); opacity: 1 }
+#sound-btn[aria-pressed="true"] { color: var(--ink); border-color: var(--key); box-shadow: inset 0 -2px var(--key) }
+.note.flash { background: var(--selected) }
+dialog { color: var(--ink); background: var(--bg); border-color: var(--key); box-shadow: 0 12px 64px #0006 }
+dialog::backdrop { background: #000b }
+#tip { background: var(--ink); color: var(--bg) }
+
+
+/* Frozen optical poster: three pattern scales, acid stock, black print blocks. */
+header { position: relative; isolation: isolate; background: #efff3c; border-bottom-color: #161b13; box-shadow: inset 0 3px #161b13 }
+header::before { content: "OPTIK"; position: absolute; z-index: -1; pointer-events: none; inset: 0 18% 0 34%; overflow: hidden; white-space: nowrap; font: 600 86px/.72 var(--display); letter-spacing: -.04em; color: #161b132e }
+h1 { font-family: var(--display); font-size: 21px; font-weight: 600; letter-spacing: -.04em }
+.stage { background-color: #efff3c; background-image: repeating-radial-gradient(circle at 50% 45%,#161b13 0 3px,#efff3c 3px 6px); box-shadow: inset 0 0 0 1px #161b13 }
+/* Only the 12px side gutters carry this second interference field. */
+.stage::before, .stage::after { content: ""; position: absolute; pointer-events: none; top: 0; bottom: 0; width: 12px; background: repeating-linear-gradient(168deg,#161b13 0 2px,transparent 2px 5px) }
+.stage::before { left: 1px }
+.stage::after { right: 1px }
+#beats { background: #f5f4e9; box-shadow: inset 8px 0 #161b13 }
+#beats h2 { background: #161b13; color: #efff3c; box-shadow: inset 0 -3px #efff3c }
+#beats h2 span { color: #efff3c }
+.beat { border-bottom-color: #9b9e8c }
+.beat.cur { background: #e5ecb5; box-shadow: inset 6px 0 #161b13,inset 0 0 0 1px #161b13 }
+.rail { background: #f5f4e9; box-shadow: inset 7px 0 #161b13 }
+.rail-tabs { background: #efff3c; border-bottom-color: #161b13; box-shadow: inset 0 -3px #161b13 }
+h2 { font-weight: 600 }
+button { border-color: #161b13; background: #f5f4e9; box-shadow: inset 0 -3px #161b132b }
+button:hover:not(:disabled) { background: #efff3c; box-shadow: inset 0 -3px #161b13 }
+.go, .sound-go, .cue, button.plain { box-shadow: none }
+.go:hover { background: var(--selected) }
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] { background: #161b13; color: #efff3c; border-bottom-color: #161b13 }
+.dock { position: relative; isolation: isolate; background: #efff3c; box-shadow: inset 0 4px #161b13,inset 0 7px #efff3c,inset 0 9px #161b13 }
+.dock::before { content: ""; position: absolute; z-index: -1; pointer-events: none; right: 16px; top: 9px; width: 27%; height: 38px; background: repeating-linear-gradient(108deg,#161b13 0 3px,transparent 3px 7px); opacity: .13 }
+.dock::after { content: "OPTIK"; position: absolute; z-index: -1; pointer-events: none; right: 28px; top: 0; height: 49px; overflow: hidden; font: 600 74px/.8 var(--display); letter-spacing: -.04em; color: #161b1324 }
+#transport > button, #readout, .step { background: #efff3c }
+#transport > #play { background: #161b13; color: #efff3c; border-color: #161b13; font-weight: 600; box-shadow: none }
+.tl { background: repeating-linear-gradient(90deg,#161b13 0 2px,transparent 2px 8px) 0 0/100% 8px no-repeat }
+.cell { background-color: #f5f4e9; border-right-color: #161b13; background-image: repeating-linear-gradient(0deg,#161b1333 0 1px,transparent 1px 4px) }
+.cell[data-layout="full-face"] { background-color: #d3df9c; background-image: radial-gradient(#161b1352 1px,transparent 1.3px); background-size: 4px 4px }
+.cell[data-layout="full-graphic"] { background-color: #efff3c; background-image: repeating-linear-gradient(135deg,#161b1340 0 2px,transparent 2px 5px),repeating-linear-gradient(45deg,#161b1320 0 1px,transparent 1px 5px) }
+.cell.cur { outline: 2px solid #161b13; outline-offset: -2px }
+#head { background: #161b13; box-shadow: 0 0 0 1px #efff3c }
+#head::before { content: ""; position: absolute; pointer-events: none; left: -6px; top: -2px; width: 15px; height: 15px; background: #161b13; border: 3px solid #efff3c; border-radius: 50%; outline: 2px solid #161b13 }
+.cue { border-left-color: #161b13; background: #f5f4e9; box-shadow: inset 0 -3px #161b13 }
+.lane i:not(.bad):not(.old) { background: #161b13; border-radius: 0; transform: rotate(45deg) }
+kbd { border-color: #161b13; color: #161b13; background: #f5f4e9 }
+
+
+/* Solid islands protect live labels from the large background lettering. */
+header > h1, header > .pic, header > .end, #transport > span, #composer .hint, #composer .at, .legend { background: #efff3c }
+
+/* Shared review signal, intentionally after all decorative rules.
+   The DOM has no separate count span inside tabs. :has() colours the Notes
+   label from the player's ready state or an open/pending sound-note control;
+   zero/closed counts and the Sound cue total remain neutral. */
+.go .ch, .pill.FAIL, .tag.bad, .job.bad, #saved.bad, #sound-status.bad,
+#changed-line, #changed-line button, #go-hint, #go-line { color: var(--bad) }
+.cell.ch { box-shadow: inset 0 3px 0 var(--bad) }
+.lane i.bad, .cue i { background: var(--bad) }
+#notes:has(#go-line:not([hidden]), .note .when > .tag:first-child ~ button[title^="Take this note back"], .note .when > .tag:first-child ~ button.plain.mono:last-child) #note-count,
+#checks:has(.finding .tag.bad) #check-count { color: var(--bad) }
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"] { color: var(--bad) }
+/* Keep attention labels readable even in an inverted selected tab. */
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"][aria-selected="true"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"][aria-selected="true"] { background: var(--panel) }
+/* Static materials; no new animation. Attention is never used decoratively. */
+@media (forced-colors: active) {
+  .beat.cur, .cell.cur { outline: 1px solid Highlight; outline-offset: -1px }
+  .cell.ch { border-top: 3px solid LinkText }
+}

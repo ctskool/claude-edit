@@ -1,0 +1,28 @@
+@import url("/skins/05-carbon.css");
+
+/* DENSITY — sparse / medium / dense screens encode the EXISTING layout data.
+   High-contrast cell labels sit in a solid central band; no invented audio data.
+   The neutral dotted strip is a voice-lane treatment, not a measured waveform. */
+.stage { background-color: #1b1b1a; background-image: radial-gradient(circle, #a3a293 1px, transparent 1.2px), radial-gradient(circle, #74746b .65px, transparent .85px); background-size: 10px 10px; background-position: 0 0, 5px 5px }
+.dock { box-shadow: none; border-top-style: dotted; border-top-color: var(--key) }
+.tl { background: radial-gradient(circle, #8c8c80 .9px, transparent 1.1px) 0 1px / 4px 3px repeat-x, radial-gradient(circle, #8c8c80 .7px, transparent .9px) 2px 6px / 8px 3px repeat-x }
+.cell, .cell[data-layout="full-graphic"], .cell[data-layout="full-face"] {
+  --density-step: 9px; --density-radius: .8px; --density-dot: #c8c6b5;
+  background-color: #292927;
+  background-image: linear-gradient(#292927, #292927), radial-gradient(circle, var(--density-dot) var(--density-radius), transparent calc(var(--density-radius) + .2px));
+  background-size: 100% 18px, var(--density-step) 4px;
+  background-position: center 5px, left top;
+  background-repeat: no-repeat, repeat;
+}
+.cell[data-layout="full-graphic"] { --density-step: 5px; --density-radius: 1px }
+.cell[data-layout="full-face"] { --density-step: 3px; --density-radius: 1px }
+.cell.ch { --density-dot: var(--bad); box-shadow: inset 0 3px var(--bad) }
+.cell.cur { outline-color: var(--key) }
+.cue { border-left-color: transparent; background-image: radial-gradient(circle, var(--key) .9px, transparent 1.1px); background-size: 2px 4px; background-repeat: repeat-y; background-position: left top }
+.cue i { border-radius: 0; background: radial-gradient(circle, var(--bad) .8px, transparent 1px) 0 0 / 2px 2px }
+.lane i:not(.bad):not(.old) { border-radius: 0; background: radial-gradient(circle, var(--key) .9px, transparent 1px) 0 0 / 3px 3px }
+.legend i { background-color: #292927; background-image: radial-gradient(circle, #c8c6b5 .7px, transparent .9px); background-size: 6px 4px }
+.legend i[data-layout="full-graphic"] { background-color: #292927; background-size: 4px 4px }
+.legend i[data-layout="full-face"] { background-color: #292927; background-size: 2px 2px }
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) { .cell, .cell[data-layout] { background-size: 100% 13px, var(--density-step) 4px; background-position: center top, left top } }
+@media (forced-colors: active) { .stage, .tl, .cell, .legend i { background-image: none } .cue { border-left-color: CanvasText } .cue i, .lane i:not(.bad):not(.old) { background: CanvasText } }

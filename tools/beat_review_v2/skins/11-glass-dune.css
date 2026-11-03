@@ -1,0 +1,187 @@
+/* Glass Dune — warm smoked glass over concrete and golden-hour sand.
+   Geometry, panel visibility and all media styling belong to the player.
+   Hanken Grotesk / Geist Mono are already loaded by index.html. */
+:root[data-theme] {
+  --bg: #40352d;
+  --panel: #51443a;
+  --ink: #faf7f2;
+  --mute: #e1dad3;
+  --mute2: var(--mute);
+  --line: rgb(255 244 228 / 24%);
+  --on: #211b17;
+  --accent: #7c2d1b;
+  --bad: #7c2d1b;
+  --warn: var(--mute);
+  --split: rgb(255 244 228 / 6%);
+  --graphic: rgb(255 244 228 / 10%);
+  --face: rgb(255 244 228 / 14%);
+  --body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: var(--body);
+  --mono: "Geist Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --dune-glass: rgb(65 53 44 / 90%);
+  --dune-selected: rgb(21 17 14 / 24%);
+  --dune-signal: #f3d9c8;
+  --dune-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='%23fff' opacity='.025' filter='url(%23n)' d='M0 0h160v160H0z'/%3E%3C/svg%3E");
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg) url("/skins/11-glass-dune-bg.png") center / cover fixed no-repeat;
+  color: var(--ink);
+  font-family: var(--body);
+}
+.app { padding: 12px; gap: 8px; min-width: 0 }
+
+/* Texture is a panel background, never a layer above the picture.
+   Even over white, the 90% smoke floor keeps secondary text above 4.5:1. */
+header, .stage, #beats, .rail, .dock, dialog {
+  background-color: var(--dune-glass);
+  background-image: var(--dune-grain), linear-gradient(135deg, rgb(255 244 228 / 3%), transparent 65%);
+  border: 1px solid var(--line);
+  border-radius: 16px !important;
+  box-shadow: inset 0 1px 0 rgb(255 249 239 / 8%), 0 8px 26px rgb(24 17 12 / 12%);
+  -webkit-backdrop-filter: blur(22px) saturate(.75);
+  backdrop-filter: blur(22px) saturate(.75);
+}
+header { border-bottom-style: solid }
+.stage { padding-right: 16px }
+#beats, .rail { scrollbar-width: thin; scrollbar-color: #a49a90 transparent }
+h1 { font-family: var(--display); font-weight: 600; letter-spacing: .01em }
+h2 { font: 600 13px/1.2 var(--display); letter-spacing: .015em }
+h2 span { color: var(--mute) }
+.pic, .mute, .quiet, .keys, #saved, #why, #theme, .empty { color: var(--mute) }
+
+/* Solid smoked sticky headings prevent scrolling text showing through. */
+#beats h2, .rail-tabs {
+  background: #493d33;
+  border-bottom-color: var(--line);
+}
+.rail-tabs { border-bottom-style: solid }
+.rail-tabs button, .tabs button {
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0;
+  color: var(--mute);
+}
+.rail-tabs button[aria-selected="true"], .tabs button[aria-selected="true"] {
+  border-bottom-color: var(--ink);
+  color: var(--ink);
+}
+
+/* Override the base player's intentionally square controls. */
+button, select, input, textarea { border-radius: 7px !important }
+button {
+  color: var(--ink);
+  background: rgb(255 244 228 / 5%);
+  border-color: var(--line);
+  font-family: var(--display);
+}
+button:hover:not(:disabled) { background-color: rgb(255 244 228 / 6%); border-color: rgb(255 244 228 / 58%) }
+button:disabled { color: var(--mute) }
+button.small, .step button { border-radius: 6px !important }
+button.plain { background: transparent }
+button.primary, #approve.primary {
+  background: #fff;
+  border-color: #fff;
+  color: #191512;
+  border-radius: 999px !important;
+  font-weight: 600;
+}
+#approve.primary:hover:not(:disabled) { background: #efe9e1; border-color: #efe9e1 }
+#approve.primary:disabled { background: #fff; border-color: #fff; color: #60594f }
+#theme { background: rgb(255 244 228 / 5%); border-color: var(--line); font-family: var(--display); padding-inline: 8px }
+#theme option { background: var(--bg); color: var(--ink) }
+:focus-visible { outline: 2px solid #faf7f2; outline-offset: 2px }
+kbd { border-radius: 4px !important; background: rgb(255 244 228 / 5%); color: var(--mute) }
+.pill { border-radius: 4px !important }
+.pill.PASS, .pill.UNVERIFIED, .tag, .tag.ok, .tag.q { color: var(--mute) }
+
+.beat { border-left-color: var(--split) }
+.beat.cur {
+  background: var(--dune-selected);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgb(255 244 228 / 36%);
+}
+.go { background: transparent; border-radius: 7px !important }
+.go:hover:not(:disabled) { background: rgb(21 17 14 / 18%) }
+.go .i, .go .t { color: var(--mute) }
+.beat.cur .i { color: var(--ink) }
+.acts button { background: rgb(255 244 228 / 6%) }
+.sound-row { background: rgb(21 17 14 / 17%); border-radius: 6px }
+.sound-row .sound-go { background: transparent; border-radius: 5px !important }
+.sound-row .sound-go:hover { background: rgb(21 17 14 / 12%) }
+.note.flash { background: var(--dune-selected) }
+#banner, .go-line { background: #493d33; border-radius: 8px !important }
+#composer textarea, .ask input {
+  background: rgb(21 17 14 / 35%);
+  border-color: rgb(255 244 228 / 58%);
+  color: var(--ink);
+}
+textarea::placeholder, input::placeholder { color: var(--mute); opacity: 1 }
+#sound-btn[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); box-shadow: inset 0 -2px var(--ink) }
+
+/* Navigation and layout chips stay neutral; rust is review attention only. */
+.cells { border-radius: 5px !important }
+.cell {
+  border: 1px solid rgb(255 244 228 / 13%);
+  border-radius: 4px;
+  color: var(--ink);
+  background: var(--split);
+}
+.cell[data-layout="full-graphic"] { background: var(--graphic) }
+.cell[data-layout="full-face"] { background: var(--face) }
+.cell.cur { background: rgb(21 17 14 / 30%); outline-color: var(--ink) }
+#head { background: var(--ink); box-shadow: 0 0 0 1px rgb(36 29 24 / 40%) }
+#tip { background: #faf7f2; color: #30271f; border-radius: 6px !important }
+.cue-lane { background: rgb(21 17 14 / 17%); border-bottom-style: solid; border-radius: 0 0 5px 5px }
+.cue { background: transparent; border-left-color: var(--mute); border-radius: 0 !important }
+.cue:hover:not(:disabled) { background: rgb(21 17 14 / 20%) }
+.meter i { background: var(--ink) }
+.legend i { border-radius: 2px !important; border: 1px solid rgb(255 244 228 / 22%) }
+dialog { background-color: #40352df5 }
+dialog::backdrop { background: rgb(18 14 11 / 64%) }
+
+/* Dark rust needs a light reading ground. These small signal labels keep
+   deep rust legible without turning playback or approval into alerts. */
+.go .ch, .pill.FAIL, .tag.bad, .job.bad, #saved.bad, #sound-status.bad,
+#changed-line, #go-hint, #go-line, #why[style*="--bad"] {
+  color: var(--bad);
+  background-color: var(--dune-signal);
+  border-radius: 4px;
+}
+#changed-line button { color: var(--bad) }
+.cell.ch { box-shadow: inset 0 3px 0 var(--bad) }
+.lane i.bad, .cue i { background: var(--bad); box-shadow: 0 0 0 1px var(--dune-signal) }
+#notes:has(#go-line:not([hidden]), .note .when > .tag:first-child ~ button[title^="Take this note back"], .note .when > .tag:first-child ~ button.plain.mono:last-child) #note-count,
+#checks:has(.finding .tag.bad) #check-count,
+.app:has(#go-line:not([hidden]), #notes .note .when > .tag:first-child ~ button[title^="Take this note back"], #notes .note .when > .tag:first-child ~ button.plain.mono:last-child) button[data-tab="notes"],
+.app:has(#checks .finding .tag.bad) button[data-tab="checks"] {
+  color: var(--bad);
+  background-color: var(--dune-signal);
+  border-radius: 4px !important;
+}
+
+/* In the two-column player, .rail becomes display:contents. The existing
+   .panels wrapper supplies glass to every tab; keep its visibility rules. */
+@media (max-width: 1099px) {
+  .app { padding: 8px; gap: 8px }
+  .panels {
+    background-color: var(--dune-glass);
+    background-image: var(--dune-grain), linear-gradient(135deg, rgb(255 244 228 / 3%), transparent 65%);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgb(255 249 239 / 8%), 0 8px 26px rgb(24 17 12 / 12%);
+    -webkit-backdrop-filter: blur(22px) saturate(.75);
+    backdrop-filter: blur(22px) saturate(.75);
+  }
+  #beats, .rail { background: transparent; border: 0; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none }
+  .tabs { border-bottom-style: solid }
+}
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) {
+  .app { padding: 6px; gap: 6px }
+}
+@media (forced-colors: active) {
+  .beat.cur, .cell.cur { outline: 1px solid Highlight; outline-offset: -1px }
+  .cell.ch { border-top: 3px solid LinkText }
+  :focus-visible { outline-color: Highlight }
+}

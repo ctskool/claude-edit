@@ -1,0 +1,29 @@
+# your machine
+.venv/
+.venv-matte/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# optional downloads (licences in THIRD_PARTY.md); never committed
+/vendor/
+/_ext/
+templates/ivory/sfx/source/
+# Pixabay sounds may be used in videos but not passed on: tools/fetch_sounds.py makes these on each machine
+templates/ivory/sfx/pencil-a.wav
+templates/ivory/sfx/pencil-b.wav
+
+# your videos, projects and renders
+work/
+out/
+renders/
+references/*/
+*.mp4
+*.mkv
+*.mov
+*.webm
+*.m4a
+!media/**
+!docs/clips/**

@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Edit</title>
+<meta name="description" content="A raw talking-head take edited beat by beat with Claude Code: the before and after, the review player, and the components it reuses.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@1,6..72,500&display=swap">
+<style>
+/* The review player's own look: cool grey ground, hairlines, small mono labels, one warm accent for what matters. */
+:root {
+  --wall: #e6e7e6; --sheet: #f2f2f0; --ink: #141516; --muted: #5a5e62; --line: #c3c5c4;
+  --accent: #ff6a3d; --on-accent: #141516; --link: #b23a12;
+  --display: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Newsreader", Georgia, serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --wall: #1d1e20; --sheet: #26282b; --ink: #eef0f2; --muted: #a3a8ad; --line: #3e4145;
+    --link: #ff8f6b; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --wall: #1d1e20; --sheet: #26282b; --ink: #eef0f2; --muted: #a3a8ad; --line: #3e4145;
+  --link: #ff8f6b; color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--wall); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+.wrap { max-width: 1320px; margin-inline: auto; display: grid; gap: 28px; }
+header { display: grid; gap: 10px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0; font-weight: 800; font-size: clamp(38px, 6vw, 68px); line-height: 1; letter-spacing: -.03em; text-wrap: balance; }
+h1 em { font-family: var(--serif); font-weight: 500; letter-spacing: -.01em; }
+.lede { margin: 0; max-width: 64ch; color: var(--muted); font-size: 16px; }
+a { color: var(--link); }
+section { display: grid; gap: 12px; }
+h2 {
+  margin: 0; font-weight: 600; font-size: 20px; letter-spacing: -.01em;
+  padding-top: 12px; border-top: 1px solid var(--line);
+}
+.note { margin: 0; color: var(--muted); max-width: 70ch; }
+.grid { display: grid; gap: 24px 16px; grid-template-columns: repeat(auto-fill, minmax(min(170px, 100%), 1fr)); }
+.grid.wide { grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr)); }
+.card { all: unset; box-sizing: border-box; display: grid; gap: 6px; align-content: start; cursor: pointer; min-width: 0; }
+.card[disabled] { cursor: default; }
+.frame { display: block; width: 100%; overflow: hidden; border-radius: 3px; background: #101114; border: 1px solid var(--line); }
+.frame video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.slot { display: grid; place-items: center; height: 100%; color: var(--muted); font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; background: var(--sheet); }
+.name { font-weight: 600; font-size: 15px; line-height: 1.2; }
+.does { color: var(--muted); font-size: 13px; line-height: 1.35; }
+.card:not([disabled]):hover .name { color: var(--link); }
+.card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.tool:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+dialog {
+  border: 0; padding: 0; margin: auto; background: var(--sheet); color: var(--ink); border-radius: 6px;
+  width: min(1120px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto;
+}
+dialog::backdrop { background: rgba(10, 11, 13, .78); }
+.view { display: grid; grid-template-columns: minmax(0, 1fr) 300px; }
+.view .stage { background: #101114; display: grid; place-items: center; min-height: 0; }
+.view video { display: block; max-height: min(calc(100dvh - 24px), 820px); max-width: 100%; }
+.about { padding: 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.about h3 { margin: 0; font-weight: 800; font-size: 28px; line-height: 1.05; letter-spacing: -.02em; text-wrap: balance; }
+.about p { margin: 0; }
+.label { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
+.tools { margin-top: auto; display: flex; gap: 6px; flex-wrap: wrap; padding-top: 8px; }
+.tool { font: 500 14px var(--body); color: var(--ink); background: transparent; cursor: pointer; border: 1px solid var(--line); border-radius: 4px; padding: 7px 11px; }
+.tool:hover { border-color: var(--ink); }
+.tool.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+@media (max-width: 760px) {
+  .view { grid-template-columns: minmax(0, 1fr); }
+  .view video { max-height: 70dvh; }
+  .about { padding: 16px; gap: 10px; }
+  .about h3 { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">A Claude Code skill</span>
+    <h1>Claude Edit. <em>Raw take in, your notes at the second.</em></h1>
+    <p class="lede">Hand Claude a raw talking-head take. It cuts it, waits for your one-minute listen, builds the whole edit, and opens a player where you pause and leave notes on the exact frame. Then it changes only what you noted, until you approve.</p>
+    <p class="lede"><a href="https://github.com/ctskool/claude-edit">Get it on GitHub</a></p>
+  </header>
+  <main id="sections" style="display:grid;gap:30px"></main>
+</div>
+
+<dialog id="viewer" aria-labelledby="v-name">
+  <div class="view">
+    <div class="stage"><video id="v-video" loop playsinline controls></video></div>
+    <div class="about">
+      <span class="eyebrow" id="v-pos"></span>
+      <h3 id="v-name"></h3>
+      <p id="v-does"></p>
+      <p><span class="label">Where it's from</span><span id="v-key"></span></p>
+      <div class="tools">
+        <button class="tool" id="v-prev" type="button">Previous</button>
+        <button class="tool" id="v-next" type="button">Next</button>
+        <button class="tool primary" id="v-close" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+const groups = /*DATA*/null;
+const flat = groups.flatMap(g => g.items.filter(item => !item.pending).map(item => ({ ...item, group: g.name })));
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+
+const observer = new IntersectionObserver(entries => {
+  for (const { target: video, isIntersecting } of entries) {
+    if (isIntersecting && !reduce && !$("viewer").open) {
+      if (!video.src) video.src = video.dataset.src;
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }
+}, { threshold: 0.3 });
+
+function card(item) {
+  const button = document.createElement("button");
+  button.className = "card";
+  button.type = "button";
+  const frame = document.createElement("span");
+  frame.className = "frame";
+  frame.style.aspectRatio = (item.aspect || "9/16").replace("/", " / ");
+  if (item.pending) {
+    button.disabled = true;
+    const slot = document.createElement("span");
+    slot.className = "slot";
+    slot.textContent = item.key;
+    frame.append(slot);
+  } else {
+    button.setAttribute("aria-label", `${item.name}: open`);
+    const video = document.createElement("video");
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = "none";
+    video.poster = `posters/${item.slug}.jpg`;
+    video.dataset.src = `clips/${item.slug}.mp4`;
+    video.setAttribute("aria-hidden", "true");
+    frame.append(video);
+    observer.observe(video);
+    button.addEventListener("click", () => open(flat.findIndex(entry => entry.slug === item.slug)));
+  }
+  const name = document.createElement("span");
+  name.className = "name";
+  name.textContent = item.name;
+  const does = document.createElement("span");
+  does.className = "does";
+  does.textContent = item.does;
+  button.append(frame, name, does);
+  return button;
+}
+
+for (const group of groups) {
+  const section = document.createElement("section");
+  const heading = document.createElement("h2");
+  heading.textContent = group.name;
+  section.append(heading);
+  if (group.note) {
+    const note = document.createElement("p");
+    note.className = "note";
+    note.textContent = group.note;
+    section.append(note);
+  }
+  const grid = document.createElement("div");
+  grid.className = group.items.some(item => item.aspect && item.aspect !== "9/16") ? "grid wide" : "grid";
+  grid.append(...group.items.map(card));
+  section.append(grid);
+  $("sections").append(section);
+}
+
+let current = 0;
+function show(index) {
+  current = (index + flat.length) % flat.length;
+  const item = flat[current];
+  $("v-pos").textContent = `${current + 1} of ${flat.length} · ${item.group}${item.secs ? ` · ${item.secs} s` : ""}`;
+  $("v-name").textContent = item.name;
+  $("v-does").textContent = item.does;
+  $("v-key").textContent = item.key;
+  const video = $("v-video");
+  video.muted = !item.sound;
+  video.src = `clips/${item.slug}.mp4`;
+  video.poster = `posters/${item.slug}.jpg`;
+  video.play().catch(() => {});
+}
+function open(index) {
+  document.querySelectorAll(".frame video").forEach(video => video.pause());
+  $("viewer").showModal();
+  show(index);
+}
+$("v-prev").addEventListener("click", () => show(current - 1));
+$("v-next").addEventListener("click", () => show(current + 1));
+$("v-close").addEventListener("click", () => $("viewer").close());
+$("viewer").addEventListener("click", event => { if (event.target === $("viewer")) $("viewer").close(); });
+$("viewer").addEventListener("keydown", event => {
+  if (event.key === "ArrowRight") show(current + 1);
+  if (event.key === "ArrowLeft") show(current - 1);
+});
+$("viewer").addEventListener("close", () => {
+  $("v-video").pause();
+  $("v-video").removeAttribute("src");
+  if (reduce) return;
+  document.querySelectorAll(".frame video").forEach(video => {
+    const box = video.getBoundingClientRect();
+    if (video.src && box.bottom > 0 && box.top < innerHeight) video.play().catch(() => {});
+  });
+});
+</script>
+</body>
+</html>

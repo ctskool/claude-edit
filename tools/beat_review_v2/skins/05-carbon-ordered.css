@@ -1,0 +1,16 @@
+@import url("/skins/05-carbon.css");
+
+/* ORDERED — hard 2px pixels, 4x4 Bayer thresholds, a folded one-bit ramp.
+   The selected-row screen occupies only the existing 3px gutter. */
+.stage { background-color: #181818; background-image: url("/skins/05-carbon-ordered.svg"); background-size: 128px 128px }
+header { background-image: url("/skins/05-carbon-ordered.svg"); background-size: 128px 128px; background-position: center center; image-rendering: pixelated }
+header > h1, header > .pic, header > .end { background-color: #eeeee5 }
+.dock { box-shadow: none; background-image: url("/skins/05-carbon-ordered.svg"); background-size: 128px 5px; background-repeat: repeat-x; background-position: left top; image-rendering: pixelated; border-top-color: #a6a699 }
+.rail { border-left-style: dashed }
+.beat.cur { box-shadow: inset 0 0 0 1px #78786b; border-left-color: transparent; background-image: url("/skins/05-carbon-ordered.svg"); background-position: left top; background-size: 3px 128px; background-repeat: repeat-y }
+.tl { background: repeating-linear-gradient(90deg, #c0beb4 0 2px, transparent 2px 4px, #c0beb4 4px 6px, transparent 6px 16px) left 2px / 100% 2px no-repeat }
+.cell { background-image: conic-gradient(#464640 25%, transparent 0 50%, #464640 0 75%, transparent 0); background-size: 4px 4px; image-rendering: pixelated }
+.cell[data-layout="full-graphic"] { background-image: conic-gradient(#55554c 25%, transparent 0 50%, #55554c 0 75%, transparent 0); background-size: 4px 4px }
+.cell[data-layout="full-face"] { background-image: conic-gradient(#616156 25%, transparent 0 50%, #616156 0 75%, transparent 0); background-size: 2px 2px }
+.cue-lane { border-bottom-style: dashed }
+@media (forced-colors: active) { .stage, header, .dock, .beat.cur, .tl, .cell { background-image: none } }

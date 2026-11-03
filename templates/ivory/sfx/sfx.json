@@ -1,0 +1,681 @@
+{
+  "note": "Ivory's sound palette, from Chase's audition on 2026-10-31. tier default plays in any edit; tier special plays only when he asks for it in a note or a plan. maybe marks a sound he has not fully approved. Files are slices of a hand-vetted library. target_db is the slice's level against speech, measured the way tools/sound_mix.py measures it: 250 ms RMS from the attack, against the 90th percentile of the voice's 20 ms level. Levels were swept in steps and these read the same as reference A's bed-free reels on the same stem measurement (about 3.6 hits per 30 s at -29 dB). The whole source recordings do not ship, so source_dir only matters for re-slicing (sound_mix.py slices). es- entries are code-made sounds from the earshot bank that Chase said yes to on 2026-11-02 (earshot-picks.json). Their source files are in templates/ivory/sfx/earshot/, they carry no target_db, and they are levelled by job like every cue.",
+  "source_dir": "templates/ivory/sfx/source",
+  "sounds": {
+    "whoosh-a": {
+      "file": "Whoosh Short 2.mp3",
+      "from": 0,
+      "to": 0.693,
+      "target_db": -25,
+      "use": "layout switch",
+      "tier": "default"
+    },
+    "whoosh-b": {
+      "file": "Simple Whoosh 1.wav",
+      "from": 0,
+      "to": 0.467,
+      "target_db": -25,
+      "use": "layout switch",
+      "maybe": true,
+      "tier": "default"
+    },
+    "whoosh-c": {
+      "file": "Simple Whoosh 2.wav",
+      "from": 0,
+      "to": 0.312,
+      "target_db": -25,
+      "use": "layout switch",
+      "tier": "default"
+    },
+    "pop-hero": {
+      "file": "Pop 1.wav",
+      "from": 0,
+      "to": 0.25,
+      "target_db": -22,
+      "use": "the graphic's main object landing",
+      "tier": "default"
+    },
+    "pop": {
+      "file": "Pop 1.wav",
+      "from": 0.46,
+      "to": 0.71,
+      "target_db": -24,
+      "use": "a sibling object landing",
+      "tier": "default"
+    },
+    "pop-soft": {
+      "file": "Pop 1.wav",
+      "from": 0.88,
+      "to": 1.08,
+      "target_db": -27,
+      "use": "a later object, or a burst as one cue",
+      "tier": "default"
+    },
+    "click": {
+      "file": "Mouse Click - Computer Clicking.aiff",
+      "from": 2.44,
+      "to": 2.9,
+      "target_db": -25,
+      "use": "a real cursor press",
+      "tier": "default"
+    },
+    "bell": {
+      "file": "Bell Ding Sound Effect.wav",
+      "from": 0,
+      "to": 1.46,
+      "target_db": -26,
+      "use": "completion only",
+      "fade": 0.4,
+      "tier": "default"
+    },
+    "whoosh-d": {
+      "file": "Fast Whoosh.wav",
+      "from": 0,
+      "to": 0.79,
+      "target_db": -25,
+      "use": "something flying or docking across the frame",
+      "tier": "default"
+    },
+    "film-burn": {
+      "file": "Film Burn Transition.wav",
+      "from": 0,
+      "to": 2.0,
+      "target_db": -25,
+      "use": "a film-style transition",
+      "tier": "default"
+    },
+    "pop-2": {
+      "file": "Pop 2.wav",
+      "from": 0,
+      "to": 0.4,
+      "target_db": -24,
+      "use": "an object landing, alternate",
+      "tier": "default"
+    },
+    "bubble": {
+      "file": "Bubble Pop.wav",
+      "from": 2.336,
+      "to": 2.545,
+      "target_db": -24,
+      "use": "a round orb or bubble appearing",
+      "tier": "default"
+    },
+    "metal-pop": {
+      "file": "Metal Pop.wav",
+      "from": 0.5,
+      "to": 0.83,
+      "target_db": -24,
+      "use": "a hard object landing or a bump",
+      "tier": "default"
+    },
+    "click-b": {
+      "file": "1 Click Mouse.wav",
+      "from": 0,
+      "to": 0.31,
+      "target_db": -25,
+      "use": "a real cursor press, alternate",
+      "tier": "default"
+    },
+    "switch": {
+      "file": "Loud Switch.wav",
+      "from": 0,
+      "to": 2.28,
+      "target_db": -27,
+      "use": "a switch or toggle flipping",
+      "tier": "default",
+      "fade": 0.2
+    },
+    "lighter": {
+      "file": "Lighter.wav",
+      "from": 0.33,
+      "to": 0.57,
+      "target_db": -25,
+      "use": "a row ticking on in a list",
+      "tier": "default"
+    },
+    "typing": {
+      "file": "Keyboard Typing.aiff",
+      "from": 3.84,
+      "to": 9.84,
+      "target_db": -27,
+      "use": "typed text, cut to the typed span",
+      "tier": "default",
+      "fade": 0.05
+    },
+    "typing-b": {
+      "file": "Keyboard 1.mp3",
+      "from": 0,
+      "to": 6,
+      "target_db": -27,
+      "use": "typed text, cut to the typed span",
+      "tier": "default",
+      "fade": 0.05
+    },
+    "typing-c": {
+      "file": "Keyboard Typing 1.wav",
+      "from": 0,
+      "to": 6,
+      "target_db": -27,
+      "use": "typed text, cut to the typed span",
+      "tier": "default",
+      "fade": 0.05
+    },
+    "typing-d": {
+      "file": "Keyboard Typing 2 (laptop).wav",
+      "from": 0,
+      "to": 6,
+      "target_db": -27,
+      "use": "typed text on a laptop, cut to the typed span",
+      "tier": "default",
+      "fade": 0.05
+    },
+    "tap": {
+      "file": "Texting On Phone.mp3",
+      "from": 0.417,
+      "to": 0.583,
+      "target_db": -25,
+      "use": "a phone tap",
+      "tier": "default"
+    },
+    "camera": {
+      "file": "Camera Clicks.mp3",
+      "from": 0,
+      "to": 0.334,
+      "target_db": -25,
+      "use": "a snapshot or a montage cut",
+      "tier": "default"
+    },
+    "shutter": {
+      "file": "Shutter 5Dm4.mp3",
+      "from": 0,
+      "to": 0.65,
+      "target_db": -25,
+      "use": "a camera shutter",
+      "tier": "default"
+    },
+    "camera-snap": {
+      "file": "Analogue Camera Snap 1.wav",
+      "from": 0,
+      "to": 2.0,
+      "target_db": -25,
+      "use": "an analogue camera snap",
+      "tier": "default",
+      "fade": 0.2
+    },
+    "camera-rec": {
+      "file": "Camera Beep & Shutter.mp3",
+      "from": 5.33,
+      "to": 5.75,
+      "target_db": -25,
+      "use": "a recording starting",
+      "tier": "default"
+    },
+    "camera-focus": {
+      "file": "Camera Focus & Shutter.wav",
+      "from": 0,
+      "to": 3,
+      "target_db": -27,
+      "use": "a camera focusing, slice not yet chosen",
+      "tier": "default",
+      "fade": 0.2
+    },
+    "snip": {
+      "file": "Scissors.wav",
+      "from": 0.542,
+      "to": 0.834,
+      "target_db": -25,
+      "use": "a glyph snapping in or a hard snap",
+      "tier": "default"
+    },
+    "marker": {
+      "file": "Pencils & Markers.mp3",
+      "from": 11.303,
+      "to": 12.054,
+      "target_db": -25,
+      "use": "a strike or a drawn line",
+      "tier": "default"
+    },
+    "highlighter": {
+      "file": "Pencils & Markers.mp3",
+      "from": 7.88,
+      "to": 8.26,
+      "target_db": -27,
+      "use": "a highlighter wipe",
+      "tier": "default"
+    },
+    "paper-fast": {
+      "file": "Paper Turn (fast).wav",
+      "from": 0,
+      "to": 1.98,
+      "target_db": -26,
+      "use": "a fast paper turn",
+      "tier": "default",
+      "fade": 0.2
+    },
+    "paper-slow": {
+      "file": "Paper Turn (slow).wav",
+      "from": 0,
+      "to": 3.12,
+      "target_db": -26,
+      "use": "a slow paper turn",
+      "tier": "default",
+      "fade": 0.2
+    },
+    "sheet-slide": {
+      "file": "Sheet Slide.wav",
+      "from": 0,
+      "to": 2.01,
+      "target_db": -26,
+      "use": "a sheet sliding in",
+      "tier": "default",
+      "fade": 0.2
+    },
+    "ui-tick-a": {
+      "file": "Mac SFX 13.wav",
+      "from": 0,
+      "to": 0.72,
+      "target_db": -26,
+      "use": "a system or status change",
+      "tier": "default"
+    },
+    "ui-tick-b": {
+      "file": "Mac SFX 22.wav",
+      "from": 0,
+      "to": 0.38,
+      "target_db": -26,
+      "use": "a system or status change",
+      "tier": "default"
+    },
+    "ui-tick-c": {
+      "file": "Mac SFX 23.wav",
+      "from": 0,
+      "to": 0.48,
+      "target_db": -26,
+      "use": "a system or status change",
+      "tier": "default"
+    },
+    "phone-ring": {
+      "file": "Phone Dial Ring.wav",
+      "from": 4.588,
+      "to": 7.6,
+      "target_db": -27,
+      "use": "a phone ringing, cut to the ring",
+      "tier": "default",
+      "fade": 0.05
+    },
+    "clock": {
+      "file": "Fast Clock Ticking.wav",
+      "from": 0,
+      "to": 3,
+      "target_db": -28,
+      "use": "time running, cut to the span",
+      "tier": "default",
+      "fade": 0.2
+    },
+    "impact": {
+      "file": "Impact.wav",
+      "from": 0.93,
+      "to": 2.5,
+      "target_db": -25,
+      "use": "a slammed claim word",
+      "tier": "special",
+      "fade": 0.3
+    },
+    "deep-hit": {
+      "file": "Deep Hit.wav",
+      "from": 0,
+      "to": 3.94,
+      "target_db": -25,
+      "use": "one big moment",
+      "tier": "special",
+      "fade": 0.3
+    },
+    "deep-hit-2": {
+      "file": "Deep Hit 2.wav",
+      "from": 0,
+      "to": 4,
+      "target_db": -25,
+      "use": "one big moment",
+      "tier": "special",
+      "fade": 0.5
+    },
+    "deep-hit-3": {
+      "file": "Deep Hit 3.wav",
+      "from": 0,
+      "to": 5.14,
+      "target_db": -25,
+      "use": "one big moment",
+      "tier": "special",
+      "fade": 0.3
+    },
+    "sub-drop": {
+      "file": "Sub Drop 2.wav",
+      "from": 0,
+      "to": 3.69,
+      "target_db": -25,
+      "use": "one big moment",
+      "tier": "special",
+      "fade": 0.3
+    },
+    "heartbeat": {
+      "file": "Heartbeat.wav",
+      "from": 0,
+      "to": 4,
+      "target_db": -27,
+      "use": "tension, cut to the span",
+      "tier": "special",
+      "fade": 0.2
+    },
+    "heavenly-choir": {
+      "file": "Heavenly Angel Choir.mp3",
+      "from": 0,
+      "to": 6,
+      "target_db": -27,
+      "use": "a joke beat, cut to the span",
+      "tier": "special",
+      "fade": 0.5
+    },
+    "es-swipe-cloth": {
+      "file": "es-swipe-cloth.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.6757,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "swipe/cloth",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-swipe-flick": {
+      "file": "es-swipe-flick.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.5681,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "swipe/flick",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-swish-blade": {
+      "file": "es-swish-blade.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.3685,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "swish/blade",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-swish-cane": {
+      "file": "es-swish-cane.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.7001,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "swish/cane",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-swish-flick": {
+      "file": "es-swish-flick.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.32,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "swish/flick",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-swish-soft": {
+      "file": "es-swish-soft.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.8826,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "swish/soft",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-whoosh-fast-heavy": {
+      "file": "es-whoosh-fast-heavy.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.765,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "whoosh_fast/heavy",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-whoosh-fast-crisp": {
+      "file": "es-whoosh-fast-crisp.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 1.0561,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "whoosh_fast/crisp",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-swish-zing": {
+      "file": "es-swish-zing.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.5353,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "swish/zing",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-swish-stick": {
+      "file": "es-swish-stick.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.5269,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "swish/stick",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-whoosh-fast-tight": {
+      "file": "es-whoosh-fast-tight.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.5364,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "whoosh_fast/tight",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-whoosh-fast-sleeve": {
+      "file": "es-whoosh-fast-sleeve.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 1.0901,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "whoosh_fast/sleeve",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-whoosh-fast-reverse": {
+      "file": "es-whoosh-fast-reverse.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.7681,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "whoosh_fast/reverse",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-whoosh-fast-whistle": {
+      "file": "es-whoosh-fast-whistle.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.9968,
+      "use": "a layout switch, or something moving across the frame",
+      "tier": "default",
+      "earshot": "whoosh_fast/whistle",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-knock-plastic": {
+      "file": "es-knock-plastic.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.1531,
+      "use": "a solid object or block set in place",
+      "tier": "default",
+      "earshot": "knock/plastic",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-pop-4": {
+      "file": "es-pop-4.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.22,
+      "use": "an object landing",
+      "tier": "default",
+      "earshot": "pop/4",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-pop-3": {
+      "file": "es-pop-3.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.16,
+      "use": "an object landing",
+      "tier": "default",
+      "earshot": "pop/3",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-pop-1": {
+      "file": "es-pop-1.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.15,
+      "use": "an object landing",
+      "tier": "default",
+      "earshot": "pop/1",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-pop-0": {
+      "file": "es-pop-0.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.2,
+      "use": "an object landing",
+      "tier": "default",
+      "earshot": "pop/0",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-knock-wood": {
+      "file": "es-knock-wood.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.1536,
+      "use": "a solid object or block set in place",
+      "tier": "default",
+      "earshot": "knock/wood",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-knock-snap": {
+      "file": "es-knock-snap.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.1335,
+      "use": "a solid object or block set in place",
+      "tier": "default",
+      "earshot": "knock/snap",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-click-snap": {
+      "file": "es-click-snap.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.0621,
+      "use": "a visible cursor press",
+      "tier": "default",
+      "earshot": "click/snap",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-typing-key-clicky": {
+      "file": "es-typing-key-clicky.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.1937,
+      "use": "a single key press",
+      "tier": "default",
+      "earshot": "typing_key/clicky",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-typing-key-thock": {
+      "file": "es-typing-key-thock.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.3365,
+      "use": "a single key press",
+      "tier": "default",
+      "earshot": "typing_key/thock",
+      "source": "earshot 0.4.0 bank (MIT), its own seed"
+    },
+    "es-fit-click-floss-lid": {
+      "file": "es-fit-click-floss-lid.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.132,
+      "use": "a visible cursor press",
+      "tier": "default",
+      "earshot": "fit/click/floss_lid",
+      "source": "earshot 0.4.0 bank (MIT), its own seed, fitted from a CC0 recording, see its note"
+    },
+    "es-fit-key-lubed": {
+      "file": "es-fit-key-lubed.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.4245,
+      "use": "a single key press",
+      "tier": "default",
+      "earshot": "fit/key/lubed",
+      "source": "earshot 0.4.0 bank (MIT), its own seed, fitted from a CC0 recording, see its note"
+    },
+    "es-fit-key-medium": {
+      "file": "es-fit-key-medium.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.4265,
+      "use": "a single key press",
+      "tier": "default",
+      "earshot": "fit/key/medium",
+      "source": "earshot 0.4.0 bank (MIT), its own seed, fitted from a CC0 recording, see its note"
+    },
+    "es-fit-pop-mouth-plop": {
+      "file": "es-fit-pop-mouth-plop.wav",
+      "source_dir": "templates/ivory/sfx/earshot",
+      "from": 0,
+      "to": 0.2808,
+      "use": "a soft object landing",
+      "tier": "default",
+      "earshot": "fit/pop/mouth_plop",
+      "source": "earshot 0.4.0 bank (MIT), its own seed, fitted from a CC0 recording, see its note"
+    },
+    "pencil-a": {
+      "file": "floraphonic-pencil-foley-write-1-162850.mp3",
+      "source_dir": "work/sfx-sources/pixabay-pencil",
+      "from": 0.68,
+      "to": 1.01,
+      "fade": 0.08,
+      "use": "a straight strike-through drawn across text",
+      "tier": "default",
+      "source": "Pixabay, Pencil Foley Write 1, stroke at 0.70 s. Pixabay Content License: use in videos, no credit; never redistribute the file. See work/sfx-sources/pixabay-pencil/SOURCE.md",
+      "picked": "Chase, pencil audition 2026-11-02 (#2)"
+    },
+    "pencil-b": {
+      "file": "floraphonic-pencil-foley-write-5-162854.mp3",
+      "source_dir": "work/sfx-sources/pixabay-pencil",
+      "from": 0.6,
+      "to": 0.82,
+      "fade": 0.08,
+      "use": "a straight strike-through drawn across text",
+      "tier": "default",
+      "source": "Pixabay, Pencil Foley Write 5, stroke at 0.62 s. Pixabay Content License: use in videos, no credit; never redistribute the file. See work/sfx-sources/pixabay-pencil/SOURCE.md",
+      "picked": "Chase, pencil audition 2026-11-02 (#7)"
+    }
+  }
+}
