@@ -4,6 +4,7 @@ Usage: python prep_source.py <video> <work_dir> [--face-top 0.575] [--no-transcr
 
 Writes into <work_dir>/assets:
   face_half.mp4  face cam (bottom region of the source), 1280 wide, 30fps, no audio
+  face_half_4k.mp4  the same frames at the source's full size, for a 4K final (section 10 swaps it in)
   face_full.mp4  face cam center-cropped to 1080x1920 for full-frame moments, 30fps, no audio
   voice.m4a      source audio
 and <work_dir>/metadata.json, <work_dir>/transcript.json (word timestamps), <work_dir>/face_map.json (retime map).
@@ -130,6 +131,7 @@ def main():
     full_w = int(face_h * 9 / 16) // 2 * 2
     full_crop = f"{full_w}:{face_h}:{(w - full_w) // 2}:{top}"
     face_half, face_full = os.path.join(assets, "face_half.mp4"), os.path.join(assets, "face_full.mp4")
+    face_4k = os.path.join(assets, "face_half_4k.mp4")  # same frames, no downscale: a 4K final needs no re-cut
     if a.camera and not a.no_camera:
         cmeta = probe(a.camera)
         rect, score = locate_face_crop(a.video, a.camera, meta, cmeta, top)
@@ -145,6 +147,7 @@ def main():
         args = [sys.executable, os.path.join(HERE, "face_retime.py"), a.camera, "--map", os.path.join(a.work_dir, "face_map.json"),
                 "--proxy-crop", half_c,
                 "--crop", half_c, "--scale", "1280x-2", "--out", face_half,
+                "--crop", half_c, "--scale", f"{half_c.split(':')[0]}x-2", "--out", face_4k,
                 "--crop", full_c, "--scale", "1080x1920", "--out", face_full,
                 "--crop", wide_c, "--scale", "1920x1080", "--out", os.path.join(assets, "face_wide.mp4")]
         if a.no_retime:
@@ -155,6 +158,8 @@ def main():
         run(["ffmpeg", "-v", "error", "-y", "-i", a.video, "-an", "-vf",
              f"crop={half_crop},scale=1280:-2,fps=30", "-c:v", "libx264", "-crf", "16", "-g", "15",
              "-preset", "medium", "-pix_fmt", "yuv420p", face_half])
+        run(["ffmpeg", "-v", "error", "-y", "-i", a.video, "-an", "-vf", f"crop={half_crop},fps=30", "-c:v", "libx264",
+             "-crf", "14", "-g", "15", "-preset", "medium", "-pix_fmt", "yuv420p", face_4k])
         run(["ffmpeg", "-v", "error", "-y", "-i", a.video, "-an", "-vf",
              f"crop={full_crop},scale=1080:1920,fps=30", "-c:v", "libx264",
              "-crf", "16", "-g", "15", "-preset", "medium", "-pix_fmt", "yuv420p", face_full])
@@ -164,6 +169,7 @@ def main():
         run([sys.executable, os.path.join(HERE, "face_retime.py"), a.video,
              "--map", os.path.join(a.work_dir, "face_map.json"),
              "--crop", half_crop, "--scale", "1280x-2", "--out", face_half,
+             "--crop", half_crop, "--scale", f"{w}x-2", "--out", face_4k,
              "--crop", full_crop, "--scale", "1080x1920", "--out", face_full])
         meta["face_retime"] = "face_map.json"
     run(["ffmpeg", "-v", "error", "-y", "-i", a.video, "-vn", "-c:a", "aac", "-b:a", "192k",

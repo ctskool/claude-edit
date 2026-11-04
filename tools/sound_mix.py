@@ -296,15 +296,25 @@ def stale(root):
     return int(changed)
 
 
-def rebind(root, why):
+def rebind(root, why, base_events=None):
     """Moves a sheet to the current picture_rev, and says so in the sheet. Only for a change that moves no cue: a new hash, a sharper source, a fps map.
-    An event that moved, or one this cannot confirm, stops it, because those cues need review."""
+    An event that moved, or one this cannot confirm, stops it, because those cues need review.
+    base_events: the approved picture's events. Then a cue is held to its event not moving between the two pictures, so an offset
+    the approved sheet already had (and Chase heard) carries over instead of refusing a re-render of the same picture."""
     if not str(why or "").strip():
         raise ValueError("rebind needs a reason")
     path = Path(root) / "sound.json"
     sheet, events = sheet_of(root), events_of(plan_of(root))
     cues = [c for c in sheet.get("cues", []) if not str(c.get("event_id")).startswith("legacy.")]  # a legacy cue has no event to move with, and check-sheet warns on it
-    moved = [c.get("event_id") for c in cues if events.get(c.get("event_id")) is None or abs(float(events[c["event_id"]]) - c["t"]) > 0.001]
+    def moved_(c):
+        now = events.get(c.get("event_id"))
+        if now is None:
+            return True
+        if base_events is not None:
+            was = base_events.get(c["event_id"])
+            return was is None or abs(float(now) - float(was)) > 0.001
+        return abs(float(now) - c["t"]) > 0.001
+    moved = [c.get("event_id") for c in cues if moved_(c)]
     if moved:
         raise ValueError(f"rebind refused, these cues' events moved or cannot be confirmed: {moved[:8]}")
     new = picture_rev(root)

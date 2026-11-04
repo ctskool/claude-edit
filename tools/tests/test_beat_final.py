@@ -235,6 +235,15 @@ class PictureRev(Base):
         write(self.project / "sound.json", sheet)
         self.refused("moved", sound.rebind, self.project, "test")
 
+    def test_rebind_against_the_approved_events_keeps_an_approved_offset(self):
+        sheet = sound.sheet_of(self.project)
+        sheet["cues"] = [{"t": 0.207, "at": 0.207, "gain": 0.1, "dur": 0.1, "file": "x.wav", "event_id": "b1.e1"}]  # 7 ms off its event
+        write(self.project / "sound.json", sheet)
+        events = sound.events_of(sound.plan_of(self.project))
+        self.refused("moved", sound.rebind, self.project, "test")
+        self.assertEqual(sound.rebind(self.project, "test", events), self.rev())
+        self.refused("moved", sound.rebind, self.project, "test", {**events, "b1.e1": events["b1.e1"] + 0.1})
+
 
 class Bundle(Base):
     def test_freeze_is_complete_and_rebuilds(self):
@@ -469,6 +478,15 @@ class Derivative(Base):
         self.assertEqual(record["sound"]["to"], sound.picture_rev(ed))
         self.assertEqual(final.bundle_problems(home), [])
         self.assertEqual(sound.file_hash(ed / "plan.json"), sound.file_hash(final.editorial(self.bundle) / "plan.json"))
+
+    def test_4k30_keeps_the_review_grid_and_only_swaps(self):
+        home = final.derive(self.bundle, "4k30", self.swap())
+        record = store.read_json(home / final.DERIVATIVE)
+        self.assertEqual(beat_lock.load(final.editorial(home))["fps"], 30)
+        self.assertEqual(record["source_edits"], [])
+        self.assertEqual(record["swaps"][0]["path"], "assets/face.mp4")
+        self.assertEqual(final.complete_profile("final-4k30")["fps"], 30)
+        self.assertEqual(final.complete_profile("final-4k30")["width"], 2160)
 
     def test_a_swapped_final_passes_accept(self):
         home = final.derive(self.bundle, "4k60", self.swap())

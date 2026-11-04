@@ -49,11 +49,14 @@ PROFILES = "final-profiles.json"
 WAIVER_FILES = ("fixture.json", "waivers.json")
 GENERATED = ("index.html", "ownership.json", "beats.lock.json", "events.json")  # build.py writes these
 NOT_FROZEN = (".hyperframes/", "renders/", "snaps", "verification/", "tools_local/_bak/", "tools_local/__pycache__/")  # what no picture reads, as review.py's SKIP
-SPECS = {"1080p30": {"profile": "final", "fps": 30}, "4k60": {"profile": "final-4k60", "fps": 60}}
+SPECS = {"1080p30": {"profile": "final", "fps": 30}, "4k30": {"profile": "final-4k30", "fps": 30}, "4k60": {"profile": "final-4k60", "fps": 60}}
 FINAL_4K60 = {"name": "final-4k60", "width": 2160, "height": 3840, "dpr": 2, "fps": 60,
               "capture": {"method": "screenshot", "format": "jpeg", "quality": 100, "gpu": "hardware"}, "extraction": "auto",
               "encoder": {"lib": "libx264", "preset": "medium", "crf": 16, "pix_fmt": "yuv420p", "gop": "closed-per-segment", "bframes": 0},
               "threads": {"decoder": 1, "filter": 1, "encoder": 4}, "page_rotate_frames": 240}
+# 4K on the review's own 30 fps grid: no fps edits, so a derivative is only its swaps. Half the frames of 4k60.
+FINAL_4K30 = dict(FINAL_4K60, name="final-4k30", fps=30)
+FINALS_4K = {p["name"]: p for p in (FINAL_4K60, FINAL_4K30)}
 # Every place ivory's sources fix the frame grid. Each must match exactly once, or the derivative is refused: a new builder has to be read, not guessed at.
 FPS_EDITS = [("tools_local/build.py", r"^FPS = 30\r?$", "FPS = {fps}"), ("tools_local/build.py", r'data-fps="30"', 'data-fps="{fps}"'),
              ("tools_local/timeline.js", r"FPS = 30;", "FPS = {fps};")]
@@ -78,7 +81,7 @@ def editorial(home):
 def complete_profile(name):
     """The complete profile of a spec. The base profile is read from profiles.json, so a final's hash is the store's."""
     data = json.loads(renderer.PROFILES.read_text(encoding="utf8"))
-    return FINAL_4K60 if name == FINAL_4K60["name"] else data["profiles"][name]
+    return FINALS_4K.get(name) or data["profiles"][name]
 
 
 def built(project):
@@ -485,7 +488,7 @@ def derive(bundle, spec_name, swaps=None):
             raise Refused("the derivative's videos are not the approved videos")
         why = f"derivative {spec_name} of {base['composition_rev'][:16]}: {len(edits)} fps edits, {len(swapped)} swaps. plan.json and every cue are unchanged."
         try:
-            rev = sound_mix.rebind(ed, why)
+            rev = sound_mix.rebind(ed, why, sound_mix.events_of(sound_mix.plan_of(old)))
         except ValueError as e:
             raise Refused(str(e)) from e
         cues_same = sound_mix.sheet_of(ed)["cues"] == sheet["cues"]
@@ -506,7 +509,7 @@ def derive(bundle, spec_name, swaps=None):
 def renderer_for(spec_name, home):
     """run.py with the spec's profile added, and its output check left for the delivered file. A stitched final is unmastered, so O6 could only fail it on loudness."""
     data = json.loads(renderer.PROFILES.read_text(encoding="utf8"))
-    data["profiles"][FINAL_4K60["name"]] = FINAL_4K60
+    data["profiles"].update(FINALS_4K)
     path = Path(home) / PROFILES
     store.write_json(path, data)
     renderer.PROFILES = path

@@ -50,7 +50,7 @@ Trial ideas stay off. Open decisions stay open: keep current behaviour and flag 
 | Full-face setting | Partly | Resolved by hand at intake. `tools/tests/test_full_face.py` covers motionlint and stub dry runs of both workflows, never a real run |
 | `motionlint.py`, `flash_scan.py` | Works | Both run inside the checks on every stitched picture |
 | Sound | Partly | `sound.json`, sheet/stem/media checks. The cue agent ran live once on 1030-2. Cue lane, listening preview and sound notes are in the player, not yet used on a real sound round |
-| Final | Partly | `tools/beat_review/final.py` and `deliver.py --stitched`. 1080p delivered PASS on 1030-2, a new raw. Whole 4K60 delivered PASS only on a copy of the fixture with a test approval |
+| Final | Yes | `tools/beat_review/final.py` and `deliver.py --stitched`. 1080p delivered PASS on two new raws; 4K30 delivered PASS on one (2026-11-03), the default now. Whole 4K60 delivered PASS only on a copy of the fixture with a test approval |
 | CapCut finish | Not built | Not part of this release |
 | Lock | Not built | `templates/ivory/LOCK.md` is empty on purpose |
 
@@ -238,6 +238,15 @@ python tools/sound_mix.py stale $P
 ## 10. Final
 
 The final is built fresh from a frozen copy of the approved composition, never from the review picture. `build` refuses without a passing record in `beat/approvals/`. Long job: run it in the background, and never two renders at once.
+
+**4K30 is the default final.** Reviews render at 1080p for speed; the edit is a page, so the final renders the same composition at 2160x3840 and text and graphics come out sharp. Prep already wrote `assets/face_half_4k.mp4` (the same frames as `face_half.mp4` at the source's full size), so nothing is re-cut. Write `<work>/swaps-4k30.json` (`<work>` is `work/<id>`) pointing `assets/face_half.mp4` at it, with his approval words in `authorized_by`. YouTube plays and rewards 4K; Instagram and TikTok show 1080p at most, and the same 4K file is fine there.
+```bash
+# {"swaps": [{"path": "assets/face_half.mp4", "file": "<work>/assets/face_half_4k.mp4", "source": "prep_source.py face_half_4k (same frame map)", "why": "4K30 final", "authorized_by": "<his approval, verbatim>"}]}
+python tools/beat_review/final.py build $P --spec 4k30 --workers 6 --swaps <work>/swaps-4k30.json
+python tools/deliver.py $P <base>_4k30 --mode final --stitched <file that build printed> --source-swap assets/face_half.mp4
+python tools/sound_mix.py check-media out/<base>_4k30.mp4
+```
+On an 85 s edit the 4K30 build took 11 minutes at 6 workers (1080p30: about 3.5). A project prepped before face_half_4k existed: make it with `tools/face_retime.py raw/cut.mp4 --map face_map.json --reuse --crop <metadata face crop> --scale <crop width>x-2 --out assets/face_half_4k.mp4`, never a plain `fps=30` (the swap check refuses frames a tick off). Clips from other skills keep their own size: /vfx renders 1080x1920 and is scaled up. **1080p30 is the fallback** if a 4K check fails, or if he asks for it:
 ```bash
 python tools/beat_review/final.py build $P --spec 1080p30 --workers 4
 python tools/deliver.py $P <base> --mode final --stitched <file that build printed>
@@ -247,7 +256,7 @@ python tools/sound_mix.py check-media out/<base>.mp4
 **A new sound sheet after a final.** Run `build` again. A bundle is never changed, so it makes `work/<id>-final-<rev16>-sound-<hash8>/`, the same picture by hard link with the new sheet, cue files and waiver lists, and renders 0 beats. Deliver the file it prints, under a new `<base>`. `deliver.py` refuses a picture from a bundle whose sheet or cue bytes are not `$P`'s, so the old sound cannot go out by accident.
 Send him a phone copy of the sounded file and wait for final approval. Sound quality and stressed-word masking stay UNVERIFIED until Chase listens.
 
-**4K60, on his final approval.** Say plainly first: no whole short from a raw has been built this way. It is a derivative revision with its own bundle, and `derivative.json` says exactly what changed. Same cut, audio and plan as approved.
+**4K60, only if he asks for 60 fps.** Say plainly first: no whole short from a raw has been built this way (4K30 has). It is a derivative revision with its own bundle, and `derivative.json` says exactly what changed. Same cut, audio and plan as approved.
 ```bash
 # Rebuild face_half at 60 fps with ffmpeg from raw/cam_cut.mp4 (metadata.json camera_crops half) or,
 # with no CAMERA file, raw/cut.mp4 (face_top_px, face_region). Real pixels only.
@@ -261,7 +270,7 @@ python tools/sound_mix.py check-media out/<base>_4k60.mp4
 ```
 `--source-swap` lists the same paths as `swaps.json`, so leave it out only if that file lists none. It states what is expected and authorizes nothing. A new sound sheet at 4K60 is a whole 4K render, because rebinding makes the derivative's sheet its own.
 - Screen clips and plates keep their preview size. With `allow_full_face` true, full-face punch-ins are real camera pixels scaled up about 1.9x. Tell him what applies.
-- **If the render fails, or a check does not pass: say "the 4K60 final cannot be done yet". His approved file stays the 1080p final.** Never hand over a guess.
+- **If the render fails, or a check does not pass: say "the 4K60 final cannot be done yet". His approved file stays the 4K30 (or 1080p) final.** Never hand over a guess.
 
 ## 11. CapCut
 
