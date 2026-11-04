@@ -246,7 +246,7 @@ python tools/beat_review/final.py build $P --spec 4k30 --workers 6 --swaps <work
 python tools/deliver.py $P <base>_4k30 --mode final --stitched <file that build printed> --source-swap assets/face_half.mp4
 python tools/sound_mix.py check-media out/<base>_4k30.mp4
 ```
-On an 85 s edit the 4K30 build took 11 minutes at 6 workers (1080p30: about 3.5). A project prepped before face_half_4k existed: make it with `tools/face_retime.py raw/cut.mp4 --map face_map.json --reuse --crop <metadata face crop> --scale <crop width>x-2 --out assets/face_half_4k.mp4`, never a plain `fps=30` (the swap check refuses frames a tick off). Clips from other skills keep their own size: /vfx renders 1080x1920 and is scaled up. **1080p30 is the fallback** if a 4K check fails, or if he asks for it:
+On an 85 s edit the 4K30 build took 11 minutes at 6 workers (1080p30: about 3.5). A project prepped before face_half_4k existed: make it with `tools/face_retime.py raw/cut.mp4 --map face_map.json --reuse --crop <metadata face crop> --scale <crop width>x-2 --out assets/face_half_4k.mp4`, never a plain `fps=30` (the swap check refuses frames a tick off). Clips from other skills keep their own size: a /vfx clip stays 1080x1920 and is scaled up. Don't swap in a `/vfx --4k` render: a full-frame 2160x3840 clip inside the composition renders with held frames (about half its frames repeated, found 2026-11-04), while the 1080 clip plays every frame. **1080p30 is the fallback** if a 4K check fails, or if he asks for it:
 ```bash
 python tools/beat_review/final.py build $P --spec 1080p30 --workers 4
 python tools/deliver.py $P <base> --mode final --stitched <file that build printed>
