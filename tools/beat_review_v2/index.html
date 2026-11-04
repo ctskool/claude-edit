@@ -914,6 +914,14 @@ function paintApproval() {
     const part = a.stage === "comparing" ? "Comparing every frame" : a.stage !== "rendering" ? "Starting" : a.total && a.done >= a.total ? "Checking the fresh render" : "Rendering every beat fresh";
     row.append(make("div", "", `Approval check: ${part}${a.total ? ` · ${a.done} of ${a.total} beats` : ""} · ${elapsed(a.started)}`));
     const m = make("div", a.total ? "meter" : "meter wait"), i = make("i"); if (a.total) i.style.width = `${a.done / a.total * 100}%`; m.append(i); row.append(m);
+  } else if (rec && rec.result === "APPROVED") {
+    // His click is the approval; autofinal.py takes it from there to the delivered file
+    const f = a.final || {}, label = f.spec === "1080p30" ? "1080p final" : "4K final";
+    row.append(make("b", "", "Approved"), ` · ${String(rec.created).replace("T", " ")}`);
+    const said = f.stage === "done" ? `${label} ready: ${f.file}` : f.stage === "error" ? `${label} stopped: ${f.why || ""}` : f.stage === "delivering" ? `${label}: mastering sound and checking the file` :
+      f.stage === "building" ? `${label}: rendering · ${elapsed(f.building)}` : f.stage === "after sound" ? `${label} starts once the sound is done: ${f.why || ""}` : f.stage ? `${label}: waiting for the GPU` : "";
+    if (said) row.append(make("div", f.stage === "error" ? "" : "mute", said));
+    if (f.stage && !["done", "error", "after sound"].includes(f.stage)) { const m = make("div", "meter wait"); m.append(make("i")); row.append(m); }
   } else if (rec && (approved || state === "failed")) {
     row.append(make("b", "", `Approval check ${rec.result}`), ` · ${rec.frames_compared} frames · worst ${rec.worst_psnr == null ? "n/a" : Number(rec.worst_psnr).toFixed(1) + " dB"} · worst block ${Number(rec.worst_block).toFixed(2)}`);
     if (rec.why) row.append(make("div", "mute", rec.why));

@@ -44,7 +44,7 @@ Trial ideas stay off. Open decisions stay open: keep current behaviour and flag 
 | Review render | Works | `tools/beat_render/run.py`. Proven on the fixture and on that kit build |
 | Player and notes | Partly | `tools/beat_review_v2/` (page and look) over `tools/beat_review/` (notes, rounds, approval), port 4750. Same notes, rounds and approval as the page `work/1030-2` used for four note rounds; the top-five edit is the first to run in this look |
 | Note round | Partly | Instructions below. Scripted rounds only until Phase 6 |
-| Approval check | Partly | `review.py`. Writes `beat/approvals/<file_sha16>.json` |
+| Approval | Yes | His Approve click writes `beat/approvals/<file_sha16>.json` at once and starts the final (`autofinal.py`); the fresh-render check is by hand only (`deep=True`) |
 | Popout bottom | Partly | `tools/popout.py` and ivory's kit. Proven on a copy of 1030-2 at review size (`work/1030-2-popout`). Never on a new raw, and never through a 4K final |
 | Reference | Partly | `references/HOW.md`, `tools/reference.py measure`. Measuring tested on our own 1030-2 final only. Never through an edit |
 | Full-face setting | Partly | Resolved by hand at intake. `tools/tests/test_full_face.py` covers motionlint and stub dry runs of both workflows, never a real run |
@@ -211,16 +211,14 @@ Sound-only notes wait for section 9: put them in `not_done` with that reason, an
 
 ## 8. Approval
 
-He approves in the player. That runs `review.approve(project, picture_sha)`, which refuses a picture with a FAIL not fixed or waived or with an open note, then re-renders every beat fresh at the review profile and compares every frame to the picture he approved. Read progress with `review.approval_status(project)`, and expect about a first-draft render.
-- `approved`: the record is written once at `beat/approvals/<file_sha16>.json`. Before section 9, two things that make the next video better:
+He approves in the player, and his click is the approval: he watched this exact file. `review.approve(project, picture_sha)` refuses a picture with a FAIL not fixed or waived, with an open note, or that is not the newest picture byte for byte, then writes the record at once (`beat/approvals/<file_sha16>.json`, result `APPROVED`). No second render.
+- The same click starts the final (`tools/beat_review/autofinal.py`) when the sound is ready: `sound.json` written for this picture and no sound note open. Otherwise the player says the final starts once the sound is done, and section 9 comes first. Read where it is with `review.approval_status(project)["final"]`.
+- Before section 9, two things that make the next video better:
   1. **Library:** `python tools/library.py harvest $P`. It adds this edit's scenes to `templates/ivory/library/` and raises their proven counts. It writes only the library and refuses an unapproved project; report a refusal, never bypass it.
   2. **His notes into rules:** `python tools/taste_from_notes.py digest work/<id>`. Then one agent reads `work/<id>/taste-digest.md`, `templates/ivory/CANDIDATES.md` and the target rule files, and drafts candidates in CANDIDATES.md's format. It merges repeats and counts the videos. Show Chase the list to mark keep or strike. Candidates do nothing until he marks them; only then run `python tools/taste_from_notes.py promote` and show him what moved.
   Then run `python tools/run_state.py metrics <id>` and `python tools/run_state.py report`, and go to section 9.
-- `reconcile`: differences the method cannot call go to him in the player. Only his click settles them, through `review.reconcile`.
-- `failed`: a real difference. Show him the frames, and do not go on. Treat it as a note round.
-- `blocked` or `error`: read its `why`, fix that, and he approves again.
-- Any picture change after approval clears it, and so does a new note on the approved picture. The record stands, so approving that same picture again takes no second render.
-- A note left during the check also stops it. A clean check still writes its record and waits. `reconcile` refuses until the note is dealt with.
+- Any picture change after approval clears it, and so does a new note on the approved picture. The record stands, so approving that same picture again is instant.
+- **The deep check, by hand only:** `approval.start(project, sha, deep=True)` re-renders every beat fresh and compares every frame first, about a whole review render. Use it only when a cached beat is in real doubt. Its results: `reconcile` (differences go to him; only his click settles them, through `review.reconcile`), `failed` (a real difference: show him the frames and treat it as a note round), `blocked` or `error` (read its `why`).
 
 ## 9. Sound
 
@@ -231,22 +229,24 @@ python tools/sound_mix.py check-sheet $P
 python tools/sound_mix.py check-mix $P
 python tools/sound_mix.py stale $P
 ```
-**He listens in the player before the final.** Once `sound.json` exists, the player shows the cue lane and Sound tab, and the Sound button (key S) plays a listening preview: the picture stream-copied with `sound_mix`'s own mix. It's never a picture and approvals don't read it. A sound note pins a cue, doesn't clear approval, doesn't hold Approve and never enters `freeze`. When he says go, read `review.sound_notes(project)`, revise `sound.json` through `sound-cues.js` with his notes in `note`, re-run the checks below, then `review.close_sound(project, done=[ids], not_done={id: "why"})`. Claude cannot hear, so say what changed and let him listen again. Go to section 10 when he's happy, so sound fixes cost no extra final.
+**He listens in the player before the final.** Once `sound.json` exists, the player shows the cue lane and Sound tab, and the Sound button (key S) plays a listening preview: the picture stream-copied with `sound_mix`'s own mix. It's never a picture and approvals don't read it. A sound note pins a cue, doesn't clear approval, doesn't hold Approve and never enters `freeze`. When he says go, read `review.sound_notes(project)`, revise `sound.json` through `sound-cues.js` with his notes in `note`, re-run the checks below, then `review.close_sound(project, done=[ids], not_done={id: "why"})`. Claude cannot hear, so say what changed and let him listen again. When he says the sound is good, start the final: `python tools/beat_review/autofinal.py start $P` (section 10). It does nothing twice, so it's safe if his click already started it. Sound fixes before that cost no extra final.
 
 `check-sheet` covers palette, special requests, rotation, source share, spacing, events, CTA/proof spans and picture revision. `check-mix` requires 10-26 LU under the voice; over 8 cues per 30 s is a WARN: it "just has to make sense". `stale` lists cues that need review, including moved events. `cues: []` needs `empty_reason`. Sound comes before section 10, because the final freezes `sound.json` with the picture. A sound-only note revises `sound.json` through `sound-cues.js` and costs no render of the review picture. After a final, run section 10's `build` again with the new sheet.
 
 ## 10. Final
 
-The final is built fresh from a frozen copy of the approved composition, never from the review picture. `build` refuses without a passing record in `beat/approvals/`. Long job: run it in the background, and never two renders at once.
+The final is built fresh from a frozen copy of the approved composition, never from the review picture. `build` refuses without an approval record in `beat/approvals/`. Long job: never two renders at once (`tools/gpu_lock.py` queues them).
 
-**4K30 is the default final.** Reviews render at 1080p for speed; the edit is a page, so the final renders the same composition at 2160x3840 and text and graphics come out sharp. Prep already wrote `assets/face_half_4k.mp4` (the same frames as `face_half.mp4` at the source's full size), so nothing is re-cut. Write `<work>/swaps-4k30.json` (`<work>` is `work/<id>`) pointing `assets/face_half.mp4` at it, with his approval words in `authorized_by`. YouTube plays and rewards 4K; Instagram and TikTok show 1080p at most, and the same 4K file is fine there.
+**`autofinal.py` does all of this by itself** from his Approve click, or from `python tools/beat_review/autofinal.py start $P` once the sound is good. It writes the swap file below with his click as `authorized_by`, builds 4K30 under `gpu_lock` (1080p30 when there is no `assets/face_half_4k.mp4`), delivers `out/<id>_<style>_final_4k30.mp4`, and runs `check-media`. The player shows each stage, and `work/<id>/final-<sha16>.log` has the output. On an error, read the log, fix it, and run `start` again. The commands below are what it runs, for doing it by hand.
+
+**4K30 is the default final.** Reviews render at 1080p for speed; the edit is a page, so the final renders the same composition at 2160x3840 and text and graphics come out sharp. Prep already wrote `assets/face_half_4k.mp4` (the same frames as `face_half.mp4` at the source's full size), so nothing is re-cut. By hand: write `<work>/swaps-4k30.json` (`<work>` is `work/<id>`) pointing `assets/face_half.mp4` at it, with his approval words in `authorized_by`. YouTube plays and rewards 4K; Instagram and TikTok show 1080p at most, and the same 4K file is fine there.
 ```bash
 # {"swaps": [{"path": "assets/face_half.mp4", "file": "<work>/assets/face_half_4k.mp4", "source": "prep_source.py face_half_4k (same frame map)", "why": "4K30 final", "authorized_by": "<his approval, verbatim>"}]}
 python tools/beat_review/final.py build $P --spec 4k30 --workers 6 --swaps <work>/swaps-4k30.json
 python tools/deliver.py $P <base>_4k30 --mode final --stitched <file that build printed> --source-swap assets/face_half.mp4
 python tools/sound_mix.py check-media out/<base>_4k30.mp4
 ```
-On an 85 s edit the 4K30 build took 11 minutes at 6 workers (1080p30: about 3.5). A project prepped before face_half_4k existed: make it with `tools/face_retime.py raw/cut.mp4 --map face_map.json --reuse --crop <metadata face crop> --scale <crop width>x-2 --out assets/face_half_4k.mp4`, never a plain `fps=30` (the swap check refuses frames a tick off). Clips from other skills keep their own size: a /vfx clip stays 1080x1920 and is scaled up. Don't swap in a `/vfx --4k` render: a full-frame 2160x3840 clip inside the composition renders with held frames (about half its frames repeated, found 2026-11-04), while the 1080 clip plays every frame. **1080p30 is the fallback** if a 4K check fails, or if he asks for it:
+On an 85 s edit the 4K30 build took 11 minutes at 6 workers (1080p30: about 3.5), and delivering it about 10 more. A project prepped before face_half_4k existed: make it with `tools/face_retime.py raw/cut.mp4 --map face_map.json --reuse --crop <metadata face crop> --scale <crop width>x-2 --out assets/face_half_4k.mp4`, never a plain `fps=30` (the swap check refuses frames a tick off). Clips from other skills keep their own size: a /vfx clip stays 1080x1920 and is scaled up. Don't swap in a `/vfx --4k` render: a full-frame 2160x3840 clip inside the composition renders with held frames (about half its frames repeated, found 2026-11-04), while the 1080 clip plays every frame. **1080p30 is the fallback** if a 4K check fails, or if he asks for it:
 ```bash
 python tools/beat_review/final.py build $P --spec 1080p30 --workers 4
 python tools/deliver.py $P <base> --mode final --stitched <file that build printed>

@@ -41,7 +41,7 @@ import stitch as stitcher
 import store
 from common import frame_of, source_frame_time, sha
 
-OK = ("PASS", "RECONCILED")
+OK = ("PASS", "RECONCILED", "APPROVED")
 BUNDLE = "bundle.json"
 DERIVATIVE = "derivative.json"
 BUILD = "final.json"

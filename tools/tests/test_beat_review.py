@@ -21,6 +21,7 @@ NEEDS_FIXTURE = unittest.skipUnless((ROOT / "work/beat-fixture/v2/editorial/beat
                                     "needs work/beat-fixture, the author's 107 s test edit, which does not ship")
 sys.path[:0] = [str(ROOT / "tools" / "beat_review"), str(ROOT / "tools" / "beat_check"), str(ROOT / "tools" / "beat_render"), str(ROOT / "tools")]
 import approval
+import autofinal
 import numpy as np
 import output
 import review
@@ -108,6 +109,8 @@ class Base(unittest.TestCase):
         self.dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)  # a still may still be decoding
         self.p = Project(Path(self.dir.name).resolve())
         self.project = self.p.project
+        self.finals = mock.patch.object(approval.autofinal, "start", return_value={"stage": "waiting"}).start()  # his click starts the final: never a real build here
+        self.addCleanup(mock.patch.stopall)
 
     def tearDown(self):
         self.dir.cleanup()
@@ -761,10 +764,23 @@ class Approval(Base):
         with self.assertRaisesRegex(ValueError, "on disk"):
             review.approve(self.project, self.h)
 
-    def test_starts_its_own_process_and_says_running(self):
+    def test_his_click_approves_at_once_and_starts_the_final(self):
+        with mock.patch.object(approval.subprocess, "Popen") as popen:
+            s = review.approve(self.project, self.h)
+        self.assertEqual(s["state"], "approved")
+        popen.assert_not_called()
+        self.assertEqual(store.read_json(self.folder / f"{self.tag}.json")["result"], "APPROVED")
+        self.finals.assert_called_once_with(Path(self.project).resolve(), self.h)
+
+    def test_a_click_on_an_approved_picture_writes_no_second_record(self):
+        review.approve(self.project, self.h)
+        self.assertEqual(review.approve(self.project, self.h)["state"], "approved")
+        self.assertEqual(len(list(self.folder.glob(f"{self.tag}*.json"))), 1)
+
+    def test_the_deep_check_starts_its_own_process_and_says_running(self):
         with mock.patch.object(approval.subprocess, "Popen") as popen, mock.patch.object(store, "alive", return_value=True):
             popen.return_value.pid = 123
-            s = review.approve(self.project, self.h)
+            s = approval.start(self.project, self.h, deep=True)
         self.assertEqual((s["state"], s["stage"]), ("running", "starting"))
         self.assertIn("check", popen.call_args.args[0])
         self.assertIn(self.h, popen.call_args.args[0])
@@ -772,7 +788,7 @@ class Approval(Base):
     def test_a_second_ask_does_not_start_a_second_check(self):
         store.write_json(self.folder / f"running-{self.tag}.json", {"pid": 1, "stage": "rendering", "started": "x"})
         with mock.patch.object(approval.subprocess, "Popen") as popen, mock.patch.object(store, "alive", return_value=True):
-            self.assertEqual(review.approve(self.project, self.h)["stage"], "rendering")
+            self.assertEqual(approval.start(self.project, self.h, deep=True)["stage"], "rendering")
         popen.assert_not_called()
 
     def test_a_check_that_died_reads_as_an_error(self):
@@ -909,6 +925,39 @@ class Approval(Base):
             review.reconcile(self.project, self.h, " ")
         s = review.reconcile(self.project, self.h, "I looked, it is noise")
         self.assertEqual((s["state"], s["record"]["result"], s["record"]["why"]), ("approved", "RECONCILED", "I looked, it is noise"))
+
+
+REAL_FINISH = autofinal.start  # Base stubs it out, so these tests call the real one
+
+
+class Finish(Base):
+    def setUp(self):
+        super().setUp()
+        self.h = self.p.picture()
+
+    def test_with_no_sound_sheet_the_final_waits_for_sound(self):
+        with mock.patch.object(autofinal.subprocess, "Popen") as popen:
+            s = REAL_FINISH(self.project, self.h)
+        popen.assert_not_called()
+        self.assertEqual(s["stage"], "after sound")
+        self.assertIn("section 9", s["why"])
+
+    def test_a_ready_sound_starts_the_final_in_its_own_process(self):
+        with mock.patch.object(autofinal, "sound_ready", return_value=None), mock.patch.object(autofinal.subprocess, "Popen") as popen:
+            popen.return_value.pid = 321
+            s = REAL_FINISH(self.project, self.h)
+        self.assertEqual(s["stage"], "waiting")
+        self.assertEqual(popen.call_args.args[0][3:5], ["run", str(self.project)])
+        with mock.patch.object(autofinal.subprocess, "Popen") as popen, mock.patch.object(store, "alive", return_value=True):
+            self.assertEqual(REAL_FINISH(self.project, self.h)["stage"], "waiting")
+        popen.assert_not_called()
+
+    def test_start_without_a_picture_takes_the_approved_one(self):
+        with self.assertRaisesRegex(ValueError, "no approved picture"):
+            REAL_FINISH(self.project)
+        review.approve(self.project, self.h)
+        with mock.patch.object(autofinal, "sound_ready", return_value="later"):
+            self.assertEqual(REAL_FINISH(self.project)["why"], "later")
 
 
 class Native(unittest.TestCase):

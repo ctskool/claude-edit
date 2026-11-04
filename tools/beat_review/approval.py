@@ -22,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from paths import project_root
 ROOT = project_root()
 sys.path[:0] = [str(HERE), str(ROOT / "tools" / "beat_render"), str(ROOT / "tools")]
+import autofinal
 import ownership
 import review
 import sentinel
@@ -34,7 +35,7 @@ RUN = ROOT / "tools" / "beat_render" / "run.py"
 PROFILES = ROOT / "tools" / "beat_render" / "profiles.json"
 BLOCK_PX, FINE_PX = 48, 24  # at 1080 wide. Scaled with the frame, so a block covers the same part of the picture at every size. A small object is lost in a 48 px block, so a finer one runs too
 METRICS = ("block", "fine", "chroma")  # higher is worse. psnr is reported and never decides: a whole-frame number averages a small change away
-OK = ("PASS", "RECONCILED")
+OK = ("PASS", "RECONCILED", "APPROVED")
 GROUP_GAP = 3  # flagged frames this close are one region
 MAX_REGIONS = 24
 BOX_DIFF = 16  # a pixel this far off counts toward a crop's box
@@ -226,6 +227,14 @@ def record_of(pic, fresh_sha, numbers, result, **extra):
             "result": result, "created": review.now(), **extra}
 
 
+def click_record(pic):
+    """Chase approved the picture on screen. No second render: the checks are the ones this picture already passed, and the file is the one he watched."""
+    profile = json.loads(PROFILES.read_text(encoding="utf8"))["profiles"][review.PROFILE]
+    return {"approved_file_sha256": pic["file_sha256"], "composition_rev": pic["composition_rev"], "lock_revision": pic["lock_revision"], "profile": profile,
+            "method": {"how": "Chase's Approve click on the picture he watched in the player; no fresh render (approval.py check is the deep check, by hand)"},
+            "result": "APPROVED", "created": review.now()}
+
+
 def activate(root, pic):
     store.write_json(approvals(root) / "active.json", {"file_sha256": pic["file_sha256"], "composition_rev": pic["composition_rev"], "lock_revision": pic["lock_revision"], "approved": review.now()})
 
@@ -271,7 +280,7 @@ def status(project):
     if record and record["result"] == "FAIL":
         return {"state": "failed", "record": record, "regions": record.get("regions", []), "regions_dir": record.get("regions_dir")}
     if record and bound(record, pic) and store.read_json(folder / "active.json", {}).get("file_sha256") == pic["file_sha256"]:
-        return {"state": "approved", "record": record}
+        return {"state": "approved", "record": record, "final": autofinal.status(project, pic["file_sha256"])}
     for state in ("reconcile", "blocked", "error"):
         held = store.read_json(folder / f"{state}-{tag}.json")
         if held:
@@ -279,8 +288,9 @@ def status(project):
     return {**empty, "record": record}
 
 
-def start(project, picture_sha):
-    """Checks everything a quick look can, then starts the check in its own process. A picture already approved by a record of this exact composition needs no second render."""
+def start(project, picture_sha, deep=False):
+    """Checks everything a quick look can, then approves: his click is the approval, written at once, and the final starts (autofinal.py). The file he approves is the newest picture, byte for byte,
+    so a final built from its composition is what he watched. deep=True is the old backstop instead: every beat rendered fresh and compared first, for when a cache is in doubt."""
     project = Path(project).resolve()
     root = review.root_of(project)
     pic = review.picture(project)
@@ -305,6 +315,12 @@ def start(project, picture_sha):
         if not bound(record, pic):
             raise ValueError("a record for this file names another composition, and a record is written once")
         activate(root, pic)
+        autofinal.start(project, picture_sha)
+        return status(project)
+    if not deep:
+        write_once(folder / f"{tag}.json", click_record(pic))
+        activate(root, pic)
+        autofinal.start(project, picture_sha)
         return status(project)
     now_state = status(project)
     if now_state["state"] == "running":
