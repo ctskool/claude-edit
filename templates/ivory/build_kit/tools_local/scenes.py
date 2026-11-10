@@ -108,6 +108,31 @@ def lbl(id_, x, y, txt, size, style=""):
     return f'<div id="{id_}" class="lbl" style="left:{x}px;top:{y}px;font-size:{size}px;{style}">{txt}</div>'
 
 
+def _ground_text(cols=119, rows=9, seed=3):
+    """A strip of ASCII terrain, the charcoal look's texture. Deterministic."""
+    def h(i, j, s):
+        x = (i * 374761393 + j * 668265263 + s * 1442695041) & 0xFFFFFFFF
+        x = ((x ^ (x >> 13)) * 1274126177) & 0xFFFFFFFF
+        return (x ^ (x >> 16)) / 4294967295
+    out = []
+    for j in range(rows):
+        line = ""
+        for i in range(cols):
+            u, v = i / 146, j / rows
+            y0 = 0.36 + math.sin(u * 5 + seed) * 0.24 + math.sin(u * 13 + seed * 2) * 0.11 + math.sin(u * 31 + seed) * 0.05
+            n, dd = h(i, j, seed), v - y0
+            line += " " if dd <= 0 or n <= 0.1 else ("." if n > 0.55 else ":") if dd < 0.07 else "-" if dd < 0.2 else "=" if dd < 0.36 else "+" if dd < 0.56 else "#"
+        out.append(line)
+    return "\n".join(out)
+
+
+def ground(p, full=False):
+    """A look's ground band, as the scene root's first child: the densest rows on a split panel's base, all nine on a takeover's.
+    Its drift is one line in the scene's block, on the video's clock so it never jumps between scenes (looks/charcoal/LOOK.md)."""
+    top, hgt, off = (1704, 216, 0) if full else (884, 76, -140)
+    return f'<div class="gclip" style="top:{top}px;height:{hgt}px"><div id="{p}-gr" class="gr" style="top:{off}px">{_ground_text()}</div></div>'
+
+
 def own(id_, html):
     """One scene group, marked for tools/beat_render/ownership.py"""
     return f"<!--@own scene.{id_}-->\n{html}\n<!--@/own-->"

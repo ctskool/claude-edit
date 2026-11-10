@@ -31,7 +31,7 @@
 | | |
 |---|---|
 | **You give it** | A raw talking-head take (or several). Your screen on top, your face cam below, or just your face |
-| **You get** | A finished MP4, vertical in today's ivory template: cut tight, every beat edited, captioned, sounded and mastered |
+| **You get** | A finished MP4, vertical, in the ivory look or the charcoal look: cut tight, every beat edited, captioned, sounded and mastered |
 | **Your part** | One minute to listen to the cut, notes in the player wherever you want a change, then approve |
 | **It stops for you** | After the cut, after every render, before sound, before the final. It never moves the picture while you're reviewing |
 | **It never** | Invents a number, generates your body or face, or changes something you didn't note |
@@ -71,7 +71,7 @@ Left is the raw take. Right is the edit Claude made from it, on the same seconds
 
 Claude also turns your notes into candidate rules for next time. Nothing becomes a rule until you mark it keep.
 
-Since 2026-11-10 this is the default "light path": one agent in place of sixteen. On the author's test video it took 40 minutes from the raw take where the older pipeline took 127, with about a tenth of the tokens. The older multi-agent pipeline is still in the skill; ask for "the full pipeline" to use it. You can also hand over a reference video and say whether you want its whole look or specific things; applying a whole look is done by hand for now and saving one as a template is not built yet.
+Since 2026-11-10 this is the default "light path": one agent in place of sixteen. On the author's test video it took 40 minutes from the raw take where the older pipeline took 127, with about a tenth of the tokens. The older multi-agent pipeline is still in the skill; ask for "the full pipeline" to use it. You can also hand over a reference video and say whether you want its whole look or specific things; Claude applies a whole look by hand in that project, and can save it as a named look you pick next time. Two looks ship: ivory (the default) and charcoal (say "in charcoal").
 
 Some stages are newer than others. Research during the cut listen, the parallel build and the component library are tested on stubs but haven't run on a real video yet; the table at the top of [SKILL.md](.claude/skills/claude-edit/SKILL.md) says which stage has.
 

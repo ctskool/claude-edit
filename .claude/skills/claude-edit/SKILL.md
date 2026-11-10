@@ -29,7 +29,8 @@ Trial ideas stay off. Open decisions stay open: keep current behaviour and flag 
 | Raw plus notes | Works | `work/1030-2` finished the whole flow on 2026-11-01, the only one so far |
 | Light path | Partly | Default since 2026-11-10. Two test runs on one take the old pipeline had already edited (127 min, 16 agents, 3.84 M subagent tokens, on Opus 5.5). Rebuilt from its cut on Fable 5.2: 47 min. Cold from the raw take on Opus 5.5, with a reference look: 40 min including the cut, about 14 times less new input and 9 times less output. Both passed every automated check. Both edits were plainer than the pipeline's, and each first render had a defect only a close look found. No edit made this way has been through his notes yet: count them on the first ones |
 | Pilot look | Not run | Section 4, added 2026-11-10 from how the long-form video was built. Never run on a short |
-| A look from a reference | Partly | Section 4, by hand. Done twice on one take, with his own long-form video as the reference (2026-11-10). Never on someone else's reel. Saving a look as a template is not built |
+| Looks | Partly | `plan.json` `look` picks a folder in `templates/ivory/build_kit/looks/` (added 2026-11-10). Ivory is the kit's own look and builds byte for byte as before. `charcoal` ships: one take rebuilt through it passed every check and the review render. No edit in it has been through his notes |
+| A look from a reference | Partly | Section 4, by hand. Run three times on one take: twice with his own long-form video, once cold from the skill's wording with another creator's reel (2026-11-10). Saving one is copying its files into a `looks/` folder, done once, for charcoal |
 | Jump check | Partly | `tools/beat_check/jumps.py` (added 2026-11-10), advisory. On four known pictures it found the one known snap at a beat join and one harmless cut inside a clip. It cannot see a jump that starts on a tween's own first frame |
 | `run.json` state and metrics | Partly | `tools/run_state.py` (added 2026-11-02): state, `status` for resume, `metrics`, `report`. 30 tests on temp folders; no real run has used it yet |
 | Install and doctor | Partly | `tools/doctor.py`, `INSTALL.md`, `tools/paths.py`. Paths are project-relative and every workflow takes `root`. Doctor passes on a fresh clone on Windows and on a Mac (2026-11-03, with `ffmpeg-full`). No whole edit has run on a Mac, and no stranger has run a whole edit yet |
@@ -62,6 +63,7 @@ Trial ideas stay off. Open decisions stay open: keep current behaviour and flag 
 
 - Takes: raw OBS `.mkv` files at the paths supplied in $ARGUMENTS; resolve each to an absolute path. If no path was supplied, ask for the take path. Confirm which by frame grabs and a quick transcript. A finished export is not handled here yet: say so.
 - Template: any name but ivory, stop and say only ivory exists here. Everything left is notes.
+- Look: `ivory` unless he names another shipped look in words ("charcoal", "the dark one"). `ls templates/ivory/build_kit/looks` is the list; any other name, say which looks exist. Record `look` and `look_source` (his words, or `default`) in `RUN.md` and `plan.json`, and read that look's `LOOK.md` after the card. A reference video is not a look name: that is the Reference line below.
 - Path: `light` unless Chase asks for the full pipeline in words ("full pipeline", "run the workflows"). Offer the full pipeline once, in one line, for a sponsored video or the first video in a new template. Record `path` and `path_source` (his words, or `default`) in `RUN.md`.
 - Full-face: read `templates/<name>/template.json`. `allow_full_face = template.full_face OR Chase's request for this edit`. A missing file, a missing field or anything but the Boolean `true` reads false. Ivory reads false.
 - His request counts only when he asks in words for a full-screen face on this edit. Skipping a page or running auto or lock mode grants nothing.
@@ -146,7 +148,7 @@ Then the kit README's QA, in its order: owner audit, `conform.py --all` (exit 3 
 6. The caption chip must read on both the panel and his footage. If the reference has no captions, the chip is your call: flag it.
 7. The layouts stay ivory's: split, takeover, full-face when on. A reel built another way comes out as "in the spirit of", and the handoff says so.
 8. A graphic never names a look as a shipped choice unless it ships.
-9. Record `look` and `look_source` in `RUN.md`, with the list of files changed. After approval, ask once: "Keep this look for next time?" Saving it as a template is not built yet, so a yes means noting the project to copy those files from.
+9. Record `look` and `look_source` in `RUN.md`, with the list of files changed. After approval, ask once: "Keep this look for next time?" On a yes, save it: make `templates/ivory/build_kit/looks/<name>/` with `look.css` (the overrides you appended), `look.json` (name, where it came from, and a `remap` of each ivory literal you replaced), its `fonts/`, and a one-page `LOOK.md` written like charcoal's. Then set this project's `plan.json` `look` to that name, take the overrides back out of its `style.css`, rebuild, and check the page still looks the same. From then on he picks it by name at intake.
 
 **Full pipeline, only when he asks.**
 

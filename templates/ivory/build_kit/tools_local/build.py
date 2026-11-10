@@ -24,6 +24,7 @@ BOTTOMS = ("split", "popout")  # popout: templates/HOUSE.md "Popout bottom", too
 POS = {"seam": 912, "takeover": 1477, "fullface": 1640}
 SOURCES = ["tools_local/build.py", "tools_local/scenes.py", "tools_local/timeline.js", "tools_local/style.css", "tools_local/owners.py"]
 GUIDE = "templates/ivory/build_kit/README.md"
+LOOKS = ROOT.parent.parent / "templates" / "ivory" / "build_kit" / "looks"  # plan.json "look": a folder here. None, or "ivory", is the kit's own look
 CHIP_LEAD = 5  # frames a chip may open ahead of its first word. tools/beat_check/conform.py CHIP_LEAD_FRAMES
 
 
@@ -48,6 +49,8 @@ def plan_problems(plan, end):
         problems.append(f"plan.json bottom must be one of {BOTTOMS}, got {plan.get('bottom')!r}")
     if plan.get("bottom") == "popout" and not (ED / "assets" / "popout.json").is_file():
         problems.append("bottom is popout and assets/popout.json is missing: run python tools/popout.py make <project> first")
+    if plan.get("look") not in (None, "ivory") and not (LOOKS / str(plan["look"]) / "look.css").is_file():
+        problems.append(f"plan.json look is {plan.get('look')!r}, and {LOOKS} has no such folder with a look.css. Shipped looks: {sorted(p.name for p in LOOKS.iterdir() if p.is_dir()) if LOOKS.is_dir() else []}")
     if plan["composition_files"] != SOURCES:
         problems.append(f"plan.json composition_files must be {SOURCES}")
     for b in plan["beats"]:
@@ -174,6 +177,14 @@ except FileNotFoundError as e:
     stop([f"scene asset missing: {e.filename}. Add it to shared/ and rerun new_project.py, or correct the scene's asset path"])
 css = (HERE / "style.css").read_text(encoding="utf8")
 js = (HERE / "timeline.js").read_text(encoding="utf8")
+if plan.get("look") not in (None, "ivory"):
+    # a look is CSS laid over the kit's, plus a table of ivory literals to swap wherever a scene or the timeline wrote one
+    look_dir = LOOKS / plan["look"]
+    css += (look_dir / "look.css").read_text(encoding="utf8")
+    remap = json.loads((look_dir / "look.json").read_text(encoding="utf8")).get("remap", {}) if (look_dir / "look.json").is_file() else {}
+    for old, new in remap.items():
+        body = re.sub(re.escape(old), new, body, flags=re.I)
+        js = re.sub(re.escape(old), new, js, flags=re.I)
 face = f'<div id="face-wrap"><video id="face" class="clip" src="assets/face_half.mp4" muted playsinline data-start="0" data-duration="{END}" data-track-index="0"></video></div>'
 if plan.get("bottom") == "popout":
     pop = json.loads((ED / "assets" / "popout.json").read_text(encoding="utf8"))

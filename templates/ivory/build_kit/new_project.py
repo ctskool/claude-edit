@@ -47,6 +47,9 @@ def setup(root, full_face=False):
         (project / "meta.json").write_text(json.dumps({"id": f"{root.name}-editorial", "name": f"{root.name}-editorial"}, indent=2) + "\n", encoding="utf8", newline="\n")
         for name in KIT_ASSETS:
             shutil.copytree(KIT / "assets" / name, project / "assets" / name)
+    for font in sorted((KIT / "looks").glob("*/fonts/*")):  # every look's fonts, so plan.json "look" can change without a second setup
+        if not (project / "assets" / "fonts" / font.name).exists():
+            shutil.copy2(font, project / "assets" / "fonts" / font.name)
     shared = root / "shared"
     if shared.is_dir():
         for path in sorted(shared.iterdir()):

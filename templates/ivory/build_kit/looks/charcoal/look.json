@@ -1,0 +1,10 @@
+{
+  "name": "charcoal",
+  "from": "Chase's long-form YouTube look, adapted to the split-screen short on 2026-11-10",
+  "remap": {
+    "#d97757": "#ff6a3d",
+    "#c15f3c": "#ff7a50",
+    "#d9d6cc": "#423f3b",
+    "#e4e2da": "#423f3b"
+  }
+}

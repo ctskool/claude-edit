@@ -1,0 +1,50 @@
+
+      /* ===== look: charcoal. Laid over the kit's style.css by build.py when plan.json has "look": "charcoal" ===== */
+      @font-face { font-family: "Geist Mono"; font-weight: 400; src: url("assets/fonts/geist-mono-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Geist Mono"; font-weight: 500; src: url("assets/fonts/geist-mono-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Geist Mono"; font-weight: 600; src: url("assets/fonts/geist-mono-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Hanken Grotesk"; font-weight: 600; src: url("assets/fonts/hanken-grotesk-latin-600-normal.woff2") format("woff2"); }
+      :root {
+        --iv: #1a1917; --card: #141312; --bd: #423f3b; --ink: #ebe8e0; --sec: #aaa69d; --mut: #aaa69d;
+        --clay: #ff6a3d; --clayd: #ff7a50; --clayt: rgba(255, 106, 61, .14); --dark: #0d0d0c; --hair: #423f3b;
+        --mono: "Geist Mono", monospace; --serif: "Hanken Grotesk", sans-serif; --sans: "Geist Mono", monospace;
+      }
+      #grid { background-image: none; }
+      /* square corners everywhere, inline radii included */
+      .pc, .plate, .ol, .itile, .pillw, .cmd, .seg, .gap, .strike, .sw, .door, .node, .chipg, .stage, .skel { border-radius: 0 !important; }
+      svg.abs > rect { rx: 0; ry: 0; }
+      .pc { border: none; background: var(--card); box-shadow: inset 0 0 0 1.5px var(--bd); }
+      .plate { background: #fff; box-shadow: 0 0 0 1.5px var(--bd); }
+      .plate.sq { box-shadow: none; background: var(--iv); }
+      .ol { background: rgba(255, 106, 61, .12); }
+      .itile svg { color: #0d0d0c; }
+      .pillw, .chipg, .door, .node { background: var(--card); border: none; box-shadow: inset 0 0 0 1.5px var(--bd); color: var(--ink); }
+      .serif { font-weight: 600; letter-spacing: -0.035em; }
+      .serif .it { font-style: normal; color: var(--clayd); }
+      .num { font-family: var(--serif); font-weight: 600; letter-spacing: -0.04em; }
+      .num.cl { font-style: normal; color: var(--clayd); }
+      .cmd { box-shadow: inset 0 0 0 1.5px var(--bd); }
+      .sw { background: var(--iv); border: 1.5px solid var(--bd); }
+      /* caption chip: light, so it reads on the charcoal panel and on his footage. The accent is an orange highlight block */
+      .chip .in, .chipx { border-radius: 0; background: #ebe8e0; color: #1a1917; font-family: var(--mono); font-weight: 600; }
+      .chip .in b { font-weight: 600; color: #0d0d0c; background: #ff6a3d; padding: 6px 12px; margin: 0 -2px; }
+      /* the running counter: a row of square boxes that fill orange */
+      #strip-body { background: var(--card); border-radius: 0; box-shadow: inset 0 0 0 1.5px var(--bd); }
+      #hm-mark { border-radius: 0; background: #ff6a3d; }
+      #hm-mark i { display: none; }
+      #lbl { font-family: var(--mono); font-weight: 500; color: #aaa69d; }
+      #count { font-family: var(--mono); color: #ebe8e0; }
+      #count #cn0 { color: #77736a; }
+      .dot { border-radius: 0; }
+      #dot-gray { background: #423f3b; }
+      .sock { border-radius: 0; border: 1.5px solid var(--bd); background: none; }
+      .slot, .gnd, .plug .neck { display: none; }
+      .plugd { background: none; }
+      .plug .body { left: -11px; top: 22px; width: 94px; height: 86px; border-radius: 0; background: #ff6a3d; box-shadow: none; }
+      .plug .tile { top: 40px; background: none; border-radius: 0; }
+      .plug .tile svg { color: #0d0d0c; }
+      .plug .tile svg.mk { fill: #0d0d0c; }
+      .ring { border-radius: 0; }
+      /* the ASCII ground band, drawn by scenes.ground() */
+      .gclip { position: absolute; left: 0; width: 1080px; overflow: hidden; }
+      .gr { position: absolute; left: 0; white-space: pre; font: 500 22px/24px "Geist Mono", monospace; color: #77736a; }

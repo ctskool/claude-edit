@@ -43,6 +43,12 @@ Beats touch end to start, the first starts at 0, the last ends on `metadata.json
 
 The director owns scene images, only when the run has Codex (`codex` true); without it there are none. Generate missing `shared/scenes/<beat>.png` before the independent plan check and Setup, and append each exact prompt, path and dimensions to `ASSETS.md`. In Codex use the built-in image tool; in Claude Code hand the job to `codex exec`. The builder uses the linked `assets/scenes/` file. If one arrives after Setup, rerun `new_project.py` to link it.
 
+## Looks
+
+`plan.json` may carry `"look": "<name>"` and `"look_source"`. Without it, or with `"ivory"`, the page is byte for byte what it was before looks existed. With it, `build.py` reads `looks/<name>/`: it appends `look.css` after `style.css`, and swaps each literal in `look.json`'s `remap` wherever a scene or the timeline wrote it (the kit's own helpers carry ivory's clay as a literal). `new_project.py` copies every look's fonts into the project, so the look can change later with no second setup. A look that needs its own element brings a helper: charcoal's ground band is `ground()` in `scenes.py`, described in `looks/charcoal/LOOK.md`.
+
+A new look is a new folder with `look.css`, `look.json`, `fonts/` and a one-page `LOOK.md`. It must not change a layout, a time or a helper's behaviour: those belong to the kit.
+
 ## A scene, end to end
 
 `scenes.py`, one call per scene group. One balanced element, its id the scene's root, class `scene`, or `scene full` on a full-graphic layout. The root's style holds nothing but opacity.

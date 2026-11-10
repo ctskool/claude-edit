@@ -61,6 +61,10 @@ A broken hard rule. A typo, clipped text, content outside its card. A wrong, dro
 
 Each finding names the item, the frame or time, what was expected and what is there. A reviewer never reports: redesigns, "this could be better", different copy phrasing, motion-feel opinions, more or fewer graphics.
 
+## Looks
+
+Ivory is the default look and everything under "Look" above describes it. Another shipped look is a folder in `templates/ivory/build_kit/looks/`, turned on by `plan.json` `"look": "<name>"`. Read its `LOOK.md` after this page: it replaces the palette, type, shapes and chip colours here and nothing else. Write colours as the stylesheet's variables, never as literals, so a look can change them.
+
 ## Build
 
 Follow `templates/ivory/build_kit/README.md` for `plan.json` and caption-chunk fields, `owners.py`, `scenes.py`, `timeline.js` and the QA order.
