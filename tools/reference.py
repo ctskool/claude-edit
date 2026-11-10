@@ -6,15 +6,16 @@
   words.json      word-timed transcript (tools/transcribe.py), kept if already there
   measure.json    the numbers
   measure.md      the same in plain words, next to our own numbers from references/_baseline/ when they exist
-  changes-N.jpg   every visual change as before / at / after, with the words around it
+  changes-N.jpg   every visual change as a strip: before, then consecutive native frames until it settles, with the words around it
   frames.jpg      1 fps contact sheet (row = 10 s), kept if already there
 Sound separates voice from everything else with Demucs (_ext/demucs-lib, model in the Hugging Face cache) on the GPU, through
-the matte venv's torch. Nothing leaves this machine.
+the matte venv's torch. Hard cuts and the look come from HyperFrames' measure tools (`measure cuts`, `measure look`), pinned
+to the version they were checked at (HF below). Nothing leaves this machine.
 
 What it cannot see: text content, fonts, what a graphic shows, why. Those come from looking at the stills (layer 2) and from
 Chase's notes. The layout split is a face finder's guess and the halves are a straight cut at mid-frame, so both are rough.
 """
-import argparse, json, math, os, subprocess, sys, tempfile, types
+import argparse, json, math, os, shutil, subprocess, sys, tempfile, types
 from datetime import date
 from pathlib import Path
 import numpy as np
@@ -30,6 +31,10 @@ FLOOR, RATIO = 2.5, 3.0  # a change: mean pixel difference over FLOOR and RATIO 
 NEAR = 0.1  # a change "on a word" starts within this many seconds of a word onset. Fast speech has an onset every ~0.3 s,
 # so the share only means something next to its chance level
 SR = 44100
+# HyperFrames' measure tools, checked 2026-11-04 on a reel we already knew. Pinned apart from the project's render engine
+# (package.json), so the breakdown can move to a newer CLI without touching renders. Bump it only after re-checking.
+HF = [shutil.which("npx") or "npx", "-y", "hyperframes@0.9.13", "measure"]
+STRIP = 10  # most consecutive frames per change on a sheet; longer moves are evenly thinned
 
 
 def run(cmd, **kw):
@@ -154,6 +159,44 @@ def palette(rgb, n=8):
     return out
 
 
+def hf(op, video, *args):
+    """One HyperFrames measure command as JSON, or None (with a note) when the CLI can't run, so a breakdown still finishes offline."""
+    try:
+        j = json.loads(run([*HF, op, video, *args], text=True, encoding="utf8", cwd=ROOT).stdout)
+    except (subprocess.CalledProcessError, json.JSONDecodeError, OSError) as e:
+        print(f"  hyperframes measure {op} failed, skipping it: {getattr(e, 'stderr', '') or e}"[:300], flush=True)
+        return None
+    return j if j.get("ok") else None
+
+
+def hard_cuts(video, ch):
+    """Frame-exact hard cuts (measure cuts), which also catch jump cuts and punch-ins inside one take. A change within 0.15 s of
+    one is a cut, any other an animation: our 15 fps scan can't tell a one-frame switch from a fast move on its own. Each cut
+    goes to its nearest change only, since a cut can show up in both halves a frame apart. Cuts no change matched are kept apart."""
+    j = hf("cuts", video)
+    if j is None:
+        return None
+    for c in ch:
+        c["kind"] = "animated"
+    for k in j["cuts"]:
+        near = [c for c in ch if abs(k["t"] - c["t"]) <= 0.15 and "cut_frame" not in c]
+        if near:
+            c = min(near, key=lambda c: abs(k["t"] - c["t"])); c["kind"] = "cut"; c["cut_frame"] = k["frame"]
+    matched = {c["cut_frame"] for c in ch if "cut_frame" in c}
+    return {"count": len(j["cuts"]), "frames": [k["frame"] for k in j["cuts"]],
+            "unmatched": [k for k in j["cuts"] if k["frame"] not in matched], "shots": len(j["shots"])}
+
+
+def look(video, info):
+    """Brightness, contrast, saturation and warmth (measure look), for the whole frame and the top half."""
+    out = {}
+    for name, roi in (("whole", None), ("top_half", f"0,0,{info['width']},{info['height'] // 2}")):
+        j = hf("look", video, *(["--roi", roi] if roi else []))
+        if j:
+            out[name] = {k: j[k] for k in ("luma", "contrast", "saturation", "bw_share", "warmth")}
+    return out or None
+
+
 def holds(times, dur):
     gaps = np.diff([0.0, *times, dur])
     if not len(times):
@@ -276,27 +319,62 @@ def sound(video, folder):
 
 
 # ------------------------------------------------------------------------------------------------------------- output
+def strip_frames(c, fps, total):
+    """The native frames a change's strip shows: from just before it starts (its cut frame, else up to 3 frames before the scan
+    saw it, which runs at 15 fps) until 0.15 s after it settles, evenly thinned to STRIP with both ends kept."""
+    f0 = c["cut_frame"] - 1 if "cut_frame" in c else round(c["t"] * fps) - 3
+    f0 = max(0, f0); f1 = min(total - 1, max(f0 + 1, round((c["t"] + c["dur"] + 0.15) * fps)))
+    n = f1 - f0 + 1
+    return [f0 + int(i) for i in np.unique(np.linspace(0, n - 1, min(n, STRIP)).round())], n
+
+
 def sheets(video, info, ch, folder):
+    """One row per change: the frame a quarter second before, then consecutive native frames through the move, cropped to the
+    rows it touched. How a thing arrives (slides from where, types on, pops, builds) and how many frames it takes is read here."""
     import cv2
     from PIL import Image, ImageDraw, ImageFont
     try:
-        font = ImageFont.truetype("arial.ttf", 13)
+        font = ImageFont.truetype("arial.ttf", 13); small = ImageFont.truetype("arial.ttf", 11)
     except OSError:
-        font = ImageFont.load_default()
-    fw = 170; fh = int(fw * info["height"] / info["width"]); band, per = 40, 6
-    cap = cv2.VideoCapture(str(video))
+        font = small = ImageFont.load_default()
+    fw, band, tag, per = 150, 40, 14, 6
+    W, H, fps = info["width"], info["height"], info["fps"]
+    cap = cv2.VideoCapture(str(video)); total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) or int(info["duration"] * fps)
     for old in folder.glob("changes-*.jpg"):
         old.unlink()
+
+    def crop(b, c):
+        r0 = max(0, int((c["rows"][0] - 0.03) * H)); r1 = min(H, int((c["rows"][1] + 0.03) * H))
+        if r1 - r0 < H * 0.15:  # a thin band (a caption-sized change) keeps some context around it
+            mid = (r0 + r1) // 2; r0, r1 = max(0, mid - int(H * 0.075)), min(H, mid + int(H * 0.075))
+        return Image.fromarray(cv2.cvtColor(b[r0:r1], cv2.COLOR_BGR2RGB))
+
     for p in range(math.ceil(len(ch) / per)):
-        rows = ch[p * per:(p + 1) * per]; img = Image.new("RGB", (fw * 3, (fh + band) * len(rows)), "white"); d = ImageDraw.Draw(img)
-        for r, c in enumerate(rows):
-            y = (fh + band) * r
-            d.text((4, y + 3), f"#{p * per + r + 1}  {c['t']:.2f} s  {c['region']}  {c['kind']}" + ("  + sound" if c.get("sound") else ""), font=font, fill="black")
-            d.text((4, y + 21), c["said"][:84], font=font, fill="#555")
-            for col, off in enumerate((-0.25, 0.03, c["dur"] + 0.2)):  # before, at, after it settles
-                cap.set(cv2.CAP_PROP_POS_MSEC, max(0.0, c["t"] + off) * 1000); ok, b = cap.read()
-                if ok:
-                    img.paste(Image.fromarray(cv2.cvtColor(b, cv2.COLOR_BGR2RGB)).resize((fw, fh)), (fw * col, y + band))
+        rows = ch[p * per:(p + 1) * per]; cells = []
+        for c in rows:
+            cap.set(cv2.CAP_PROP_POS_MSEC, max(0.0, c["t"] - 0.25) * 1000); ok, b = cap.read()
+            pics = [("before", crop(b, c) if ok else None)]
+            want, n = strip_frames(c, fps, total)
+            cap.set(cv2.CAP_PROP_POS_FRAMES, want[0]); f = want[0]
+            for w in want:
+                while f <= w:
+                    ok, b = cap.read(); f += 1
+                    if not ok:
+                        break
+                pics.append((f"f{w}", crop(b, c) if ok else None))
+            fh = max((im.height * fw // im.width for _, im in pics if im), default=fw)
+            cells.append((c, pics, fh, n))
+        img = Image.new("RGB", (fw * (STRIP + 1), sum(band + tag + fh for _, _, fh, _ in cells)), "white"); d = ImageDraw.Draw(img); y = 0
+        for r, (c, pics, fh, n) in enumerate(cells):
+            thin = f", every {n / (len(pics) - 1):.1f} frames" if n > len(pics) - 1 else ""
+            d.text((4, y + 3), f"#{p * per + r + 1}  {c['t']:.2f} s  {c['region']}  {c['kind']}" + ("  + sound" if c.get("sound") else "")
+                   + f"   {n} frames to settle{thin}", font=font, fill="black")
+            d.text((4, y + 21), c["said"][:120], font=font, fill="#555")
+            for col, (label, im) in enumerate(pics):
+                d.text((fw * col + 3, y + band), label, font=small, fill="#a33" if label == "before" else "#333")
+                if im:
+                    img.paste(im.resize((fw, im.height * fw // im.width)), (fw * col, y + band + tag))
+            y += band + tag + fh
         img.save(folder / f"changes-{p + 1}.jpg", quality=84)
     cap.release()
     return math.ceil(len(ch) / per)
@@ -320,7 +398,9 @@ def summary(m):
         "Length": f"{m['info']['duration']:.0f} s",
         "Visual changes": f"{p['all']['count']} ({p['all']['per_10s']} per 10 s)",
         "...in the top half / bottom / whole frame": f"{by.get('top', 0)} / {by.get('bottom', 0)} / {by.get('whole', 0)}",
-        "...hard cuts / animated": f"{p['kinds'].get('cut', 0)} / {p['kinds'].get('animated', 0)}",
+        "...hard cuts / animated": f"{p['kinds'].get('cut', 0)} / {p['kinds'].get('animated', 0)}" if p.get("cuts") else "not measured",
+        "Hard cuts, frame-exact (incl. jump cuts)": "not measured" if not p.get("cuts") else
+            f"{p['cuts']['count']}, {p['cuts']['shots']} shots" + (f"; {len(p['cuts']['unmatched'])} the change scan missed" if p["cuts"]["unmatched"] else ""),
         "Median hold between changes": f"{p['all']['median_hold']} s",
         "Longest stretch with no change": f"{p['all']['longest_still']} s",
         "First change / changes in the first 3 s": f"{p['first_change']} s / {p['first_3s']}",
@@ -331,6 +411,9 @@ def summary(m):
         "Face (rough)": ", ".join(f"{k} {round(v * 100)}%" for k, v in lay.items()),
         "Top colours": " ".join(c["hex"] for c in m["colours"]["top_half"][:5]),
     }
+    lk = (m.get("look") or {}).get("top_half")
+    rows["Look, top half (luma / contrast / saturation / warmth)"] = "not measured" if not lk else \
+        f"{lk['luma']:.0f} / {lk['contrast']:.0f} / {lk['saturation']:.2f} / {lk['warmth']:+.0f}"
     if s:
         rows.update({
             "Sound cues (at least)": f"{s['count']} ({s['per_30s']} per 30 s)",
@@ -357,6 +440,11 @@ def write_md(folder, m):
     for i, c in enumerate(m["picture"]["changes"], 1):
         L.append(f"| {i} | {c['t']:.2f} | {c['region']} | {c['kind']} | {'yes' if c.get('sound') else ''} | "
                  f"{'' if c['word_offset'] is None else c['word_offset']} | {c['said']} |")
+    missed = (m["picture"].get("cuts") or {}).get("unmatched")
+    if missed:
+        L += ["", "## Hard cuts the change scan missed", "", "Often a jump cut or punch-in on the face. Look at them with "
+              "`npx hyperframes@0.9.13 measure frames <clip> --range a,b`.", "",
+              ", ".join(f"{k['t']:.2f} s (frame {k['frame']})" for k in missed)]
     if m.get("sound"):
         loose = [c for c in m["sound"]["cues"] if not c.get("change")]
         if loose:
@@ -376,6 +464,8 @@ def measure(folder, video, label, with_sound):
     caps = [c for c in ch if c["kind"] == "caption"]; ch = [c for c in ch if c["kind"] != "caption"]
     for c in ch:
         c["said"], c["word"], c["word_offset"] = said(words, c["t"])
+    print("hard cuts and look (hyperframes measure)", flush=True)
+    cuts = hard_cuts(video, ch)
     m = {"label": label, "made": str(date.today()), "video": str(video), "info": info, "layout": {"share": share, "segments": segs},
          "colours": {"whole": palette(rgb), "top_half": palette(rgb[:, :rgb.shape[1] // 2])},
          "captions": {"count": len(capinfo["swaps"]), "per_10s": round(len(capinfo["swaps"]) / info["duration"] * 10, 1),
@@ -389,10 +479,12 @@ def measure(folder, video, label, with_sound):
         "top": holds([c["t"] for c in ch if c["region"] in ("top", "whole")], info["duration"]),
         "by_region": {k: sum(c["region"] == k for c in ch) for k in ("top", "bottom", "whole")},
         "kinds": {k: sum(c["kind"] == k for c in ch) for k in ("cut", "animated")},
+        "cuts": cuts,
         "first_change": times[0] if times else None, "first_3s": sum(t < 3 for t in times),
         "on_word": round(sum(abs(o) <= NEAR for o in offs) / len(ch), 3) if ch else None,
         "on_word_chance": on_word_chance(words, info["duration"]),
         "scan": f"{SCAN_FPS} fps at {SCAN_W} px wide; change = mean difference > {FLOOR} and > {RATIO}x the local median"}
+    m["look"] = look(video, info)
     if with_sound and info["audio"]:
         print("separating sound", flush=True)
         s = sound(video, folder)
