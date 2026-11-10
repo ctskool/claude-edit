@@ -69,6 +69,7 @@ Why: a requested retention pass removed one video's conclusion and hurt its cohe
    If they disagree, reconcile date, version, units and scope first. Still disagreeing: flag it for Chase, never hide it. [Ours]
 7. Run `cut`, then `verify`. Read its printed lines, since it exits 0 either way. There is no second round. [Ours]
    MISSING, EXTRA and PAUSE get fixed in `drops.json` or flagged. A CHANGED that is only a name or spelling mishear is logged with both spellings and does not block.
+   A RUN-ON means a join slices through sound that no word's times cover, usually a number read aloud that the aligner timed too short. Listen to that second of `a48.wav`. If he is still speaking, set that word's end (or the next word's start) in `words.json` and run `cut` again; if it is a breath or a noise, say so in the cut report. Never render past an unread RUN-ON. [Chase] (proven on one long-form video)
 8. Run `render`, then `times`.
 9. Pending his answer: stop after `cut.mp4` for a one-minute phone listen until ivory and the spine lock. [Ours]
 10. Hand BIG joins to the template, whose layout rule sets the cover. BIG joins too close to cover come back here as a named problem, before graphics. [Ours]
@@ -79,7 +80,7 @@ Met when: he can correct a wrong read in one word, before graphics spend anythin
 - The hook and takeaway Claude read, and which take opens the video.
 - Each cut sentence he may want back, and borderline keeps as a list.
 - Each early promise and its payoff, plus any pickups and proposed moves.
-- Joins and BIG joins, with the amount removed at each.
+- Joins and BIG joins, with the amount removed at each, and every RUN-ON with what the listen found.
 - Listening: UNVERIFIED until Chase listens to the takes, joins and tails. `verify` proves words are present, not how they sound.
 - Each optional trim, with its exact line, and every `verify` mishear with both spellings.
 

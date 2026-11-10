@@ -36,7 +36,7 @@ Trial ideas stay off. Open decisions stay open: keep current behaviour and flag 
 | Library and capture cache | Partly | `tools/library.py`, `templates/ivory/library/` (20 scenes from 1030-2 in 9 families), `tools/capture_cache.py` (added 2026-11-02). Tested; never used by a director yet |
 | Notes into rules | Partly | `tools/taste_from_notes.py`, `templates/ivory/CANDIDATES.md` (added 2026-11-02). Digest checked on 1030-2's notes; no candidate marked yet |
 | Geometry check | Partly | `tools/beat_check/geometry.py`, advisory in both build workflows' QA since 2026-11-02 (Chase: advisory for the next two videos, then a gate if it stays clean). Calibrated: 0 FAIL on the fixture (was 1102) and on 1030-2, 62 tests. Many checks read UNVERIFIED until plans give targets as boxes or selectors. Never run on a new build |
-| `rawcut.py`, `prep_source.py` | Works | `verify` exits 0 either way, so read its lines. Face clips are preview size |
+| `rawcut.py`, `prep_source.py` | Works | `verify` exits 0 either way, so read its lines. Face clips are preview size. `cut` prints RUN-ON for a join that slices through sound no word's times cover, and NUMBER for number tokens timed too short; `times` and `verify` repeat it. Proven on one long-form raw, where it found the one clipped number and nothing else |
 | Story read-through | Partly | Rules exist in `story.md`, run by hand, never tried on a raw |
 | One-minute cut listen | Works | Chase approved keeping this hand stop on 2026-10-31 |
 | Facts and assets | Partly | `tools/workflows/next/recut-plan.js` passed a stub dry run, never a real one |
@@ -81,6 +81,7 @@ python tools/rawcut.py render $R ; python tools/rawcut.py times $R
 ```
 - Keep the wrong-to-right list in `$R/corrections.json`. No tool reads it yet, so pass each pair as `--fix`.
 - Run the full read-through in `story.md`, with its fresh reader, before `render`.
+- Read every `RUN-ON` line `cut` prints and listen to that second before `render`: it means he may still be speaking when the join lands (`story.md` step 7). `NUMBER` lines point at the usual cause.
 - **Stop for the one-minute cut listen.** Make a small phone copy of `$R/cut.mp4`, send it with the cut report from `story.md`, and wait. Nothing past this point runs until he answers, with one exception:
 - **Research runs while he listens.** Right after sending the cut, start section 3's workflow with `stage: "research"` and `words: root + "/work/" + id + "/raw/cut_words.json"`. It verifies facts and captures screenshots, which need only the cut and its words, and writes nothing that depends on his answer. Note in `RUN.md` that it ran on this cut.
 

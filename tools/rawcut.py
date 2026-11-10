@@ -21,6 +21,9 @@ drops.json: inclusive word-index ranges (from words.txt) and session-second rang
 starts, repeats, asides, fillers. Keep the LAST complete take of each line unless an earlier one is clearly better.
 The cut step removes on its own: pauses longer than --gap between kept words, breaths, head and tail, and it always
 cuts at a take-file boundary. Word edges come from audio energy and a guard stops any cut eating into a kept word.
+That guard trusts the transcript's word times, so `cut` also prints RUN-ON for any join that slices through sound no
+word accounts for (a number read aloud is timed far too short) and NUMBER for kept number tokens under 0.12 s. Each
+RUN-ON is also in cuts.json, `times` marks it and `verify` counts it as an issue. Listen to every one before `render`.
 
 Session timeline: take files back to back, each file's length = its VIDEO length (frames / fps); the audio of each
 file is shifted by its stream start offset and padded/trimmed to that length, so frame n and audio sample n/fps*48000
@@ -283,6 +286,58 @@ def transcribe(a):
                 break
 
 
+def runons(rms, words, keeps_s, floor=-40.0, min_run=0.15, dip=8):
+    """Sound that a join slices through and no transcribed word accounts for.
+
+    rms: dB per 10 ms of the session audio. words: every transcribed word [text, start, end, ...], kept or dropped.
+    keeps_s: the kept ranges in session seconds. For each join it takes the unbroken run of sound that starts at the
+    cut ("out": he is still talking when the cut lands) or ends at the resume ("in": the next word is already under
+    way), and counts the part of it that no word's own times cover. Dropped words cover their own sound, so a retake
+    cut mid-flow is not reported. What is left is speech the aligner never timed. The usual case is a number read
+    aloud: "$6.72." came back 40 ms long while he said "six dollars and seventy-two cents" for two seconds, and the
+    cut took the last second of it.
+    Returns [{"join": k, "side": "out"|"in", "t": session second, "secs": uncovered seconds}]."""
+    n = len(rms); loud = lambda i: 0 <= i < n and rms[i] > floor
+    spans = sorted((w[1] - 0.03, w[2] + 0.03) for w in words)
+
+    def uncovered(a, b):
+        left, cur = 0.0, a
+        for s, e in spans:
+            if e <= cur:
+                continue
+            if s >= b:
+                break
+            left += max(0.0, s - cur); cur = max(cur, e)
+            if cur >= b:
+                return left
+        return left + max(0.0, b - cur)
+
+    out = []
+    for k in range(len(keeps_s) - 1):
+        p, q = keeps_s[k][1], keeps_s[k + 1][0]
+        lo, hi = int(round(p * 100)), int(round(q * 100))
+        if hi - lo < int(min_run * 100):
+            continue
+        for side, start, step, stop in (("out", lo, 1, hi), ("in", hi - 1, -1, lo - 1)):
+            i = start
+            while i != stop and abs(i - start) < 5 and not loud(i):     # sound must be running within 50 ms of the join
+                i += step
+            if i == stop or not loud(i):
+                continue
+            first = last = i; quiet = 0
+            while i != stop and quiet < dip:                           # a run survives dips shorter than 80 ms
+                if loud(i):
+                    last, quiet = i, 0
+                else:
+                    quiet += 1
+                i += step
+            a, b = (min(first, last) / 100, (max(first, last) + 1) / 100)
+            u = uncovered(a, b)
+            if u >= min_run:
+                out.append({"join": k, "side": side, "t": round(p if side == "out" else q, 3), "secs": round(u, 2)})
+    return out
+
+
 def cut(a):
     S = load(a.dir, "session.json"); FPS = S["fps"]; words = load(a.dir, "words.json"); D = load(a.dir, "drops.json", {}) or {}
     A48, _ = read_wav(os.path.join(a.dir, "a48.wav")); x = A48.mean(1); DUR = len(x) / SR; h = 480; m = len(x) // h
@@ -426,6 +481,16 @@ def cut(a):
         take_change = file_of(S, p - 0.01) != file_of(S, q + 0.01)
         joins.append({"t": round(starts[k + 1] / FPS, 3), "removed": round(q - p, 2), "kind": "take" if take_change else kind,
                       "big": bool(take_change or kind == "drop" or q - p > 0.6)})
+    # speech a join slices through that the transcript never timed (see runons): listen to each before the render
+    flagged = runons(rms, words, [[s / FPS, e / FPS] for s, e in keeps])
+    for r in flagged:
+        j = joins[r["join"]]
+        prev = max((i for i in kept if words[i][1] < r["t"]), default=kept[0]); nxt = min((i for i in kept if words[i][1] >= r["t"] - 0.05), default=kept[-1])
+        r.update(word_i=prev if r["side"] == "out" else nxt, word=words[prev if r["side"] == "out" else nxt][0], cut_t=j["t"])
+        j.setdefault("runon", []).append({k: r[k] for k in ("side", "secs", "word_i", "word")})
+    # a number read aloud takes far longer than the few ms the aligner gives its token
+    numbers = [[i, words[i][0], round(words[i][2] - words[i][1], 2)] for i in kept
+               if re.search(r"\d", words[i][0]) and words[i][2] - words[i][1] < 0.12]
     save(a.dir, "edl.json", {"keeps": keeps, "fps": FPS, "dur": round(total, 3)})
     save(a.dir, "cut_words.json", cw); save(a.dir, "cuts.json", joins)
     short = [k for k in keeps if (k[1] - k[0]) / FPS < 0.2]
@@ -433,6 +498,12 @@ def cut(a):
           f"{len({tuple(c[:2]) for c in safe if c[2] == 'breath'})} breath cuts, {len(dropped)} words dropped")
     if short:
         print(f"WARNING {len(short)} keeps under 0.2s (slivers between cuts), session frames {short[:6]}: check drops.json around them")
+    for r in flagged:
+        where = f"after \"{r['word']}\" (word {r['word_i']})" if r["side"] == "out" else f"before \"{r['word']}\" (word {r['word_i']})"
+        print(f"RUN-ON   at {r['cut_t']:7.2f}s  {r['secs']:.2f}s of sound {where} is cut and no transcribed word covers it. Listen to "
+              f"session {r['t']:.2f}s: if he is still speaking, set that word's {'end' if r['side'] == 'out' else 'start'} in words.json and cut again")
+    for i, w, d in numbers:
+        print(f"NUMBER   word {i} \"{w}\" is timed at {d:.2f}s: a number read aloud runs longer, so check the join after it")
     marks = {next((w[3] for w in cw if w[1] >= j["t"] - 0.02), None) for j in joins if j["big"]}
     lines, start = [], 0
     for i, w in enumerate(cw):
@@ -464,6 +535,10 @@ def verify(a):
             issues += 1; print(f"PAUSE    at {p[2]:7.2f}s  {q[1] - p[2]:.2f}s between \"{p[0]}\" and \"{q[0]}\"")
         if norm(p[0]) == norm(q[0]):
             print(f"REPEAT   at {p[1]:7.2f}s  \"{p[0]} {q[0]}\"  (fine if meant)")
+    for c in load(a.dir, "cuts.json", []) or []:                      # found by `cut`; repeated here so the verify log holds it
+        for r in c.get("runon", []):
+            issues += 1
+            print(f"RUN-ON   at {c['t']:7.2f}s  {r['secs']:.2f}s of untimed sound is cut {'after' if r['side'] == 'out' else 'before'} \"{r['word']}\" (word {r['word_i']})")
     dur = len(ed) / SR
     print(f"\nhead {V[0][1]:.2f}s before the first word, tail {dur - V[-1][2]:.2f}s after the last (both should be under ~0.25s)")
     print(f"{issues} issue(s); edit is {dur:.1f}s, {len(V)} words\n\nHEARD: " + " ".join(y[0] for y in V))
@@ -539,7 +614,8 @@ def times(a):
     for c in cuts:
         k = next((i for i, w in enumerate(cw) if w[1] >= c["t"] - 0.02), len(cw) - 1)
         print(f"{c['t']:8.3f}  {'BIG  ' if c['big'] else 'small'} {c['kind']:6s} removed {c['removed']:5.2f}s   "
-              f"...{' '.join(w[0] for w in cw[max(0, k - 3):k])} | {' '.join(w[0] for w in cw[k:k + 3])}...")
+              f"...{' '.join(w[0] for w in cw[max(0, k - 3):k])} | {' '.join(w[0] for w in cw[k:k + 3])}..."
+              + "".join(f"   RUN-ON {r['secs']:.2f}s {r['side']}" for r in c.get("runon", [])))
 
 
 def main():
