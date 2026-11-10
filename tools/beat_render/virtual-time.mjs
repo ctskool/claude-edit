@@ -1,4 +1,4 @@
-// Exact copy of the virtual time shim from HyperFrames 0.8.184; package unchanged.
+// Exact copy of the virtual time shim from HyperFrames 0.8.184, unchanged in 0.9.13; package unchanged.
 function buildVirtualTimeShim(options) {
   const seedRandomFromFrame = options.seedRandomFromFrame === true;
   const seededRandomBlock = seedRandomFromFrame ? String.raw`

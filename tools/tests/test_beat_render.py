@@ -80,7 +80,7 @@ class Temp(unittest.TestCase):
 class VersionPin(unittest.TestCase):
     def test_other_version_fails_closed(self):
         with self.assertRaises(runner.Refused):
-            runner.check_version("0.8.185")
+            runner.check_version("0.9.12")
 
     def test_missing_package_fails_closed(self):
         with mock.patch.object(runner, "installed_version", return_value=None):
@@ -88,7 +88,7 @@ class VersionPin(unittest.TestCase):
                 runner.check_version()
 
     def test_pin_passes(self):
-        runner.check_version("0.8.184")
+        runner.check_version("0.9.13")
 
     def test_pin_matches_hf_mjs(self):
         self.assertIn(f"PINNED='{runner.PIN}'", (ROOT / "tools/beat_render/hf.mjs").read_text(encoding="utf8"))

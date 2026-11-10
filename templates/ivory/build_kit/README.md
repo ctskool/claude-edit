@@ -12,7 +12,7 @@ python templates/ivory/build_kit/new_project.py <id> [--full-face, only with all
 
 It needs `work/<id>/` to hold `metadata.json`, `beats.json`, `words.json`, `assets/face_half.mp4` and `assets/voice.m4a`. It makes `work/<id>/v2/editorial`: a copy of `tools_local/`, `hyperframes.json`, `package.json`, `meta.json`, `CLAUDE.md`, the kit's fonts and GSAP, and hard links to `shared/*` and the face and voice files. `--full-face` also links `face_full.mp4`, only when the run has `allow_full_face` true. A repeat run keeps existing sources and assets and links newly added shared files. Replaced assets need an explicit replacement; Setup never silently overwrites one.
 
-HyperFrames stays 0.8.184. `run.py` fails closed on anything else.
+HyperFrames stays 0.9.13. `run.py` fails closed on anything else.
 
 ## What you write
 

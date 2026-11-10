@@ -1,4 +1,4 @@
-# Beat renderer (HyperFrames 0.8.184)
+# Beat renderer (HyperFrames 0.9.13)
 
 Renders a project one beat at a time, stitches the beats by stream copy, and re-renders only what a change touches. It rests on HyperFrames internals, so the version is pinned and anything else fails closed. An upgrade is a re-qualification.
 

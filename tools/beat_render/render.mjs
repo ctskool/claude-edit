@@ -105,6 +105,10 @@ async function rotate(ctx,state){
 async function captureRange(ctx,state,range,job){
  const {profile,fps}=ctx,enc=profile.encoder,threads=profile.threads,count=range.end-range.start,file=path.resolve(range.path);
  const args=engine.buildEncoderArgs({fps:{num:fps,den:1},width:Math.round(ctx.width*profile.dpr),height:Math.round(ctx.height*profile.dpr),codec:'h264',preset:enc.preset,quality:enc.crf,pixelFormat:enc.pix_fmt,lockGopForChunkConcat:true,gopSize:count},['-v','error','-filter_threads',String(threads.filter),'-threads',String(threads.decoder),'-f','image2pipe','-vcodec','mjpeg','-framerate',String(fps),'-i','pipe:0','-threads',String(threads.encoder)],file);
+ // 0.9 appends x264's thread count as the machine's core count, after ours, so it wins and changes the bits. Drop it: the profile's count holds, as on 0.8.
+ const extra=args.indexOf('-threads',args.indexOf('-c:v'));
+ if(extra<0)throw Error('Expected the engine to set its own x264 thread count');
+ args.splice(extra,2);
  const encoder=spawn('ffmpeg',args,{stdio:['pipe','ignore','pipe'],windowsHide:true});
  state.encoder=encoder;
  let stderr='',broken=null;encoder.stderr.on('data',x=>stderr+=x);

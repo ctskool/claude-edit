@@ -462,7 +462,7 @@ class SetUp(unittest.TestCase):
             self.assertFalse((project / "assets" / "face_full.mp4").exists())
             self.assertTrue((project / "assets" / "vendor" / "gsap.min.js").is_file())
             self.assertEqual(json.loads((project / "meta.json").read_text(encoding="utf8"))["id"], root.name + "-editorial")
-            self.assertEqual(json.loads((project / "package.json").read_text(encoding="utf8"))["scripts"]["render"], "npx --yes hyperframes@0.8.184 render")
+            self.assertEqual(json.loads((project / "package.json").read_text(encoding="utf8"))["scripts"]["render"], "npx --yes hyperframes@0.9.13 render")
         finally:
             shutil.rmtree(root, ignore_errors=True)
 

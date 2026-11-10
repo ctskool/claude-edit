@@ -18,7 +18,7 @@ REGION_TOP = 960  # the face half, at 1080x1920
 # The observed fault paints the composition only inside the top left 800x600 of a 1080x1920 frame. Past those edges everything is page background.
 CLIP_RIGHT, CLIP_BOTTOM = 0.75, 0.32
 FLAT_RANGE = 6
-# What HyperFrames' encoder does to a capture (SDR_CAPTURE_TO_BT709_FILTER, 0.8.184), so a clean comparison measures the encoder and no colour step.
+# What HyperFrames' encoder does to a capture (SDR_CAPTURE_TO_BT709_FILTER, unchanged from 0.8.184 to 0.9.13), so a clean comparison measures the encoder and no colour step.
 STILL_FILTER = "scale=in_color_matrix=bt601:in_range=pc:flags=neighbor+accurate_rnd,format=gbrp,scale=out_color_matrix=bt709:out_range=tv:flags=neighbor"
 
 

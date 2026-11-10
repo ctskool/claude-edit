@@ -4,7 +4,7 @@ import path from 'node:path';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
 const require=createRequire(import.meta.url);
-export const PINNED='0.8.184';
+export const PINNED='0.9.13';
 export const dist=path.join(path.dirname(require.resolve('hyperframes/package.json')),'dist');
 if(require('hyperframes/package.json').version!==PINNED)throw Error(`Beat rendering requires HyperFrames ${PINNED}`);
 export async function hf(prefix){

@@ -19,7 +19,7 @@ except ImportError:
 
 MIN_PYTHON = (3, 10)
 MIN_NODE = 22
-HF_PIN = "0.8.184"  # tools/beat_render/{run.py,hf.mjs}
+HF_PIN = "0.9.13"  # tools/beat_render/{run.py,hf.mjs}
 GIB = 1024 ** 3
 # Derived from imports throughout tools/, including imports inside functions.
 # Optional means the normal split edit can run without that feature after audit edits.

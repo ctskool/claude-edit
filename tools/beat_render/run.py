@@ -32,7 +32,7 @@ import store
 import tied
 from common import sha
 
-PIN = "0.8.184"  # also fixed in hf.mjs. An upgrade is a re-qualification.
+PIN = "0.9.13"  # also fixed in hf.mjs. An upgrade is a re-qualification.
 RENDER = HERE / "render.mjs"
 REFS = HERE / "refs.mjs"
 WORKER = HERE / "worker.mjs"

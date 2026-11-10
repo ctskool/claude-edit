@@ -63,7 +63,7 @@ python -m playwright install chromium
 
 Run `source .venv/bin/activate` again in each new terminal.
 
-HyperFrames is pinned to exactly 0.8.184, because the renderer uses its internal API. Don't upgrade it on its own.
+HyperFrames is pinned to exactly 0.9.13, because the renderer uses its internal API. Don't upgrade it on its own.
 
 ## 3. One-time downloads
 
