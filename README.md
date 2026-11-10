@@ -61,8 +61,8 @@ Left is the raw take. Right is the edit Claude made from it, on the same seconds
 
 1. **Raw in.** Hand it one or more raw takes. Claude transcribes them on your computer, drops the failed takes, false starts and long pauses, and checks the cut by transcribing it again.
 2. **The one-minute cut listen.** Claude sends you a phone-size copy of the cut and **stops**. Nothing gets built until you've listened and said it's right. While you listen, it already checks the facts and captures the pages you mention.
-3. **The first edit.** Claude plans every beat: which words land on what, which real screenshot or clip shows it, where the layout switches. A second agent checks that plan before anything is built. Then the whole video is built in the ivory template and rendered at review quality.
-4. **Its own defects round.** Two fresh reviewers look for broken frames, clipped text and anything that hides your face. Claude fixes what they find before you see it.
+3. **The first edit.** One agent checks the facts, plans every beat (which words land on what, which real screenshot or clip shows it, where the layout switches) and checks its own plan against a short list. It shows you stills of the hook and first step so you can steer early, then builds the whole video in the ivory template and renders it at review quality.
+4. **Its own defects round.** A fresh reviewer that never saw the plan looks at the rendered frames for broken frames, clipped text and anything that hides your face, and a script checks for one-frame jumps. Claude fixes what they find before you see it.
 5. **Your notes, at exact seconds.** The review player opens in your browser. Pause where you want a change, press **N**, type. Each note is saved with the exact frame and the picture it was left on.
 6. **The note round.** Say "go" in the chat. Claude maps each note to the one piece of source that drew that frame, changes only that, and re-renders only the beats it touched. Then you look again. Repeat as often as you like.
 7. **Approval.** You approve in the player. Claude re-renders every beat fresh and compares each frame with the picture you approved, so nothing changed behind your back.
@@ -70,6 +70,8 @@ Left is the raw take. Right is the edit Claude made from it, on the same seconds
 9. **The final.** Built fresh from a frozen copy of the approved edit, mastered, checked again, and handed to you as an MP4.
 
 Claude also turns your notes into candidate rules for next time. Nothing becomes a rule until you mark it keep.
+
+Since 2026-11-10 this is the default "light path": one agent in place of sixteen. On the author's test video it took 40 minutes from the raw take where the older pipeline took 127, with about a tenth of the tokens. The older multi-agent pipeline is still in the skill; ask for "the full pipeline" to use it. You can also hand over a reference video and say whether you want its whole look or specific things; applying a whole look is done by hand for now and saving one as a template is not built yet.
 
 Some stages are newer than others. Research during the cut listen, the parallel build and the component library are tested on stubs but haven't run on a real video yet; the table at the top of [SKILL.md](.claude/skills/claude-edit/SKILL.md) says which stage has.
 

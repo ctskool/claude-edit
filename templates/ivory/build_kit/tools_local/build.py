@@ -229,6 +229,10 @@ except Exception:
     # a half-built project must leave no map, or run.py would accept it
     (ED / ownership.NAME).unlink(missing_ok=True)
     raise
+for sel, a, b in owners.WINDOWS:
+    for x, y in zip(plan["beats"], plan["beats"][1:]):
+        if a + 1e-6 < y["start"] < b - 1e-6:
+            print(f"BEAT JOIN: {sel} is up across the join at {y['start']} ({x['id']} into {y['id']}). Each beat renders on its own, so its picture can jump on that frame. Make the two beats one, or give the scene one window per beat")
 for id_, why in m["shared"]["unconfined"].items():
     print(f"WHOLE RENDER: {id_} stays in the shell, so a note on it re-renders every beat: {'; '.join(why)}")
 for id_, roots in owners.EXTRA_ROOTS.items():

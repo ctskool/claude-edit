@@ -74,7 +74,7 @@ COPY_BINDS = [("b13", "Half the cost", "scene.sc-price", "#pr-w", 26.5)]        
 
 - `expect` is `appear`, `change` or `present`. The target is what the plan says happens on the word, not whichever element tweens then. A clip's content cannot be measured, so an anchor inside a clip binds its plate as `present`.
 - An event with no bind is `UNVERIFIED`, never skipped and never a pass. Bind every anchor.
-- `WORD_FRAMES = 2`: a word-bound anchor may be at most 2 frames early or late. A chip may open at most 5 frames early and at most 2 frames late. An `appear` target must not already be readable on the frame before its word; use `present` only when the plan truly calls for something already on screen. Text's default hold is 30 frames (clipped to its owner's actual window); design that readable hold, or give an explicit justified `hold_frames`. An extra-root owner reaches the end, so its binds need an explicit hold within the real scene window.
+- `WORD_FRAMES = 2`: a word-bound anchor may be at most 2 frames early or late. A chip may open at most 5 frames early and at most 2 frames late. An `appear` target must not already be readable on the frame before its word, so the source check fails one that is up a frame early. When that is by design (the element is up on a layout switch that lands a frame ahead of the word), give the bind a sixth field, `lead_frames` 1. Otherwise use `present` only when the plan truly calls for something already on screen. Text's default hold is 30 frames (clipped to its owner's actual window); design that readable hold, or give an explicit justified `hold_frames`. An extra-root owner reaches the end, so its binds need an explicit hold within the real scene window.
 - A copy line must match `beats.json` character for character. A sixth field `{"symbol": "logo-x"}` marks a mark rather than text. `{"image": "assets/shots/x.png"}` marks text inside a real capture, which stays `UNVERIFIED`.
 - A word changed in a graphic must also change `beats.json` copy and its `COPY_BINDS` row, or the source check reads FAIL.
 
@@ -142,6 +142,10 @@ Fade anything that won't carry over, such as an outline, before the join.
 ## One frame early
 
 `show(sel, t)` fires at `A(t)`, 4 ms before `t`, so it lands on the frame at `t`. A tween that starts the same thing at plain `t` starts after it, and a frame that falls in those 4 ms shows the thing finished for one frame. Most times have no 30 fps frame there, so review never sees it, and a 60 fps final does. Any tween paired with a `show` takes the same time: `show("#x", 2.32)` with `tl.fromTo("#x", ..., A(2.32))`, as `popFirst` and `slotPop` do. The build prints `FRAME GAP` for a pair that misses. It does not stop the build.
+
+## Beat join lines
+
+`BEAT JOIN: #sc-x is up across the join at 23.43` is not a stop. Each beat renders as its own segment. A scene whose window crosses a beat edge can come out in two slightly different states, and the card jumps on that one frame: on the first light-path test a card moved 14 px, because `cutIn`'s push took a different transform origin in the segment that started mid-scene. No source check sees it. Make the two beats one, or give the scene one window per beat as the section above describes. After a render, `python tools/beat_check/jumps.py <project>` names any such frame as `JOIN`.
 
 ## Build stops
 

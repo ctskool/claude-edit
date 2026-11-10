@@ -15,7 +15,7 @@ Project root: resolve once at intake with `python -c "from tools.paths import pr
 
 Workflow hosting: `Workflow(...)` is not a built-in plain Claude Code command. If this session has no Workflow host, read the indicated workflow and run its phases through native Claude Code subagents: each `agent` is one fresh subagent; preserve the prompt, schema, result fields and all null/refusal/check/retry gates, and wait at each phase dependency. Supply the same resolved args, including root and codex. Do not execute these files with plain Node (they use host globals and top-level return). If neither a Workflow host nor native subagents is available, report that missing capability before starting the edit.
 Use Python and native tool argv arrays for file operations. Quote every path when forming a shell command, including paths containing spaces. Detect executables with Python shutil.which, never shell where/which commands.
-First read `templates/HOUSE.md`, then `templates/ivory/TEMPLATE.md` for the read order. Chase wins every conflict.
+**Light path is the default** [Chase, 2026-11-10]: one agent plans and builds from the one-page card `templates/ivory/LIGHT.md` and `templates/ivory/build_kit/README.md`. Open a full rule file (`templates/HOUSE.md`, `layout.md`, `captions.md`, `STYLE.md`) only when the card does not answer the question, and log it in `RUN.md`. The full pipeline (workflows, a plan-check agent, every agent reading every rule file) runs only when Chase asks for it in words; then first read `templates/HOUSE.md` and `templates/ivory/TEMPLATE.md` for the read order. Chase wins every conflict.
 Trial ideas stay off. Open decisions stay open: keep current behaviour and flag them.
 
 **The flow.** Raw in, spine and one-minute cut listen, whole edit in ivory, review render, player, notes, he says go in chat, note round, repeat, approval, sound, final. He reacts to his own edit. There is no pick list before the build. **Moves stay out of this flow for now.**
@@ -27,11 +27,15 @@ Trial ideas stay off. Open decisions stay open: keep current behaviour and flag 
 | Stage | Status | The honest detail |
 |---|---|---|
 | Raw plus notes | Works | `work/1030-2` finished the whole flow on 2026-11-01, the only one so far |
+| Light path | Partly | Default since 2026-11-10. Two test runs on one take the old pipeline had already edited (127 min, 16 agents, 3.84 M subagent tokens, on Opus 5.5). Rebuilt from its cut on Fable 5.2: 47 min. Cold from the raw take on Opus 5.5, with a reference look: 40 min including the cut, about 14 times less new input and 9 times less output. Both passed every automated check. Both edits were plainer than the pipeline's, and each first render had a defect only a close look found. No edit made this way has been through his notes yet: count them on the first ones |
+| Pilot look | Not run | Section 4, added 2026-11-10 from how the long-form video was built. Never run on a short |
+| A look from a reference | Partly | Section 4, by hand. Done twice on one take, with his own long-form video as the reference (2026-11-10). Never on someone else's reel. Saving a look as a template is not built |
+| Jump check | Partly | `tools/beat_check/jumps.py` (added 2026-11-10), advisory. On four known pictures it found the one known snap at a beat join and one harmless cut inside a clip. It cannot see a jump that starts on a tween's own first frame |
 | `run.json` state and metrics | Partly | `tools/run_state.py` (added 2026-11-02): state, `status` for resume, `metrics`, `report`. 30 tests on temp folders; no real run has used it yet |
 | Install and doctor | Partly | `tools/doctor.py`, `INSTALL.md`, `tools/paths.py`. Paths are project-relative and every workflow takes `root`. Doctor passes on a fresh clone on Windows and on a Mac (2026-11-03, with `ffmpeg-full`). No whole edit has run on a Mac, and no stranger has run a whole edit yet |
-| Research during the cut listen | Partly | `recut-plan.js` `stage: research` / `beats` (added 2026-11-02). Stub-tested, never real |
-| Plan check | Partly | Blockers vs warnings, two rounds at most (2026-11-02). Stub-tested; the top-five run is its first real use |
-| Parallel build | Partly | `recut-build-parallel.js` and `tools/beat_render/merge_chunks.py` (added 2026-11-02). 60 stub and merge tests; never a real run. `ownership.py` ignores the chunk fragments since 2026-11-03, so note rounds re-render only what changed |
+| Research during the cut listen | Partly | Full pipeline only. `recut-plan.js` `stage: research` / `beats` (added 2026-11-02). Stub-tested, never real |
+| Plan check | Partly | Full pipeline only; the light path uses section 3's self-check. Blockers vs warnings, two rounds at most (2026-11-02). Stub-tested; the top-five run is its first real use |
+| Parallel build | Partly | Full pipeline only. `recut-build-parallel.js` and `tools/beat_render/merge_chunks.py` (added 2026-11-02). 60 stub and merge tests; never a real run. `ownership.py` ignores the chunk fragments since 2026-11-03, so note rounds re-render only what changed |
 | Effects from `/animate` and `/vfx` | Partly | Note-round bridge in section 7, written 2026-11-03 (render with the skill, drop in as a clip; `/vfx` makes that beat full-face). Both skills come from the Chase Animations pack. `/vfx` orbit run once for real on a later edit (43/43 beats re-rendered, 5.5 min; 0 findings). `/animate` not yet run |
 | Library and capture cache | Partly | `tools/library.py`, `templates/ivory/library/` (20 scenes from 1030-2 in 9 families), `tools/capture_cache.py` (added 2026-11-02). Tested; never used by a director yet |
 | Notes into rules | Partly | `tools/taste_from_notes.py`, `templates/ivory/CANDIDATES.md` (added 2026-11-02). Digest checked on 1030-2's notes; no candidate marked yet |
@@ -39,7 +43,7 @@ Trial ideas stay off. Open decisions stay open: keep current behaviour and flag 
 | `rawcut.py`, `prep_source.py` | Works | `verify` exits 0 either way, so read its lines. Face clips are preview size. `cut` prints RUN-ON for a join that slices through sound no word's times cover, and NUMBER for number tokens timed too short; `times` and `verify` repeat it. Proven on one long-form raw, where it found the one clipped number and nothing else |
 | Story read-through | Partly | Rules exist in `story.md`, run by hand, never tried on a raw |
 | One-minute cut listen | Works | Chase approved keeping this hand stop on 2026-10-31 |
-| Facts and assets | Partly | `tools/workflows/next/recut-plan.js` passed a stub dry run, never a real one |
+| Facts and assets | Partly | Full pipeline: `tools/workflows/next/recut-plan.js` passed a stub dry run, never a real one |
 | Ivory build | Partly | `recut-build.js` starts from `templates/ivory/build_kit`. The kit is proven by a mechanical build of `work/1023-test` in a copy, `stage1/phase6-new-raw-path.md`. Agents have not run through it for real |
 | Review render | Works | `tools/beat_render/run.py`. Proven on the fixture and on that kit build |
 | Player and notes | Partly | `tools/beat_review_v2/` (page and look) over `tools/beat_review/` (notes, rounds, approval), port 4750. Same notes, rounds and approval as the page `work/1030-2` used for four note rounds; the top-five edit is the first to run in this look |
@@ -58,10 +62,11 @@ Trial ideas stay off. Open decisions stay open: keep current behaviour and flag 
 
 - Takes: raw OBS `.mkv` files at the paths supplied in $ARGUMENTS; resolve each to an absolute path. If no path was supplied, ask for the take path. Confirm which by frame grabs and a quick transcript. A finished export is not handled here yet: say so.
 - Template: any name but ivory, stop and say only ivory exists here. Everything left is notes.
+- Path: `light` unless Chase asks for the full pipeline in words ("full pipeline", "run the workflows"). Offer the full pipeline once, in one line, for a sponsored video or the first video in a new template. Record `path` and `path_source` (his words, or `default`) in `RUN.md`.
 - Full-face: read `templates/<name>/template.json`. `allow_full_face = template.full_face OR Chase's request for this edit`. A missing file, a missing field or anything but the Boolean `true` reads false. Ivory reads false.
 - His request counts only when he asks in words for a full-screen face on this edit. Skipping a page or running auto or lock mode grants nothing.
 - Bottom: `split`, unless he asks for popout in words ("popout", "the pop out version"). Then the template's `template.json` must have a `popout` block. If it doesn't, say this template has no popout yet. Record `bottom` and `bottom_source` (his exact words, or `default`) in `RUN.md`. Popout needs the clean camera from section 2. Rules: `templates/HOUSE.md` "Popout bottom".
-- Reference: only when he names one in words ("like the agent-types reel", a slug in `references/`). Its kept rules in `references/<slug>/taste.md` go into the intake notes as "Reference <slug>, kept rules:" followed by each rule verbatim. They pass to both workflows through `note`, so every agent gets them. Struck rules and `[seen]` rules he hasn't marked never go. With no `taste.md`, or none marked yet, stop: run layers 1 to 3 of `references/HOW.md` and wait for his keep or strike. Record `reference` and `reference_source` (his words) in `RUN.md`. House rules and his notes win over a reference rule. Take ideas, not the creator's fonts, colours, logos or characters.
+- Reference: only when he names one in words or hands over a video ("like this reel"). Ask once, before the spine: "The whole look, or specific things you liked?" Record `reference`, `reference_source` (his words) and his answer in `RUN.md`; his answer goes into the intake notes verbatim. *Specific things* (pacing, how the hook is built, layout rhythm, one device) are notes like any other. If `references/<slug>/taste.md` exists with rules he marked keep, add those verbatim too, never struck or unmarked ones; `references/HOW.md` is how to measure a reel when he wants that. *The whole look* goes to section 4, "A look from a reference". Either way his notes and the hard rules win, and nobody else's logo, character, footage or audio is used. A product's own official mark is fine where the video is about that product.
 - `allow_full_face_source` is `template`, or his exact words when they turned it on. A workflow has no file access, so resolve both here and pass both to `recut-plan.js` and `recut-build.js`. If either changes before the build, re-run the plan. After the build, a note turns it on as section 7 says.
 - Codex: the skill assumes plain Claude Code. Run `codex --version` once. Only exit 0 sets `codex = true`; anything else is false. With Codex, generated scene images and a Sol reviewer join the run; without it, no beat is a scene and the defects round uses two Claude reviewers. Record `codex` in `RUN.md` and pass it to both workflows.
 - Keep each take in `work/<id>/keep/`. Use Python `os.link(source, destination)` with absolute paths; if linking fails (including a different volume or a filesystem without hard links), use `shutil.copy2(source, destination)` and record the copy in RUN.md. Never replace an existing destination.
@@ -83,17 +88,33 @@ python tools/rawcut.py render $R ; python tools/rawcut.py times $R
 - Run the full read-through in `story.md`, with its fresh reader, before `render`.
 - Read every `RUN-ON` line `cut` prints and listen to that second before `render`: it means he may still be speaking when the join lands (`story.md` step 7). `NUMBER` lines point at the usual cause.
 - **Stop for the one-minute cut listen.** Make a small phone copy of `$R/cut.mp4`, send it with the cut report from `story.md`, and wait. Nothing past this point runs until he answers, with one exception:
-- **Research runs while he listens.** Right after sending the cut, start section 3's workflow with `stage: "research"` and `words: root + "/work/" + id + "/raw/cut_words.json"`. It verifies facts and captures screenshots, which need only the cut and its words, and writes nothing that depends on his answer. Note in `RUN.md` that it ran on this cut.
+- **Light path: nothing runs while he listens.** Research takes minutes and waits for his answer.
+- **Full pipeline only: research runs while he listens.** Right after sending the cut, start section 3's workflow with `stage: "research"` and `words: root + "/work/" + id + "/raw/cut_words.json"`. It verifies facts and captures screenshots, which need only the cut and its words, and writes nothing that depends on his answer. Note in `RUN.md` that it ran on this cut.
 
 After his answer, prepare the source and corrected words, then begin section 3:
 ```bash
 python tools/prep_source.py $R/cut.mp4 work/<id> --face-top 0.52
 # a face-only take (no screen above the face): python tools/prep_source.py $R/cut.mp4 work/<id> --no-camera --face-top 0.15 --face-bottom 0.63
 #   pick the head-and-shoulders window from a frame grab; a camera file rotated against the take also needs --no-camera
+#   then look at one frame of assets/face_half.mp4: 0.52 on a face-only take crops to the chest
 python tools/make_words.py work/<id>/transcript.json work/<id>/words.json --fix "wrong=right"
 ```
 
-## 3. Facts, assets and beats
+## 3. Facts and plan
+
+**Light path (default).** One agent, no Workflow, no subagents. Work from `templates/ivory/LIGHT.md`.
+1. **Facts.** Decide what will appear on screen, then verify only that. Every number, name, price and quote on a graphic gets a `work/<id>/facts.json` entry with source and date. A spoken claim nothing supports stays in the caption, and the graphic shows the neutral thing it is about.
+2. **Plates.** Capture only the pages the video needs: write `work/<id>/shots.spec.json` and run `python tools/capture_cache.py work/<id>/shared/shots work/<id>/shots.spec.json`. His own clips go in `shared/clips`. Measure crops on the capture, never by guess.
+3. **Plan.** Write `work/<id>/beats.json` and `$P/plan.json` directly (fields: the kit README). Snap every beat edge to a 30 fps frame. Put each BIG join on its frame in the face clip, read from `face_map.json`, not on the cut's own time: on the first test two joins sat one frame apart and failed as double cuts. `beats.json` carries `allow_full_face`, its source, `cta_start` and each beat's `copy`.
+4. **Self-check before building.** It replaces the plan-check agent, so do not skip a line:
+   - Every BIG join is covered, on its face-clip frame.
+   - No scene's window crosses a beat edge. A picture that holds across two lines is one beat.
+   - No top panel only repeats his words.
+   - Every payoff (a number, a name, the last row of a list) is on screen at least one second: land it a stressed word earlier if the cut is close.
+   - Every line of the intake notes is honoured, one by one.
+   Put anything unresolved in `RUN.md`.
+
+**Full pipeline, only when he asks.**
 
 `Workflow({scriptPath: "tools/workflows/next/recut-plan.js", args: {id, source: root + "/work/" + id + "/raw/cut.mp4", hints: [urls], jumpcuts: [BIG join seconds from times], allowFullFace, allowFullFaceSource, codex, root, note: "<intake notes verbatim>"}})`
 - If the research stage finished and he kept the cut as it was, run this with `stage: "beats"`: it skips research and assets and plans from what they wrote. If he changed the cut, run it without `stage`, so research and the clips follow the new cut. If research is still running, wait for it; never start a second one.
@@ -101,6 +122,33 @@ python tools/make_words.py work/<id>/transcript.json work/<id>/words.json --fix 
 It writes `facts.json`, `ASSETS.md`, `shared/` and `beats.json`, which carries `allow_full_face` and `allow_full_face_source`. Every agent reads `HOUSE.md`, the ivory rules and STYLE.md, and gets the intake notes. Before section 4, read the returned `error`, `assets.notes`, `check` and `revision`, and put unresolved items in `RUN.md`. A null assets, plan, check or attempted revision stops the workflow. A revision is not a passing check: verify its listed fixes against the files before continuing. The director independently re-checks the resulting content. `beats.json` also records `cta_start`, `proof_span` and their transcript/clip sources under the sound rules; null needs a reason.
 
 ## 4. First edit: the whole video in ivory
+
+**Pilot look first** [Chase, 2026-11-10]. Before building the whole video, write only the hook's and the first step's scenes, build, and take six to eight stills across them with `npx hyperframes snapshot --at <times>`. Send him the sheet with one line on how the rest will follow it, and wait. What he says is intake notes for the rest. Skip it only when he says to run straight through; record `pilot` and his words in `RUN.md`. Events with no scene yet read UNVERIFIED in the source check until the rest is built, which is expected.
+
+**Light path (default).** The same agent builds, in the real kit:
+```bash
+python templates/ivory/build_kit/new_project.py <id>     # add --full-face only with allow_full_face true
+# write $P/tools_local/scenes.py, timeline.js, owners.py, and style.css only for a new component
+cd $P ; python tools_local/build.py
+```
+Then the kit README's QA, in its order: owner audit, `conform.py --all` (exit 3 with no FAIL line), `npx hyperframes lint`, `motionlint.py`, and `python tools/beat_check/geometry.py $P` (advisory). Then `npx hyperframes snapshot --at <one time per scene>` and look at every frame before spending a render.
+- Bind each beat's anchor and every `beats.json` copy line. A full-face beat has no scene: bind its anchor to its chip as `present`. An element that is up on the switch frame, one frame ahead of its word, takes `lead_frames` 1 in its bind. Do not move it a frame later, which leaves an empty panel.
+- Reuse a proven scene from `templates/ivory/library/INDEX.md` before writing a new one.
+- With `codex` true, scene images go through `codex exec` as below. Without it, no scene beats.
+- The popout paragraph and the `build.py` stop, whole-render and frame-gap lines (section 7, step 6) apply as written. The refusal and retry rules below are the full pipeline's.
+
+**A look from a reference** (by hand; only when he asked for the whole look at intake).
+1. Read the look off the video itself. Pull about twenty frames across it with ffmpeg and write down in `RUN.md`: ground colour, text colours, the accent, headline and body fonts, card and corner shapes, how captions are treated, and any signature element. Say which values are measured and which are your read.
+2. Fonts: the same family only if it is free to use or already in the project; otherwise the closest free match, named in `RUN.md`.
+3. Apply it in this project's own `$P/tools_local`, never in `templates/ivory/build_kit`: append to `style.css` (the `:root` values first, then each component's shape) and add the fonts to `$P/assets/fonts`.
+4. The kit's helpers carry ivory's own colours and corners as literals (the outline's `#d97757`, rounded corners, the counter's final colour in `timeline.js`). Change them in the project copy, and write no literal colour or radius in a scene.
+5. A wider font overflows boxes sized for ivory's. Run `geometry.py` and fix every text overflow.
+6. The caption chip must read on both the panel and his footage. If the reference has no captions, the chip is your call: flag it.
+7. The layouts stay ivory's: split, takeover, full-face when on. A reel built another way comes out as "in the spirit of", and the handoff says so.
+8. A graphic never names a look as a shipped choice unless it ships.
+9. Record `look` and `look_source` in `RUN.md`, with the list of files changed. After approval, ask once: "Keep this look for next time?" Saving it as a template is not built yet, so a yes means noting the project to copy those files from.
+
+**Full pipeline, only when he asks.**
 
 `Workflow({scriptPath: "tools/workflows/next/recut-build-parallel.js", args: {id, styles: ["editorial"], allowFullFace, allowFullFaceSource, codex, root, chunks: 4, note: "<intake notes verbatim>"}})`
 The work is split into about 4 chunks at layout boundaries:
@@ -139,7 +187,11 @@ Every beat at the review profile, voice only, stitched, with both checks on the 
 - A refusal or a failed owner audit means a source problem. Fix it in `$P/tools_local`, `python tools_local/build.py` from `$P`, then run again.
 - A FAIL: fix the source, as section 7 does, and run `run.py change`. Read `findings` from `review.state(project)`. Only Chase can waive a finding, by clicking it in the player. Claude never writes a waiver, and says what the frames show so he can decide.
 
-**One defects-only round, on this picture.** Run `HOUSE.md`'s Review contract once. Chase does not see this round. No gauntlet.
+**One defects-only round, on this picture.** Chase does not see this round. No gauntlet.
+
+**Light path: one fresh reviewer, never zero.** On the first test every real defect the automated checks passed was found here. Cut contact sheets from the stitched picture, one frame a second, and look at them yourself. Give one fresh subagent the sheets, the picture's path, the transcript, the layout-switch times, and `LIGHT.md`'s defect list with its never-report line. It sees rendered frames only: no source, no plan. Ask for full-size frames only where a sheet raises a doubt; a brief that stepped every layout switch took 12 minutes. **Who reviews:** with `codex` true (intake checked it), Sol: `codex exec -m gpt-6.1-sol --sandbox read-only --skip-git-repo-check -i <sheet> -`, one `-i` per sheet, brief on stdin, fallback model gpt-5.6-sol. With `codex` false, one Claude subagent started with `model: "sonnet"`; never let it inherit the session's model. Neither choice has been measured against the other yet, so if a reviewer comes back with nothing on a first render, look harder at the sheets yourself before trusting it. A sheet at one frame a second cannot show a one-frame snap: on the cold test Sol reported nothing and the builder then found one. So before the reviewer, run `python tools/beat_check/jumps.py $P` and look at every frame it names; a JOIN line is a defect. Refute what you can on full-size frames, then fix at the source once, as step 3 below says. A FAIL from the re-render gets fixed too, and that is not a second round.
+
+**Full pipeline:** run `HOUSE.md`'s Review contract once, steps 1 and 2 below.
 1. Cut contact sheets from the stitched picture, one every 2 s or so. Give two fresh reviewers the sheets, `HOUSE.md`'s defect list, banned findings and the plan-check warnings. One is a Claude subagent. The other is Sol when `codex` is true:
    `codex exec -m gpt-6.1-sol --sandbox read-only --skip-git-repo-check -i <sheet> -`, prompt on stdin. Fallback model: gpt-5.6-sol.
    Without Codex it is a second Claude subagent that reviews the sheets in reverse order and starts from the warnings, so the two do not read alike.
