@@ -49,7 +49,7 @@ def approval(project):
         record_path = folder / (picture[:16] + ".json")
         record = load(record_path)
         owners = load(project / "ownership.json")
-        if record.get("result") not in ("PASS", "RECONCILED"):
+        if record.get("result") not in ("PASS", "RECONCILED", "APPROVED"):  # APPROVED: his click in the player (approval.py OK)
             raise ValueError("no passing approval record")
         if record.get("approved_file_sha256") != picture:
             raise ValueError("approval picture mismatch")
@@ -291,7 +291,7 @@ def collect(project):
     variants = []
     for scene, region in regions.items():
         intervals = [r for r in wins if r[0] == "#" + scene]
-        beats = [b for b in plan["beats"] if b.get("scene", "").removeprefix("scene.") == scene]
+        beats = [b for b in plan["beats"] if (b.get("scene") or "").removeprefix("scene.") == scene]  # face-only beats carry scene: null
         if not beats:
             beats = [b for b in plan["beats"] if any(b["start"] < end and b["end"] > start for _, start, end in intervals)]
         if not beats or any(not b.get("component") for b in beats):
@@ -376,7 +376,7 @@ def format_index(entries):
         purpose = entry["variants"][0]["components"][0].replace("|", "/").replace("\n", " ")
         rows.append(f"| [{name}]({name}.md) | {proven(entry)} | {len(entry['variants'])} | {purpose} |")
     rows += ["", "Run from the repository root:", "", "\x60\x60\x60text", "python tools/library.py list", "python tools/library.py show post-card", "python tools/library.py harvest work/<id>/v2/editorial --dry-run", "python tools/library.py harvest work/<id>/v2/editorial", "\x60\x60\x60", "",
-             "Harvest reads only: no project imports, builds, snapshots or renders. It requires an active PASS/RECONCILED record in the video's beat/approvals/, a matching composition/lock, and unchanged approved authoring hashes. --dry-run performs the same checks and extraction without writing. Repeating a harvest does not add a proven video.", "",
+             "Harvest reads only: no project imports, builds, snapshots or renders. It requires an active PASS/RECONCILED/APPROVED record in the video's beat/approvals/, a matching composition/lock, and unchanged approved authoring hashes. --dry-run performs the same checks and extraction without writing. Repeating a harvest does not add a proven video.", "",
              "Reuse: inspect a variant with show, fill every literal {{SLOT}}, retime timeline calls and media to the new plan, remeasure crops/highlights, carry the required CSS/helpers, then author new WINDOWS/EVENT_BINDS/COPY_BINDS and run the kit's checks. Existing snapshot links are references and may predate approval. No number, price or claim inherits verification from a component.", ""]
     return "\n".join(rows)
 

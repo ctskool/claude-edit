@@ -24,6 +24,10 @@ import review
 import sound_mix
 import store
 
+for _s in (sys.stdout, sys.stderr):  # the spawned run logs to a file, which Windows opens as cp1252: a "→" in a tool's output crashed it after the build
+    if _s is not None and hasattr(_s, "reconfigure"):
+        _s.reconfigure(encoding="utf-8", errors="replace")
+
 FACE, FACE_4K = "assets/face_half.mp4", "assets/face_half_4k.mp4"
 WORKERS = 6
 RULE = "Approve goes straight to the final"
@@ -81,7 +85,8 @@ def start(project, picture_sha=None):
 
 def step(cmd, what):
     print(review.now(), what, " ".join(str(c) for c in cmd), flush=True)
-    r = subprocess.run([str(c) for c in cmd], cwd=ROOT, capture_output=True, text=True, encoding="utf8", errors="replace")
+    r = subprocess.run([str(c) for c in cmd], cwd=ROOT, capture_output=True, text=True, encoding="utf8", errors="replace",
+                       env={**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1"})
     print(r.stdout[-4000:], r.stderr[-2000:], flush=True)
     if r.returncode:
         raise RuntimeError(f"{what} exited {r.returncode}: {(r.stdout + r.stderr).strip().splitlines()[-1:] or ''}")
