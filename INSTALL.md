@@ -101,7 +101,7 @@ Each line is PASS, WARN or FAIL, with the Windows and macOS command that fixes i
 
 ## 5. Your first edit
 
-Today's template, ivory, is vertical, so record a vertical (9:16) take: your screen in the top half and your face cam in the bottom half. This is how Chase records in OBS. A separate full-quality camera file named `CAMERA-<same timestamp>.mkv` next to the take is optional; with it, the face clips come from the clean camera. A take that is just your face (no split) works too: tell Claude at intake.
+For a short, record a vertical (9:16) take: your screen in the top half and your face cam in the bottom half. This is how Chase records in OBS. It is built in the ivory look unless you name another ("in charcoal", "the collage one"); the README lists them. For a 16:9 long-form video, hand over the screen recording and say it is long-form. A separate full-quality camera file named `CAMERA-<same timestamp>.mkv` next to the take is optional; with it, the face clips come from the clean camera. A take that is just your face (no split) works too: tell Claude at intake.
 
 From the repo folder, with the Python environment selected:
 
@@ -121,13 +121,11 @@ or on a Mac:
 /claude-edit "/Users/you/Movies/take.mov"
 ```
 
-Claude cuts the take, sends you a phone-size copy, and **stops for your one-minute cut listen**. After you answer, it builds the whole first edit and opens the review player at `http://localhost:4750`. Open that in Chrome or Edge, pause where you want a change, press **N** and type the note. When you've left your notes, tell Claude "go" in the chat.
+Claude cuts the take and **stops for your cut listen**: it opens the cut review page, a simple timeline where you hear the tight cut, drag any join that sounds wrong, and click Approve. After that it builds the whole first edit and opens the review player at `http://localhost:4750`. Open that in Chrome or Edge, pause where you want a change, press **N** and type the note. When you've left your notes, tell Claude "go" in the chat.
 
 Run only one render at a time on a machine.
 
-### Running workflows without a Workflow host
-
-The sound step is written as a workflow script in `tools/workflows/next/`. If your Claude Code has no `Workflow` tool, the skill tells Claude to run its phases as ordinary subagents, with the same prompts and checks. These files are not standalone Node programs: don't run them with `node`.
+A test suite ships too. It is optional: `python -m pip install pytest`, then `python -m pytest tools/tests -q` (about eight minutes; tests that need the author's own edits skip).
 
 ## Optional extras
 

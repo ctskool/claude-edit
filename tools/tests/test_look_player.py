@@ -18,6 +18,7 @@ def video(path, box_at=None):
 
 class LookPlayer(unittest.TestCase):
     def setUp(self):
+        (ROOT / "work").mkdir(exist_ok=True)   # a fresh clone has no work/ yet
         self.home = Path(tempfile.mkdtemp(dir=ROOT / "work", prefix="_test-look-"))
         self.addCleanup(shutil.rmtree, self.home, ignore_errors=True)
         self.project = self.home / "v2" / "sky"

@@ -34,6 +34,7 @@ PACKAGES = {
     "transformers": ('"transformers>=5.13,<6"', True),
     "soundfile": ("soundfile", True),
     "psutil": ("psutil", True),  # qos_watch.py: keeps a render off the Windows efficiency cores; a no-op without it
+    "pytest": ("pytest", True),  # only tools/tests needs it; no edit does
     "demucs": ("-e _ext/demucs-lib", True),
     "earshot": ("-e _ext/earshot", True),
 }
