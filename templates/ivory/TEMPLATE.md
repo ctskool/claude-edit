@@ -2,15 +2,12 @@
 
 Chase's baseline look: a split-screen short, graphics on an ivory panel above his real face cam. [Chase]
 To the tools it is `editorial`: spec `styles/editorial/STYLE.md`, flag `--pack editorial`. [Ours]
-Layout numbers in STYLE.md and these rule files are at 1080x1920. Publish is 2160x3840 at 60 fps. [Chase]
+Layout numbers in STYLE.md and these rule files are at 1080x1920. Publish is 2160x3840 at 30 fps (4K30); 60 fps only when he asks. [Chase]
 
-## Status: DRAFT, not locked
+## Status: in use
 
-- **One real video, 1030-2, has gone through these rules.** [Ours]
-  Why: a lock names one exact version that passed on first renders. Met when: `LOCK.md` records that version.
+- **These rules are in daily use.** [Ours] 1030-2 was the first video through them (2026-11-01); about a dozen shorts have followed. The lock test was never run and was dropped on 2026-11-22.
 - **`/claude-edit` is the editor, with the player and note rounds.** [Chase] 2026-11-02 he made the former `/claude-edit-next` the real one. The old multi-style skill is archived.
-- **No output counts toward a lock yet.** [Ours] Why: the version under test is not named or frozen.
-  Met when: `LOCK.md`'s record table stays empty until a lock attempt is declared.
 
 ## What makes it ivory
 
@@ -41,7 +38,6 @@ Read top to bottom. Each role reads only its rows.
 | 8 | `templates/ivory/sound.md` | Cues | Builder |
 | 9 | `templates/ivory/ledger.md` | What a first render must not carry | Planner, builder, reviewers |
 | 10 | `styles/editorial/STYLE.md` | Every look number | Planner, builder |
-| 11 | `templates/ivory/LOCK.md` | The lock test | Only on a declared lock attempt |
 
 - **Chase wins every conflict, then measured numbers, then prose.** [Chase] [Ours]
   Why: STYLE.md says measured numbers beat its prose, and his house rules beat donor numbers.
@@ -86,5 +82,5 @@ These older files stay the source. Point at them, and never copy their numbers i
 
 ## Not in this folder yet
 
-From the game plan's Phase 5, none built: `kit/`, `values.json`, `refs/`, sound as data, and a storyboard anchored to words. [Ours]
-Until then a build is one HyperFrames project, and an edit to it means a whole render.
+From the game plan's Phase 5, not built: `values.json` and `refs/`. [Ours] Built since: the kit, as `build_kit/` (every build starts from its `new_project.py`), and sound as data (`sound.json` per project, from `sound.md` and `sfx/sfx.json`). `plan.json` ties each event to a word (`word_i`) under a fixed `event_id`, but its time is still a number written by hand.
+A build is still one HyperFrames project. An edit re-renders the beats it touches (`tools/beat_render/run.py change`), not the whole video; a change to the shell, to timing or a new clip still renders every beat.

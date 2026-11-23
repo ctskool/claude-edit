@@ -31,8 +31,8 @@
 | | |
 |---|---|
 | **You give it** | A raw talking-head take (or several). Your screen on top, your face cam below, or just your face |
-| **You get** | A finished MP4, vertical, in the ivory look or the charcoal look: cut tight, every beat edited, captioned, sounded and mastered |
-| **Your part** | One minute to listen to the cut, notes in the player wherever you want a change, then approve |
+| **You get** | A finished MP4: a vertical short in one of several looks (ivory, charcoal, neo-brutalist, collage, blueprint, sky), or a 16:9 long-form video. Cut tight, every beat edited, captioned and mastered |
+| **Your part** | Listen to the cut in the cut review page and fix any join by ear, leave notes in the player wherever you want a change, then approve |
 | **It stops for you** | After the cut, after every render, before sound, before the final. It never moves the picture while you're reviewing |
 | **It never** | Invents a number, generates your body or face, or changes something you didn't note |
 
@@ -216,7 +216,7 @@ flowchart LR
 | [`.claude/skills/claude-edit/`](.claude/skills/claude-edit/SKILL.md) | The skill: every stage, its checks and its stop points |
 | [`templates/`](templates) | The house rules, the story rules for cutting, and the ivory template with its build kit, sound palette and component library |
 | [`tools/`](tools) | The cutter, transcription, beat renderer, checks, review player, sound mixer and delivery |
-| [`tools/workflows/next/`](tools/workflows/next) | The planning, build and sound workflows the skill runs |
+| [`tools/workflows/next/`](tools/workflows/next) | The sound workflow the skill runs |
 | [`examples/ivory-edit/`](examples/ivory-edit) | The text files of the approved edit above: how a plan becomes an edit |
 | [`styles/editorial/`](styles/editorial) | The measured look behind ivory |
 | [`references/`](references) | How to measure a reel you like, so its ideas (not its look) can reach your edit |
@@ -230,10 +230,13 @@ flowchart LR
 | Windows 11 | Tested. One raw take has gone the whole way, to an approved, sounded final |
 | Mac | **Partly tested** on an Apple Silicon MacBook Air: install, doctor, all tests, transcription on the CPU, the cut and source prep. A whole edit with the review player hasn't run on a Mac yet. Install `ffmpeg-full` from Homebrew, not `ffmpeg`. [Open an issue](https://github.com/ctskool/claude-edit/issues) and say how it goes |
 | Linux | Untested |
-| Widescreen | Ships with a vertical template today; a widescreen template is next. The ivory template, `prep_source.py` and the checks assume 1080x1920 |
+| Widescreen (16:9 long-form) | Ships as the `charcoal` template, built by hand from [`templates/charcoal/CARD.md`](templates/charcoal/CARD.md). Four of the author's videos went through it on Windows with an NVIDIA card. Without one it renders in software (`render_slices_x264.py`, picked automatically), which is slower and has not been timed on another machine |
+| No NVIDIA card | Shorts: everything runs (transcription on the CPU with a smaller model, renders in the browser, encodes with libx264); only the popout bottom needs NVIDIA. Long-form: the software renderer. Expect renders several times slower than the author's times |
+| Final size | 4K30 when your camera recording is 4K, 1080p30 otherwise. A 4K final of a one-minute short took 3 to 16 minutes on the author's RTX 5090; ask for 1080p (`final-by-hand.md`) on a laptop |
+| Looks | `charcoal`, `neo-brutalist` and `collage` are kit looks: several delivered shorts each, and a finished edit can be remade in another. `blueprint` and `sky` are written by hand per video (one short each so far) and re-render whole after a note |
 | A first run by someone else | Not done yet. Expect rough edges, and run `python tools/doctor.py --fix-hints` first |
 
-The status of every stage, from "works" to "not built", is in the table at the top of [SKILL.md](.claude/skills/claude-edit/SKILL.md).
+The status of every stage is in [status.md](.claude/skills/claude-edit/status.md).
 
 ## License
 

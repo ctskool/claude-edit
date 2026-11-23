@@ -1,4 +1,5 @@
-"""One GPU job at a time across sessions and agents: transcription, cut-outs, renders.
+"""One heavy job at a time across sessions and agents: transcription, cut-outs, renders (long-form, 4K finals, and since
+2026-11-16 every review render from tools/beat_render/run.py; `--no-queue` skips it for the player's native-size beat).
 
   python tools/gpu_lock.py run --who "hook2 review render" -- python tools/beat_review/review.py ...
   python tools/gpu_lock.py status
@@ -6,12 +7,14 @@
   python tools/gpu_lock.py release
 
 The lock is a folder (mkdir is atomic on every OS) holding owner.json. A holder whose process is gone is stale and is
-cleared, so a crashed job never blocks the queue. `run` waits, checking every 20 s, and says who it is waiting for.
+cleared, so a crashed job never blocks the queue. `run` waits, checking every 5 s, and says who it is waiting for.
+A renderer takes it in-process with `with gpu_lock.held(who):` (the long-form renderers do).
 """
-import argparse, json, os, subprocess, sys, time
+import argparse, contextlib, json, os, subprocess, sys, time
 from pathlib import Path
 
 LOCK = Path(__file__).resolve().parents[1] / "work" / ".gpu-lock"
+ENV = "CLAUDE_EDIT_GPU_LOCK"  # set for everything that runs under the lock, so a renderer started by `run` does not wait for its own parent
 
 
 def alive(pid):
@@ -49,8 +52,8 @@ def take(who, pid):
                 continue
             if waited % 300 == 0:
                 print(f"gpu_lock: waiting for {o.get('who') if o else 'another job'} (since {o.get('since') if o else '?'})", file=sys.stderr)
-            time.sleep(20)
-            waited += 20
+            time.sleep(5)
+            waited += 5
 
 
 def release():
@@ -59,6 +62,22 @@ def release():
         LOCK.rmdir()
     except OSError:
         pass
+
+
+@contextlib.contextmanager
+def held(who):
+    """For a renderer to take the lock itself: `with gpu_lock.held("long-form render 1110-slop"): ...`.
+    Passes straight through when this process already runs under the lock (`gpu_lock.py run`, or an outer held())."""
+    if os.environ.get(ENV):
+        yield
+        return
+    take(who, os.getpid())
+    os.environ[ENV] = str(os.getpid())
+    try:
+        yield
+    finally:
+        os.environ.pop(ENV, None)
+        release()
 
 
 def main():
@@ -86,7 +105,7 @@ def main():
         sys.exit("run needs a command after --")
     take(a.who or " ".join(cmd)[:80], os.getpid())
     try:
-        return subprocess.run(cmd).returncode
+        return subprocess.run(cmd, env={**os.environ, ENV: str(os.getpid())}).returncode
     finally:
         release()
 

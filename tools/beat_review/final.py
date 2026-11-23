@@ -34,6 +34,7 @@ import lock as beat_lock
 import confine
 import output as checks
 import ownership
+import qos_watch
 import run as renderer
 import sentinel
 import sound_mix
@@ -606,11 +607,26 @@ def validate_stitched(picture):
     return {"picture": picture, "root": root, "record": record, "map": m, "lock": lock, "profile": records[record["beats"][0]["beat_id"]]["profile_full"]}
 
 
-def validate_decoded(seen):
-    """Every decoded frame against the segments' rows, and the timestamps. Last, because at 4K this is minutes. Raises with every problem."""
+def picture_fingerprint(path):
+    """SHA-256 of a file's whole H.264 picture stream: its parameter sets and every packet in order, read without decoding.
+    Two files with the same fingerprint hold the same picture bytes, so they decode to the same frames. None when it cannot be taken."""
+    r = subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-i", str(path), "-map", "0:v:0", "-c", "copy", "-bsf:v", "h264_mp4toannexb", "-f", "hash", "-hash", "sha256", "-"],
+                       capture_output=True, text=True)
+    out = r.stdout.strip()
+    return out.split("=", 1)[1] if r.returncode == 0 and out.startswith("SHA256=") and len(out) == 71 else None
+
+
+def validate_decoded(seen, project=None):
+    """Every decoded frame against the segments' rows, and the timestamps. Last, because at 4K this is minutes. Raises with every problem.
+
+    This is the one full read of the picture. It also keeps the frames the output check samples (seen["scan"]), with the
+    picture's fingerprint, so check_delivered need not decode the delivered file again when its picture is these same bytes."""
     picture, root, record, lock = seen["picture"], seen["root"], seen["record"], seen["lock"]
     stream = stitcher.probe_video(picture)
-    rows, _, _ = sentinel.scan(picture, stream["width"], stream["height"])
+    events = checks.project_events(project, root, seen["map"]) if project is not None else None
+    wanted = sorted({f for b in lock["beats"] for f in sentinel.samples(b, events or [])})
+    rows, picked, suspects = sentinel.scan(picture, stream["width"], stream["height"], wanted, keep_suspects=checks.SUSPECTS_KEPT)
+    seen["scan"] = {"rows": rows, "picked": picked, "suspects": suspects, "wanted": wanted, "fingerprint": picture_fingerprint(picture), "of": record["file_sha256"]}
     expected = [row for b in record["beats"] for row in store.rows_of(root, record["profile_hash"], b["key"])]
     problems = []
     if rows != expected:
@@ -664,7 +680,8 @@ def accept(project, picture, reviewed_final=True, listed=()):
         seen["approval"] = approval_of(project, base_rev, base_lock)
     elif listed:
         raise Refused("listing a swap does not authorize it: a swap is a derivative revision of a reviewed final")
-    return {**seen, "frames": validate_decoded(seen), "project": ed if reviewed_final else project, "home": home, "swaps": swaps, "derivative": store.read_json(home / DERIVATIVE) if reviewed_final else None}
+    frames = validate_decoded(seen, ed if reviewed_final else project)  # first: it adds seen["scan"], which the dict below must carry
+    return {**seen, "frames": frames, "project": ed if reviewed_final else project, "home": home, "swaps": swaps, "derivative": store.read_json(home / DERIVATIVE) if reviewed_final else None}
 
 
 # ---- the output check, on the delivered file
@@ -689,7 +706,14 @@ def check_delivered(accepted, video):
     for name in ("ownership.json", "beats.lock.json"):
         shutil.copy(accepted["picture"].parent / name, folder / name)
     store.write_json(folder / "stitch.json", {**record, "file": target.name, "file_sha256": digest, "stitched_from": record["file_sha256"]})
-    report = checks.check(target, accepted["project"], root)
+    # The delivered file is the accepted picture with mastered sound: finish.py copies the picture stream. When its fingerprint
+    # says so, the frames accept() decoded a few minutes ago are this file's frames, and they are used instead of a second
+    # full decode (at 4K, minutes). Any difference, or no fingerprint, and the file is decoded again as before.
+    scan = accepted.pop("scan", None)
+    mark = picture_fingerprint(video) if scan and scan.get("fingerprint") else None
+    same = bool(mark) and mark == scan["fingerprint"] and scan.get("of") == record["file_sha256"]
+    report = checks.check(target, accepted["project"], root, scan={**scan, "delivered_fingerprint": mark} if same else None)
+    scan = None
     width = accepted["profile"]["width"]
     if width > max(checks.FLASH_WIDTHS) and "O4" in report["checks"]:
         small = accepted.get("proxy") or proxy_of(video, folder / "proxy-1080.mp4")
@@ -716,6 +740,7 @@ def main(argv=None):
     if a.swaps and swaps is None:
         print(f"REFUSED: cannot read {a.swaps}")
         return 2
+    unthrottle = qos_watch.start()  # the 4K build is the slowest render a short has: keep its Chrome workers off the efficiency cores
     try:
         if a.command == "build":
             build(a.project, a.spec, a.workers, swaps)
@@ -724,6 +749,8 @@ def main(argv=None):
     except (ValueError, OSError, subprocess.SubprocessError) as e:
         print("REFUSED:", e)
         return 2
+    finally:
+        unthrottle()
     return 0
 
 

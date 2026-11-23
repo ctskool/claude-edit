@@ -92,6 +92,6 @@ Pick the source per asset, never one route for a whole short.
 ## Open decisions
 
 - **Real captures versus rebuilt cards as ivory's default.** STYLE.md lines 5, 66 and 129 favour rebuilt cards.
-  `VISUAL_MENU.md` ("Proof beats illustration") and `WRITEUP.md` favour real material. 13 of 24 beats on 1023-test are already real shots.
+  `VISUAL_MENU.md` ("Proof beats illustration") favours real material. 13 of 24 beats on 1023-test are already real shots.
 - **Whether isometric scenes stay at all.**
 - **The reading rule.** The game plan lists it as unproven and also as a Phase 5 build item, so it stays a trial until Chase says.

@@ -1,0 +1,15 @@
+/* ?skin=wide: the same player laid out for a 16:9 picture (long-form YouTube edits).
+   Only sizes change: the picture column is wide instead of tall. Added 2026-11-09 for work/1109-fable. */
+.app { grid-template-columns: clamp(480px, 54vw, 1180px) minmax(0, 1fr) minmax(240px, 19vw) }
+@media (max-width: 1099px) {
+  .app { grid-template-columns: clamp(320px, 58vw, 720px) minmax(0, 1fr) }
+}
+@media (max-height: 560px) and (min-aspect-ratio: 1/1) {
+  .app { grid-template-columns: clamp(300px, 50vw, 720px) minmax(0, 1fr) minmax(0, 0fr) }
+}
+/* Note stills and the before/after pair are 16:9 too. */
+.note img { width: 96px; aspect-ratio: 16 / 9 }
+.pair { width: min(96vw, calc((100dvh - 170px) * 32 / 9)) }
+.pair video { aspect-ratio: 16 / 9 }
+/* "Native size" re-renders one beat through the vertical beat renderer, which this kind of edit doesn't use. */
+.acts button[title^="Render"] { display: none }

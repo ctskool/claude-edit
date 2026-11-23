@@ -236,6 +236,8 @@ class Contract(unittest.TestCase):
 
     @NEEDS_FIXTURE
     def test_the_fixture_meets_the_contracts_floor(self):
+        if not ED.is_dir():
+            self.skipTest(f"the beat-fixture project is not on disk (cleared 2026-11-22): {ED}")
         doc = events.load(ED)
         bound = conform.floor(doc["events"], beat_lock.load(ED))
         self.assertTrue(bound["met"], bound)

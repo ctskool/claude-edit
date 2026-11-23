@@ -1,0 +1,20 @@
+{
+  "name": "inverse",
+  "from": "charcoal recoloured for the IG duplicate test, 2026-11-16 (work/1114-tools/recolor_looks.py)",
+  "remap": {
+    "#d97757": "#0f0f0f",
+    "#c15f3c": "#010101",
+    "#d9d6cc": "#1b1b1b",
+    "#e4e2da": "#1b1b1b",
+    "#1a1917": "#ff6b3e",
+    "#141312": "#f6efe4",
+    "#423f3b": "#1b1b1b",
+    "#ebe8e0": "#111111",
+    "#aaa69d": "#4a2a1c",
+    "#77736a": "#d4542a",
+    "#ff6a3d": "#0f0f0f",
+    "#ff7a50": "#010101",
+    "#0d0d0c": "#fff6ea",
+    "rgba(255, 106, 61": "rgba(0, 0, 0"
+  }
+}

@@ -1,7 +1,7 @@
 """Finish a rendered style: loudness-normalise for social and make a review contact sheet.
 
 Usage: python finish.py <render.mp4> <out.mp4> [--sheet sheet.jpg]
-Two-pass EBU R128 to -14 LUFS / -2.0 dBTP limiter (lands <= -1.5 dBTP after AAC) (Instagram/TikTok/Shorts target); video stream is copied untouched.
+Two-pass EBU R128 to -14 LUFS / -2.5 dBTP limiter (-2.0 landed at -1.4 dBTP after AAC on 1112-ps2, 2026-11-12; the gate is -1.5) (Instagram/TikTok/Shorts target); video stream is copied untouched.
 """
 import argparse
 import json
@@ -9,10 +9,10 @@ import subprocess
 
 
 def loudnorm(src, dst):
-    probe = subprocess.run(["ffmpeg", "-hide_banner", "-i", src, "-af", "loudnorm=I=-14:TP=-2.0:LRA=11:print_format=json",
+    probe = subprocess.run(["ffmpeg", "-hide_banner", "-i", src, "-af", "loudnorm=I=-14:TP=-2.5:LRA=11:print_format=json",
                             "-f", "null", "-"], capture_output=True, text=True).stderr
     m = json.loads(probe[probe.rindex("{"):probe.rindex("}") + 1])
-    af = (f"loudnorm=I=-14:TP=-2.0:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
+    af = (f"loudnorm=I=-14:TP=-2.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-c:v", "copy", "-af", af, "-ar", "48000", "-c:a", "aac",
                     "-b:a", "256k", "-movflags", "+faststart", dst], check=True)

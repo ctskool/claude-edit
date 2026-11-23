@@ -617,6 +617,48 @@ class Deliver(Base):
         self.assertFalse(report["hyperframes_invoked"])
         self.refused("refusing to overwrite", deliver.deliver, self.args())
 
+    def output_report(self, base="t"):
+        report = json.loads((self.work / "out" / f"{base}-delivery.json").read_text(encoding="utf8"))
+        return json.loads(Path(report["checks"]["output"]["report"]).read_text(encoding="utf8"))
+
+    def test_the_delivered_picture_is_not_decoded_twice_and_the_checks_read_the_same(self):
+        """finish.py copies the picture stream, so the frames accept() decoded are the delivered file's. The report says so, and a fresh decode of the delivered file reaches the same results."""
+        code, out = self.run_quiet(self.args())
+        self.assertEqual(code, 0, out)
+        reused = self.output_report()
+        self.assertEqual(reused["picture_read"]["how"], "reused")
+        self.assertEqual(reused["picture_read"]["fingerprint"], reused["picture_read"]["this_file_fingerprint"])
+        self.assertEqual(reused["picture_read"]["decoded_file_sha256"], sound.file_hash(self.picture))
+        import output as checks
+        with contextlib.redirect_stdout(io.StringIO()):
+            decoded = checks.check(reused["file"], final.editorial(self.bundle), Path(reused["file"]).parents[2])
+        self.assertEqual(decoded["picture_read"], {"how": "decoded"})
+        self.assertEqual(decoded["checks"], reused["checks"])
+        self.assertEqual(decoded["status"], reused["status"])
+
+    def test_a_delivered_picture_with_other_bytes_is_decoded_again(self):
+        marks = iter(["a" * 64, "b" * 64])
+        with patch.object(final, "picture_fingerprint", side_effect=lambda path: next(marks)):
+            code, out = self.run_quiet(self.args())
+        self.assertEqual(code, 0, out)
+        self.assertEqual(self.output_report()["picture_read"], {"how": "decoded"})
+
+    def test_no_fingerprint_means_a_full_decode(self):
+        with patch.object(final, "picture_fingerprint", return_value=None):
+            code, out = self.run_quiet(self.args())
+        self.assertEqual(code, 0, out)
+        self.assertEqual(self.output_report()["picture_read"], {"how": "decoded"})
+
+    def test_the_fingerprint_follows_the_picture_bytes_not_the_container_or_the_sound(self):
+        remux, other = self.work / "remux.mov", self.work / "other.mp4"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(self.picture), "-f", "lavfi", "-i", "sine=frequency=300:duration=0.5", "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "pcm_s16le", str(remux)], check=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(self.picture), "-map", "0:v:0", "-c:v", "libx264", "-preset", "ultrafast", str(other)], check=True)
+        mark = final.picture_fingerprint(self.picture)
+        self.assertEqual(len(mark), 64)
+        self.assertEqual(final.picture_fingerprint(remux), mark)
+        self.assertNotEqual(final.picture_fingerprint(other), mark)
+        self.assertIsNone(final.picture_fingerprint(self.work / "missing.mp4"))
+
     def test_binding_is_exclusive(self):
         path = self.work / "bound.json"
         deliver.write_once(path, {"a": 1})

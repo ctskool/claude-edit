@@ -610,6 +610,11 @@ async function askForPreview() {
   schedulePoll(700);
 }
 function paintSoundStatus() {
+  // A sound sheet he has not heard yet turns "with cues" on by itself [Chase, 2026-11-18: having to click from voice only after sound was added "is not a very good user experience"].
+  // Turning it off by hand still sticks until the next new sheet.
+  if (S.sound?.identity && loaded === S.picture?.file_sha256 && mem.get("soundSheet", null) !== S.sound.identity) {
+    mem.set("soundSheet", S.sound.identity); soundWanted = true; mem.set("sound", true);
+  }
   const job = S.sound_preview, matches = job?.picture_sha === loaded && job?.sheet_identity === S.sound?.identity;
   if (soundWanted && !matches && !askingPreview && S.sound?.identity && loaded === S.picture?.file_sha256) askForPreview().then(() => { if (!askingPreview) paintSoundStatus(); });
   const ready = matches && job.state === "done";
@@ -1056,7 +1061,7 @@ async function post(url, body) {
 function loadPicture(frame) {
   if (loaded) setSaved(`New picture ${S.picture.file_sha256.slice(0, 8)}`);
   loaded = S.picture.file_sha256;
-  ++mediaSerial; switching = null; soundOn = false; soundWanted = mem.get("sound", false);
+  ++mediaSerial; switching = null; soundOn = false; soundWanted = mem.get("sound", true);
   if (composing && composing.scope !== "sound") { composing.picture = loaded; saveDraft(); }
   if ($("#compare").open) $("#compare").close();
   $("#banner").hidden = true;

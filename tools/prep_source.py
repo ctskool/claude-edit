@@ -84,6 +84,51 @@ def locate_face_crop(video, cam, meta, cmeta, top):
     return (x, y, w, h), v
 
 
+def region_empty(video, meta, top, bottom):
+    """True when rows top..bottom of the take hold no picture in three frames: the camera was hidden in OBS while recording
+    (screen-only take, his face comes from the CAMERA file alone), so there is nothing to template-match."""
+    W, H = meta["width"], meta["height"]
+    return all(grab(video, meta["duration"] * x, W, H)[top:bottom].mean(2).std() < 6 for x in (0.25, 0.5, 0.75))
+
+
+def face_geometry(video, n=9):
+    """Median face box over n frames of the camera cut (OpenCV Haar): cx, top of hair (estimated), chin, in source px.
+    Moved here from the archived tools/formats.py on 2026-11-11, unchanged."""
+    import cv2
+    import numpy as np
+    det = cv2.CascadeClassifier(os.path.join(cv2.data.haarcascades, "haarcascade_frontalface_default.xml"))
+    info = json.loads(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration:stream=width,height", "-of", "json", video],
+                                     check=True, capture_output=True, text=True).stdout)
+    d = float(info["format"]["duration"]); boxes = []
+    for k in range(n):
+        t = d * (k + 0.5) / n
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{t:.2f}", "-i", video, "-frames:v", "1", "-vf", "scale=960:-2",
+                              "-f", "rawvideo", "-pix_fmt", "gray", "-"], capture_output=True, check=True).stdout
+        h = len(raw) // 960
+        g = np.frombuffer(raw, np.uint8).reshape(h, 960)
+        f = det.detectMultiScale(g, 1.1, 6, minSize=(120, 120))
+        if len(f):
+            x, y, w, hh = max(f, key=lambda b: b[2] * b[3]); boxes.append((x, y, w, hh))
+    if not boxes:
+        sys.exit("no face found in the camera cut")
+    s = info["streams"][0]["width"] / 960
+    x, y, w, h = (float(np.median([b[i] for b in boxes])) for i in range(4))
+    # Haar box: mid-forehead to the mouth. Measured on Chase's 4K framing (2026-10-24): hair top ~0.35 box heights above it,
+    # chin ~0.22 box heights below it.
+    return {"cx": round((x + w / 2) * s), "top": round(max(0, y - 0.35 * h) * s), "chin": round((y + h * 1.22) * s),
+            "box": [round(v * s) for v in (x, y, w, h)], "frames": len(boxes)}
+
+
+def face_crop_from_camera(cam, cmeta, aspect):
+    """The split face rect for a take with no face in it: full camera height, `aspect` wide, centred on his face (OpenCV
+    Haar median over 9 frames, face_geometry above). On 1030-1 and 1023-test OBS's own crop sat 120-140 px off his face
+    centre and reached the camera's bottom edge; camera_crops() keeps the centre and bottom and extends to the top."""
+    g = face_geometry(cam)
+    Wc, Hc = cmeta["width"], cmeta["height"]
+    w = min(Wc, Hc * aspect)
+    return (g["cx"] - w / 2, 0, w, Hc), g
+
+
 def camera_crops(rect, aspect, Wc, Hc):
     """half / full / wide crop strings for the clean camera: OBS's crop centre, extended up to the camera's top edge."""
     x, y, w, h = rect

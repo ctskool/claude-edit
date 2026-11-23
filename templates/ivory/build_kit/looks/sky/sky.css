@@ -1,0 +1,46 @@
+/* sky: the pixel Claude guide's style. A bright stepped sky, edge clouds that drift in steps, titles in a pixel
+   cloud (Jersey 15), cards framed in cream with a navy outline, a grass-and-brick floor the guide stands on.
+   The first block is the guide stage itself; the second is the sky theme over it (Chase's pick, 2026-11-19). */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{margin:0;background:#000}
+#root{position:relative;width:100%;height:100%;overflow:hidden;background:#000}
+#face{position:absolute;left:0;top:998px;width:1080px;height:922px;object-fit:cover;z-index:0}
+.top{position:absolute;left:0;top:0;width:1080px;height:998px;overflow:hidden;background:#1a1917}
+.scn{position:absolute;inset:0;overflow:hidden;background:#1a1917;isolation:isolate}
+h1{position:absolute;left:62px;top:66px;font:700 78px/1.02 'Hanken Grotesk';color:#ebe8e0;letter-spacing:-.03em}
+h1 span{color:#ff6a3d}
+.cd{position:absolute;background:#141312;color:#ebe8e0;border:1.5px solid #423f3b;overflow:hidden}
+.mono{font-family:'JetBrains Mono';font-weight:700}
+.floor{position:absolute;left:0;width:1080px;top:950px;height:3px;background:#423f3b}
+.chip{position:absolute;font:800 26px 'JetBrains Mono';padding:6px 14px;letter-spacing:.04em}
+.lane{position:absolute;left:60px;width:960px;height:170px;background:#141312;border:1.5px solid #423f3b;opacity:.28}
+.lane .lb{position:absolute;left:28px;top:22px;font:800 30px 'JetBrains Mono';color:#ebe8e0;letter-spacing:.04em}
+.vc{position:absolute;top:290px;width:290px;height:420px;border:1.5px solid #423f3b;background:#141312 center/cover no-repeat}
+.tl10{position:absolute;width:170px;height:290px;border:1.5px solid #423f3b;background:#141312 center/cover no-repeat}
+.tl10 .bd{position:absolute;left:0;right:0;bottom:0;height:44px;font:800 22px/44px 'Hanken Grotesk';color:#1a1917;padding-left:10px;transform-origin:50% 100%}
+#g2{position:absolute;left:0;top:0;width:0;height:0;z-index:30}
+#g2 .pose2{position:absolute;left:0;bottom:0;display:none}
+.serif{letter-spacing:-.02em}
+#g{position:absolute;left:0;top:0;width:0;height:0;z-index:30}
+#g .pose{position:absolute;left:0;bottom:0;display:none}
+.fx{position:absolute;z-index:31;opacity:0}
+.cap{position:absolute;left:540px;top:998px;transform:translate(-50%,-50%);z-index:50;white-space:nowrap;
+ background:#ebe8e0;color:#1a1917;font:700 46px 'JetBrains Mono';padding:10px 28px 12px;opacity:0}
+.cloud{position:absolute;z-index:0}
+.cloud > div{transform-origin:0 0}
+
+/* ── the sky theme ── */
+.top,.scn{background:#6fa8ff !important;background-image:linear-gradient(180deg,#5d9bf7 0 30%,#6fa8ff 30% 62%,#82b6ff 62% 82%,#97c3ff 82%) !important}
+/* cards: cream frame + navy outline, so dark screenshots don't sit heavy on the bright sky */
+.cd,.vc,.tl10,.lane{border:6px solid #fffaf0 !important;outline:4px solid #1d2b53;box-shadow:12px 12px 0 rgba(29,43,83,.4) !important}
+.cd,.lane{background-color:#fffaf0 !important;color:#1d2b53 !important}
+.lane .lb{color:#1d2b53 !important}
+/* text on a card is navy, soft text #5b6890 (write those colours inline; the charcoal greys don't read on cream) */
+.floor{top:950px !important;height:48px !important;background:linear-gradient(#63c74d,#63c74d) 0 0/100% 12px no-repeat,
+  linear-gradient(#3e8948,#3e8948) 0 12px/100% 5px no-repeat, repeating-linear-gradient(90deg,#c97c43 0 46px,#a35b2c 46px 50px) !important}
+.chip{border-radius:0 !important;box-shadow:4px 4px 0 #1d2b53}
+/* titles sit in a pixel cloud */
+h1{font-family:'Jersey 15' !important;font-weight:400 !important;font-size:74px !important;line-height:1 !important;letter-spacing:0 !important;
+  color:#1d2b53 !important;background:#fff;border-bottom:12px solid #cfe3ff;padding:20px 34px 14px;left:46px !important;clip-path:__STEP__}
+h1 span,.serif{color:#e8531e !important;font-family:'Jersey 15' !important;font-style:normal !important;font-weight:400 !important}
+.cloudbox{font-family:'Jersey 15';font-weight:400;color:#1d2b53;background:#fff;border-bottom:14px solid #cfe3ff;clip-path:__STEP__}

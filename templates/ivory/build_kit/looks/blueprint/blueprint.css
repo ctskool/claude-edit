@@ -1,0 +1,105 @@
+/* Blueprint look: the sheet, drafting strokes, plates, labels, HUD, captions. __SW__/__SH__ = sheet size, filled by bp.py */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
+:root{--bp:#0f4486;--bp2:#0b356c;--line:#eaf3ff;--soft:rgba(234,243,255,.62);--faint:rgba(234,243,255,.22);--red:#ff7a45}
+.top{position:absolute;left:0;top:0;width:1080px;height:998px;overflow:hidden;background:var(--bp2)}
+#sheet{position:absolute;left:0;top:0;width:__SW__px;height:__SH__px;transform-origin:0 0;
+  background:radial-gradient(ellipse 60% 50% at 50% 40%,#134f98,var(--bp) 60%,var(--bp2));}
+#sheet::before{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(234,243,255,.16) 2px,transparent 2px),linear-gradient(90deg,rgba(234,243,255,.16) 2px,transparent 2px),
+  linear-gradient(rgba(234,243,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(234,243,255,.07) 1px,transparent 1px);
+  background-size:120px 120px,120px 120px,24px 24px,24px 24px}
+.reg{position:absolute;width:1080px;height:998px}
+.reg svg.ink{position:absolute;inset:0;overflow:visible;z-index:3;pointer-events:none}
+.l{stroke:var(--line);stroke-width:3;fill:none}
+.t{stroke:var(--soft);stroke-width:2;fill:none}
+.r{stroke:var(--red);stroke-width:4;fill:none}
+.cn{stroke:var(--faint);stroke-width:1.5;stroke-dasharray:30 8 4 8;fill:none}
+.bfill{fill:rgba(11,53,108,.85)}
+.dot{fill:var(--line)} .dotr{fill:var(--red)}
+text{font-family:'JetBrains Mono';letter-spacing:.06em}
+.tl{fill:var(--line)} .tr{fill:var(--red)} .ts{fill:var(--soft)}
+.h1{position:absolute;font-family:'Barlow Condensed';font-weight:800;line-height:.92;text-transform:uppercase;color:var(--line);letter-spacing:.005em;z-index:4}
+.h1.outline{color:transparent;-webkit-text-stroke:3px var(--line);text-transform:none;letter-spacing:.01em}
+.big{position:absolute;font-family:'Barlow Condensed';font-weight:800;line-height:1;z-index:4}
+.red{color:var(--red)}
+b.red{font-weight:inherit}
+.note{position:absolute;font-family:'JetBrains Mono';font-weight:700;letter-spacing:.08em;z-index:4;white-space:nowrap}
+.plate{position:absolute;border:3px solid var(--line);overflow:hidden;background:#0a2a55}
+.plate img{display:block}
+.tag{position:absolute;z-index:4;font:800 24px 'JetBrains Mono';letter-spacing:.06em;background:var(--line);color:var(--bp2);padding:4px 12px}
+.redtag{background:var(--red);color:#fff}
+.isowrap{position:absolute;left:40px;top:230px;width:560px;height:740px}
+.iso{position:absolute;left:280px;top:500px;transform-style:preserve-3d;transform:rotateX(57deg) rotateZ(-42deg)}
+.lay{position:absolute;left:-75px;top:-133px;width:150px;height:266px;border:3px solid var(--line);background:#0a2a55;transform-style:preserve-3d}
+.lay img{width:100%;height:100%;object-fit:cover;display:block;opacity:.96}
+.mk{position:absolute;width:1px;height:1px}
+.bom{position:absolute;border-collapse:collapse;font:700 22px 'JetBrains Mono';color:var(--line);z-index:4;background:rgba(11,53,108,.9)}
+.bom th{font-size:20px;letter-spacing:.08em;text-align:left;padding:10px 14px;border:2px solid var(--line)}
+.bom td{border:2px solid var(--soft);padding:5px 14px;height:48px;letter-spacing:.04em;white-space:nowrap}
+.bom td.red{color:var(--red)}
+.bal{display:inline-block;width:34px;height:34px;border-radius:50%;border:2px solid var(--line);text-align:center;line-height:30px;font-size:18px}
+.bal.red{border-color:var(--red)}
+.spec{position:absolute;z-index:4;font:700 24px/1.45 'JetBrains Mono';color:var(--line);border:3px solid var(--line);padding:14px 20px;background:rgba(11,53,108,.9)}
+.tblock{position:absolute;z-index:4;border:4px solid var(--line);outline:2px solid var(--line);outline-offset:8px;background:rgba(11,53,108,.92)}
+.tbig{font:800 190px/1 'Barlow Condensed';color:var(--line);text-align:center;padding:24px 0 18px;border-bottom:3px solid var(--line)}
+.trow{display:flex;justify-content:space-between;font:700 24px 'JetBrains Mono';letter-spacing:.06em;color:var(--line);padding:16px 26px}
+.match{position:absolute;font:700 20px 'JetBrains Mono';letter-spacing:.1em;color:var(--soft);white-space:nowrap}
+/* HUD: fixed on the camera, not the sheet (its top comes from bp.py TEXT_TOP) */
+#hud{position:absolute;right:24px;top:22px;z-index:60;border:2px solid var(--line);background:rgba(11,53,108,.85);font:700 16px 'JetBrains Mono';letter-spacing:.08em;color:var(--soft)}
+#hud div{padding:5px 12px} #hud .n{font:800 30px 'Barlow Condensed';color:var(--line);letter-spacing:.04em;border-top:2px solid var(--line)}
+.reg-mark{position:absolute;z-index:60;width:40px;height:40px}
+.reg-mark::before,.reg-mark::after{content:'';position:absolute;background:var(--soft)}
+.reg-mark::before{left:19px;top:0;width:2px;height:40px} .reg-mark::after{top:19px;left:0;height:2px;width:40px}
+#grain{position:absolute;left:0;top:0;width:1080px;height:998px;z-index:58;pointer-events:none;opacity:.10;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.cap{position:absolute;left:540px;top:998px;transform:translate(-50%,-50%);z-index:70;white-space:nowrap;background:var(--line);color:var(--bp2);
+  font:800 54px 'Barlow Condensed';letter-spacing:.04em;padding:6px 30px 8px;box-shadow:0 0 0 4px var(--bp2),0 0 0 6px var(--line)}
+/* drafting: the region is being drawn; strokes partly traced, plates wiping in, lettering only outlined */
+.drafting .l,.drafting .r,.drafting .t{stroke-dasharray:1 1;stroke-dashoffset:calc(1 - var(--p))}
+.drafting .plate{clip-path:inset(0 0 calc((1 - var(--p)) * 100%) 0)}
+.drafting .h1{color:transparent;-webkit-text-stroke:2px var(--line)}
+.drafting .note,.drafting .tag,.drafting text{opacity:.0}
+.drafting .cn{stroke:rgba(234,243,255,.4)}
+
+/* ── round 2: paper, duotone, detail, procedure ── */
+
+#sheet::after{content:'';position:absolute;inset:0;pointer-events:none;mix-blend-mode:soft-light;opacity:.55;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='1200'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.0035' numOctaves='3' seed='7'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>");
+  background-size:1200px 1200px}
+.crease{position:absolute;pointer-events:none;z-index:2}
+.crease.v{width:3px;top:0;bottom:0;background:linear-gradient(90deg,rgba(0,20,60,.28),rgba(234,243,255,.16))}
+.crease.h{height:3px;left:0;right:0;background:linear-gradient(180deg,rgba(0,20,60,.28),rgba(234,243,255,.16))}
+.reg svg.ink{filter:drop-shadow(0 0 2.5px rgba(234,243,255,.35))}
+.h1,.big{text-shadow:0 0 6px rgba(234,243,255,.25)}
+.duoimg{filter:url(#duo)}
+.plate img{width:100%;height:100%;object-fit:cover}
+.scan{position:absolute;top:0;bottom:0;width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 14px 4px rgba(255,140,90,.9)}
+.dimtag{background:rgba(234,243,255,.75)}
+.detail{position:absolute;border-radius:50%;z-index:3;box-shadow:0 0 0 4px var(--bp2)}
+.lay.ai{border-color:var(--red)}
+.proc{position:absolute;z-index:2;border:3px solid var(--line);background:rgba(11,53,108,.92);font:700 24px 'JetBrains Mono';color:var(--line)}
+.ph{font-size:20px;letter-spacing:.08em;padding:14px 18px;border-bottom:3px solid var(--line);height:52px}
+.pq{font:600 italic 19px 'JetBrains Mono';color:var(--soft);padding:16px 18px;border-bottom:2px solid var(--soft);height:64px;white-space:nowrap}
+.step{height:56px;line-height:56px;padding:0 18px;border-bottom:1px solid rgba(234,243,255,.3);white-space:nowrap;letter-spacing:.03em}
+.sn{display:inline-block;width:52px;color:var(--soft)}
+.hand{position:absolute;z-index:5;font:400 38px/1 'Caveat';color:var(--red);transform:rotate(-4deg);white-space:nowrap}
+.rev{position:absolute;border-collapse:collapse;font:700 20px 'JetBrains Mono';color:var(--line);z-index:4;background:rgba(11,53,108,.9)}
+.rev th,.rev td{border:2px solid var(--line);padding:4px 14px;letter-spacing:.06em;text-align:left}
+.rev td.red{color:var(--red)}
+#pen{position:absolute;z-index:40;pointer-events:none;overflow:visible}
+#endblock{position:absolute;left:60px;top:700px;width:960px;z-index:65;display:none;border:4px solid var(--line);outline:2px solid var(--line);outline-offset:8px;background:rgba(11,53,108,.95)}
+#endblock .tbig{font-size:150px;padding:18px 0 10px}
+
+/* ── motion: terminal, doc, pens, captions, HUD, end block ── */
+
+.term{position:absolute;z-index:4;border:3px solid var(--line);background:rgba(11,53,108,.92);padding:22px 28px;font:700 30px/1.7 'JetBrains Mono';color:var(--line)}
+.doc{position:absolute;z-index:2;border:3px solid var(--line);background:rgba(11,53,108,.92)}
+#pens{position:absolute;left:0;top:0;overflow:visible;z-index:40;pointer-events:none}
+.capc{position:absolute;left:540px;top:998px;transform:translate(-50%,-50%);z-index:70;white-space:nowrap;background:var(--line);color:var(--bp2);
+  font:800 54px 'Barlow Condensed';letter-spacing:.04em;padding:6px 30px 8px;box-shadow:0 0 0 4px var(--bp2),0 0 0 6px var(--line);opacity:0;text-transform:uppercase}
+.hudn{position:absolute;left:0;right:0;top:27px;opacity:0;padding:5px 12px;font:800 30px 'Barlow Condensed';color:var(--line);letter-spacing:.04em}
+#hud{width:236px;height:80px}
+#hud .n{display:none}
+#endblock{display:block;opacity:0}
+#endarrow{position:absolute;left:540px;top:930px;width:6px;height:0;background:var(--red);z-index:66;transform:translateX(-50%)}

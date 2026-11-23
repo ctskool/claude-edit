@@ -37,7 +37,7 @@ def setup(root, full_face=False):
     root = Path(root).resolve()
     missing = [n for n in ("metadata.json", "beats.json", "words.json", "assets/face_half.mp4", "assets/voice.m4a") + (("assets/face_full.mp4",) if full_face else ()) if not (root / n).is_file()]
     if missing:
-        raise ValueError(f"{root} is missing {', '.join(missing)}: run the spine and recut-plan first")
+        raise ValueError(f"{root} is missing {', '.join(missing)}: run the spine and write beats.json first (short-build.md, section 3)")
     project = root / "v2" / "editorial"
     project.mkdir(parents=True, exist_ok=True)
     if not (project / "tools_local").exists():
@@ -50,6 +50,12 @@ def setup(root, full_face=False):
     for font in sorted((KIT / "looks").glob("*/fonts/*")):  # every look's fonts, so plan.json "look" can change without a second setup
         if not (project / "assets" / "fonts" / font.name).exists():
             shutil.copy2(font, project / "assets" / "fonts" / font.name)
+    for look_assets in sorted((KIT / "looks").glob("*/assets")):  # and every look's own images (looks/collage/assets/vox), for the same reason. Never over a file the project has
+        for path in sorted(look_assets.rglob("*")):
+            target = project / "assets" / path.relative_to(look_assets)
+            if path.is_file() and not target.exists():
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(path, target)
     shared = root / "shared"
     if shared.is_dir():
         for path in sorted(shared.iterdir()):

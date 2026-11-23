@@ -2,7 +2,7 @@
 
 A new raw's project starts here. Its first build writes `beats.lock.json`, `ownership.json` and `events.json`, so `tools/beat_render/run.py` accepts it. A project with none of those is refused, and nothing falls back to all-shared.
 
-`recut-build.js` uses it. For a real look at the same sources in use, read `work/beat-fixture/v2/editorial` (a 107 s ivory edit). Read it only: its content is another video's.
+`new_project.py` starts a project from it. For a real look at the same sources in use, read `work/beat-fixture/v2/editorial` (a 107 s ivory edit). Read it only: its content is another video's.
 
 ## Start
 
@@ -10,7 +10,7 @@ A new raw's project starts here. Its first build writes `beats.lock.json`, `owne
 python templates/ivory/build_kit/new_project.py <id> [--full-face, only with allow_full_face true]
 ```
 
-It needs `work/<id>/` to hold `metadata.json`, `beats.json`, `words.json`, `assets/face_half.mp4` and `assets/voice.m4a`. It makes `work/<id>/v2/editorial`: a copy of `tools_local/`, `hyperframes.json`, `package.json`, `meta.json`, `CLAUDE.md`, the kit's fonts and GSAP, and hard links to `shared/*` and the face and voice files. `--full-face` also links `face_full.mp4`, only when the run has `allow_full_face` true. A repeat run keeps existing sources and assets and links newly added shared files. Replaced assets need an explicit replacement; Setup never silently overwrites one.
+It needs `work/<id>/` to hold `metadata.json`, `beats.json`, `words.json`, `assets/face_half.mp4` and `assets/voice.m4a`. It makes `work/<id>/v2/editorial`: a copy of `tools_local/`, `hyperframes.json`, `package.json`, `meta.json`, `CLAUDE.md`, the kit's fonts and GSAP, every look's fonts and images, and hard links to `shared/*` and the face and voice files. `--full-face` also links `face_full.mp4`, only when the run has `allow_full_face` true. A repeat run keeps existing sources and assets and links newly added shared files. Replaced assets need an explicit replacement; Setup never silently overwrites one.
 
 HyperFrames stays 0.9.13. `run.py` fails closed on anything else.
 
@@ -18,7 +18,7 @@ HyperFrames stays 0.9.13. `run.py` fails closed on anything else.
 
 | File | You write |
 |---|---|
-| `plan.json` | Everything below. The director writes it |
+| `plan.json` | Everything below. The planning step writes it (`short-build.md`, section 3) |
 | `tools_local/owners.py` | Windows, HUD rows, binds |
 | `tools_local/scenes.py` | Scenes in `build()`, where `# @SCENES` sits |
 | `tools_local/timeline.js` | One block per scene, where `// @BLOCKS` sits |
@@ -41,13 +41,20 @@ Beats touch end to start, the first starts at 0, the last ends on `metadata.json
 
 `cta_start` comes from the first CTA word's start in `words.json`; `cta_start_source` records the word index and quote, or the reason there is no CTA. A beat's `proof_span` covers audible product/demo evidence under `sound.md`, with `proof_span_source` naming the clip and composition interval. Muted screen footage under narration has null with that reason. The content planner writes these in `beats.json`; the director carries them into `plan.json` and derives them from transcript/media only for older content plans. The plan checker verifies both sources. They are never invented as placeholders for sound.
 
-The director owns scene images, only when the run has Codex (`codex` true); without it there are none. Generate missing `shared/scenes/<beat>.png` before the independent plan check and Setup, and append each exact prompt, path and dimensions to `ASSETS.md`. In Codex use the built-in image tool; in Claude Code hand the job to `codex exec`. The builder uses the linked `assets/scenes/` file. If one arrives after Setup, rerun `new_project.py` to link it.
+Scene images exist only when the run has Codex (`codex` true); without it there are none. Generate missing `shared/scenes/<beat>.png` before the self-check and Setup, and append each exact prompt, path and dimensions to `ASSETS.md`. In Codex use the built-in image tool; in Claude Code hand the job to `codex exec`. The builder uses the linked `assets/scenes/` file. If one arrives after Setup, rerun `new_project.py` to link it.
 
 ## Looks
 
 `plan.json` may carry `"look": "<name>"` and `"look_source"`. Without it, or with `"ivory"`, the page is byte for byte what it was before looks existed. With it, `build.py` reads `looks/<name>/`: it appends `look.css` after `style.css`, and swaps each literal in `look.json`'s `remap` wherever a scene or the timeline wrote it (the kit's own helpers carry ivory's clay as a literal). `new_project.py` copies every look's fonts into the project, so the look can change later with no second setup. A look that needs its own element brings a helper: charcoal's ground band is `ground()` in `scenes.py`, described in `looks/charcoal/LOOK.md`.
 
 A new look is a new folder with `look.css`, `look.json`, `fonts/` and a one-page `LOOK.md`. It must not change a layout, a time or a helper's behaviour: those belong to the kit.
+
+A look may also bring two optional things (the collage look does, `looks/collage/LOOK.md`):
+
+- `assets/`: its own images. `new_project.py` copies every look's `assets/` tree into the project's `assets/` (so `looks/collage/assets/vox/x.png` is `assets/vox/x.png` in the page), never over a file the project already has. If the chosen look has a file the project lacks, the build stops and says to rerun `new_project.py`.
+- `motion.js`: a script `build.py` appends at the end of the timeline's function, after every scene block and the shell, just before the two `window.__timelines` lines. It can read `END`, `RUNS`, `WINDOWS`, `tl` and the shell's helpers. It is shell code: it must not name a scene's element id, every position it passes is a number, and a change to it re-renders every beat.
+
+A look with neither builds exactly as before. A project made before 2026-11-16 has its own older `tools_local/build.py`; to use a look with images or a script, copy the kit's over it (`cp templates/ivory/build_kit/tools_local/build.py work/<id>/v2/editorial/tools_local/build.py`) and rerun `new_project.py <id>`.
 
 ## A scene, end to end
 

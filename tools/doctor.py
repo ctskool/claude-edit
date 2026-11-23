@@ -33,6 +33,7 @@ PACKAGES = {
     "torch": ("torch", True),
     "transformers": ('"transformers>=5.13,<6"', True),
     "soundfile": ("soundfile", True),
+    "psutil": ("psutil", True),  # qos_watch.py: keeps a render off the Windows efficiency cores; a no-op without it
     "demucs": ("-e _ext/demucs-lib", True),
     "earshot": ("-e _ext/earshot", True),
 }

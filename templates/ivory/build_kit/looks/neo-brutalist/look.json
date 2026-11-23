@@ -1,0 +1,26 @@
+{
+  "name": "neo-brutalist",
+  "from": "Neo-brutalism: Chase liked a stills-only trial of it on the five-tools short on 2026-11-16 (\"looks solid\", a mock that does not ship) and asked for it as a real look on 2026-11-17. LOOK.md beside this file",
+  "remap": {
+    "#d97757": "#ff5c8a",
+    "#c15f3c": "#d6246e",
+    "#f6e3da": "#ffd9e4",
+    "rgba(217, 119, 87": "rgba(255, 92, 138",
+    "rgba(246, 227, 218": "rgba(255, 217, 228",
+    "#eeeee7": "#fdf3dc",
+    "#d9d6cc": "#111111",
+    "#e4e2da": "#111111",
+    "#1f1e1d": "#111111",
+    "#5e5d59": "#333333",
+    "#8a887f": "#55514a",
+    "#1a1917": "#fdf3dc",
+    "#141312": "#ffffff",
+    "#423f3b": "#111111",
+    "#ebe8e0": "#111111",
+    "#aaa69d": "#333333",
+    "#77736a": "#55514a",
+    "#ff6a3d": "#ff5c8a",
+    "#ff7a50": "#d6246e",
+    "rgba(255, 106, 61": "rgba(255, 92, 138"
+  }
+}

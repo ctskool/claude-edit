@@ -12,8 +12,8 @@ Restate any frame count in seconds, then snap once to the output grid. [Ours]
 - **The spine runs once per raw. Each template owns its assets and edit style.** [Chase]
   Why: facts and the cut must match across versions. Met when: a second template re-runs no transcript, cut or audio step.
 - **A template may override pacing.** [Chase] Today it does so by taking listed trims before graphics, one template per output. [Ours]
-  "Never re-cut from raw" is a proposal waiting on his yes. Why: a blend cannot pass a lock. Met when: the run names one template version and its trims.
-- **Publish 4K60 (2160x3840, 60 fps). Review an MP4 with chat notes. CapCut draft after approve. Finish last.** [Chase]
+  "Never re-cut from raw" is a proposal waiting on his yes. Why: a blend is no one version anyone can check. Met when: the run names one template version and its trims.
+- **Publish 4K. Review, then finish last.** [Chase] Today that is 4K30 (2160x3840, 30 fps), with 4K60 only when he asks; review in the player, with notes left at exact seconds; no CapCut draft, because CapCut is not wired. [Ours, 2026-11-11: this line read "Publish 4K60 ... Review an MP4 with chat notes. CapCut draft after approve." until the flow changed]
   Why: he cannot review what was not rendered, and notes must stay cheap. Met when: no notes round runs through CapCut.
 
 ## Build path, today's tools [Ours]
@@ -23,7 +23,7 @@ Ivory is `editorial` to the tools: spec `styles/editorial/STYLE.md`, flag `--pac
 3. Picture preview: `python tools/deliver.py work/<id>/v2/editorial <id>_editorial_<vN> --mode picture-preview`. Voice only; never two renders at once.
 4. After picture approval: `tools/workflows/next/sound-cues.js` writes `sound.json`, then `deliver.py --mode final --picture <approved-render>` reuses the bound picture. Missing or stale sheets stop finals. Cue-only notes never call HyperFrames.
 Preview: 1080x1920 at 30 fps. `deliver.py` also accepts `--resolution portrait-4k --fps 60`; preparing the 4K sources is still a hand route, proven only on 3 s, slow and unmeasured on a whole short.
-Stand-ins until built: `work/<id>/raw/corrections.json` (wrong -> right), hand-written `notes.jsonl`, `RUN.md`, `LOCK.md`, and a `raw/cut_words.json` index as word ID.
+Stand-ins until built: `work/<id>/raw/corrections.json` (wrong -> right), hand-written `notes.jsonl`, `RUN.md`, and a `raw/cut_words.json` index as word ID.
 
 ## Non-negotiables
 - **Real footage only.** Crop, scale, move, mask or matte his real pixels. Never generate, stretch, mirror-tile, inpaint or extend him or his background. [Chase]
@@ -55,7 +55,7 @@ Stand-ins until built: `work/<id>/raw/corrections.json` (wrong -> right), hand-w
 - Proof: `work/1030-2-popout/POPOUT.md`. Chase picked the size from four mocks (variant 2).
 
 ## Warn only, until Chase rules
-Active but untested. A miss is logged as a warning and never resets a lock, unless the defect list below names it. [Ours]
+Active but untested. A miss is logged as a warning, unless the defect list below names it. [Ours]
 - **Platform bands.** No key content in the top 200 px or bottom 300 px, so y 200-1620. His body may run past it. (untested on ivory)
   Why: platform UI covers those bands. Met when: ink above y 200 or below y 1620 is logged. STYLE's safe area stays the hard rule.
 - **Face and caption stay clear.** No ink on his face, hair or the caption band. The graphic gives way first. No room in a tight take: flag it. (untested on ivory)
@@ -81,9 +81,9 @@ Only these are defects:
 - Coverage: a request line or template requirement with no evidence.
 
 ## Review contract
-Runs before Chase sees anything: checks first, then one round, defects only. A declared lock attempt also shows him the untouched first render. [Ours]
+Runs before Chase sees anything: checks first, then one round, defects only. [Ours]
 - **Required checks end PASS, FAIL or UNVERIFIED. Missing evidence is never green. FAIL blocks handoff.** [Ours]
-  A deviation is a logged waiver, never a sentence in a report. Lock runs allow none. (untested on ivory)
+  A deviation is a logged waiver, never a sentence in a report. (untested on ivory)
   Why: green checks can give false confidence. Met when: each result is tied to its inputs and the exact file.
   - Black frames, audio stream, loudness: `tools/gates.py`. Read its findings, not its verdict.
     `black`, `audio`, `loudness` and `true-peak` count. `frozen-band`, `hold`, `freeze` and `layout-run` only warn, and need a 1080x1920 file.
@@ -96,6 +96,7 @@ Runs before Chase sees anything: checks first, then one round, defects only. A d
 - **One discovery round, never a second. Re-checking a repair is not a round.** Unfixed findings go open in the handoff. (untested on ivory)
   Why: a repeat round oscillates. Chase's taste rounds are a separate loop and stay unlimited. Met when: the run logs one round.
 - **Fresh eyes: two reviewers on contact sheets. One Claude, and one Sol through `codex exec` when Codex is installed, otherwise a second Claude with a different reading order.** [Ours] (untested on ivory)
+  Not what the skill runs now: since 2026-11-10 a short gets one fresh reviewer (`short-review.md`, section 5). Two reviewers and the skeptic below were the multi-agent pipeline's round, archived 2026-11-12. [Ours]
   Sol, prompt on stdin: `codex exec -m gpt-6.1-sol --sandbox read-only --skip-git-repo-check -i <sheet> -`. Fallback model: gpt-5.6-sol.
   `finish.py`'s sheet stops at 48 s, so cut extra sheets past that. Sheets cover composition and copy, never audio. Step cuts and motion on the render.
   Why: the builder grading its own work ships flaws. Met when: each reviewer signs off only what it saw, and an unseen stretch reports UNVERIFIED.
@@ -122,11 +123,6 @@ Short enough to read before watching. Claim only evidence gathered: what changed
   Why: the final state wins, and an early choice he corrected is an anti-pattern. Met when: each new rule cites its note.
 - **Never a rule:** per-shoot measurements (face, seam, framing, fills), brands, keywords, delivery names, a device seen once. (untested on ivory)
   Why: counts, timestamps and shares are outcomes, never targets. Met when: each job re-measures its own shoot.
-- **A lock names one exact template and spine version, frozen before raw 1, over three new raws in a stated scope.** [Chase] [Ours]
-  Why: it is scoped evidence, not a promise. Met when: `LOCK.md` records raws, versions, date and scope.
-- **On a declared lock attempt, a raw counts only on its untouched first render. Repairs wait for his verdict.** [Ours]
-  An adopted output change restarts at zero. Per-raw content, measurements and assets are not output changes. [Ours]
-  Met when: required checks are green with no waiver or UNVERIFIED, zero cut and defect notes, publishable yes, hand status closed.
 
 ## Trial ideas, off until Chase says yes
 - A handoff part listing what no reviewer was shown, opening with "Nobody listened to the audio". (untested on ivory)

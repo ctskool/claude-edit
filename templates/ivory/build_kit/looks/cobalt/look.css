@@ -1,0 +1,79 @@
+
+      /* ===== the kit's own rules that write a literal colour, recoloured ===== */
+      .tagx { position: absolute; height: 52px; padding: 0 18px; display: flex; align-items: center; white-space: nowrap; background: var(--clay); color: #0a1650;
+        font-family: var(--mono); font-weight: 600; font-size: 24px; letter-spacing: .08em; line-height: 1; }
+      .nbox { position: absolute; background: var(--clay); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 600;
+        letter-spacing: -0.05em; line-height: 1; color: #0a1650; }
+      .stamp { position: absolute; background: var(--clay); color: #0a1650; display: flex; align-items: center; justify-content: center; white-space: nowrap;
+        font-family: var(--serif); font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+      .doc { position: absolute; background: #f5f7ff; }
+      .doc .dh { position: absolute; left: 18px; top: 18px; font-family: var(--mono); font-weight: 600; font-size: 22px; line-height: 1; color: #1534b0; white-space: nowrap; }
+      .ctag { position: absolute; left: 46px; top: 6px; height: 34px; padding: 0 10px; display: flex; align-items: center; background: var(--clay); color: #0a1650;
+        font-family: var(--mono); font-weight: 600; font-size: 18px; letter-spacing: .08em; white-space: nowrap; }
+      .trr b.x { color: #0a1650; background: var(--clay); padding: 0 4px; }
+      .frm { position: absolute; background: #f5f7ff; overflow: hidden; }
+      .frm .fh { left: 22px; top: 26px; font-family: var(--serif); font-weight: 600; font-size: 52px; color: #1534b0; }
+      .frm .fn { right: 16px; top: 136px; font-family: var(--mono); font-size: 20px; color: #7d90e0; }
+      .tbk { position: absolute; background: #2a2826; box-shadow: inset 0 0 0 1px var(--bd); display: flex; align-items: center; justify-content: center;
+        font-family: var(--mono); font-weight: 600; font-size: 18px; color: #0a1650; overflow: hidden; }
+      .tcp { position: absolute; top: 0; height: 22px; background: #f5f7ff; opacity: .55; }
+      .phd { position: absolute; width: 4px; background: #f5f7ff; }
+      .son span { color: #0a1650; }
+      .rbo { position: absolute; inset: 0; background: var(--clay); color: #0a1650; font-style: normal; display: flex; align-items: center; justify-content: center; opacity: 0; }
+
+      /* ===== look: cobalt (charcoal recoloured). Laid over the kit's style.css by build.py when plan.json has "look": "charcoal" ===== */
+      @font-face { font-family: "Geist Mono"; font-weight: 400; src: url("assets/fonts/geist-mono-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Geist Mono"; font-weight: 500; src: url("assets/fonts/geist-mono-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Geist Mono"; font-weight: 600; src: url("assets/fonts/geist-mono-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Hanken Grotesk"; font-weight: 600; src: url("assets/fonts/hanken-grotesk-latin-600-normal.woff2") format("woff2"); }
+      :root {
+        --iv: #1534b0; --card: #0d2280; --bd: #4a64d6; --ink: #f5f7ff; --sec: #bcc7f5; --mut: #bcc7f5;
+        --clay: #ffd23f; --clayd: #ffdb5c; --clayt: rgba(255, 210, 63, .14); --dark: #0a1650; --hair: #4a64d6;
+        --mono: "Geist Mono", monospace; --serif: "Hanken Grotesk", sans-serif; --sans: "Geist Mono", monospace;
+      }
+      #grid { background-image: none; }
+      /* square corners everywhere, inline radii included */
+      .pc, .plate, .ol, .itile, .pillw, .cmd, .seg, .gap, .strike, .sw, .door, .node, .chipg, .stage, .skel { border-radius: 0 !important; }
+      svg.abs > rect { rx: 0; ry: 0; }
+      .pc { border: none; background: var(--card); box-shadow: inset 0 0 0 1.5px var(--bd); }
+      .plate { background: #fff; box-shadow: 0 0 0 1.5px var(--bd); }
+      .plate.sq { box-shadow: none; background: var(--iv); }
+      .ol { background: rgba(255, 210, 63, .12); }
+      .itile svg { color: #0a1650; }
+      .pillw, .chipg, .door, .node { background: var(--card); border: none; box-shadow: inset 0 0 0 1.5px var(--bd); color: var(--ink); }
+      .serif { font-weight: 600; letter-spacing: -0.035em; }
+      .serif .it { font-style: normal; color: var(--clayd); }
+      .num { font-family: var(--serif); font-weight: 600; letter-spacing: -0.04em; }
+      .num.cl { font-style: normal; color: var(--clayd); }
+      .cmd { box-shadow: inset 0 0 0 1.5px var(--bd); }
+      .sw { background: var(--iv); border: 1.5px solid var(--bd); }
+      /* caption chip: light, so it reads on the charcoal panel and on his footage. The accent is an orange highlight block */
+      .chip .in, .chipx { border-radius: 0; background: #f5f7ff; color: #1534b0; font-family: var(--mono); font-weight: 600; }
+      .chip .in b { font-weight: 600; color: #0a1650; background: #ffd23f; padding: 6px 12px; margin: 0 -2px; }
+      /* the running counter: a row of square boxes that fill orange */
+      #strip-body { background: var(--card); border-radius: 0; box-shadow: inset 0 0 0 1.5px var(--bd); }
+      #hm-mark { border-radius: 0; background: #ffd23f; }
+      #hm-mark i { display: none; }
+      #lbl { font-family: var(--mono); font-weight: 500; color: #bcc7f5; }
+      #count { font-family: var(--mono); color: #f5f7ff; }
+      #count #cn0 { color: #7d90e0; }
+      .dot { border-radius: 0; }
+      #dot-gray { background: #4a64d6; }
+      .sock { border-radius: 0; border: 1.5px solid var(--bd); background: none; }
+      .slot, .gnd, .plug .neck { display: none; }
+      .plugd { background: none; }
+      .plug .body { left: -11px; top: 22px; width: 94px; height: 86px; border-radius: 0; background: #ffd23f; box-shadow: none; }
+      .plug .tile { top: 40px; background: none; border-radius: 0; }
+      .plug .tile svg { color: #0a1650; }
+      .plug .tile svg.mk { fill: #0a1650; }
+      .ring { border-radius: 0; }
+      /* the ASCII ground band, drawn by scenes.ground() */
+      .gclip { position: absolute; left: 0; width: 1080px; overflow: hidden; }
+      .gr { position: absolute; left: 0; white-space: pre; font: 500 22px/24px "Geist Mono", monospace; color: #7d90e0; }
+
+      /* ===== cobalt: the caption chip is deep navy with white text, in Newsreader (a serif); the accent word is a yellow block ===== */
+      .chip .in, .chipx { font-family: "Newsreader", serif; font-weight: 500; letter-spacing: 0; }
+      .chip .in b { font-weight: 500; background: #ffd23f; color: #0a1650; }
+
+      .frm { background: var(--card); box-shadow: inset 0 0 0 1.5px var(--bd); }
+      .frm .fh { color: var(--ink); }

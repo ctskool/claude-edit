@@ -3,13 +3,19 @@
 Usage (all files land in <raw_dir>, e.g. work/<id>/raw):
   python rawcut.py session    <raw_dir> <take1.mkv> <take2.mkv> ...   # stitch takes into one session timeline + audio
   python rawcut.py transcribe <raw_dir> [--model large-v3]            # words.json, words.txt, script + hints to choose takes
+  python rawcut.py move       <raw_dir> --from A --to B --before T    # a block filmed out of place: session seconds A-B go to T
   (write <raw_dir>/drops.json yourself: {"words": [[i, j], ...], "secs": [[a, b], ...]})
   python rawcut.py cut        <raw_dir> [--gap 0.12] [--pad-out 0.10] [--pad-in 0.08] [--min-cut 0.3]
   python rawcut.py verify     <raw_dir>                              # re-transcribes the edited audio and diffs it
-  python rawcut.py render     <raw_dir>                              # cut.mp4 at source res/fps (NVENC), edit audio
+  python rawcut.py render     <raw_dir> [--draft] [--low]            # cut.mp4 at source res/fps (NVENC), edit audio; in cached pieces (_pieces)
   python rawcut.py times      <raw_dir>                              # every join on the cut timeline, BIG = visible jump
 
 Then: python prep_source.py <raw_dir>/cut.mp4 work/<id> --face-top 0.52   (raw OBS split: seam at 51.9%)
+
+His ear on the cut (tools/cut_review): after `cut`, `python tools/cut_review/server.py <raw_dir>` opens a page where he
+listens and moves joins. Approve there rewrites edl.json ("reviewed": true) and runs `render`. A later `cut` writes a
+fresh edl.json without his changes; `render` then refuses until `python tools/cut_review/core.py <raw_dir>` (or the
+page) has carried them onto it, or --ignore-review is passed.
 
 Camera files (OBS Source Record filter on the camera, named CAMERA-<YYYY-MM-DD hh-mm-ss>.mkv next to the take): `session`
 pairs each take with the CAMERA file started within 5 s of it, measures the frame offset by matching face-cam motion in the
@@ -32,11 +38,13 @@ always line up. A keep never spans two files.
 """
 import argparse
 import difflib
+import hashlib
 import json
 import os
 import re
 import subprocess
 import sys
+import time
 import wave
 from concurrent.futures import ThreadPoolExecutor
 
@@ -212,6 +220,8 @@ def session(a):
         # -ss counts from the container start (OBS: the audio, ~21 ms before the first video frame)
         files.append({"path": f, "frames": n, "start_frame": frames0, "start": round(frames0 / fps, 3), "dur": round(n / fps, 3),
                       "seek_off": round(float(v.get("start_time", 0)) - fmt0, 6)})
+        if a.pic_delay:
+            files[-1]["pic_delay"] = a.pic_delay
         print(f"take {len(files):2d}  {os.path.basename(f)}  {n / fps:7.2f}s  at {frames0 / fps:7.2f}s")
         cam = None if a.no_camera else find_camera(f)
         if cam:
@@ -236,6 +246,18 @@ def session(a):
     print(f"session: {len(files)} takes, {frames0 / fps0:.1f}s at {fps0:g} fps, {size0[0]}x{size0[1]}")
 
 
+def sync(a):
+    """Lip sync: the picture can run behind the voice (camera capture delay; 1116-yogurt measured ~85 ms on hard b/p
+    sounds, 2026-11-16). Stored per take as pic_delay; render takes every frame that much later, the cut review page
+    shows the same, and word times do not move. Re-render after changing it."""
+    S = load(a.dir, "session.json")
+    for k, f in enumerate(S["files"], 1):
+        if not a.take or k in a.take:
+            f["pic_delay"] = round(a.pic_delay, 4)
+            print(f"take {k}: picture {a.pic_delay * 1000:+.0f} ms behind the voice  ({os.path.basename(f['path'])})")
+    save(a.dir, "session.json", S)
+
+
 def file_of(S, t):
     return next((k for k, f in enumerate(S["files"]) if f["start"] <= t < f["start"] + f["dur"]), len(S["files"]) - 1)
 
@@ -250,14 +272,7 @@ def transcribe(a):
         words = load(a.dir, "words.json")
     else:
         print("!!! alignment failed; keeping Whisper's word times", file=sys.stderr)
-    with open(os.path.join(a.dir, "words.txt"), "w", encoding="utf-8") as f:
-        cur = -1
-        for i, (t, s, e) in enumerate(words):
-            k = file_of(S, s)
-            if k != cur:
-                cur = k; f.write(f"----- take {k + 1}: {os.path.basename(S['files'][k]['path'])} (starts {S['files'][k]['start']:.2f}s)\n")
-            gap = s - words[i - 1][2] if i else s
-            f.write(f"{i:5d}  {s:8.2f} {e:8.2f}  {t}{f'    <- {gap:.1f}s pause' if gap > 0.6 else ''}\n")
+    write_words_txt(a.dir, S, words)
     print(f"{len(words)} words over {len(S['files'])} takes. Script ([word index, session time] per line):\n")
     start, cur = 0, -1
     for i, (t, s, e) in enumerate(words):
@@ -336,6 +351,63 @@ def runons(rms, words, keeps_s, floor=-40.0, min_run=0.15, dip=8):
             if u >= min_run:
                 out.append({"join": k, "side": side, "t": round(p if side == "out" else q, 3), "secs": round(u, 2)})
     return out
+
+
+def write_words_txt(d, S, words):
+    with open(os.path.join(d, "words.txt"), "w", encoding="utf-8") as f:
+        cur = -1
+        for i, (t, s, e) in enumerate(w[:3] for w in words):
+            k = file_of(S, s)
+            if k != cur:
+                cur = k; f.write(f"----- take {k + 1}: {os.path.basename(S['files'][k]['path'])} (starts {S['files'][k]['start']:.2f}s)\n")
+            gap = s - words[i - 1][2] if i else s
+            f.write(f"{i:5d}  {s:8.2f} {e:8.2f}  {t}{f'    <- {gap:.1f}s pause' if gap > 0.6 else ''}\n")
+
+
+def move(a):
+    """Move session seconds [--from, --to) so they start at --before: a block he filmed out of place (a sponsor read
+    recorded at the end). The session becomes the same files in pieces, in the new order: session.json gets one entry per
+    piece ("first" = the piece's first frame inside its file), a48/a16 and words.json are rearranged to match, and every
+    later step (cut, the review page, render) works on the new order with no other change. Run it after `transcribe`
+    and before writing drops.json: word indexes change. The originals are kept as *.pre-move.*"""
+    S = load(a.dir, "session.json"); FPS = S["fps"]; words = load(a.dir, "words.json")
+    A, B, T = (int(round(x * FPS)) for x in (a.frm, a.to, a.before))
+    if not (0 <= A < B <= S["frames"]) or A < T < B or not 0 <= T <= S["frames"]:
+        sys.exit("need 0 <= from < to <= session length, and --before outside the moved range")
+    cuts = sorted({A, B, T}); pieces = []                             # (old start frame, frames, file entry)
+    for f in S["files"]:
+        s0, e0 = f["start_frame"], f["start_frame"] + f["frames"]
+        edges = [s0] + [c for c in cuts if s0 < c < e0] + [e0]
+        pieces += [(u, v - u, f) for u, v in zip(edges, edges[1:])]
+    moved = [p for p in pieces if A <= p[0] < B]; rest = [p for p in pieces if not A <= p[0] < B]
+    k = next((i for i, p in enumerate(rest) if p[0] >= T), len(rest))
+    order = rest[:k] + moved + rest[k:]
+    for n in ("session.json", "words.json", "a48.wav", "a16.wav"):
+        bak = os.path.join(a.dir, n.replace(".", ".pre-move.", 1))
+        if not os.path.exists(bak):
+            os.replace(os.path.join(a.dir, n), bak)
+    files, shift, acc = [], [], 0
+    for old, n, f in order:
+        g = dict(f); g.update(first=f.get("first", 0) + old - f["start_frame"], file_frames=f.get("file_frames", f["frames"]),
+                              frames=n, start_frame=acc, start=round(acc / FPS, 3), dur=round(n / FPS, 3))
+        files.append(g); shift.append((old, old + n, acc - old)); acc += n
+    for name, sr in (("a48.wav", SR), ("a16.wav", 16000)):
+        w = wave.open(os.path.join(a.dir, name.replace(".", ".pre-move.", 1))); ch = w.getnchannels()
+        x = np.frombuffer(w.readframes(w.getnframes()), np.int16).reshape(-1, ch); w.close()
+        y = np.concatenate([x[int(round(old / FPS * sr)): int(round((old + n) / FPS * sr))] for old, n, _ in order])
+        o = wave.open(os.path.join(a.dir, name), "wb"); o.setnchannels(ch); o.setsampwidth(2); o.setframerate(sr)
+        o.writeframes(y.tobytes()); o.close()
+    out = []
+    for w in load(a.dir, "words.pre-move.json"):
+        m = (w[1] + w[2]) / 2 * FPS
+        d = next((d for u, v, d in shift if u <= m < v), shift[-1][2]) / FPS
+        out.append([w[0], round(w[1] + d, 3), round(w[2] + d, 3)] + list(w[3:]))
+    out.sort(key=lambda w: w[1])
+    S2 = dict(S, files=files); save(a.dir, "session.json", S2); save(a.dir, "words.json", out); write_words_txt(a.dir, S2, out)
+    print(f"moved {a.frm:.2f}-{a.to:.2f}s ({(B - A) / FPS:.1f}s) to start at {next(f['start'] for f, p in zip(files, order) if p[0] == A):.2f}s; "
+          f"{len(files)} pieces. Word indexes changed: read words.txt again before drops.json.")
+    for i, f in enumerate(files):
+        print(f"  piece {i + 1}: session {f['start']:8.2f}s, {f['dur']:8.2f}s long, from {f['first'] / FPS:8.2f}s of {os.path.basename(f['path'])}")
 
 
 def cut(a):
@@ -544,67 +616,125 @@ def verify(a):
     print(f"{issues} issue(s); edit is {dur:.1f}s, {len(V)} words\n\nHEARD: " + " ".join(y[0] for y in V))
 
 
-def render(a):
-    S = load(a.dir, "session.json"); E = load(a.dir, "edl.json"); FPS = S["fps"]
-    tmp = os.path.join(a.dir, "_segs"); os.makedirs(tmp, exist_ok=True)
-    A48, _ = read_wav(os.path.join(a.dir, "a48.wav"))
-    write_wav(os.path.join(tmp, "edit.wav"), edit_audio(A48, E["keeps"], FPS), SR)
-    want = sum(e - s for s, e in E["keeps"])
+ENC = "nvenc-p6-cq17-v1"            # part of every piece's name: change it when the encode settings below change
 
-    def segment(path, seek_off, lf, n, total, out):
-        """n frames from local frame lf of path; frames before 0 / past `total` repeat the first / last frame."""
+
+def render(a):
+    """cut.mp4 (his screen, with the cut's sound) and cam_cut.mp4 (the clean camera) from edl.json's keeps.
+
+    Each keep is rendered as pieces of 20 s at most, on a fixed grid of the take's own frames, and every piece is kept
+    in <dir>/_pieces under a name made from what it shows. A second render re-uses every piece whose frames did not
+    change, so after he moves a join in the cut review page only the piece at that edge is made again. --draft renders
+    the machine's cut before he has approved it (the page starts one while he listens), so most pieces already exist
+    when he approves and the graphics can be planned against real files. _pieces can be deleted at any time."""
+    S = load(a.dir, "session.json"); E = load(a.dir, "edl.json"); FPS = S["fps"]
+    R = load(a.dir, "cut_review.json")
+    if R and not E.get("reviewed") and R.get("keeps") != R.get("auto") and not (a.ignore_review or a.draft):
+        sys.exit("This cut was made after Chase moved joins by ear in the cut review page, and his changes are not in it.\n"
+                 f"Carry them over first: python tools/cut_review/core.py {a.dir}   (or reopen the page and let him approve).\n"
+                 "--ignore-review renders the machine's cut as it is.")
+    if a.low and os.name == "nt":                                     # he is listening in the page: stay out of its way
+        import ctypes
+        ctypes.windll.kernel32.SetPriorityClass(ctypes.windll.kernel32.GetCurrentProcess(), 0x00004000)   # below normal, inherited
+    t0 = time.time()
+    pdir = os.path.join(a.dir, "_pieces"); os.makedirs(pdir, exist_ok=True)
+    for f in os.listdir(pdir):                                        # what a stopped render left half written
+        if f.endswith(".part.mp4") or f in ("list.txt", "edit.wav"):
+            os.remove(os.path.join(pdir, f))
+    A48, _ = read_wav(os.path.join(a.dir, "a48.wav"))
+    write_wav(os.path.join(pdir, "edit.wav"), edit_audio(A48, E["keeps"], FPS), SR)
+    want = sum(e - s for s, e in E["keeps"]); G = int(round(20 * FPS)); used = set(); count = {"made": 0, "reused": 0}
+
+    def piece(kind, path, seek_off, lf, n, total):
+        """(command, file) for n frames from local frame lf of path; frames before 0 / past `total` repeat the first / last frame."""
+        st = os.stat(path)
+        key = hashlib.sha1(json.dumps([ENC, kind, os.path.abspath(path), st.st_size, int(st.st_mtime), seek_off, lf, n, total, FPS]).encode()).hexdigest()[:16]
+        out = os.path.join(pdir, f"{kind}-{key}.mp4")
         pre, post = max(0, -lf), max(0, lf + n - total)
         pad = f"tpad=start={pre}:start_mode=clone:stop={post}:stop_mode=clone," if pre or post else ""
-        return ["ffmpeg", "-v", "error", "-y", "-hwaccel", "cuda", "-ss", f"{(max(lf, 0) - 0.5) / FPS + seek_off:.6f}", "-i", path,
-                "-frames:v", str(n), "-an", "-c:v", "h264_nvenc", "-preset", "p6", "-rc", "vbr", "-cq", "17",
-                "-b:v", "0", "-maxrate", "120M", "-bufsize", "240M", "-pix_fmt", "yuv420p",
-                "-vf", f"{pad}setpts=N/({FPS:g}*TB)", "-fps_mode", "passthrough", "-video_track_timescale", "60000", out]
+        return (["ffmpeg", "-v", "error", "-y", "-hwaccel", "cuda", "-ss", f"{(max(lf, 0) - 0.5) / FPS + seek_off:.6f}", "-i", path,
+                 "-frames:v", str(n), "-an", "-c:v", "h264_nvenc", "-preset", "p6", "-rc", "vbr", "-cq", "17",
+                 "-b:v", "0", "-maxrate", "120M", "-bufsize", "240M", "-pix_fmt", "yuv420p",
+                 "-vf", f"{pad}setpts=N/({FPS:g}*TB)", "-fps_mode", "passthrough", "-video_track_timescale", "60000",
+                 out[:-4] + ".part.mp4"], out)
 
-    def go(cmd):
-        r = subprocess.run(cmd, capture_output=True, text=True)
-        if r.returncode:  # no CUDA decode or NVENC encode -> software decode and libx264
-            fallback = [c for c in cmd if c not in ("-hwaccel", "cuda")]
-            start = fallback.index("-c:v")
-            end = fallback.index("-vf", start)
-            fallback[start:end] = ["-c:v", "libx264", "-preset", "medium", "-crf", "17", "-pix_fmt", "yuv420p"]
-            r = subprocess.run(fallback, capture_output=True, text=True)
-        return r.returncode, r.stderr[-300:]
+    def go(job):
+        cmd, out = job
+        if os.path.isfile(out) and os.path.getsize(out) > 0:
+            count["reused"] += 1; return 0, ""
+        # CUDA decode sometimes hangs for good on a segment (0-byte file, ffmpeg alive, seen 2026-11-11 on 4K60 camera
+        # files): give it four times the segment's length, 90 s at least, then kill it and decode in software.
+        n = int(cmd[cmd.index("-frames:v") + 1])
+        try:
+            rc = subprocess.run(cmd, capture_output=True, text=True, timeout=max(90, 4 * n / FPS)).returncode
+        except subprocess.TimeoutExpired:
+            print(f"  CUDA decode hung on {os.path.basename(out)}; software decode", flush=True)
+            rc = 1
+        if rc:                                                        # no CUDA decode, or it hung -> software decode
+            soft = [c for c in cmd if c not in ("-hwaccel", "cuda")]
+            r = subprocess.run(soft, capture_output=True, text=True)
+            if r.returncode:                                          # no NVENC either (no NVIDIA card, a Mac): libx264
+                start = soft.index("-c:v"); end = soft.index("-vf", start)
+                soft[start:end] = ["-c:v", "libx264", "-preset", "medium", "-crf", "17", "-pix_fmt", "yuv420p"]
+                r = subprocess.run(soft, capture_output=True, text=True)
+            if r.returncode:
+                return r.returncode, r.stderr[-300:]
+        os.replace(cmd[-1], out); count["made"] += 1                  # a piece only gets its name once it is whole
+        return 0, ""
 
     def build(name, jobs, audio):
-        with ThreadPoolExecutor(4) as ex:
-            for k, (rc, err) in enumerate(ex.map(go, [j for j, _ in jobs])):
+        with ThreadPoolExecutor(2 if a.low else 4) as ex:
+            for k, (rc, err) in enumerate(ex.map(go, jobs)):
                 if rc:
-                    sys.exit(f"{name} segment {k} failed: {err}")
-        lst = os.path.join(tmp, "list.txt")
+                    sys.exit(f"{name} piece {k} failed: {err}")
+        used.update(os.path.basename(p) for _, p in jobs)
+        lst = os.path.join(pdir, "list.txt")
         with open(lst, "w") as L:
-            L.writelines(f"file '{os.path.basename(p)}'\n" for _, p in jobs)
-        out = os.path.join(a.dir, name)
-        aud = ["-i", os.path.join(tmp, "edit.wav"), "-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "320k"] if audio else ["-map", "0:v"]
+            # each piece's exact length is written out: left to the files' own durations, the joined timestamps slip a
+            # little at some joins (39 ms over 230 pieces, measured 2026-11-12)
+            L.writelines(f"file '{os.path.basename(p)}'\nduration {int(c[c.index('-frames:v') + 1]) / FPS:.6f}\n" for c, p in jobs)
+        out = os.path.join(a.dir, name); new = out[:-4] + ".new.mp4"
+        aud = ["-i", os.path.join(pdir, "edit.wav"), "-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "320k"] if audio else ["-map", "0:v"]
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst, *aud, "-c:v", "copy",
-                        "-movflags", "+faststart", out], check=True)
+                        "-movflags", "+faststart", new], check=True)
+        for k in range(360):                                          # the draft may still be open in a tool that reads it
+            try:
+                os.replace(new, out); break
+            except PermissionError:
+                if k == 0:
+                    print(f"  {name} is open in another program (a tool reading the draft?); waiting for it", flush=True)
+                time.sleep(5)
+        else:
+            sys.exit(f"{out} stayed open for 30 minutes; the new cut is in {new}")
         got = int(ffprobe(out, "-select_streams", "v:0", "-count_packets", "-show_entries", "stream=nb_read_packets")["streams"][0]["nb_read_packets"])
-        print(f"wrote {out}: {got} frames ({got / FPS:.2f}s), expected {want}" + ("" if got == want else "  <-- FRAME COUNT MISMATCH"))
-        for _, p in jobs:
-            os.remove(p)
+        print(f"wrote {out}: {got} frames ({got / FPS:.2f}s), expected {want}" + ("" if got == want else "  <-- FRAME COUNT MISMATCH"), flush=True)
 
     take = lambda s: next(f for f in reversed(S["files"]) if f["start_frame"] <= s)
-    jobs = []
-    for k, (s, e) in enumerate(E["keeps"]):
-        f = take(s); p = os.path.join(tmp, f"s{k:04d}.mp4")
-        jobs.append((segment(f["path"], f.get("seek_off", 0), s - f["start_frame"], e - s, f["frames"], p), p))
-    build("cut.mp4", jobs, True)
 
-    if all("camera" in take(s) for s, _ in E["keeps"]):              # clean camera on the same frames (lag per take)
-        jobs = []
-        for k, (s, e) in enumerate(E["keeps"]):
-            c = take(s)["camera"]; p = os.path.join(tmp, f"c{k:04d}.mp4")
-            jobs.append((segment(c["path"], c["seek_off"], s - take(s)["start_frame"] - c["lag"], e - s, c["frames"], p), p))
-        build("cam_cut.mp4", jobs, False)
+    def parts(s, e):
+        """A keep as (start, end) pieces, divided where the take's own frame number is a multiple of G."""
+        f = take(s); off = f["start_frame"] - f.get("first", 0)
+        marks = [s] + list(range(((s - off) // G + 1) * G + off, e, G)) + [e]
+        return [(x, y, f) for x, y in zip(marks, marks[1:])]
+
+    P = [q for s, e in E["keeps"] for q in parts(s, e)]
+    # pic_delay (s): how far the picture runs behind the voice in this take (camera capture delay; see `sync`).
+    # The words stay on the sound's clock; each frame is taken that much later in the file, so lips meet the sound.
+    build("cut.mp4", [piece("s", f["path"], f.get("seek_off", 0) + f.get("pic_delay", 0), x - f["start_frame"] + f.get("first", 0), y - x,
+                            f.get("file_frames", f["frames"])) for x, y, f in P], True)
+
+    if all("camera" in f for _, _, f in P):                          # clean camera on the same frames (lag per take)
+        build("cam_cut.mp4", [piece("c", f["camera"]["path"], f["camera"]["seek_off"] + f.get("pic_delay", 0),
+                                    x - f["start_frame"] + f.get("first", 0) - f["camera"]["lag"], y - x, f["camera"]["frames"])
+                              for x, y, f in P], False)
     elif any("camera" in f for f in S["files"]):
         print("NOTE some kept takes have no CAMERA file: cam_cut.mp4 not written (face crops will come from cut.mp4)")
-    for f in os.listdir(tmp):
-        os.remove(os.path.join(tmp, f))
-    os.rmdir(tmp)
+    for f in os.listdir(pdir):                                        # pieces this cut does not use, and the scratch files
+        if f not in used:
+            os.remove(os.path.join(pdir, f))
+    save(a.dir, "rendered.json", {"keeps": E["keeps"], "dur": E.get("dur"), "reviewed": bool(E.get("reviewed")), "draft": bool(a.draft)})
+    print(f"{'DRAFT of the machine cut, not yet approved. ' if a.draft and not E.get('reviewed') else ''}"
+          f"pieces: {count['made']} rendered, {count['reused']} re-used, {time.time() - t0:.0f} s", flush=True)
 
 
 def times(a):
@@ -623,6 +753,11 @@ def main():
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("session"); p.add_argument("dir"); p.add_argument("files", nargs="+")
     p.add_argument("--no-camera", action="store_true", help="ignore CAMERA-* Source Record files")
+    p.add_argument("--pic-delay", type=float, default=0.0, help="seconds the picture runs behind the voice (see `sync`)")
+    p = sub.add_parser("sync", help="set how far the picture runs behind the voice, per take, on an existing session")
+    p.add_argument("dir"); p.add_argument("--pic-delay", type=float, required=True,
+                                          help="seconds, measured on a hard b/p: lips part this long after the sound (2026-11-16: 0.083)")
+    p.add_argument("--take", type=int, nargs="*", help="take numbers from 1 (default: all)")
     for name in ("transcribe", "verify"):
         p = sub.add_parser(name); p.add_argument("dir")
         p.add_argument("--model", default="large-v3" if name == "transcribe" else "large-v3-turbo")
@@ -631,10 +766,17 @@ def main():
                                                                      help="air kept after a word before a cut (lets the sentence land)")
     p.add_argument("--pad-in", type=float, default=0.08, help="air kept before a word after a cut (a join is ~0.2 s of silence)")
     p.add_argument("--min-cut", type=float, default=0.3, help="leave pauses/breaths shorter than this uncut (0.06 = pack's tight cut)")
+    p = sub.add_parser("move"); p.add_argument("dir"); p.add_argument("--from", dest="frm", type=float, required=True)
+    p.add_argument("--to", type=float, required=True); p.add_argument("--before", type=float, required=True)
     for name in ("render", "times"):
         p = sub.add_parser(name); p.add_argument("dir")
+        if name == "render":
+            p.add_argument("--ignore-review", action="store_true", help="render even though his hand-set joins are not in edl.json")
+            p.add_argument("--draft", action="store_true", help="the machine's cut, before his approval: makes the pieces and draft files while he listens")
+            p.add_argument("--low", action="store_true", help="below-normal priority and two encodes at once (he is in the cut review page)")
     a = ap.parse_args()
-    {"session": session, "transcribe": transcribe, "cut": cut, "verify": verify, "render": render, "times": times}[a.cmd](a)
+    {"session": session, "sync": sync, "transcribe": transcribe, "move": move, "cut": cut, "verify": verify, "render": render,
+     "times": times}[a.cmd](a)
 
 
 if __name__ == "__main__":

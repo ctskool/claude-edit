@@ -12,7 +12,7 @@ A segment is reused only if its input key and complete profile match and its byt
 The owner audit runs in the page before anything renders, and a picture becomes current only after both checks ran to the end and neither failed. Any other is in last_attempt.json.
 --inject-fault is for tests: nothing a faulted attempt renders is ever published.
 """
-import argparse, json, shutil, subprocess, sys, time
+import argparse, contextlib, json, shutil, subprocess, sys, time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -23,8 +23,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from paths import project_root
 ROOT = project_root()
 sys.path.append(str(HERE.parent))
+import gpu_lock
 import lock as beat_lock
 import ownership
+import qos_watch
 import sentinel
 import sound_mix
 import stitch as stitcher
@@ -584,6 +586,7 @@ def main(argv=None):
     parser.add_argument("--kind", help="change: the note kind for the change record")
     parser.add_argument("--only", help="draft: render only these comma-separated beats and stop before stitching")
     parser.add_argument("--store", help="tests: a store other than the project's")
+    parser.add_argument("--no-queue", action="store_true", help="a small render someone is waiting on (the player's native-size beat): start at once instead of waiting in tools/gpu_lock.py's queue")
     parser.add_argument("--inject-fault", choices=["viewport", "dom", "clear", "gpu", "crash"], help="tests: show a fault in these beats. The run stops before stitching.")
     parser.add_argument("--inject-beats", help="tests: comma-separated beats")
     parser.add_argument("--inject-rounds", type=int, default=1, help="tests: how many attempts the fault lasts")
@@ -594,18 +597,29 @@ def main(argv=None):
     except Refused as e:
         print("REFUSED:", e)
         return 2
+    # One render at a time across sessions (added 2026-11-16): four sessions asking for review renders together would
+    # otherwise split the 16 threads four ways and all finish late. A final run under autofinal already holds the lock,
+    # so held() passes straight through there.
+    queue = contextlib.nullcontext() if args.no_queue else gpu_lock.held(f"{args.profile} {args.command} {Path(run.root).parent.name}")
+    with queue:
+        return locked_main(run, args, started)
+
+
+def locked_main(run, args, started):
     try:
         store.lock(run.root)
     except RuntimeError as e:
         print("REFUSED:", e)
         return 2
     tmp = store.new_tmp(run.root)
+    unthrottle = qos_watch.start()  # Windows 11 parks a background app's Chrome workers on the efficiency cores (2-3x slower, measured 2026-11-11)
     try:
         return {"draft": draft, "change": change_cmd, "stitch": stitch_cmd, "refs": refs_cmd}[args.command](run, args, tmp, started)
     except (Refused, ValueError, subprocess.CalledProcessError) as e:
         print("REFUSED:", e)
         return 2
     finally:
+        unthrottle()
         store.clear_tmp(run.root)
         store.unlock(run.root)
 

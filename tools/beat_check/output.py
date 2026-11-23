@@ -242,7 +242,9 @@ def project_events(project, root, m):
     return [e for e in doc["events"] if "frame" in e]
 
 
-def check(path, project=None, root=None):
+def check(path, project=None, root=None, scan=None):
+    """scan: the rows, sampled frames and clip suspects of a file already decoded in full whose picture stream is byte for byte
+    this file's (final.check_delivered proves that by fingerprint). Without it, or when it sampled other frames, this file is decoded."""
     path = Path(path).resolve()
     root = Path(root or path.parents[2])
     report = {"schema": 1, "check": "output", "file": str(path), "checks": {}}
@@ -274,12 +276,18 @@ def check(path, project=None, root=None):
     width, height = stream["width"], stream["height"]
     total, fps = lock["total_frames"], lock["fps"]
     wanted = sorted({f for b in lock["beats"] for f in sentinel.samples(b, events or [])})
-    try:
-        rows, picked, suspects = sentinel.scan(path, width, height, wanted, keep_suspects=SUSPECTS_KEPT)
-    except RuntimeError as e:
-        report["checks"]["O1"] = result(FAIL, problems=[str(e)[:400]])
-        report["status"] = FAIL
-        return finish(report, root, file_sha, record)
+    if scan is not None and scan.get("wanted") == wanted and scan.get("of") == record.get("stitched_from", record["file_sha256"]):
+        rows, picked, suspects = scan["rows"], scan["picked"], scan["suspects"]
+        report["picture_read"] = {"how": "reused", "why": "the picture stream is byte for byte the accepted picture's, which was decoded in full",
+                                  "decoded_file_sha256": scan["of"], "fingerprint": scan.get("fingerprint"), "this_file_fingerprint": scan.get("delivered_fingerprint")}
+    else:
+        report["picture_read"] = {"how": "decoded"}
+        try:
+            rows, picked, suspects = sentinel.scan(path, width, height, wanted, keep_suspects=SUSPECTS_KEPT)
+        except RuntimeError as e:
+            report["checks"]["O1"] = result(FAIL, problems=[str(e)[:400]])
+            report["status"] = FAIL
+            return finish(report, root, file_sha, record)
 
     first = store.find(root, record["profile_hash"], record["beats"][0]["key"]) if record["beats"] else None
     report["checks"]["O1"] = o1_frames(rows, total, stream, first["stream"] if first else None)

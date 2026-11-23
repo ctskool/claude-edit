@@ -1,0 +1,19 @@
+{
+  "name": "collage",
+  "from": "Vox-style paper collage, approved by Chase as a mock on the five-tools short 2026-11-16 and made a look the same day. LOOK.md beside this file",
+  "remap": {
+    "#d97757": "#fff200",
+    "#c15f3c": "#d93a26",
+    "#d9d6cc": "#9c9c95",
+    "#e4e2da": "#9c9c95",
+    "#1a1917": "#d9d9d3",
+    "#141312": "#f6f1e6",
+    "#423f3b": "#9c9c95",
+    "#ebe8e0": "#171512",
+    "#aaa69d": "#4a4a46",
+    "#77736a": "#8d8d86",
+    "#ff6a3d": "#fff200",
+    "#ff7a50": "#d93a26",
+    "rgba(255, 106, 61": "rgba(255, 242, 0"
+  }
+}

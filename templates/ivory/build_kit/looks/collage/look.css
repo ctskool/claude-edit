@@ -1,0 +1,148 @@
+
+      /* ===== look: collage (Vox-style paper collage, approved 2026-11-16). Laid over the kit's style.css by build.py when plan.json has "look": "collage".
+         A grey paper table, torn white sheets on torn yellow backing, a coloured halftone scrap, a newspaper clipping and a magazine cut-out per scene.
+         Images are in assets/vox/ (looks/collage/assets, made by make_assets.py). The moving parts are in motion.js. LOOK.md says what a scene writes.
+         Nothing here names a scene or an element id of one video: kit classes, and the look's own cq- and cut- classes. ===== */
+      @font-face { font-family: "Geist Mono"; font-weight: 400; src: url("assets/fonts/geist-mono-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Geist Mono"; font-weight: 500; src: url("assets/fonts/geist-mono-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Geist Mono"; font-weight: 600; src: url("assets/fonts/geist-mono-latin-600-normal.woff2") format("woff2"); }
+      /* the serif is never heavier than 500 here: a scene that asks for 600 gets the 500 file, not a faked bold */
+      @font-face { font-family: "Newsreader"; font-weight: 600 900; font-style: normal; src: url("assets/fonts/newsreader-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Newsreader"; font-weight: 600 900; font-style: italic; src: url("assets/fonts/newsreader-latin-500-italic.woff2") format("woff2"); }
+      /* Arial Black is a Windows font, copied from C:/Windows/Fonts/ariblk.ttf. A free heavy face has to replace it before anything public ships this look (LOOK.md) */
+      @font-face { font-family: "Collage Head"; src: url("assets/vox/ariblk.ttf") format("truetype"); }
+      :root {
+        --iv: #d9d9d3; --card: #f6f1e6; --bd: #9c9c95; --ink: #171512; --sec: #4a4a46; --mut: #4a4a46;
+        --clay: #fff200; --clayd: #d93a26; --clayt: rgba(255, 242, 0, .14); --dark: #0d0d0c; --hair: #9c9c95;
+        --mono: "Geist Mono", monospace; --serif: "Newsreader", serif; --sans: "Geist Mono", monospace;
+        --cq-head: "Collage Head", "Arial Black", sans-serif; --cq-red: #d93a26; 
+        
+        --cq-lift: drop-shadow(0 12px 14px rgba(45, 28, 6, .40)) drop-shadow(0 2px 2px rgba(45, 28, 6, .35));
+      }
+
+      /* ---- the table: grey paper, faint crosshair marks, light from the upper left ---- */
+      #bg { background: url("assets/vox/marks-faint.svg") 0 0 / 270px 270px repeat, #d9d9d3 url("assets/vox/greypaper.png") center / cover no-repeat; }
+      #bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 70% at 30% 18%, rgba(255, 255, 255, .13), rgba(255, 255, 255, 0) 45%, rgba(46, 34, 14, .17) 100%); }
+      #grid { background-image: none; }
+      /* the graphics panel is a sheet laid over his footage: a torn paper edge along the seam. His pixels are untouched under it */
+      #face-wrap::before { content: ""; position: absolute; left: -30px; top: -36px; width: 1140px; height: 72px; z-index: 2; background: #d9d9d3 url("assets/vox/greypaper.png") center / cover;
+        -webkit-mask: url("assets/vox/torn-strip.png") center / 100% 100% no-repeat; mask: url("assets/vox/torn-strip.png") center / 100% 100% no-repeat; }
+
+      /* ---- kit components ---- */
+      .pc, .plate, .ol, .itile, .pillw, .cmd, .seg, .gap, .strike, .sw, .door, .node, .chipg, .stage, .skel { border-radius: 0 !important; }
+      svg.abs > rect { rx: 0; ry: 0; }
+      .plate { background: #fff; box-shadow: 0 0 0 1.5px var(--bd); }
+      .plate.sq { box-shadow: none; background: var(--iv); }
+      .ol { background: rgba(255, 242, 0, .12); }
+      .itile svg { color: #0d0d0c; }
+      .pillw, .chipg, .door, .node { background: var(--card); border: none; box-shadow: inset 0 0 0 1.5px var(--bd); color: var(--ink); }
+      .serif { font-weight: 500; letter-spacing: -0.035em; }
+      .serif .it { font-style: normal; color: var(--clayd); }
+      .num { font-family: var(--serif); font-weight: 500; letter-spacing: -0.03em; }
+      .num.cl { font-style: normal; color: var(--clayd); }
+      .cmd { box-shadow: inset 0 0 0 1.5px var(--bd); }
+      .sw { background: var(--iv); border: 1.5px solid var(--bd); }
+      .lbl { font-family: var(--serif); font-weight: 500; }
+      /* charcoal's ASCII ground band has no place on paper: a scene written for charcoal keeps its ground() call and shows nothing */
+      .gclip { display: none; }
+
+      /* a card is a torn sheet of white paper, taped down, on a torn yellow sheet. On a full-screen title card the backing is a newspaper page */
+      .pc, .cq-sheet, .cq-slip, #strip-body { background: none !important; box-shadow: none !important; border: none !important; filter: var(--cq-lift); }
+      .pc::before, .cq-sheet::before, .cq-slip::before, #strip-body::before { content: ""; position: absolute; inset: -20px; z-index: -1; background: #f6f1e6 url("assets/vox/whitepaper.png") center / cover;
+        -webkit-mask: url("assets/vox/torn-a.png") center / 100% 100% no-repeat; mask: url("assets/vox/torn-a.png") center / 100% 100% no-repeat; }
+      .pc::before { background: url("assets/vox/cut/tape.png") 50% -6px / 210px auto no-repeat, url("assets/vox/cut/tape.png") 99% 100% / 150px auto no-repeat, #f6f1e6 url("assets/vox/whitepaper.png") center / cover; }
+      .pc::after { content: ""; position: absolute; inset: -6px -34px -40px -2px; z-index: -2; --tilt: 1.3deg; background: url("assets/vox/scrap-yellow.png") center / 100% 100% no-repeat; }
+      .scene.full .pc::after { inset: -34px -44px -52px -30px; --tilt: -3.3deg; background-image: url("assets/vox/clip-wide.png"); }
+      .cq-slip::before, #strip-body::before { inset: -10px -16px; -webkit-mask-image: url("assets/vox/torn-strip.png"); mask-image: url("assets/vox/torn-strip.png"); }
+      .cq-slip:nth-of-type(odd) { rotate: -0.9deg; } .cq-slip:nth-of-type(even) { rotate: 0.8deg; }
+
+      /* captions: a torn paper strip in the heavy face, the accent word under yellow highlighter */
+      .chip { filter: drop-shadow(0 6px 8px rgba(30, 18, 4, .5)); }
+      .chip .in, .chipx { border-radius: 0; background: #f6f1e6 url("assets/vox/whitepaper.png") center / cover; color: #171512; font-family: var(--cq-head) !important; font-weight: 900; letter-spacing: -0.01em;
+        padding: 0 40px; -webkit-mask: url("assets/vox/torn-strip.png") center / 100% 100% no-repeat; mask: url("assets/vox/torn-strip.png") center / 100% 100% no-repeat; }
+      .chip .in b { font-weight: 900; background: #fff200; color: #171512; border-radius: 3px 10px 4px 12px; padding: 6px 12px; margin: 0 -2px; }
+
+      /* the counter: a pinned paper strip, square boxes that fill yellow */
+      #strip-body::after { content: ""; position: absolute; left: -16px; top: -26px; width: 62px; height: 62px; background: url("assets/vox/cut/pin.png") center / contain no-repeat; filter: drop-shadow(0 5px 4px rgba(30, 20, 5, .45)); }
+      #hm-mark { border-radius: 0; background: var(--cq-red); }
+      #hm-mark i { display: none; }
+      #lbl { font-family: var(--mono); font-weight: 500; color: #4a443b; }
+      #count { font-family: var(--mono); color: #171512; }
+      #count #cn0 { color: #8d8d86; }
+      .dot { border-radius: 0; }
+      #dot-gray { background: #9c9c95; }
+      .sock { border-radius: 0; border: 1.5px solid var(--bd); background: none; box-shadow: inset 0 0 0 2.5px #171512; }
+      .slot, .gnd, .plug .neck { display: none; }
+      .plugd { background: none; }
+      .plug .body { left: -11px; top: 22px; width: 94px; height: 86px; border-radius: 0; background: #fff200 url("assets/vox/yellowpaper.png") center / cover; box-shadow: none; }
+      .plug .tile { top: 40px; background: none; border-radius: 0; }
+      .plug .tile svg { color: #0d0d0c; }
+      .plug .tile svg.mk { fill: #0d0d0c; }
+      .ring { border-radius: 0; }
+
+      /* ---- what a scene marks (LOOK.md). Each is a class beside the element's own, and does nothing under another look ---- */
+      /* cq-title: a title, white heavy type on a torn strip of black paper, centred on the frame whatever left it was given */
+      .cq-title { width: max-content !important; left: 0 !important; right: 0 !important; margin: 0 auto; rotate: -1.6deg; padding: 16px 40px 14px; color: #f6f1e6 !important;
+        font-family: var(--cq-head) !important; font-weight: 900; letter-spacing: -0.01em !important; background: #161616 url("assets/vox/darkpaper.png") center / cover; -webkit-mask: url("assets/vox/torn-strip.png") center / 100% 100% no-repeat; mask: url("assets/vox/torn-strip.png") center / 100% 100% no-repeat; }
+      /* cq-num: a big number on a torn yellow scrap, tilted, ringed in red marker */
+      .cq-num { rotate: -4deg; background: none !important; color: #171512; font-family: var(--serif); font-style: italic; font-weight: 500; filter: drop-shadow(0 10px 12px rgba(45, 28, 6, .42)); }
+      .cq-num::before { content: ""; position: absolute; inset: -16px; z-index: -1; background: url("assets/vox/scrap-yellow-sq.png") center / 100% 100% no-repeat; }
+      .cq-num::after { content: ""; position: absolute; inset: -17%; background: url("assets/vox/ring.svg") center / 100% 100% no-repeat; }
+      /* cq-stat: the one figure a card is about. A red marker arrow points away from it to whatever sits on its right */
+      .cq-stat::after { content: ""; position: absolute; left: 104%; top: -34%; width: 0.9em; height: 0.9em; background: url("assets/vox/arrow-r.svg") center / contain no-repeat; rotate: 168deg; }
+      /* cq-under: a red marker underline, for a name */
+      .cq-under::after { content: ""; position: absolute; left: -1%; right: -1%; bottom: -16px; height: 15px; background: url("assets/vox/scribble.svg") center / 100% 100% no-repeat; }
+      /* cq-tag: a small label on torn yellow paper in the heavy face. With cq-outline: white paper, ruled in ink */
+      .cq-tag { color: #171512 !important; font-family: var(--cq-head) !important; font-weight: 900; letter-spacing: -0.01em; rotate: -1.6deg; background: #fff200 url("assets/vox/yellowpaper.png") center / cover !important; box-shadow: none !important;
+        -webkit-mask: url("assets/vox/torn-strip.png") center / 100% 100% no-repeat; mask: url("assets/vox/torn-strip.png") center / 100% 100% no-repeat; }
+      .cq-tag.cq-outline { rotate: 1.4deg; background: #f6f1e6 url("assets/vox/whitepaper.png") center / cover !important; outline: 2px solid #171512; outline-offset: -2px; -webkit-mask: none; mask: none; }
+      /* cq-dark: a panel of black paper with light type, held by a paperclip (a code listing) */
+      .cq-dark { background: #161616 url("assets/vox/darkpaper.png") center / cover !important; box-shadow: 0 6px 8px rgba(40, 26, 6, .4) !important; rotate: -0.8deg; --ink: #f6f1e6; --mut: #a9a69c; --sec: #a9a69c; --clayd: #fff200; color: #f6f1e6; }
+      .cq-dark::after { content: ""; position: absolute; left: 30px; top: -46px; width: 90px; height: 110px; rotate: 8deg; background: url("assets/vox/cut/paperclip.png") center / contain no-repeat; filter: drop-shadow(0 3px 3px rgba(30, 20, 5, .4)); }
+      /* cq-mark: line art drawn in the accent. Yellow is too faint on paper, so inside this the accent is red marker */
+      .cq-mark { --clay: #d93a26; }
+      svg.cq-mark { fill: #d93a26 !important; color: #d93a26 !important; }
+      /* small surfaces a scene's own component can borrow */
+      .cq-paper { background: #f6f1e6 url("assets/vox/whitepaper.png") center / cover !important; box-shadow: 0 6px 8px rgba(45, 28, 6, .35) !important; }
+      .cq-yellow { background: #fff200 url("assets/vox/yellowpaper.png") center / cover !important; box-shadow: none; }
+      .cq-ink { background: #171512 !important; --ink: #d9d9d3; color: #d9d9d3; }
+      .cq-ink > * { color: #d9d9d3 !important; }
+      .cq-box { box-shadow: inset 0 0 0 2.5px #171512 !important; }
+      .cq-redact { background: #2a2622 !important; border-radius: 3px 9px 4px 8px; opacity: .82; }
+      .cq-dash { height: 3px !important; background: repeating-linear-gradient(90deg, #171512 0 16px, transparent 16px 26px) !important; }
+      .cq-over { z-index: 3; }
+
+      /* ---- the three loose pieces every scene gets from motion.js: a coloured scrap and a newspaper clipping behind, a magazine cut-out on top if the scene names one.
+         The outer box holds the seat, the tilt and the jitter; the inner one is what an entrance moves. ---- */
+      .scene { isolation: isolate; }
+      .cq-piece { position: absolute; pointer-events: none; }
+      .cq-piece > i { position: absolute; inset: 0; display: block; background: center / 100% 100% no-repeat; }
+      .cq-scrap { z-index: -1; left: -150px; top: 540px; width: 540px; height: 440px; rotate: var(--rot, -8deg); translate: calc(var(--bx) * var(--amp)) calc(var(--by) * var(--amp)); }
+      .scene.full > .cq-scrap { left: -170px; top: 400px; width: 520px; height: 500px; }
+      .scene.full > .cq-scrap.cq-r { left: 710px; top: 430px; }
+      .cq-clip { z-index: -1; left: 760px; top: -210px; width: 640px; height: 820px; rotate: var(--rot, 13deg); }
+      .scene.full > .cq-clip.cq-l { left: -330px; top: -230px; }
+      .cq-teal > i { background-image: url("assets/vox/scrap-teal.png"); } .cq-red > i { background-image: url("assets/vox/scrap-red.png"); } .cq-blue > i { background-image: url("assets/vox/scrap-blue.png"); }
+      .cq-n1 > i { background-image: url("assets/vox/clip-1.png"); } .cq-n2 > i { background-image: url("assets/vox/clip-2.png"); } .cq-n3 > i { background-image: url("assets/vox/clip-3.png"); }
+      /* the cut-out's seats. Half screen: the card's lower right corner, clear of the counter (which starts at y 780). Full screen: right edge under the card, clear of the counter (y 1350).
+         cut-top: beside the number at the top right. cut-hero: large and central behind the type, for a title card that is only a number and a title */
+      .cq-cut { z-index: 6; left: 850px; top: 525px; width: 250px; height: 250px; rotate: calc(var(--rot, 9deg) + var(--br) * 2 * var(--amp)); translate: calc(var(--bx) * -1.4 * var(--amp)) calc(var(--by) * 1.4 * var(--amp)); }
+      .cq-cut > i { background-size: contain; filter: drop-shadow(0 10px 10px rgba(40, 26, 6, .42)) drop-shadow(0 2px 2px rgba(40, 26, 6, .35)); }
+      .scene.full > .cq-cut { left: 770px; top: 1025px; width: 320px; height: 320px; }
+      .scene.full.cut-top > .cq-cut { left: 750px; top: 190px; width: 300px; height: 300px; z-index: 1; }
+      .scene.full.cut-hero > .cq-cut { left: 250px; top: 600px; width: 620px; height: 620px; z-index: 1; }
+      .cq-cut.crt > i { background-image: url("assets/vox/cut/crt.png"); } .cq-cut.brush > i { background-image: url("assets/vox/cut/brush.png"); }
+      .cq-cut.magnifier > i { background-image: url("assets/vox/cut/magnifier.png"); } .cq-cut.pointer > i { background-image: url("assets/vox/cut/pointer.png"); }
+      .cq-cut.camera > i { background-image: url("assets/vox/cut/camera.png"); } .cq-cut.megaphone > i { background-image: url("assets/vox/cut/megaphone.png"); }
+
+      /* ---- the paper jitter. motion.js re-places every piece six times a second through --bx, --by and --br; --amp scales it:
+         full on a full-screen title card, about a third on a half-screen scene, the counter and the captions [Chase, 2026-11-16].
+         It is only ever on a pseudo-element or on a box no tween transforms. GSAP folds an element's own rotate and translate into its transform the first time it
+         tweens it and writes "rotate: none" inline, so a tilt on a tweened element would be lost or, held with !important, applied twice ---- */
+      #root { --amp: 0.32; --bx: 0px; --by: 0px; --br: 0deg; }
+      .scene.full { --amp: 1; }
+      .pc::before { --tilt: -1.1deg; }
+      .pc::before, .pc::after { rotate: calc(var(--tilt) + var(--br) * var(--amp)); translate: calc(var(--bx) * var(--amp)) calc(var(--by) * var(--amp)); }
+      .cq-num::before, .cq-num::after { rotate: calc(var(--br) * var(--amp)); translate: calc(var(--bx) * var(--amp)) calc(var(--by) * var(--amp)); }
+      #strip-body { rotate: calc(0.6deg + var(--br) * var(--amp)); translate: calc(var(--bx) * var(--amp)) calc(var(--by) * var(--amp)); }
+      .chip .in, .chipx { rotate: calc(-1deg + var(--br) * var(--amp)); translate: calc(var(--bx) * var(--amp)) calc(var(--by) * var(--amp)); }

@@ -1,0 +1,79 @@
+
+      /* ===== the kit's own rules that write a literal colour, recoloured ===== */
+      .tagx { position: absolute; height: 52px; padding: 0 18px; display: flex; align-items: center; white-space: nowrap; background: var(--clay); color: #fbfbf9;
+        font-family: var(--mono); font-weight: 600; font-size: 24px; letter-spacing: .08em; line-height: 1; }
+      .nbox { position: absolute; background: var(--clay); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 600;
+        letter-spacing: -0.05em; line-height: 1; color: #fbfbf9; }
+      .stamp { position: absolute; background: var(--clay); color: #fbfbf9; display: flex; align-items: center; justify-content: center; white-space: nowrap;
+        font-family: var(--serif); font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+      .doc { position: absolute; background: #121212; }
+      .doc .dh { position: absolute; left: 18px; top: 18px; font-family: var(--mono); font-weight: 600; font-size: 22px; line-height: 1; color: #f3f2ee; white-space: nowrap; }
+      .ctag { position: absolute; left: 46px; top: 6px; height: 34px; padding: 0 10px; display: flex; align-items: center; background: var(--clay); color: #fbfbf9;
+        font-family: var(--mono); font-weight: 600; font-size: 18px; letter-spacing: .08em; white-space: nowrap; }
+      .trr b.x { color: #fbfbf9; background: var(--clay); padding: 0 4px; }
+      .frm { position: absolute; background: #121212; overflow: hidden; }
+      .frm .fh { left: 22px; top: 26px; font-family: var(--serif); font-weight: 600; font-size: 52px; color: #f3f2ee; }
+      .frm .fn { right: 16px; top: 136px; font-family: var(--mono); font-size: 20px; color: #a19d95; }
+      .tbk { position: absolute; background: #2a2826; box-shadow: inset 0 0 0 1px var(--bd); display: flex; align-items: center; justify-content: center;
+        font-family: var(--mono); font-weight: 600; font-size: 18px; color: #fbfbf9; overflow: hidden; }
+      .tcp { position: absolute; top: 0; height: 22px; background: #121212; opacity: .55; }
+      .phd { position: absolute; width: 4px; background: #121212; }
+      .son span { color: #fbfbf9; }
+      .rbo { position: absolute; inset: 0; background: var(--clay); color: #fbfbf9; font-style: normal; display: flex; align-items: center; justify-content: center; opacity: 0; }
+
+      /* ===== look: paper (charcoal recoloured). Laid over the kit's style.css by build.py when plan.json has "look": "charcoal" ===== */
+      @font-face { font-family: "Geist Mono"; font-weight: 400; src: url("assets/fonts/geist-mono-latin-400-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Geist Mono"; font-weight: 500; src: url("assets/fonts/geist-mono-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Geist Mono"; font-weight: 600; src: url("assets/fonts/geist-mono-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Hanken Grotesk"; font-weight: 600; src: url("assets/fonts/hanken-grotesk-latin-600-normal.woff2") format("woff2"); }
+      :root {
+        --iv: #f3f2ee; --card: #fefefd; --bd: #2b2a28; --ink: #121212; --sec: #5a5751; --mut: #5a5751;
+        --clay: #050505; --clayd: #000000; --clayt: rgba(0, 0, 0, .14); --dark: #fbfbf9; --hair: #2b2a28;
+        --mono: "Geist Mono", monospace; --serif: "Hanken Grotesk", sans-serif; --sans: "Geist Mono", monospace;
+      }
+      #grid { background-image: none; }
+      /* square corners everywhere, inline radii included */
+      .pc, .plate, .ol, .itile, .pillw, .cmd, .seg, .gap, .strike, .sw, .door, .node, .chipg, .stage, .skel { border-radius: 0 !important; }
+      svg.abs > rect { rx: 0; ry: 0; }
+      .pc { border: none; background: var(--card); box-shadow: inset 0 0 0 1.5px var(--bd); }
+      .plate { background: #fff; box-shadow: 0 0 0 1.5px var(--bd); }
+      .plate.sq { box-shadow: none; background: var(--iv); }
+      .ol { background: rgba(0, 0, 0, .12); }
+      .itile svg { color: #fbfbf9; }
+      .pillw, .chipg, .door, .node { background: var(--card); border: none; box-shadow: inset 0 0 0 1.5px var(--bd); color: var(--ink); }
+      .serif { font-weight: 600; letter-spacing: -0.035em; }
+      .serif .it { font-style: normal; color: var(--clayd); }
+      .num { font-family: var(--serif); font-weight: 600; letter-spacing: -0.04em; }
+      .num.cl { font-style: normal; color: var(--clayd); }
+      .cmd { box-shadow: inset 0 0 0 1.5px var(--bd); }
+      .sw { background: var(--iv); border: 1.5px solid var(--bd); }
+      /* caption chip: light, so it reads on the charcoal panel and on his footage. The accent is an orange highlight block */
+      .chip .in, .chipx { border-radius: 0; background: #121212; color: #f3f2ee; font-family: var(--mono); font-weight: 600; }
+      .chip .in b { font-weight: 600; color: #fbfbf9; background: #050505; padding: 6px 12px; margin: 0 -2px; }
+      /* the running counter: a row of square boxes that fill orange */
+      #strip-body { background: var(--card); border-radius: 0; box-shadow: inset 0 0 0 1.5px var(--bd); }
+      #hm-mark { border-radius: 0; background: #050505; }
+      #hm-mark i { display: none; }
+      #lbl { font-family: var(--mono); font-weight: 500; color: #5a5751; }
+      #count { font-family: var(--mono); color: #121212; }
+      #count #cn0 { color: #a19d95; }
+      .dot { border-radius: 0; }
+      #dot-gray { background: #2b2a28; }
+      .sock { border-radius: 0; border: 1.5px solid var(--bd); background: none; }
+      .slot, .gnd, .plug .neck { display: none; }
+      .plugd { background: none; }
+      .plug .body { left: -11px; top: 22px; width: 94px; height: 86px; border-radius: 0; background: #050505; box-shadow: none; }
+      .plug .tile { top: 40px; background: none; border-radius: 0; }
+      .plug .tile svg { color: #fbfbf9; }
+      .plug .tile svg.mk { fill: #fbfbf9; }
+      .ring { border-radius: 0; }
+      /* the ASCII ground band, drawn by scenes.ground() */
+      .gclip { position: absolute; left: 0; width: 1080px; overflow: hidden; }
+      .gr { position: absolute; left: 0; white-space: pre; font: 500 22px/24px "Geist Mono", monospace; color: #a19d95; }
+
+      /* ===== paper: the caption chip is black with light text, in Hanken Grotesk; the accent word is a light block ===== */
+      .chip .in, .chipx { font-family: "Hanken Grotesk", sans-serif; font-weight: 600; letter-spacing: -0.01em; }
+      .chip .in b { font-weight: 600; background: #f3f2ee; color: #050505; }
+
+      .frm { background: var(--card); box-shadow: inset 0 0 0 1.5px var(--bd); }
+      .frm .fh { color: var(--ink); }

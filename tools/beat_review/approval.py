@@ -298,7 +298,7 @@ def start(project, picture_sha, deep=False):
         raise ValueError("that is not the newest picture")
     if sound_mix.file_hash(pic["file"]) != picture_sha:
         raise ValueError("the file on disk is not this picture")
-    m = ownership.load(project)
+    m = review.composition(project)
     if m is None or m["composition_rev"] != pic["composition_rev"]:
         raise ValueError("the project has moved on from this picture: run run.py change, or go back")
     left = review.blocking(project, root, pic)

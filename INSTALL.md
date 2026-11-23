@@ -127,7 +127,7 @@ Run only one render at a time on a machine.
 
 ### Running workflows without a Workflow host
 
-The build steps are written as workflow scripts in `tools/workflows/next/`. If your Claude Code has no `Workflow` tool, the skill tells Claude to run each workflow's phases as ordinary subagents, with the same prompts and checks. These files are not standalone Node programs: don't run them with `node`.
+The sound step is written as a workflow script in `tools/workflows/next/`. If your Claude Code has no `Workflow` tool, the skill tells Claude to run its phases as ordinary subagents, with the same prompts and checks. These files are not standalone Node programs: don't run them with `node`.
 
 ## Optional extras
 
@@ -137,6 +137,7 @@ The build steps are written as workflow scripts in `tools/workflows/next/`. If y
 | Word alignment | Tighter word timings than Whisper's | `python -m pip install torch "transformers>=5.13,<6"`. Slow on a CPU. Without it the tools keep Whisper's timings and say so |
 | Popout bottom | Your cut-out rising out of the bottom card instead of a plain split | NVIDIA GPU, `python -m pip install torch torchvision`, then [Robust Video Matting](https://github.com/PeterL1n/RobustVideoMatting) (GPL-3.0, from its own GitHub) into `vendor/RobustVideoMatting` and its `rvm_resnet50.pth` into `vendor/rvm-weights/`. Untested on a Mac |
 | `/animate` and `/vfx` effects | A note can call an animation or an effect on your own shot | Install the separate [Chase Animations](https://github.com/ctskool/chase-animations) pack with its `npm run setup`. Without it, Claude says the effect isn't installed and leaves that note open |
+| Long-form (16:9) on the GPU | The fast slice renderer for the `charcoal` template | An NVIDIA card with NVENC. Without it `render_slices.py` hands over to the software renderer by itself; nothing to install |
 | Reference sound stems | Measuring the sound in a reference reel | Demucs. Without it, use `python tools/reference.py measure ... --no-sound` |
 
 ## If something breaks

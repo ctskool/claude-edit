@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-MOVES = ROOT / 'templates/moves'
+MOVES = ROOT / 'templates/moves'  # the moves library does not ship; the old plan page's move routes need it
 _hash_cache = {}
 
 

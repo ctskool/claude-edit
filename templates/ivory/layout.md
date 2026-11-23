@@ -2,7 +2,7 @@
 
 Two layouts: split, full-graphic. A third, full-face, exists only when `full_face` is on. Chase's rules win every conflict.
 Format: rule, why, then Met (how to tell it held). "(untested on ivory)" means ivory has not proven it.
-All STYLE.md layout numbers here are at 1080x1920. Publish is 2160x3840 at 60 fps.
+All STYLE.md layout numbers here are at 1080x1920. Publish is 2160x3840 at 30 fps (4K30); 60 fps only when he asks.
 
 ## The `full_face` setting
 
@@ -78,7 +78,7 @@ If one would move a switch off his spots, leave the switch and flag it. A BIG jo
 
 - **Real footage and no bottom fade:** `HOUSE.md`. [Chase] Platform bands warn only: `HOUSE.md`.
 - **Face files are preview size today.** [Ours] Why: `prep_source.py` makes 1280-wide and 1080x1920 clips at 30 fps, and doubling a number adds no pixels.
-  Met: the size STYLE quotes comes from a finished export. No tool yet builds a 2160x3840 60 fps face layer: only a hand route exists, proven on 3 s.
+  Met: the size STYLE quotes comes from a finished export. For the 4K30 final, `prep_source.py` also writes `assets/face_half_4k.mp4` (the same frames at the source's full size) and the final swaps it in. No tool builds a 60 fps face layer: 4K60 is a hand route, never run on a whole short from a raw.
 
 ## The seam: two different rows
 

@@ -10,7 +10,7 @@ A 4K30 final when prep made assets/face_half_4k.mp4, swapped in for the review f
 The build waits its turn on gpu_lock, then deliver.py and check-media, the same commands section 10 lists. The file is out/<id>_<style>_final_4k30.mp4 (or _final.mp4 at 1080p30).
 beat/approvals/final-<file_sha16>.json says how far it got, and the player shows it.
 """
-import argparse, os, re, subprocess, sys
+import argparse, os, re, shutil, subprocess, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -20,6 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from paths import project_root
 ROOT = project_root()
 sys.path[:0] = [str(HERE), str(ROOT / "tools" / "beat_render"), str(ROOT / "tools")]
+import look_player
 import review
 import sound_mix
 import store
@@ -41,6 +42,8 @@ def state_file(project, picture_sha):
 
 def sound_ready(project):
     """Why the sound holds the final, or None. The final freezes sound.json with the picture, so it waits for a sheet of this picture with every sound note closed."""
+    if look_player.marker(project):
+        return None  # a hand-built look mixes its few cues into the review picture itself: he heard them when he approved
     if not (Path(project) / "sound.json").is_file():
         return "no sound.json yet: section 9 first"
     if sound_mix.sheet_of(project).get("picture_rev") != sound_mix.picture_rev(project):
@@ -103,6 +106,9 @@ def run(project, picture_sha):
         held.update(stage=name, **fields)
         store.write_json(path, held)
 
+    look = look_player.marker(project)
+    if look:
+        return run_look(project, picture_sha, look, home, stage)
     try:
         four_k = (home / FACE_4K).is_file()
         spec = "4k30" if four_k else "1080p30"
@@ -126,6 +132,30 @@ def run(project, picture_sha):
         file = ROOT / "out" / f"{base}.mp4"
         step([sys.executable, ROOT / "tools/sound_mix.py", "check-media", file], "check-media")
         stage("done", spec=spec, file=str(file), finished=review.now())
+    except Exception as e:
+        stage("error", why=str(e)[:600])
+        raise
+
+
+def run_look(project, picture_sha, look, home, stage):
+    """A hand-built look's final (blueprint, sky): the spec's own `final`, which rebuilds, refuses unless that is the approved composition, and renders 4K30 at -14 LUFS."""
+    try:
+        if not look.get("spec") or not Path(look["spec"]).is_file():
+            raise RuntimeError(f"engine.json names no spec file: {look.get('spec')}")
+        pic = review.picture(project)
+        if pic is None or pic["file_sha256"] != picture_sha:
+            raise RuntimeError("the approved picture is no longer the newest")
+        stage("building", spec="4k30", building=review.now())
+        lock = [sys.executable, ROOT / "tools/gpu_lock.py", "run", "--who", f"4k30 final {home.name}", "--"]
+        out = step(lock + [sys.executable, "-B", look["spec"], "final", pic["composition_rev"]], "build")
+        built = re.search(r"^built 4k30: (.+)$", out, re.M)
+        if not built:
+            raise RuntimeError("the build printed no file")
+        stage("delivering", spec="4k30")
+        file = ROOT / "out" / f"{home.name}_{project.name}_final_4k30.mp4"
+        file.parent.mkdir(exist_ok=True)
+        shutil.copyfile(built.group(1).strip(), file)
+        stage("done", spec="4k30", file=str(file), finished=review.now())
     except Exception as e:
         stage("error", why=str(e)[:600])
         raise

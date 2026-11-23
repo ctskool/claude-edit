@@ -1,0 +1,20 @@
+{
+  "name": "cobalt",
+  "from": "charcoal recoloured for the IG duplicate test, 2026-11-16 (work/1114-tools/recolor_looks.py)",
+  "remap": {
+    "#d97757": "#ffd23f",
+    "#c15f3c": "#ffdb5c",
+    "#d9d6cc": "#4a64d6",
+    "#e4e2da": "#4a64d6",
+    "#1a1917": "#1534b0",
+    "#141312": "#0d2280",
+    "#423f3b": "#4a64d6",
+    "#ebe8e0": "#f5f7ff",
+    "#aaa69d": "#bcc7f5",
+    "#77736a": "#7d90e0",
+    "#ff6a3d": "#ffd23f",
+    "#ff7a50": "#ffdb5c",
+    "#0d0d0c": "#0a1650",
+    "rgba(255, 106, 61": "rgba(255, 210, 63"
+  }
+}

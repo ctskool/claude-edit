@@ -1,0 +1,172 @@
+
+      /* ===== look: neo-brutalist. Laid over the kit's style.css by build.py when plan.json has "look": "neo-brutalist".
+         Cream ground with a dot grid, white boxes in thick black outlines with hard offset shadows, flat yellow / pink / mint, heavy tight grotesk type.
+         Chase liked a stills-only trial of it on 2026-11-16 (a mock that does not ship); this file is hand-kept and stands on its own. LOOK.md says what a scene may add.
+         Nothing here names a scene's element id: kit classes, component classes projects have carried, and the look's own nb- classes.
+         Three rules keep it one look:
+           outline   3 px small parts, 4 px boxes inside a card, 5 px cards and rows, 7 px the one hero block. Always #111, always square.
+           shadow    hard, down and right, no blur: 6 px small boxes, 8 px the caption, 10 px cards and rows, 14 px the hero block.
+           colour    yellow is the one thing that matters (the number, a lit state, the highlight word, a filled seat). Pink is the working accent
+                     (tags, flags, outlines, bars; deep pink as type). Mint is the quiet second tag. Everything structural is black on white or cream. ===== */
+
+      /* Inter 800 / 900 and JetBrains Mono 800 are in looks/neo-brutalist/fonts (SIL OFL 1.1, FONTS-LICENSE.txt); the other cuts are the kit's own.
+         The families remap weight, so a scene that asks for 600 or 700 gets a heavy cut without the look touching the scene:
+         grotesk  up to 500 -> Inter 600, 600-700 -> Inter 800, 800-900 -> Inter 900.   mono  up to 400 -> 500, 500 -> 700, 600 and up -> 800.
+         size-adjust draws the grotesk at 92 %: Inter is wider and taller in the x than the faces scenes are sized for (ivory's Newsreader, charcoal's Hanken Grotesk).
+         At 92 % with the tracking below, a heavy line is as wide as the same line in charcoal, so a scene sized for charcoal fits. The mono is the kit's width already. */
+      @font-face { font-family: "NB Grotesk"; font-weight: 100 500; size-adjust: 92%; src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+      @font-face { font-family: "NB Grotesk"; font-weight: 600 700; size-adjust: 92%; src: url("assets/fonts/inter-latin-800-normal.woff2") format("woff2"); }
+      @font-face { font-family: "NB Grotesk"; font-weight: 800 900; size-adjust: 92%; src: url("assets/fonts/inter-latin-900-normal.woff2") format("woff2"); }
+      @font-face { font-family: "NB Mono"; font-weight: 100 400; src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "NB Mono"; font-weight: 500; src: url("assets/fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "NB Mono"; font-weight: 600 900; src: url("assets/fonts/jetbrains-mono-latin-800-normal.woff2") format("woff2"); }
+      :root {
+        --iv: #fdf3dc; --card: #ffffff; --bd: #111111; --ink: #111111; --sec: #333333; --mut: #55514a;
+        --clay: #ff5c8a; --clayd: #d6246e; --clayt: #ffd9e4; --dark: #111111; --hair: #111111;
+        --mono: "NB Mono", monospace; --serif: "NB Grotesk", sans-serif; --sans: "NB Grotesk", sans-serif;
+      }
+
+      /* ---- ground: cream, a dot grid that holds still. The kit's drifting line grid is off ---- */
+      #bg, .nb-ground { background-color: #fdf3dc; background-image: radial-gradient(circle at center, rgba(17, 17, 17, .15) 0 3px, rgba(17, 17, 17, 0) 3.6px); background-size: 44px 44px; }
+      #grid { background-image: none; }
+      /* the ground band charcoal draws has no place here: a scene written for charcoal keeps its ground() call and shows nothing */
+      .gclip { display: none; }
+      /* the seam: one 6 px black rule across the top edge of his footage. His pixels are otherwise untouched */
+      #face-wrap::before { content: ""; position: absolute; left: 0; top: 0; width: 1080px; height: 6px; background: #111; z-index: 2; }
+
+      /* ---- square corners everywhere, inline radii included ---- */
+      .pc, .plate, .skel, .ol, .door, .door .lit, .itile, .pillw, .chipg, .stage, .rstep, .rstep .on, .node, .node .lit, .mrow, .mrow .da, .mrow .so, .mrow .sp,
+      .cmd, .seg, .gap, .strike, .sw { border-radius: 0 !important; }
+      svg.abs > rect { rx: 0; ry: 0; }
+      /* the outline drawn() draws round a box: twice the kit's weight */
+      svg.abs > rect[pathLength] { stroke-width: 6px; }
+
+      /* ---- how an outline is drawn, so it stays clean while the kit's slow push scales it.
+         An empty box, or one whose content is centred, takes a real border with the fill clipped inside it: no fill can fringe the outline.
+         A box whose children are placed from its corner takes an inset shadow instead, which moves nothing.
+         Never a border beside an inset shadow on one box: scaled, the two show a seam. ---- */
+
+      /* ---- cards, captures ---- */
+      .pc { background: #fff; background-clip: padding-box; border: 5px solid #111; box-shadow: 10px 10px 0 #111; }
+      .pc.nb-flat { box-shadow: none; }
+      /* a capture keeps its own colours inside a thick black frame. On the ground it casts the card's shadow; written straight after its card it sits on that card and casts none */
+      .plate { background: #fff; box-shadow: 0 0 0 4px #111, 10px 10px 0 4px #111; }
+      .pc + .plate, .plate.nb-flat { box-shadow: 0 0 0 4px #111; }
+      .plate.nb-lift { box-shadow: 0 0 0 4px #111, 10px 10px 0 4px #111; }
+      .plate.sq { box-shadow: none; background: var(--iv); }
+      .skel { background: #eadfc3; box-shadow: inset 0 0 0 3px #111; }
+      /* a highlight on a capture: the pink marker, twice the kit's weight, no black */
+      .ol { border: 6px solid #ff5c8a; background: rgba(255, 92, 138, .14); }
+      .ol.bare { background: none; }
+
+      /* ---- type ---- */
+      .serif { font-weight: 900; letter-spacing: -0.045em; }
+      /* the accent word: black on a yellow block, the same highlight the captions use. The block is a shadow, so the line's width and centring do not move */
+      .serif .it { font-style: normal; color: #111; background: #ffd400; box-shadow: 0 0 0 .07em #ffd400; }
+      .num { font-family: var(--serif); font-weight: 900; letter-spacing: -0.05em; }
+      .num.cl { font-style: normal; color: var(--clayd); }
+      .lbl { font-weight: 800; letter-spacing: -0.03em; }
+      .rlab { color: var(--sec); }
+      /* pink is a fill and a line. As type it is too pale on white, so on the kit's text classes the accent resolves to the deep pink */
+      .lbl, .src, .t, .serif, .num, .rlab { --clay: #d6246e; }
+
+      /* ---- built diagram parts ---- */
+      .door { background: #fff; border: none; box-shadow: inset 0 0 0 5px #111, 10px 10px 0 #111; }
+      /* a lit door or node fills yellow. The kit's lit layer is a see-through tint; this one is solid, so the labels are lifted over it */
+      .door .lit { inset: 0; border: 5px solid #111; background: #ffd400; background-clip: padding-box; }
+      .door .n, .door .l { z-index: 1; }
+      .door .n { font-weight: 800; letter-spacing: -0.03em; }
+      .door .l { color: var(--sec); }
+      .itile { background: #ffd400; background-clip: padding-box; border: 4px solid #111; box-shadow: 6px 6px 0 #111; }
+      .itile svg { color: #111; stroke-width: 3; }
+      .itile svg.mk { fill: #111; }
+      .pillw { background: #fff; border: 4px solid #111; border-width: 4px !important; box-shadow: 6px 6px 0 #111; font-weight: 800; }
+      .chipg { background: #fff; border: none; box-shadow: inset 0 0 0 4px #111, 6px 6px 0 #111; font-weight: 800; }
+      .stage { background: #fff; border: none; box-shadow: inset 0 0 0 5px #111, 10px 10px 0 #111; }
+      /* the kit writes white on a clay stage and on a lit node. Here both stay black: on pink and on yellow, white does not read */
+      .stage .sn { color: #111 !important; }
+      .rstep { background: #fff; border: 4px solid #111; color: #111; font-weight: 800; }
+      .rstep .on { inset: -4px; background: #ffd400; background-clip: padding-box; color: #111; border: 4px solid #111; }
+      .node { background: #fff; border: none; box-shadow: inset 0 0 0 4px #111, 6px 6px 0 #111; font-weight: 800; }
+      .node .lit { inset: 0; border: 4px solid #111; background: #ffd400; background-clip: padding-box; }
+      .node .nl { z-index: 1; color: #111 !important; }
+      .mrow .da { border: 4px dashed #111; background: rgba(255, 255, 255, .6); }
+      .mrow .so { border: 5px solid #111; background: #fff; background-clip: padding-box; box-shadow: 10px 10px 0 #111; }
+      .mrow .sp { background: #ffd400; background-clip: padding-box; border: 4px solid #111; }
+      .mrow .sp svg { fill: #111; }
+      .mrow .nm { font-weight: 900; letter-spacing: -0.04em; }
+      .cmd { background: #fff; box-shadow: inset 0 0 0 4px #111; }
+      .sw { background: var(--iv); border: 3px solid #111; }
+
+      /* ---- the counter: a white strip, five cream seats that fill yellow ---- */
+      #strip-body { background: #fff; background-clip: padding-box; border: 5px solid #111; border-radius: 0; box-shadow: 10px 10px 0 #111; }
+      #hm-mark { border-radius: 0; background: #ff5c8a; background-clip: padding-box; border: 3px solid #111; }
+      #hm-mark i { display: none; }
+      #lbl { font-family: var(--mono); font-weight: 800; color: #111; }
+      #count { font-family: var(--sans); font-weight: 900; letter-spacing: -0.03em; color: #111; }
+      #count #cn0 { color: #a89f89; }
+      .dot { border-radius: 0; border: 3px solid #111; background-clip: padding-box; }
+      #dot-gray { background-color: #fff; }
+      #dot-on { background-color: #ff5c8a; }
+      .sock { border-radius: 0; border: 4px solid #111; background: #fdf3dc; }
+      .slot, .gnd, .plug .neck { display: none; }
+      .plugd { background: none; }
+      .plug .body { left: -11px; top: 22px; width: 94px; height: 86px; border-radius: 0; background: #ffd400; background-clip: padding-box; border: 4px solid #111; box-shadow: none; }
+      .plug .tile { top: 40px; background: none; border-radius: 0; }
+      .plug .tile svg { color: #111; stroke-width: 2.8; }
+      .plug .tile svg.mk { fill: #111; }
+      .ring { border-radius: 0; border: 6px solid #ff5c8a; }
+
+      /* ---- captions: a white box, thick outline, hard shadow, heavy caps. The accent word sits on a yellow block.
+         56 px at the family's 92 % is the kit's 52 px to the eye; the widest three-word chunk on five recent shorts is under 880 px of the 960 allowed ---- */
+      .chip .in, .chipx { border-radius: 0; padding: 0 30px; font-size: 56px; background: #fff; color: #111; font-family: var(--sans); font-weight: 900; letter-spacing: -0.01em;
+        box-shadow: inset 0 0 0 5px #111, 8px 8px 0 #111; }
+      .chip .in b { font-weight: 900; color: #111; background: #ffd400; padding: 6px 12px; margin: 0 -2px; }
+
+      /* ---- component classes projects have carried in their own style.css (the 1114-tools set). A project without them is untouched ---- */
+      .lbl.hk, .bign, .rnm, .mnm, .frm .fh { font-family: var(--serif); font-weight: 900; letter-spacing: -0.045em; }
+      .hair { height: 4px; background: #111; }
+      .skelb, .bdot { background: #111; }
+      /* tags: the heavy mono needs less air than the kit's, and tighter tracking keeps a long tag inside its card. The border takes its width from the padding, so a tag is no wider */
+      .tagx, .tago, .ctag { font-family: var(--mono); font-weight: 800; letter-spacing: .03em; color: #111; background-clip: padding-box; border: 4px solid #111; padding: 0 14px; box-shadow: none; }
+      .tagx { background-color: #ff5c8a; box-shadow: 6px 6px 0 #111; }
+      .tago { background-color: #7df9c1; }
+      .ctag { background-color: #ff5c8a; border-width: 3px; padding: 0 7px; }
+      .stamp { background: #ff5c8a; background-clip: padding-box; border: 5px solid #111; color: #111; font-family: var(--serif); font-weight: 900; letter-spacing: -0.04em; box-shadow: 8px 8px 0 #111; }
+      .nbox { background: #ffd400; background-clip: padding-box; border: 7px solid #111; color: #111; font-family: var(--serif); font-weight: 900; letter-spacing: -0.06em; box-shadow: 14px 14px 0 #111; }
+      .flag, .ring2 { box-shadow: inset 0 0 0 6px #ff5c8a; }
+      .scan { height: 6px; background: #ff5c8a; }
+      .bar { background: #fff; }
+      .bar::after { content: ""; position: absolute; inset: 0; border: 4px solid #111; }
+      .mnode, .stile { background: #fff; box-shadow: inset 0 0 0 4px #111, 6px 6px 0 #111; }
+      /* a node lights yellow, so the mark inside it is black: pink on yellow does not read */
+      .mnode { --clay: #111111; --clayd: #111111; }
+      .mon, .son, .rbo { background: #ffd400; background-clip: padding-box; border: 4px solid #111; box-shadow: none; }
+      .rbo { border-width: 5px; }
+      .stile span { color: #111; }
+      .rrow { background: #fff; box-shadow: inset 0 0 0 5px #111, 10px 10px 0 #111; }
+      .rbx { box-shadow: inset 0 0 0 5px #111; }
+      .doc { background: #fff; box-shadow: inset 0 0 0 4px #111, 6px 6px 0 #111; }
+      .doc .dh { color: #111; }
+      .doc i { background: #111; }
+      .frm { background: #fff; box-shadow: inset 0 0 0 4px #111, 6px 6px 0 #111; }
+      .frm .fh { color: #111; }
+      .frm .fn { color: var(--mut); }
+      .tbk { background: #111; box-shadow: none; color: #111; }
+      .tbk.on { background: #ffd400; background-clip: padding-box; border: 3px solid #111; }
+      .tcam { background: #7df9c1; background-clip: padding-box; border: 3px solid #111; }
+      .tcp { background: #111; opacity: 1; }
+      .phd { background: #ff5c8a; box-shadow: 0 0 0 1px #ff5c8a; }
+      /* a page a scene draws (a stand-in for a real site) keeps its own colours inside the black frame, like a capture. The frame is an overlay, so a clip-path wipe keeps it */
+      .sp-page::after, .cl-page::after, .pgw::after { content: ""; position: absolute; inset: 0; border: 4px solid #111; }
+
+      /* ---- what a scene may add (LOOK.md). Each does nothing under another look ---- */
+      /* nb-dark: a black panel (a code listing). Inside it type is white and the accent is yellow. The 1114-tools .code panel gets the same */
+      .code, .nb-dark { background: #111 !important; box-shadow: none; color: #fff; --ink: #ffffff; --sec: #d9d4c7; --mut: #a8a394; --clay: #ffd400; --clayd: #ffd400; --bd: #111111; --hair: #ffffff; }
+      .code .lbl, .code .src, .code .t, .nb-dark .lbl, .nb-dark .src, .nb-dark .t { --clay: #ffd400; }
+      /* nb-box: a white box in the 4 px outline. nb-lift adds the 6 px shadow. nb-yellow / nb-pink / nb-mint are the three fills */
+      .nb-box { background: #fff; box-shadow: inset 0 0 0 4px #111; }
+      .nb-box.nb-lift { box-shadow: inset 0 0 0 4px #111, 6px 6px 0 #111; }
+      .nb-yellow { background-color: #ffd400 !important; color: #111; }
+      .nb-pink { background-color: #ff5c8a !important; color: #111; }
+      .nb-mint { background-color: #7df9c1 !important; color: #111; }

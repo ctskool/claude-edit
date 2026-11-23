@@ -1,0 +1,18 @@
+{
+  "name": "charcoal-light",
+  "from": "charcoal recoloured for the IG duplicate test, 2026-11-16 (work/1114-tools/recolor_looks.py)",
+  "remap": {
+    "#d97757": "#ff6a3d",
+    "#c15f3c": "#e8521f",
+    "#d9d6cc": "#d5d0c6",
+    "#e4e2da": "#d5d0c6",
+    "#1a1917": "#f4f1ea",
+    "#141312": "#fbfaf6",
+    "#423f3b": "#d5d0c6",
+    "#ebe8e0": "#1b1a18",
+    "#aaa69d": "#5f5b54",
+    "#77736a": "#a39e94",
+    "#ff7a50": "#e8521f",
+    "#0d0d0c": "#fdfcf8"
+  }
+}

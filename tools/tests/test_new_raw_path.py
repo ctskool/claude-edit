@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The path from a new raw: the ivory build kit, what recut-build.js tells its agents, and the skill's flow. stage1/phase6-new-raw-path.md.
+"""The path from a new raw: the ivory build kit and the skill's flow. stage1/phase6-new-raw-path.md.
 
 python tools/tests/test_new_raw_path.py                       logic, plus real builds of a tiny stand-in project. No render
 python tools/tests/test_new_raw_path.py --mechanical <work>   one-scene-per-few-beats build of <work>, a folder with words, beats, shared and assets
@@ -11,7 +11,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 KIT = ROOT / "templates" / "ivory" / "build_kit"
-WORKFLOWS = ROOT / "tools" / "workflows" / "next"
 SKILL = ROOT / ".claude" / "skills" / "claude-edit" / "SKILL.md"
 UNIT = ROOT / "work" / f"beat-t4-unit-{os.getpid()}"
 sys.path[:0] = [str(KIT), str(ROOT / "tools" / "beat_render"), str(ROOT / "tools" / "beat_check"), str(ROOT / "tools" / "tests")]
@@ -467,116 +466,11 @@ class SetUp(unittest.TestCase):
             shutil.rmtree(root, ignore_errors=True)
 
 
-class Workflow(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        import test_full_face as tf
-        cls.tf = tf
-        cls.args = {"id": "t1", "styles": ["editorial"]}
-        cls.run_ok = tf.run_workflow("recut-build.js", cls.args)
-        cls.prompts = {p["label"]: p["prompt"] for p in cls.run_ok["prompts"]}
-        cls.source = (WORKFLOWS / "recut-build.js").read_text(encoding="utf8")
-
-    def test_the_builder_starts_from_the_kit_not_an_old_project(self):
-        build_prompt = self.prompts["build:editorial"]
-        self.assertIn("new_project.py t1", build_prompt)
-        self.assertNotIn("tools_local\\ build machinery", build_prompt)
-        self.assertNotIn("1022-2", self.source)
-
-    def test_the_builder_is_told_what_it_must_write(self):
-        build_prompt = self.prompts["build:editorial"]
-        for word in ("WINDOWS", "EVENT_BINDS", "COPY_BINDS", "HUD_BINDS", "BUILD STOPPED", "WHOLE RENDER", "conform.py", "--audit", "number", "build.py", "README.md"):
-            self.assertIn(word, build_prompt, word)
-
-    def test_the_director_writes_the_fields_the_build_needs(self):
-        direct = self.prompts["direct:editorial"]
-        for word in ("event_id", "proof_span", "cta_start", "composition_files", "sub_anchors", "captions"):
-            self.assertIn(word, direct, word)
-
-    def test_a_failed_plan_check_still_refuses_and_the_builder_never_runs(self):
-        run = self.tf.run_workflow("recut-build.js", self.args, {"ok": False, "issues": ["stub"]})
-        self.assertEqual([p["label"] for p in run["prompts"]], ["direct:editorial", "plancheck:editorial"])
-        self.assertIs(run["result"][0]["refused"], True)
-
-    def test_a_style_with_no_kit_is_refused_before_any_agent(self):
-        run = self.tf.run_workflow("recut-build.js", {"id": "t1", "styles": ["dense"]})
-        self.assertEqual(run["prompts"], [])
-        self.assertIs(run["result"][0]["refused"], True)
-        self.assertIn("kit", run["result"][0]["reason"])
-
-    def test_the_old_ref_argument_changes_nothing(self):
-        self.assertEqual(self.tf.dry_run("recut-build.js", {**self.args, "ref": "1022-2"}), self.prompts)
-
-    def test_plan_issues_return_to_the_director(self):
-        prompts = self.tf.dry_run("recut-build.js", {**self.args, "planIssues": ["wrong proof span"]})
-        direct = prompts["direct:editorial"]
-        for text in ("wrong proof span", "revise the existing plan.json", "keep every event_id"):
-            self.assertIn(text, direct)
-
-    def test_builder_retry_skips_direct_but_rechecks_the_existing_plan(self):
-        run = self.tf.run_workflow("recut-build.js", {**self.args, "skipDirect": True, "note": "fix owner audit"})
-        self.assertEqual([p["label"] for p in run["prompts"]], ["plancheck:editorial", "build:editorial"])
-        self.assertIn("fix owner audit", run["prompts"][-1]["prompt"])
-        run = self.tf.run_workflow("recut-build.js", {**self.args, "skipDirect": True}, {"ok": False, "issues": ["stale"]})
-        self.assertEqual([p["label"] for p in run["prompts"]], ["plancheck:editorial"])
-        self.assertIs(run["result"][0]["refused"], True)
-
-    def test_intake_notes_reach_all_content_agents(self):
-        note = 'Use the pricing page; no GitHub screenshot.'
-        for script in ("recut-plan.js", "recut-build.js"):
-            run = self.tf.run_workflow(script, {**self.args, "note": note})
-            for row in run["prompts"]:
-                self.assertIn(note, row["prompt"], row["label"])
-
-    def test_null_stage_results_stop_the_content_workflow(self):
-        labels = ["research", "assets", "plan", "check", "plan-revise"]
-        for i, label in enumerate(labels):
-            with self.subTest(label=label):
-                run = self.tf.run_workflow("recut-plan.js", self.args, replies={label: None})
-                self.assertEqual([p["label"] for p in run["prompts"]], labels[:i + 1])
-                self.assertTrue(run["result"].get("error"))
-
-    def test_null_director_stops_before_plan_check_or_build(self):
-        run = self.tf.run_workflow("recut-build.js", self.args, replies={"direct:editorial": None})
-        self.assertEqual([p["label"] for p in run["prompts"]], ["direct:editorial"])
-        self.assertIs(run["result"][0]["refused"], True)
-
-    def test_source_check_is_in_the_pre_render_qa_loop(self):
-        prompt = self.prompts["build:editorial"]
-        self.assertLess(prompt.index("--audit"), prompt.index("--all"))
-        self.assertIn("exit 3", prompt)
-        self.assertIn("no FAIL", prompt)
-        schema = next(p["schema"] for p in self.run_ok["prompts"] if p["label"] == "build:editorial")
-        self.assertIn("source_check", schema["required"])
-
-    def test_scene_images_belong_to_the_director(self):
-        # Scene images exist only with Codex; without it the director plans none.
-        prompts = {p["label"]: p["prompt"] for p in self.tf.run_workflow("recut-build.js", {**self.args, "codex": True})["prompts"]}
-        self.assertIn("shared/scenes", prompts["direct:editorial"])
-        self.assertIn("ASSETS.md", prompts["direct:editorial"])
-        self.assertIn("generate any missing scene image", prompts["direct:editorial"])
-        self.assertNotIn("generate any missing scene image", prompts["build:editorial"])
-        self.assertIn("plan no scene images", self.prompts["direct:editorial"])
-
-    def test_short_clips_have_a_held_frame_recipe(self):
-        for text in ("vplate", "stills", "assets/held", "ffmpeg"):
-            self.assertIn(text, self.prompts["build:editorial"])
-
-    def test_proof_and_cta_have_transcript_sources(self):
-        prompts = self.tf.dry_run("recut-plan.js", self.args)
-        for label in ("plan", "check"):
-            for text in ("proof_span", "cta_start", "word", "sound.md"):
-                self.assertIn(text, prompts[label])
-
-    def test_revision_beats_skip_direct_when_both_are_requested(self):
-        prompts = self.tf.dry_run("recut-build.js", {**self.args, "skipDirect": True, "planIssues": ["fix crop"]})
-        self.assertIn("fix crop", prompts["direct:editorial"])
-
-
 class Skill(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.text = SKILL.read_text(encoding="utf8")
+        # the router, then its side files (the skill was split on 2026-11-11)
+        cls.text = "\n".join(p.read_text(encoding="utf8") for p in [SKILL] + sorted(q for q in SKILL.parent.glob("*.md") if q != SKILL))
 
     def test_the_flow_is_named_in_order(self):
         at = [self.text.index(w) for w in ("## 2. Spine", "## 3. Facts", "## 4. First edit", "## 5. Review render", "## 6. Player", "## 7. Note round", "## 8. Approval", "## 9. Sound", "## 10. Final")]
@@ -586,9 +480,6 @@ class Skill(unittest.TestCase):
         for word in ("plan-picks", "selection.json", "picture-preview"):
             self.assertNotIn(word, self.text, word)
 
-    def test_it_says_what_to_do_with_refused(self):
-        self.assertIn("refused: true", self.text)
-
     def test_the_note_round_is_all_there(self):
         for word in ("freeze(", "ownership", "never generated HTML", "beats.json", "copy", "real footage", "verified numbers", "his note wins", "python tools_local/build.py", "run.py change", "close_round(", "done", "not done", "BUILD STOPPED", "WHOLE RENDER"):
             self.assertIn(word, self.text, word)
@@ -596,18 +487,17 @@ class Skill(unittest.TestCase):
     def test_the_player_port(self):
         self.assertIn("4750", self.text)
 
-    def test_moves_stay_out(self):
-        self.assertIn("Moves stay out", self.text)
-
     def test_listening_stop_precedes_source_prep(self):
-        stop = self.text.index("**Stop for the one-minute cut listen.**")
+        stop = self.text.index("**Stop for the cut listen, in the cut review page**")
         self.assertLess(stop, self.text.index("python tools/prep_source.py"))
         self.assertLess(stop, self.text.index("python tools/make_words.py"))
 
-    def test_intake_and_retry_arguments_are_documented(self):
-        for text in ("planIssues", "skipDirect", "intake notes", "assets.notes", "revision", "check"):
-            self.assertIn(text, self.text)
-        self.assertRegex(self.text, r"Create `work/<id>/RUN.md`[^\n]*intake notes")
+    def test_run_md_keeps_his_intake_notes(self):
+        self.assertRegex(self.text, r"Create `work/<id>/RUN.md`[^\n]*intake notes in his exact words")
+
+    def test_the_archived_pipeline_is_not_offered(self):
+        for word in ("full-pipeline.md", "recut-plan", "recut-build", "planIssues", "skipDirect"):
+            self.assertNotIn(word, self.text, word)
 
     def test_flagged_notes_name_the_explicit_adopt_call(self):
         self.assertIn("review.freeze(project, adopt=[", self.text)

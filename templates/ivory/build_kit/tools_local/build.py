@@ -185,7 +185,17 @@ if plan.get("look") not in (None, "ivory"):
     for old, new in remap.items():
         body = re.sub(re.escape(old), new, body, flags=re.I)
         js = re.sub(re.escape(old), new, js, flags=re.I)
-face = f'<div id="face-wrap"><video id="face" class="clip" src="assets/face_half.mp4" muted playsinline data-start="0" data-duration="{END}" data-track-index="0"></video></div>'
+    # a look may also bring images (looks/<name>/assets, copied into the project by new_project.py) and a motion script (looks/<name>/motion.js),
+    # which runs last inside the timeline's own function, after every scene block and the shell, so it can read END, RUNS, WINDOWS and tl
+    lacking = sorted(p.relative_to(look_dir).as_posix() for p in (look_dir / "assets").rglob("*") if p.is_file() and not (ED / p.relative_to(look_dir)).is_file()) if (look_dir / "assets").is_dir() else []
+    if lacking:
+        stop([f"look {plan['look']!r} needs {len(lacking)} files this project does not have ({', '.join(lacking[:3])}{', ...' if len(lacking) > 3 else ''}): rerun python templates/ivory/build_kit/new_project.py <id>, which copies them and keeps everything else"])
+    if (look_dir / "motion.js").is_file():
+        tail = "        window.__timelines = window.__timelines || {};"
+        if js.count(tail) != 1:
+            stop([f"look {plan['look']!r} has a motion.js, and tools_local/timeline.js does not end with the kit's two window.__timelines lines, where it goes"])
+        js = js.replace(tail, (look_dir / "motion.js").read_text(encoding="utf8") + tail)
+face =f'<div id="face-wrap"><video id="face" class="clip" src="assets/face_half.mp4" muted playsinline data-start="0" data-duration="{END}" data-track-index="0"></video></div>'
 if plan.get("bottom") == "popout":
     pop = json.loads((ED / "assets" / "popout.json").read_text(encoding="utf8"))
     css += popout.css(pop)

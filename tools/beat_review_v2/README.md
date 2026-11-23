@@ -16,4 +16,3 @@ python -B tools/beat_review_v2/server.py work/beat-fixture/v2/editorial
 
 `test_server.py` checks the routes against a fake API (no renders, no real-project writes).
 
-`_sol-layout/` holds Sol's new-layout build from 2026-11-02. Chase preferred his original layout, so it is kept for reference only.

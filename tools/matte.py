@@ -1,4 +1,4 @@
-"""GPU person cut-out (transparent WebM) with Robust Video Matting - the fast replacement for tools/cutout.sh.
+"""GPU person cut-out (transparent WebM) with Robust Video Matting - the fast replacement for cutout.sh (archived).
 
 Usage (needs the matting venv, not the system Python):
   python tools/matte.py <in.mp4> <out.webm> [--model resnet50|mobilenetv3] [--ratio auto]

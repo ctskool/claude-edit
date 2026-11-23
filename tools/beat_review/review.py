@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from paths import project_root
 ROOT = project_root()
 sys.path[:0] = [str(HERE), str(ROOT / "tools" / "beat_check"), str(ROOT / "tools" / "beat_render"), str(ROOT / "tools")]
+import look_player
 import output as checks
 import ownership
 import sound_mix
@@ -56,6 +57,12 @@ def now():
 
 
 # ---- the picture
+
+
+def composition(project):
+    """What says this index.html is the composition of a picture: a kit build's ownership map, or a hand-built look's engine.json (blueprint, sky: tools/look_player.py).
+    None once the project has moved on from it."""
+    return ownership.load(project) or look_player.composition(project)
 
 
 def picture(project):
@@ -129,6 +136,10 @@ def output_findings(report):
 
 def findings_of(project, root, pic):
     """(findings, unverified counts) for a picture, read from its check reports. Waivers apply as they stand now, so a click takes effect without a new check."""
+    if project and look_player.marker(project):  # a hand-built look has one report, and nothing in it can be waived
+        report = store.read_json(Path(root) / "checks" / pic["composition_rev"][:16] / f"look-{pic['file_sha256'][:16]}.json")
+        rows = [finding("look", "this picture was not loaded by the spec's `player` command")] if report is None else [finding("look", p) for p in report["problems"]]
+        return [{**r, "waived": False, "waivable": False} for r in rows], {}
     keys = {b["beat_id"]: b["key"] for b in stitched_beats(root, pic["stitched"])}
     waivers = checks.waivers_of(project, root)
     output = store.read_json(Path(root) / "checks" / pic["composition_rev"][:16] / f"output-{pic['file_sha256'][:16]}.json")
@@ -449,9 +460,9 @@ def close_round(project, done=(), not_done=None):
     pic = picture(project)
     if pic is None:
         raise ValueError("no picture yet")
-    m = ownership.load(project)
+    m = composition(project)
     if m is None or m["composition_rev"] != pic["composition_rev"]:
-        raise ValueError("the project is not the newest picture: run run.py change first")
+        raise ValueError("the project is not the newest picture: run run.py change first (a hand-built look: its spec's `player` command)")
     head = head_of(root)
     frozen = store.read_json(rounds_dir(root) / "frozen.json")
     done, not_done, ids = list(done), dict(not_done or {}), frozen["note_ids"] if frozen else []
@@ -657,13 +668,15 @@ def native_beat(project, beat_id):
     """That beat at native size, with no sound. Renders in its own store, work/<id>/beat-native, at the final profile, so the review picture and its store are never read or written.
     Waits for the render, and asking again for the same composition returns the same file at once. One run per store, so server.py should call this off its request thread and one beat at a time."""
     project = Path(project).resolve()
+    if look_player.marker(project):
+        raise ValueError("no native-size beat for a hand-built look yet: the review picture is the whole render at 1080")
     native = home_of(project) / "beat-native"
     m = ownership.load(project)
     held = store.read_json(native / "held.json", {})
     known = held.get(f"{m['composition_rev'] if m else None}:{beat_id}")
     if known and Path(known).is_file():
         return known
-    command = [sys.executable, str(RUN), "draft", str(project), "--profile", "final", "--workers", str(NATIVE_WORKERS), "--store", str(native), "--only", beat_id]
+    command = [sys.executable, str(RUN), "draft", str(project), "--profile", "final", "--workers", str(NATIVE_WORKERS), "--store", str(native), "--only", beat_id, "--no-queue"]  # he is waiting on it: never behind a 4K final
     r = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, encoding="utf8", errors="replace", timeout=NATIVE_SECONDS)
     if r.returncode not in (0, 3):
         raise ValueError(f"the native render of {beat_id} exited {r.returncode}: {r.stdout[-400:]}")

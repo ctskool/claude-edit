@@ -1,0 +1,23 @@
+{
+  "name": "charcoal",
+  "tool_name": "charcoal",
+  "format": "16:9",
+  "canvas": [1920, 1080],
+  "fps": 30,
+  "final": "3840x2160 at 30 fps, the same page at twice the density",
+  "full_face": true,
+  "render_unit": "slice (one scene, 22 s at most)",
+  "card": "templates/charcoal/CARD.md",
+  "kit": "templates/charcoal/build_kit",
+  "face_window": {
+    "aspect": "4:5",
+    "right": [1344, 206, 480, 600],
+    "left": [96, 206, 480, 600],
+    "corner": [1566, 538, 258, 322],
+    "pip": [1512, 582, 360, 450],
+    "pipL": [48, 582, 360, 450],
+    "pipT": [1512, 48, 360, 450],
+    "radius": 113
+  },
+  "note": "Long-form, built by hand from the kit (CARD.md). run.py and the Approve click do not know this template yet. full_face is true for long-form only: his camera full frame is a base shot."
+}

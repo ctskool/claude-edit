@@ -1,7 +1,9 @@
-"""Full-face gate for /claude-edit: motionlint, both workflows, the template rule files.
+"""Full-face gate for /claude-edit: motionlint and the template rule files.
 
 Usage: python tools/tests/test_full_face.py
-The workflows run in node with agent, parallel, pipeline, phase, log and args stubbed, and their prompts are captured.
+run_workflow and dry_run run a workflow script in node with agent, parallel, pipeline, phase, log and args stubbed, and capture its
+prompts. The sound step's test uses them. The plan and build workflows they were written for were archived on 2026-11-12
+(retired 2026-11-12, not shipped), with their cases.
 """
 import json
 import os
@@ -98,7 +100,7 @@ class Motionlint(unittest.TestCase):
         self.assertNotIn("face_full", out)
 
     def test_boolean_true_passes_on_a_relative_path(self):
-        # recut-build.js runs motionlint on index.html from inside the project.
+        # The build runs motionlint on index.html from inside the project.
         code, out = lint('{"allow_full_face": true}', relative=True)
         self.assertEqual(code, 0, out)
 
@@ -134,210 +136,16 @@ def dry_run(script, args, plan_check=PLAN_PASSES):
     return {p["label"]: p["prompt"] for p in run_workflow(script, args, plan_check)["prompts"]}
 
 
-PLAN_ARGS = {"id": "t1", "source": "cut.mp4", "hints": [], "jumpcuts": [12.5]}
-BUILD_ARGS = {"id": "t1", "styles": ["editorial"], "ref": "1022-2"}
-OFF = {"allowFullFace": False, "allowFullFaceSource": "template"}
-ON_TEMPLATE = {"allowFullFace": True, "allowFullFaceSource": "template"}
-ON_WORDS = {"allowFullFace": True, "allowFullFaceSource": HIS_WORDS}
-PUNCH_MARK = "covers jump cut at <t> with a bottom-half punch-in"
-
-
-class Workflows(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.plan_off = dry_run("recut-plan.js", {**PLAN_ARGS, **OFF})
-        cls.plan_on = dry_run("recut-plan.js", {**PLAN_ARGS, **ON_WORDS})
-        cls.build_off = dry_run("recut-build.js", {**BUILD_ARGS, **OFF})
-        cls.build_on = dry_run("recut-build.js", {**BUILD_ARGS, **ON_WORDS})
-
-    def test_every_stage_ran(self):
-        self.assertEqual(list(self.plan_off), ["research", "assets", "plan", "check", "plan-revise"])
-        self.assertEqual(list(self.plan_on), ["research", "assets", "plan", "check", "plan-revise"])
-        self.assertEqual(list(self.build_off), ["direct:editorial", "plancheck:editorial", "build:editorial"])
-        self.assertEqual(list(self.build_on), ["direct:editorial", "plancheck:editorial", "build:editorial"])
-
-    def test_default_and_non_boolean_are_off(self):
-        for args in ({}, {"allowFullFace": "true"}, {"allowFullFace": 1}):
-            with self.subTest(args=args):
-                self.assertEqual(dry_run("recut-plan.js", {**PLAN_ARGS, **args}), self.plan_off)
-                self.assertEqual(dry_run("recut-build.js", {**BUILD_ARGS, **args}), self.build_off)
-
-    def test_no_args_at_all_is_off(self):
-        self.assertIn("allow_full_face false", dry_run("recut-build.js", None)["direct:editorial"])
-
-    def test_template_opt_in_is_on(self):
-        p = dry_run("recut-plan.js", {**PLAN_ARGS, **ON_TEMPLATE})["plan"]
-        self.assertIn("allow_full_face to true (a JSON Boolean) and allow_full_face_source to \"template\"", p)
-        self.assertIn("'face' (his opinion or emphasis", p)
-
-    def test_every_agent_gets_the_setting(self):
-        for prompts in (self.plan_off, self.build_off):
-            for label, p in prompts.items():
-                self.assertIn("This run has allow_full_face false", p, label)
-        for prompts in (self.plan_on, self.build_on):
-            for label, p in prompts.items():
-                self.assertIn("This run has allow_full_face true", p, label)
-
-    def test_planner_off_excludes_full_face(self):
-        p = self.plan_off["plan"]
-        self.assertIn("NEVER 'face': a full-screen face is off for this run", p)
-        self.assertIn("on a quiet top panel with one big serif line", p)
-        self.assertNotIn("'face' (his opinion", p)
-        self.assertNotIn("assets/face_full.mp4", p)
-        self.assertIn("allow_full_face to false (a JSON Boolean)", p)
-        self.assertIn("allow_full_face, allow_full_face_source, beats[]", p)
-
-    def test_planner_on_offers_full_face(self):
-        p = self.plan_on["plan"]
-        self.assertIn("'face' (his opinion or emphasis", p)
-        self.assertIn("assets/face_full.mp4", p)
-        self.assertNotIn("NEVER 'face'", p)
-        self.assertIn("allow_full_face to true (a JSON Boolean)", p)
-        self.assertIn(json.dumps(HIS_WORDS), p)
-
-    def test_jump_cuts_follow_the_setting(self):
-        self.assertIn("quick punch-in inside the bottom half only (scale about 1.08)", self.plan_off["plan"])
-        self.assertNotIn("a beat with layout_hint 'face'", self.plan_off["plan"])
-        self.assertIn("a beat with layout_hint 'face' (a full-face punch-in) or 'takeover' must START", self.plan_on["plan"])
-        self.assertNotIn("punch-in inside the bottom half", self.plan_on["plan"])
-
-    def test_jump_covers_reach_the_plan_check(self):
-        self.assertIn("Every jump cut in [12.5] has a cover: a beat with layout_hint 'takeover'", self.plan_off["check"])
-        self.assertIn("Every jump cut in [12.5] has a cover: a beat with layout_hint 'face'", self.plan_on["check"])
-
-    def test_no_jump_cut_list_means_no_check_item(self):
-        args = {k: v for k, v in PLAN_ARGS.items() if k != "jumpcuts"}
-        self.assertNotIn("has a cover", dry_run("recut-plan.js", {**args, **OFF})["check"])
-
-    def test_bottom_half_punch_in_reaches_the_build(self):
-        self.assertIn(PUNCH_MARK, self.plan_off["plan"])
-        self.assertNotIn(PUNCH_MARK, self.plan_on["plan"])
-        for label in ("direct:editorial", "build:editorial"):
-            self.assertIn(PUNCH_MARK, self.build_off[label], label)
-            self.assertIn("punch-in on face_half.mp4", self.build_off[label], label)
-            self.assertNotIn(PUNCH_MARK, self.build_on[label], label)
-        self.assertIn("punch-in jump cover with no punch-in in plan.json is a defect", self.build_off["plancheck:editorial"])
-        self.assertNotIn("punch-in jump cover", self.build_on["plancheck:editorial"])
-
-    def test_emphasis_list_follows_the_setting(self):
-        self.assertNotIn("face/takeover", self.plan_off["plan"])
-        self.assertIn("strongest quiet-panel/takeover beats", self.plan_off["plan"])
-        self.assertIn("strongest face/takeover beats", self.plan_on["plan"])
-
-    def test_plan_check_treats_full_face_as_a_defect_only_when_off(self):
-        self.assertIn("is a full-face beat and a defect", self.plan_off["check"])
-        self.assertNotIn("'split', 'takeover' or 'face'", self.plan_off["check"])
-        self.assertIn("'split', 'takeover' or 'face'", self.plan_on["check"])
-        self.assertNotIn("is a full-face beat and a defect", self.plan_on["check"])
-
-    def test_plan_check_issues_still_flow(self):
-        self.assertIn("stub plan problem", self.plan_off["plan-revise"])
-        self.assertIn("stub plan problem", self.plan_on["plan-revise"])
-
-    def test_build_refuses_a_plan_check_that_did_not_pass(self):
-        failed = {"ok": False, "issues": ["stub plan-check issue"]}
-        for check in (failed, None, {}, {"ok": "true", "issues": []}, {"ok": True}, {"ok": True, "issues": ["left over"]}):
-            with self.subTest(check=check):
-                run = run_workflow("recut-build.js", BUILD_ARGS, check)
-                self.assertEqual([p["label"] for p in run["prompts"]], ["direct:editorial", "plancheck:editorial"])
-                self.assertEqual(len(run["result"]), 1)
-                self.assertIs(run["result"][0]["refused"], True)
-                self.assertNotIn("build", run["result"][0])
-
-    def test_build_runs_on_a_passed_plan_check(self):
-        run = run_workflow("recut-build.js", BUILD_ARGS)
-        self.assertIs(run["result"][0]["refused"], False)
-        self.assertEqual(run["result"][0]["build"]["motionlint"], "ok")
-
-    def test_builder_never_sees_plan_check_issues(self):
-        self.assertNotIn("Plan-check issues", self.build_off["build:editorial"])
-        self.assertNotIn("Plan-check issues", self.build_on["build:editorial"])
-
-    def test_build_off_never_uses_face_full(self):
-        for label in ("direct:editorial", "build:editorial"):
-            p = self.build_off[label]
-            self.assertIn("NEVER use face_full.mp4", p, label)
-            self.assertIn("SPLIT SCREEN in every style", p, label)
-        self.assertIn("the layout (split / full-graphic), the component", self.build_off["direct:editorial"])
-        self.assertIn("Leave face_full.mp4 out.", self.build_off["build:editorial"])
-        self.assertIn("A full-face beat or any use of face_full.mp4 is a defect.", self.build_off["plancheck:editorial"])
-
-    def test_build_on_allows_face_full(self):
-        for label in ("direct:editorial", "build:editorial"):
-            p = self.build_on[label]
-            self.assertNotIn("NEVER use face_full.mp4", p, label)
-            self.assertNotIn("SPLIT SCREEN in every style", p, label)
-            self.assertIn("face_full.mp4 (full-frame face", p, label)
-        self.assertIn("the layout (split / full-graphic / full-face), the component", self.build_on["direct:editorial"])
-        self.assertNotIn("Leave face_full.mp4 out.", self.build_on["build:editorial"])
-        self.assertIn("Full-face beats are allowed", self.build_on["plancheck:editorial"])
-        self.assertNotIn("is a defect.", self.build_on["plancheck:editorial"].split("Defects only")[0].split("must both set")[1])
-
-    def test_plan_json_carries_both_fields(self):
-        self.assertIn('In plan.json set allow_full_face to false (a JSON Boolean) and allow_full_face_source to "template"', self.build_off["direct:editorial"])
-        self.assertIn("In plan.json set allow_full_face to true (a JSON Boolean) and allow_full_face_source to " + json.dumps(HIS_WORDS), self.build_on["direct:editorial"])
-
-
-class PlanCheckAndCodex(unittest.TestCase):
-    """Warnings never block the build, and Codex is opt-in: the default run is plain Claude Code."""
-
-    def test_warnings_alone_still_build_and_reach_the_builder(self):
-        run = run_workflow("recut-build.js", BUILD_ARGS, {"ok": True, "issues": [], "warnings": ["outline 6 px left of b14's target"]})
-        self.assertIs(run["result"][0]["refused"], False)
-        build = {p["label"]: p["prompt"] for p in run["prompts"]}["build:editorial"]
-        self.assertIn("Plan-check warnings, not blockers", build)
-        self.assertIn("outline 6 px left of b14's target", build)
-
-    def test_a_blocker_still_refuses_with_warnings_beside_it(self):
-        run = run_workflow("recut-build.js", BUILD_ARGS, {"ok": False, "issues": ["b07 shows 40% but facts.json says 38%"], "warnings": ["easing"]})
-        self.assertIs(run["result"][0]["refused"], True)
-
-    def test_check_sorts_blockers_from_warnings(self):
-        p = dry_run("recut-build.js", BUILD_ARGS)["plancheck:editorial"]
-        self.assertIn("issues are blockers only", p)
-        self.assertIn("geometry.py measures those on the built page", p)
-        self.assertIn("When unsure which list, warn.", p)
-
-    def test_default_run_has_no_codex(self):
-        for args in ({}, {"codex": "true"}, {"codex": 1}):
-            with self.subTest(args=args):
-                plan = dry_run("recut-plan.js", {**PLAN_ARGS, **args})["plan"]
-                direct = dry_run("recut-build.js", {**BUILD_ARGS, **args})["direct:editorial"]
-                self.assertIn("never pick scene", plan)
-                self.assertNotIn("may get a scene block", plan)
-                self.assertIn("plan no scene images", direct)
-                self.assertNotIn("codex exec", direct)
-
-    def test_codex_true_keeps_scenes(self):
-        plan = dry_run("recut-plan.js", {**PLAN_ARGS, "codex": True})["plan"]
-        direct = dry_run("recut-build.js", {**BUILD_ARGS, "codex": True})["direct:editorial"]
-        self.assertIn("may get a scene block", plan)
-        self.assertIn("hand it to codex exec", direct)
-
-    def test_research_stage_runs_alone_on_the_cut_words(self):
-        run = run_workflow("recut-plan.js", {**PLAN_ARGS, "stage": "research", "words": "raw/cut_words.json"})
-        self.assertEqual([p["label"] for p in run["prompts"]], ["research", "assets"])
-        self.assertEqual(run["result"]["stage"], "research")
-        self.assertIn("Transcript with word timings: raw/cut_words.json", run["prompts"][0]["prompt"])
-
-    def test_beats_stage_skips_research_and_assets(self):
-        labels = [p["label"] for p in run_workflow("recut-plan.js", {**PLAN_ARGS, "stage": "beats"})["prompts"]]
-        self.assertEqual(labels, ["plan", "check", "plan-revise"])
-
-    def test_unknown_stage_runs_everything(self):
-        labels = [p["label"] for p in run_workflow("recut-plan.js", {**PLAN_ARGS, "stage": "nope"})["prompts"]]
-        self.assertEqual(labels, ["research", "assets", "plan", "check", "plan-revise"])
-
-    def test_skill_caps_plan_check_rounds_and_makes_codex_optional(self):
-        p = read(ROOT, ".claude", "skills", "claude-edit", "SKILL.md")
-        self.assertIn("**Two plan-check rounds at most:**", p)
-        self.assertIn("Run `codex --version` once.", p)
-        self.assertEqual(p.count("allowFullFaceSource, codex"), 4)
-
-
 def read(*parts):
     with open(os.path.join(*parts), encoding="utf-8") as f:
         return f.read()
+
+
+def skill_text():
+    """The skill: SKILL.md (the router) followed by its side files."""
+    folder = os.path.join(ROOT, ".claude", "skills", "claude-edit")
+    names = ["SKILL.md"] + sorted(n for n in os.listdir(folder) if n.endswith(".md") and n != "SKILL.md")
+    return "\n".join(read(folder, n) for n in names)
 
 
 class Rules(unittest.TestCase):
@@ -367,16 +175,21 @@ class Rules(unittest.TestCase):
         self.assertIn("Joins inside a takeover already up need neither", p)
 
     def test_picture_note_turns_full_face_on_for_the_whole_route(self):
-        p = read(ROOT, ".claude", "skills", "claude-edit", "SKILL.md")
+        p = skill_text()
         self.assertIn("Set `allow_full_face` true and `allow_full_face_source` to his exact words in `RUN.md`, `beats.json` and `plan.json`.", p)
         self.assertIn("Hard-link `work/<id>/assets/face_full.mp4` into `work/<id>/v2/editorial/assets`", p)
         self.assertIn("If either changes before the build, re-run the plan.", p)
         self.assertIn("Only when RUN.md has allow_full_face true: rebuild face_full", p)
 
     def test_every_full_face_mention_is_gated(self):
-        """A full-face line must name `full_face` itself, or sit under a rule line that does."""
+        """A full-face line must name `full_face` itself, or sit under a rule line that does.
+
+        Rule files only. A template's library/ is skipped: tools/library.py harvests it from approved edits, and its
+        "For:" lines are records of what one video did and why (often why it did not go full-face), not instructions."""
         bare = []
         for folder, _, names in os.walk(TEMPLATES):
+            if "library" in os.path.relpath(folder, TEMPLATES).split(os.sep):
+                continue
             for name in names:
                 if not name.endswith(".md"):
                     continue

@@ -8,7 +8,7 @@ HyperFrames audio is always replaced before the unchanged finish.py mastering st
 A project with a beat map is a reviewed project. Its final takes only a stitched picture from tools/beat_review/final.py, which needs the approval record.
 From there on the project is the frozen bundle that picture came from, sound included. The output check runs on the delivered file.
 """
-import argparse, json, os, shutil, subprocess, sys, time, uuid
+import argparse, json, os, shutil, subprocess, sys, threading, time, uuid
 from fractions import Fraction
 from pathlib import Path
 import sound_mix as sound
@@ -21,6 +21,49 @@ TOOLS = ROOT / "tools"
 
 def run(args, **kwargs):
     return subprocess.run([str(x) for x in args], check=True, **kwargs)
+
+
+class PhoneCopy:
+    """The 1080-wide phone copy of a delivered file, made in the background while the checks read that file.
+
+    It depends on nothing but the finished file, and the checks take minutes at 4K, so waiting for them first only added
+    its whole length to a delivery (64 s of 305 on a 41 s short, 2026-11-12). wait() returns when it is written and raises
+    if it could not be; drop() stops it and removes the file, so a delivery that fails a check still leaves no phone copy.
+    The encoder is the graphics card's when ffmpeg has one (NVENC, same bitrate ceiling), else libx264 as before.
+    """
+    RATE = ["-b:v", "3800k", "-maxrate", "4500k", "-bufsize", "8000k"]
+    ENCODERS = [["-c:v", "h264_nvenc", "-preset", "p6", "-tune", "hq", "-profile:v", "high", "-rc", "vbr"], ["-c:v", "libx264", "-preset", "slow"]]
+
+    def __init__(self, video, out, width):
+        self.out, self.proc, self.error, self.dropped = Path(out), None, None, False
+        scale = ["-vf", "scale=1080:1920:flags=area"] if width > 1080 else []
+        self.commands = [["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", str(video), *scale, *enc, *self.RATE,
+                          "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(self.out)] for enc in self.ENCODERS]
+        self.thread = threading.Thread(target=self._work, daemon=True)
+        self.thread.start()
+
+    def _work(self):
+        for cmd in self.commands:
+            if self.dropped:
+                return
+            self.proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+            _, err = self.proc.communicate()
+            if self.proc.returncode == 0 and self.out.is_file():
+                self.error = None
+                return
+            self.error = (err or b"").decode("utf8", "replace")[-400:]  # no NVENC on this machine: the next encoder is libx264
+
+    def wait(self):
+        self.thread.join()
+        if self.error or not self.out.is_file():
+            raise ValueError(f"the phone copy could not be made: {self.error}")
+
+    def drop(self):
+        self.dropped = True
+        if self.proc and self.proc.poll() is None:
+            self.proc.kill()
+        self.thread.join(timeout=30)
+        self.out.unlink(missing_ok=True)
 
 
 def write_json(path, value):
@@ -202,33 +245,38 @@ def deliver(a):
          "-c:v", "copy", "-c:a", "pcm_s24le", "-t", str(duration), mux_path])
     # MOV carries the PCM mix to finish.py without an extra lossy audio encode.
     run([sys.executable, TOOLS / "finish.py", mux_path, video, "--sheet", sheet_image])
-    gated = video
-    if accepted and bound["width"] > 1080:  # gates.py's bands are 1080x1920 pixels
-        gated = accepted["proxy"] = final_path.proxy_of(video, renders / (a.base + ".proxy-1080.mp4"))
-    gate_cmd = [sys.executable, str(TOOLS / "gates.py"), str(gated), "--band", "0,0,1080,900", "--pack", "editorial", "--json", str(gates_path)]
-    gate = subprocess.run(gate_cmd, capture_output=True, text=True)
-    if gate.returncode not in (0, 1, 2) or not gates_path.is_file():
-        raise ValueError(f"gates.py could not run: {gate.stderr}")
-    g = json.loads(gates_path.read_text(encoding="utf8"))
-    # HOUSE.md makes motion findings warn-only. Audio/black findings still block delivery.
-    blocking = [f for f in g["findings"] if f["check"] in ("black", "audio", "loudness", "true-peak")]
-    checks["gates"] = {"exit_code": gate.returncode, "report": str(gates_path), "verdict": g["verdict"], "findings": g["findings"], "blocking": blocking}
-    report = {"mode": a.mode, "status": "checking", "picture": str(picture), "picture_sha256": bound["picture_sha256"],
-              "hyperframes_invoked": not bool(a.picture or accepted), "render_elapsed_seconds": render_seconds,
-              "picture_rev": revision, "render_manifest": str(render_manifest), "sound_sheet_sha256": sheet_hash,
-              "sound_sheet": str(project / "sound.json") if sheet_hash else None, "sound_identity": sound_identity, "mix": str(mix_path),
-              "output": str(video), "output_sha256": sound.file_hash(video), "duration": duration,
-              "width": bound["width"], "height": bound["height"], "fps": bound["fps"],
-              "source_swaps": swaps, "checks": checks}
-    if accepted:
-        approval = accepted.get("approval") or {}
-        derivative = accepted["derivative"]
-        report.update(composition_rev=accepted["record"]["composition_rev"], lock_revision=accepted["record"]["lock_revision"], profile=accepted["profile"], bundle=str(accepted["home"]), project=str(project),
-                      approval={k: approval.get(k) for k in ("approved_file_sha256", "composition_rev", "lock_revision", "result", "created")} if approval else None,
-                      derivative=None if not derivative else {k: derivative[k] for k in ("base_composition_rev", "source_edits", "swaps", "sound")},
-                      frame_map=None if not derivative else {k: v for k, v in derivative["frame_map"].items() if k != "beats"},
-                      sound_audition="UNVERIFIED until Chase listens")
-    write_json(manifest, report)
+    phone_copy = PhoneCopy(video, preview, bound["width"])  # made while the checks below run; kept only if they all pass
+    try:
+        gated = video
+        if accepted and bound["width"] > 1080:  # gates.py's bands are 1080x1920 pixels
+            gated = accepted["proxy"] = final_path.proxy_of(video, renders / (a.base + ".proxy-1080.mp4"))
+        gate_cmd = [sys.executable, str(TOOLS / "gates.py"), str(gated), "--band", "0,0,1080,900", "--pack", "editorial", "--json", str(gates_path)]
+        gate = subprocess.run(gate_cmd, capture_output=True, text=True)
+        if gate.returncode not in (0, 1, 2) or not gates_path.is_file():
+            raise ValueError(f"gates.py could not run: {gate.stderr}")
+        g = json.loads(gates_path.read_text(encoding="utf8"))
+        # HOUSE.md makes motion findings warn-only. Audio/black findings still block delivery.
+        blocking = [f for f in g["findings"] if f["check"] in ("black", "audio", "loudness", "true-peak")]
+        checks["gates"] = {"exit_code": gate.returncode, "report": str(gates_path), "verdict": g["verdict"], "findings": g["findings"], "blocking": blocking}
+        report = {"mode": a.mode, "status": "checking", "picture": str(picture), "picture_sha256": bound["picture_sha256"],
+                  "hyperframes_invoked": not bool(a.picture or accepted), "render_elapsed_seconds": render_seconds,
+                  "picture_rev": revision, "render_manifest": str(render_manifest), "sound_sheet_sha256": sheet_hash,
+                  "sound_sheet": str(project / "sound.json") if sheet_hash else None, "sound_identity": sound_identity, "mix": str(mix_path),
+                  "output": str(video), "output_sha256": sound.file_hash(video), "duration": duration,
+                  "width": bound["width"], "height": bound["height"], "fps": bound["fps"],
+                  "source_swaps": swaps, "checks": checks}
+        if accepted:
+            approval = accepted.get("approval") or {}
+            derivative = accepted["derivative"]
+            report.update(composition_rev=accepted["record"]["composition_rev"], lock_revision=accepted["record"]["lock_revision"], profile=accepted["profile"], bundle=str(accepted["home"]), project=str(project),
+                          approval={k: approval.get(k) for k in ("approved_file_sha256", "composition_rev", "lock_revision", "result", "created")} if approval else None,
+                          derivative=None if not derivative else {k: derivative[k] for k in ("base_composition_rev", "source_edits", "swaps", "sound")},
+                          frame_map=None if not derivative else {k: v for k, v in derivative["frame_map"].items() if k != "beats"},
+                          sound_audition="UNVERIFIED until Chase listens")
+        write_json(manifest, report)
+    except BaseException:
+        phone_copy.drop()
+        raise
     try:
         if blocking:
             raise ValueError(f"gates failed: {blocking}")
@@ -245,12 +293,14 @@ def deliver(a):
         selection_unchanged()
         if sound.picture_rev(project) != revision or sound.file_hash(picture) != bound["picture_sha256"] or not sound_unchanged():
             raise ValueError("inputs changed during delivery; rerun against stable inputs")
-        phone = ["-vf", "scale=1080:1920:flags=area"] if bound["width"] > 1080 else []
-        run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", video, *phone, "-c:v", "libx264", "-preset", "slow", "-b:v", "3800k", "-maxrate", "4500k", "-bufsize", "8000k",
-             "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", preview])
+        phone_copy.wait()  # started after finish.py, so by now it is usually written
         report.update(status=checks["output"]["status"] if accepted else "PASS", preview=str(preview), preview_sha256=sound.file_hash(preview))
     except Exception as e:
+        phone_copy.drop()
         report.update(status="FAIL", error=str(e))
+        raise
+    except BaseException:
+        phone_copy.drop()
         raise
     finally:
         write_json(manifest, report)

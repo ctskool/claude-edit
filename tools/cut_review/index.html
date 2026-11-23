@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cut review</title>
+<style>
+:root{
+  --bg:#141414; --panel:#1f1f1f; --panel2:#2a2a2a; --line:#333; --text:#ededed; --dim:#9a9a9a; --faint:#666;
+  --clip:#0f6f78; --clipTop:#12808a; --wave:#7fe0e6; --hand:#f4b860; --ok:#7fd49a; --warn:#ff8f6b;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font:14px/1.4 "Segoe UI",system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden;user-select:none}
+button{font:inherit;color:var(--text);background:none;border:1px solid transparent;border-radius:6px;padding:6px 10px;cursor:pointer;white-space:nowrap}
+button:hover{background:var(--panel2)}
+button:disabled{opacity:.35;cursor:default;background:none}
+button kbd{font:11px var(--mono);color:var(--faint);margin-left:6px}
+button.primary{background:var(--hand);color:#201707;font-weight:600;padding:7px 16px}
+button.primary:hover{background:#ffc878}
+button.primary.done{background:none;color:var(--ok);border-color:#3c6b4b}
+button.primary.bad{background:none;color:var(--warn);border-color:#7a4433}
+header{display:flex;align-items:center;gap:14px;padding:8px 14px;background:var(--panel)}
+header h1{font-size:14px;margin:0;font-weight:600}
+header h1 span{color:var(--dim);font-weight:400}
+#stats{color:var(--dim);font:13px var(--mono);flex:1;text-align:center}
+#stats b{color:var(--text);font-weight:500}
+#stats .ch{color:var(--hand)}
+#banner{display:none;padding:8px 14px;background:#33290f;color:#f6d9a0}
+#stage{flex:1;min-height:120px;display:flex;align-items:center;justify-content:center;position:relative;background:#0c0c0c;margin:6px 6px 0;border-radius:8px;overflow:hidden}
+#vid{max-width:100%;max-height:100%;height:100%;display:block}
+#vmsg{position:absolute;color:var(--dim);text-align:center}
+#bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:6px 10px;margin:6px 6px 0;background:var(--panel);border-radius:8px 8px 0 0;border-bottom:1px solid var(--line)}
+#bar .l{display:flex;gap:2px}
+#bar .c{display:flex;align-items:center;gap:12px}
+#bar .r{display:flex;gap:2px;justify-content:flex-end}
+#clock{font:14px var(--mono);min-width:150px}
+#clock b{color:#5fd7e0;font-weight:500}
+#clock span{color:var(--dim)}
+#play{width:38px;height:38px;border-radius:50%;background:var(--panel2);font-size:15px;padding:0}
+#tl{height:176px;display:block;width:calc(100% - 12px);margin:0 6px;background:var(--panel);cursor:default}
+footer{padding:6px 16px 8px;margin:0 6px 6px;background:var(--panel);border-radius:0 0 8px 8px;color:var(--faint);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+footer b{color:var(--dim);font-weight:500}
+</style>
+</head>
+<body>
+<header>
+  <h1>Cut review <span id="vidName"></span></h1>
+  <div id="stats"></div>
+  <button id="approve" class="primary">Approve cut</button>
+</header>
+<div id="banner"></div>
+<div id="stage"><video id="vid" muted playsinline preload="auto"></video><div id="vmsg"></div></div>
+<div id="bar">
+  <div class="l">
+    <button id="undo" title="Undo (Ctrl+Z)">↶ Undo</button>
+    <button id="redo" title="Redo (Ctrl+Shift+Z)">↷ Redo</button>
+    <button id="split" title="Split the clip at the playhead">Split<kbd>S</kbd></button>
+    <button id="del" title="Delete the selected clip">Delete<kbd>Del</kbd></button>
+  </div>
+  <div class="c"><button id="play" title="Play / pause (Space)">▶</button><div id="clock"></div></div>
+  <div class="r"><button id="zout" title="Zoom out">−</button><button id="zin" title="Zoom in">+</button><button id="zfit" title="Show the whole cut">Fit</button></div>
+</div>
+<canvas id="tl"></canvas>
+<footer><b>Drag a clip's edge</b> to trim it or pull back what was cut · <b>Q</b> / <b>W</b> trim the clip's start / end to the playhead · <b>S</b> split · click a clip, <b>Del</b> to remove it · <b>Space</b> play · <b>← →</b> 1 s · scroll to move, Ctrl+scroll to zoom</footer>
+
+<script>
+const $ = s => document.querySelector(s), SR = 48000, css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C = {clip: css('--clip'), clipTop: css('--clipTop'), wave: css('--wave'), hand: css('--hand'), line: css('--line'), dim: css('--dim'), faint: css('--faint'), text: css('--text'), mono: css('--mono')};
+let ST, fps, peaks = new Uint8Array(0), keeps = [], auto = [], autoOut = new Set(), autoIn = new Set(), words = [], kw = [], kC = [], ver = 0;
+let sS = [], kS = [], aS = [], total = 0, cur = 0, anchor = 0, selK = -1, undo = [], redo = [], approved = null, render = {state: 'idle'};
+let viewDur = 30, viewStart = 0, drag = null, pollT = null, video = [];
+const RULER = 24, TRACK = 92, vid = $('#vid');
+
+const fmt = t => { t = Math.max(0, t); const m = Math.floor(t / 60); return m + ':' + (t - m * 60).toFixed(1).padStart(4, '0'); };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const post = (u, b) => fetch(u, {method: 'POST', body: JSON.stringify(b)}).then(r => r.json());
+const samp = f => Math.round(f / fps * SR);
+
+/* ---- the cut: kept session-frame ranges, shown as clips laid end to end ---- */
+function normalise(K) {                                               // touching clips stay two clips (a split); the server joins them
+  const M = [];
+  for (const [s0, e0] of K.map(k => [Math.max(0, k[0]), Math.min(ST.frames, k[1])]).sort((a, b) => a[0] - b[0])) {
+    if (e0 <= s0) continue;
+    if (M.length && s0 < M[M.length - 1][1]) M[M.length - 1][1] = Math.max(M[M.length - 1][1], e0); else M.push([s0, e0]);
+  }
+  const fb = ST.files.slice(1).map(f => f.start_frame), out = [];
+  for (const [s, e] of M) { const c = fb.filter(x => s < x && x < e), a = [s, ...c], b = [...c, e]; a.forEach((u, i) => out.push([u, b[i]])); }
+  return out.filter(k => k[1] - k[0] >= 2);
+}
+const fileOf = f => { let k = 0; ST.files.forEach((x, i) => { if (f >= x.start_frame) k = i; }); return k; };
+const fileSpan = f => { const x = ST.files[fileOf(f)]; return [x.start_frame, x.start_frame + x.frames]; };
+function find(arr, v) { let lo = 0, hi = arr.length - 1; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (arr[m] <= v) lo = m; else hi = m - 1; } return lo; }
+const inside = (K, starts, f) => { if (!K.length) return false; const k = find(starts, f); return K[k][0] <= f && f < K[k][1]; };
+const clipAt = tc => find(sS, Math.max(0, tc) * SR);
+function c2s(tc) { const x = Math.max(0, tc) * SR, k = find(sS, x); return keeps[k][0] / fps + Math.min((x - sS[k]) / SR, (keeps[k][1] - keeps[k][0]) / fps); }
+function s2c(ts) { const f = ts * fps, k = find(kS, f), [s, e] = keeps[k]; if (f < s) return sS[k] / SR; if (f <= e) return sS[k] / SR + (f - s) / fps; return k + 1 < keeps.length ? sS[k + 1] / SR : total; }
+function recalc() {
+  sS = []; let a = 0; for (const [s, e] of keeps) { sS.push(a); a += samp(e) - samp(s); } total = a / SR;
+  kS = keeps.map(k => k[0]); kw = [];
+  for (const w of words) { const m = (w.s + w.e) / 2 * fps; if (inside(keeps, kS, m) && (w.base || !inside(auto, aS, m))) { w.c0 = s2c(w.s); kw.push(w); } }
+  kC = kw.map(w => w.c0);
+}
+function pushUndo() { undo.push(JSON.stringify(keeps)); if (undo.length > 300) undo.shift(); redo = []; anchor = c2s(cur); }
+async function commit() {
+  keeps = normalise(keeps); recalc(); cur = Math.min(total, s2c(anchor)); approved = null; if (selK >= keeps.length) selK = -1; head();
+  const was = eng.playing; halt();
+  const r = await post('/save', {keeps}); ver = r.v;
+  if (was) start(cur, total);
+}
+function step(dir) { const st = dir < 0 ? undo : redo, other = dir < 0 ? redo : undo; if (!st.length) return; other.push(JSON.stringify(keeps)); anchor = c2s(cur); keeps = JSON.parse(st.pop()); selK = -1; commit(); }
+function limits(k, side) {
+  if (side === 'out') { const nx = keeps[k + 1], hi = Math.min(fileSpan(keeps[k][1] - 1)[1], nx && fileOf(nx[0]) === fileOf(keeps[k][1] - 1) ? nx[0] : 1e12); return [keeps[k][0] + 2, hi]; }
+  const pv = keeps[k - 1], lo = Math.max(fileSpan(keeps[k][0])[0], pv && fileOf(pv[1] - 1) === fileOf(keeps[k][0]) ? pv[1] : 0); return [lo, keeps[k][1] - 2];
+}
+function setEdge(k, side, f) { const [lo, hi] = limits(k, side); f = Math.max(lo, Math.min(hi, f)); keeps[k][side === 'out' ? 1 : 0] = f; return f; }
+function split() { const t = now(), k = clipAt(t), [s, e] = keeps[k], f = Math.round(c2s(t) * fps); if (f - s < 2 || e - f < 2) return; pushUndo(); keeps.splice(k, 1, [s, f], [f, e]); selK = -1; commit(); }
+function del() { if (selK < 0 || keeps.length < 2) return; pushUndo(); anchor = keeps[selK][1] / fps; keeps.splice(selK, 1); selK = -1; commit(); }
+function trimTo(side) {                                               // CapCut's Q / W: cut the clip's start / end at the playhead
+  const t = now(), k = clipAt(t), f = Math.round(c2s(t) * fps); if (f - keeps[k][0] < 2 || keeps[k][1] - f < 2) return;
+  pushUndo(); keeps[k][side === 'in' ? 0 : 1] = f; if (side === 'in') anchor = f / fps; selK = k; commit();
+}
+
+/* ---- sound: the cut is streamed in chunks and scheduled back to back, sample exact ---- */
+const eng = {ctx: null, gen: 0, playing: false, t0: Infinity, from: 0, to: 0, nodes: new Set()};
+function halt() { eng.gen++; for (const s of eng.nodes) { try { s.stop(); } catch {} } eng.nodes.clear(); eng.playing = false; $('#play').textContent = '▶'; }
+const pos = () => Math.min(eng.to, eng.from + Math.max(0, eng.ctx.currentTime - eng.t0));
+const now = () => eng.playing ? pos() : cur;
+async function start(from, to) {
+  halt(); if (to - from < 0.02) return;
+  if (!eng.ctx) eng.ctx = new AudioContext({sampleRate: SR}); if (eng.ctx.state !== 'running') await eng.ctx.resume();
+  const g = ++eng.gen, a = Math.round(from * SR), b = Math.round(to * SR); Object.assign(eng, {playing: true, t0: Infinity, from: a / SR, to: b / SR}); $('#play').textContent = '❚❚';
+  let next = a, first = true;
+  while (g === eng.gen && next < b) {
+    if (!first && (next - a) / SR - (eng.ctx.currentTime - eng.t0) > 8) { await sleep(250); continue; }
+    const n = Math.min(first ? SR / 2 : SR * 5, b - next); let buf;
+    try {
+      const r = await fetch(`/pcm?from=${next}&n=${n}&v=${ver}`); if (!r.ok) throw 0;
+      const d = new Int16Array(await r.arrayBuffer()); buf = eng.ctx.createBuffer(2, n, SR);
+      for (let c = 0; c < 2; c++) { const ch = buf.getChannelData(c); for (let i = 0; i < n; i++) ch[i] = d[i * 2 + c] / 32768; }
+    } catch { if (g === eng.gen) halt(); return; }
+    if (g !== eng.gen) return;
+    if (first) { eng.t0 = Math.ceil((eng.ctx.currentTime + 0.04) * SR) / SR; first = false; }
+    const src = eng.ctx.createBufferSource(); src.buffer = buf; src.connect(eng.ctx.destination); src.start(eng.t0 + (next - a) / SR);
+    eng.nodes.add(src); src.onended = () => eng.nodes.delete(src); next += n;
+  }
+}
+function toggle() { if (eng.playing) { cur = pos(); halt(); } else start(cur >= total - 0.05 ? 0 : cur, total); }
+function seek(t, keepView) { cur = Math.max(0, Math.min(total, t)); if (eng.playing) start(cur, total); if (!keepView) follow(true); }
+function follow(force) { if (force ? (cur < viewStart || cur > viewStart + viewDur) : cur > viewStart + viewDur * 0.9) viewStart = cur - viewDur * (force ? 0.3 : 0.06); clampView(); }
+function clampView() { viewStart = Math.max(0, Math.min(Math.max(0, total - viewDur * 0.7), viewStart)); }
+function zoom(k, at) { const c = at ?? now(), r = (c - viewStart) / viewDur; viewDur = Math.max(2, Math.min(Math.max(30, total * 1.05), viewDur * k)); viewStart = c - r * viewDur; clampView(); }
+
+/* ---- picture: a small copy of the camera follows the sound ---- */
+/* Lip sync (2026-11-16): the picture follows what is HEARD now (the sound clock minus the output's latency), plus the
+   take's pic_delay. Small drift is pulled in by nudging the playback rate, so the picture never sits 0.15 s off; only a
+   join or a big slip seeks. */
+function syncVideo() {
+  const lat = eng.playing && eng.ctx ? (eng.ctx.outputLatency || eng.ctx.baseLatency || 0) : 0;
+  const ts = drag && drag.kind === 'trim' ? drag.ses : c2s(Math.max(0, now() - lat)), k = fileOf(ts * fps), v = video[k], msg = $('#vmsg');
+  if (!v || !v.ready) { msg.textContent = 'Getting the picture ready. Sound and trimming work already.'; vid.style.visibility = 'hidden'; return; }
+  msg.textContent = ''; vid.style.visibility = '';
+  if (vid.dataset.k !== String(v.vid)) { vid.src = '/video/' + v.vid; vid.dataset.k = String(v.vid); }
+  const vt = Math.max(0, (ts * fps - ST.files[k].start_frame + v.first - v.lag) / fps + (v.delay || 0)), live = eng.playing && eng.t0 !== Infinity && !drag;
+  if (live) {
+    if (vid.paused) vid.play().catch(() => {});
+    const d = vt - vid.currentTime;
+    if (Math.abs(d) > 0.25) { if (!vid.seeking) { vid.currentTime = vt + 0.03; vid.playbackRate = 1; } }   // a join: jump
+    else vid.playbackRate = Math.abs(d) < 0.01 ? 1 : Math.max(0.8, Math.min(1.25, 1 + d * 4));            // drift: pull in
+  }
+  else { vid.playbackRate = 1; if (!vid.paused) vid.pause(); if (Math.abs(vid.currentTime - vt) > 0.02 && !vid.seeking) vid.currentTime = vt; }
+}
+
+/* ---- timeline ---- */
+function fit(cv) { const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1; if (cv.width !== Math.round(r.width * d) || cv.height !== Math.round(r.height * d)) { cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d); } const g = cv.getContext('2d'); g.setTransform(d, 0, 0, d, 0, 0); return [g, r.width, r.height]; }
+function pk(s0, s1) { let i = Math.max(0, Math.floor(s0 * 100)), j = Math.min(peaks.length, Math.max(i + 1, Math.ceil(s1 * 100))), m = 0; for (; i < j; i++) if (peaks[i] > m) m = peaks[i]; return m / 255; }
+function draw() {
+  const [g, W, H] = fit($('#tl')); g.clearRect(0, 0, W, H); if (!total) return;
+  const per = viewDur / W, tx = t => (t - viewStart) / per, y0 = RULER + 8, y1 = y0 + TRACK;
+  // ruler
+  const steps = [0.5, 1, 2, 5, 10, 30, 60, 120, 300], st = steps.find(s => s / per >= 80) || 600;
+  g.font = '11px ' + C.mono; g.textBaseline = 'middle'; g.fillStyle = C.faint;
+  for (let t = Math.floor(viewStart / st) * st; t < viewStart + viewDur; t += st) { const x = tx(t); if (x < -1) continue; g.fillRect(x, 6, 1, 12); const m = Math.floor(t / 60), s = t - m * 60; g.fillText(`${String(m).padStart(2, '0')}:${st < 1 ? s.toFixed(1).padStart(4, '0') : String(Math.round(s)).padStart(2, '0')}`, x + 5, 12); for (let i = 1; i < 5; i++) g.fillRect(x + i * st / per / 5, 14, 1, 4); }
+  // clips
+  const k0 = clipAt(viewStart);
+  for (let k = k0; k < keeps.length; k++) {
+    const a = sS[k] / SR, len = (keeps[k][1] - keeps[k][0]) / fps, xa = tx(a), xb = tx(a + len); if (xa > W) break;
+    const x = Math.max(-4, xa + 1), w = Math.min(W + 4, xb - 1) - x; if (w < 1) continue;
+    g.fillStyle = C.clip; g.beginPath(); g.roundRect(x, y0, w, TRACK, 5); g.fill();
+    g.fillStyle = C.clipTop; g.beginPath(); g.roundRect(x, y0, w, 16, [5, 5, 0, 0]); g.fill();
+    g.save(); g.beginPath(); g.rect(x, y0, w, TRACK); g.clip();
+    g.fillStyle = C.wave; const s0 = keeps[k][0] / fps, mid = y0 + 16 + (TRACK - 16) / 2;
+    for (let px = Math.max(0, Math.floor(x)); px < Math.min(W, x + w); px++) { const t = s0 + (viewStart + px * per - a), h = pk(t, t + per) * (TRACK - 24); g.fillRect(px, mid - h / 2, 1, Math.max(1, h)); }
+    if (w > 46) { g.fillStyle = 'rgba(255,255,255,.8)'; g.font = '11px ' + C.mono; g.fillText(len.toFixed(len < 10 ? 2 : 1) + 's', x + 6, y0 + 8.5); }
+    g.restore();
+    g.fillStyle = C.hand;                                             // an edge he moved
+    if (!autoIn.has(keeps[k][0]) && xa > -4) g.fillRect(xa + 1, y0, 3, TRACK);
+    if (!autoOut.has(keeps[k][1]) && xb < W + 4) g.fillRect(xb - 4, y0, 3, TRACK);
+    if (k === selK) { g.strokeStyle = '#fff'; g.lineWidth = 2; g.beginPath(); g.roundRect(x + 1, y0 + 1, w - 2, TRACK - 2, 4); g.stroke(); }
+  }
+  // words under the clips
+  g.font = '12.5px "Segoe UI",system-ui,sans-serif'; g.textBaseline = 'middle'; let right = -1e9; const t = now();
+  for (let i = find(kC, viewStart - 2); i < kw.length; i++) { const w = kw[i], x = tx(w.c0); if (x > W) break; if (x < right + 6) continue; const live = w.c0 <= t && (i + 1 >= kw.length || kw[i + 1].c0 > t); g.fillStyle = live ? '#fff' : w.base ? C.dim : C.hand; g.fillText(w.t, x, y1 + 22); right = x + g.measureText(w.t).width; }
+  // playhead
+  const px = tx(t); g.fillStyle = '#fff'; g.fillRect(px - 0.75, 0, 1.5, H); g.beginPath(); g.roundRect(px - 5, 0, 10, 13, [2, 2, 5, 5]); g.fill();
+}
+function frame() {
+  if (eng.playing) { if (eng.ctx.currentTime - eng.t0 >= eng.to - eng.from) { cur = eng.to; halt(); } else { cur = pos(); if (!drag) follow(false); } }
+  $('#clock').innerHTML = `<b>${fmt(now())}</b> <span>/ ${fmt(total)}</span>`; draw(); syncVideo(); requestAnimationFrame(frame);
+}
+function head() {
+  const was = auto.reduce((a, k) => a + k[1] - k[0], 0) / fps, d = total - was, n = keeps.reduce((a, k) => a + !autoIn.has(k[0]) + !autoOut.has(k[1]), 0);
+  $('#stats').innerHTML = `<b>${fmt(total)}</b> · ${keeps.length} clips` + (n ? ` · <span class="ch">${n} edge${n > 1 ? 's' : ''} moved, ${d >= 0 ? '+' : '−'}${Math.abs(d).toFixed(2)} s</span>` : '');
+  $('#undo').disabled = !undo.length; $('#redo').disabled = !redo.length; $('#del').disabled = selK < 0 || keeps.length < 2;
+  const b = $('#approve'); b.className = 'primary'; b.disabled = false; b.title = '';
+  if (!approved) b.textContent = 'Approve cut';
+  else if (render.state === 'running') { b.textContent = `Approved · cutting both files ${fmt(render.secs).slice(0, -2)}`; b.classList.add('done'); }
+  else if (render.state === 'failed') { b.textContent = 'Approved, but the render failed: tell Claude'; b.classList.add('bad'); b.title = render.note || ''; }
+  else if (render.state === 'done') { b.textContent = `Approved · both files cut in ${fmt(render.secs).slice(0, -2)}`; b.classList.add('done'); }
+  else { b.textContent = 'Approved'; b.classList.add('done'); }
+}
+async function poll() {
+  clearTimeout(pollT); const r = await fetch('/status').then(r => r.json()); render = r.render; r.video.forEach((ok, k) => { video[k].ready = ok; }); head();
+  if (render.state === 'running' || video.some(v => !v.ready)) pollT = setTimeout(poll, 1500);
+}
+
+/* ---- input ---- */
+$('#play').onclick = toggle; $('#undo').onclick = () => step(-1); $('#redo').onclick = () => step(1); $('#split').onclick = split; $('#del').onclick = del;
+$('#zin').onclick = () => zoom(0.6); $('#zout').onclick = () => zoom(1 / 0.6); $('#zfit').onclick = () => { viewDur = Math.max(30, total * 1.05); viewStart = 0; };
+$('#approve').onclick = async () => { if (approved) return; const b = $('#approve'); b.disabled = true; b.textContent = 'Saving…'; const r = await post('/approve', {keeps}); if (r.error) { b.disabled = false; b.textContent = 'Could not save: ' + r.error; return; } approved = r.approved; await poll(); };
+const tl = $('#tl');
+function hit(e) {                                                     // what is under the mouse: a clip edge, a clip, or the ruler
+  const r = tl.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, per = viewDur / r.width, t = viewStart + x * per, out = {x, y, t, per, k: -1, edge: null};
+  if (y < RULER + 4 || t < 0 || t > total) return out;
+  const k = clipAt(t), a = sS[k] / SR, b = a + (keeps[k][1] - keeps[k][0]) / fps; out.k = k;
+  if ((t - a) / per <= 7 && (b - t) / per > 7) out.edge = 'in'; else if ((b - t) / per <= 7) out.edge = 'out';
+  return out;
+}
+tl.onmousemove = e => { if (!drag) tl.style.cursor = hit(e).edge ? 'ew-resize' : 'default'; };
+tl.onmousedown = e => {
+  const h = hit(e);
+  if (h.edge) { pushUndo(); if (eng.playing) { cur = pos(); halt(); } selK = h.k; const f0 = keeps[h.k][h.edge === 'out' ? 1 : 0]; drag = {kind: 'trim', k: h.k, side: h.edge, f0, x0: h.x, vs0: viewStart, per: h.per, ses: f0 / fps}; }
+  else { drag = {kind: 'scrub', x0: h.x, moved: false, k: h.k}; seek(h.t, true); }
+  head();
+};
+window.onmousemove = e => {
+  if (!drag) return; const r = tl.getBoundingClientRect(), x = e.clientX - r.left;
+  if (drag.kind === 'scrub') { if (Math.abs(x - drag.x0) > 3) drag.moved = true; if (drag.moved) seek(viewStart + x / r.width * viewDur, true); return; }
+  const f = setEdge(drag.k, drag.side, drag.f0 + Math.round((x - drag.x0) * drag.per * fps));
+  if (drag.side === 'in') viewStart = drag.vs0 + (drag.f0 - f) / fps;   // the edge follows the mouse; what comes after stays put
+  drag.ses = (drag.side === 'out' ? f - 1 : f) / fps; recalc();
+};
+window.onmouseup = () => {
+  if (!drag) return; const d = drag; drag = null;
+  if (d.kind === 'scrub') { if (!d.moved) selK = d.k; head(); return; }
+  const f = keeps[d.k][d.side === 'out' ? 1 : 0]; if (f === d.f0) { undo.pop(); clampView(); head(); return; }
+  anchor = d.side === 'in' ? f / fps : Math.max(keeps[d.k][0] / fps, f / fps - 1);
+  commit().then(() => { if (d.side === 'in') cur = Math.max(0, cur - 1); clampView(); });   // parked a second before the join: Space plays it
+};
+tl.onwheel = e => { e.preventDefault(); const r = tl.getBoundingClientRect(); if (e.ctrlKey) zoom(e.deltaY > 0 ? 1.25 : 0.8, viewStart + (e.clientX - r.left) / r.width * viewDur); else { viewStart += (e.deltaX || e.deltaY) / 700 * viewDur; clampView(); } };
+window.onkeydown = e => {
+  const k = e.key.toLowerCase(), c = e.ctrlKey || e.metaKey; let used = true;
+  if (c && k === 'z') step(e.shiftKey ? 1 : -1); else if (c && k === 'y') step(1); else if (c && k === 'b') split(); else if (c) used = false;
+  else if (k === ' ') toggle(); else if (k === 'arrowleft') seek(now() - (e.shiftKey ? 5 : 1)); else if (k === 'arrowright') seek(now() + (e.shiftKey ? 5 : 1));
+  else if (k === 's') split(); else if (k === 'q') trimTo('in'); else if (k === 'w') trimTo('out'); else if (k === 'delete' || k === 'backspace') del();
+  else if (k === '=' || k === '+') zoom(0.6); else if (k === '-') zoom(1 / 0.6); else if (k === 'escape') { selK = -1; head(); } else used = false;
+  if (used) e.preventDefault();
+};
+
+(async function boot() {
+  ST = await fetch('/state').then(r => r.json()); peaks = new Uint8Array(await fetch('/peaks').then(r => r.arrayBuffer()));
+  fps = ST.fps; ver = ST.v; keeps = ST.keeps; auto = ST.auto; approved = ST.approved; render = ST.render; video = ST.video;
+  autoOut = new Set(auto.map(k => k[1])); autoIn = new Set(auto.map(k => k[0])); aS = auto.map(k => k[0]);
+  words = ST.words.map(w => ({t: w[0], s: w[1], e: w[2], base: !!w[3]}));
+  $('#vidName').textContent = '· ' + ST.id; document.title = 'Cut review · ' + ST.id;
+  if (ST.carried) { $('#banner').style.display = 'block'; $('#banner').textContent = 'The cut was remade since your last review. Your changes were carried onto it: the amber edges are yours, worth one more listen.'; }
+  recalc(); viewDur = Math.min(60, Math.max(30, total * 1.05)); head(); poll(); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

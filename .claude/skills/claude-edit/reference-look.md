@@ -1,0 +1,18 @@
+Read this when Chase names a reference in words or hands over a video ("like this reel"). The first part is intake; the numbered steps run only when he answers "the whole look".
+
+## At intake (section 1)
+
+- Reference: only when he names one in words or hands over a video ("like this reel"). Ask once, before the spine: "The whole look, or specific things you liked?" Record `reference`, `reference_source` (his words) and his answer in `RUN.md`; his answer goes into the intake notes verbatim. *Specific things* (pacing, how the hook is built, layout rhythm, one device) are notes like any other. If `references/<slug>/taste.md` exists with rules he marked keep, add those verbatim too, never struck or unmarked ones; `references/HOW.md` is how to measure a reel when he wants that. *The whole look* goes to section 4, "A look from a reference", below. Either way his notes and the hard rules win, and nobody else's logo, character, footage or audio is used. A product's own official mark is fine where the video is about that product.
+
+## Section 4: the whole look
+
+**A look from a reference** (by hand; only when he asked for the whole look at intake).
+1. Read the look off the video itself. `python tools/reference.py measure <folder> --video <file>` writes a contact sheet, a strip for every visual change and the pacing numbers. For colours, pull about twenty frames with ffmpeg and sample the pixels (Pillow's `getpixel` on a flat area of each surface); read fonts and shapes by eye. Write down in `RUN.md`: ground colour, text colours, the accent, headline and body fonts, card and corner shapes, how captions are treated, and any signature element. Say which values are measured and which are your read.
+2. Fonts: the same family only if it is free to use or already in the project; otherwise the closest free match, named in `RUN.md`.
+3. Apply it in this project's own `$P/tools_local`, never in `templates/ivory/build_kit`: append to `style.css` (the `:root` values first, then each component's shape) and add the fonts to `$P/assets/fonts`.
+4. The kit's helpers carry ivory's own colours and corners as literals (the outline's `#d97757`, rounded corners, the counter's final colour in `timeline.js`). Change them in the project copy, and write no literal colour or radius in a scene.
+5. A wider font overflows boxes sized for ivory's. Run `geometry.py` and fix every text overflow.
+6. The caption chip must read on both the panel and his footage. If the reference has no captions, the chip is your call: flag it.
+7. The layouts stay ivory's: split, takeover, full-face when on. A reel built another way comes out as "in the spirit of", and the handoff says so. When his own note asks for the reference's layout ("a full frame like hers", cards floating over his shot), say before building which part the kit cannot draw, build the nearest thing its layouts allow, and put it first in the handoff as not met. Never pass it off as done.
+8. A graphic never names a look as a shipped choice unless it ships.
+9. Record `look` and `look_source` in `RUN.md`, with the list of files changed. After approval, ask once: "Keep this look for next time?" On a yes, save it: make `templates/ivory/build_kit/looks/<name>/` with `look.css` (the overrides you appended), `look.json` (name, where it came from, and a `remap` of each ivory literal you replaced), its `fonts/`, and a one-page `LOOK.md` written like charcoal's. Then set this project's `plan.json` `look` to that name, take the overrides back out of its `style.css`, rebuild, and check the page still looks the same. From then on he picks it by name at intake.

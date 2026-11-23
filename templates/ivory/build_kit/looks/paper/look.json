@@ -1,0 +1,20 @@
+{
+  "name": "paper",
+  "from": "charcoal recoloured for the IG duplicate test, 2026-11-16 (work/1114-tools/recolor_looks.py)",
+  "remap": {
+    "#d97757": "#050505",
+    "#c15f3c": "#000000",
+    "#d9d6cc": "#2b2a28",
+    "#e4e2da": "#2b2a28",
+    "#1a1917": "#f3f2ee",
+    "#141312": "#fefefd",
+    "#423f3b": "#2b2a28",
+    "#ebe8e0": "#121212",
+    "#aaa69d": "#5a5751",
+    "#77736a": "#a19d95",
+    "#ff6a3d": "#050505",
+    "#ff7a50": "#000000",
+    "#0d0d0c": "#fbfbf9",
+    "rgba(255, 106, 61": "rgba(0, 0, 0"
+  }
+}

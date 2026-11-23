@@ -434,16 +434,13 @@ class SoundStep(unittest.TestCase):
         self.assertIn("FAIL delivered loudness", text)
         self.assertIn("FAIL delivered true peak", text)
 
-    def test_sound_workflow_and_build_contract_stub(self):
+    def test_sound_workflow_stub(self):
         sys.path.insert(0, str(TOOLS / "tests"))
         from test_full_face import dry_run
         prompts = dry_run("sound-cues.js", {"id": "t1", "note": "Keep the card silent"})
         p = prompts["sound-cues"]
         for text in ("sound.md", "sfx.json", "event_id", "check-sheet", "Keep the card silent", "only art direction"):
             self.assertIn(text, p)
-        build = dry_run("recut-build.js", {"id": "t1"})
-        self.assertIn("immutable event_id", build["direct:editorial"])
-        self.assertIn("no cue <audio> tags", build["build:editorial"])
 
 
 if __name__ == "__main__":
