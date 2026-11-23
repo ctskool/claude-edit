@@ -176,9 +176,11 @@ def motion(path, vf, secs=60):
     W, H = 96, 82
     cmd = ["ffmpeg", "-v", "error", "-hwaccel", "cuda", "-t", str(secs), "-i", path, "-fps_mode", "passthrough", "-vf",
            f"{vf},scale={W}:{H},format=gray", "-f", "rawvideo", "-"]
+    if sys.platform == "darwin":                                     # a Mac decodes on VideoToolbox, not CUDA
+        cmd[cmd.index("cuda")] = "videotoolbox"
     r = subprocess.run(cmd, capture_output=True)
     if r.returncode:
-        r = subprocess.run([c for c in cmd if c not in ("-hwaccel", "cuda")], capture_output=True, check=True)
+        r = subprocess.run([c for c in cmd if c not in ("-hwaccel", "cuda", "videotoolbox")], capture_output=True, check=True)
     F = np.frombuffer(r.stdout, np.uint8).reshape(-1, H, W).astype(np.float32)
     m = np.abs(np.diff(F, axis=0)).mean((1, 2))
     return (m - m.mean()) / (m.std() + 1e-9)
@@ -665,13 +667,16 @@ def render(a):
         # CUDA decode sometimes hangs for good on a segment (0-byte file, ffmpeg alive, seen 2026-11-11 on 4K60 camera
         # files): give it four times the segment's length, 90 s at least, then kill it and decode in software.
         n = int(cmd[cmd.index("-frames:v") + 1])
+        if sys.platform == "darwin":                                  # a Mac: decode on VideoToolbox, encode with libx264 at the
+            cmd = list(cmd); cmd[cmd.index("cuda")] = "videotoolbox"  # software route's settings (not yet run on a Mac)
+            start = cmd.index("-c:v"); cmd[start:cmd.index("-vf", start)] = ["-c:v", "libx264", "-preset", "medium", "-crf", "17", "-pix_fmt", "yuv420p"]
         try:
             rc = subprocess.run(cmd, capture_output=True, text=True, timeout=max(90, 4 * n / FPS)).returncode
         except subprocess.TimeoutExpired:
-            print(f"  CUDA decode hung on {os.path.basename(out)}; software decode", flush=True)
+            print(f"  hardware decode hung on {os.path.basename(out)}; software decode", flush=True)
             rc = 1
         if rc:                                                        # no CUDA decode, or it hung -> software decode
-            soft = [c for c in cmd if c not in ("-hwaccel", "cuda")]
+            soft = [c for c in cmd if c not in ("-hwaccel", "cuda", "videotoolbox")]
             r = subprocess.run(soft, capture_output=True, text=True)
             if r.returncode:                                          # no NVENC either (no NVIDIA card, a Mac): libx264
                 start = soft.index("-c:v"); end = soft.index("-vf", start)

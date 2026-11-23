@@ -1,6 +1,6 @@
 Read this only when you need to know whether a stage or tool is proven, before relying on it or telling Chase it works. A run never needs it.
 
-Rewritten 2026-11-22 from what the author has shipped with it on his own machine (Windows, an NVIDIA card): 32 delivered 4K30 finals of shorts (2026-11-01 to 2026-11-19) and four long-form videos. Nothing here was measured on another machine; `INSTALL.md` says what is tested on macOS and without an NVIDIA card. A row marked "(2026-11-11)" keeps its older wording and was not re-checked. "Section N" means that section of `SKILL.md` and its side file.
+Rewritten 2026-11-22 from what the author has shipped with it on his own machine (Windows, an NVIDIA card): 32 delivered 4K30 finals of shorts (2026-11-01 to 2026-11-19) and four long-form videos. Nothing here was measured on another machine; `INSTALL.md` says what is tested on macOS and without an NVIDIA card. The one-command installer (2026-11-23) was run from a clean state on Windows only; the macOS installer, Mac GPU transcription (`mlx-whisper`) and Mac hardware decode were written on Windows and have not run on a Mac. A row marked "(2026-11-11)" keeps its older wording and was not re-checked. "Section N" means that section of `SKILL.md` and its side file.
 
 | Stage | Status | The honest detail |
 |---|---|---|

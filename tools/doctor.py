@@ -232,6 +232,15 @@ def check_transcription(root):
         win_fix = "Close apps using the GPU (video exports, games), then rerun: python tools/doctor.py"
     else:
         win_fix = cpu
+    import importlib.util
+    import platform
+    if sys.platform == "darwin" and platform.machine() == "arm64":      # an Apple Silicon Mac has its own fast route
+        mlx = "python -m pip install mlx-whisper"
+        if importlib.util.find_spec("mlx_whisper"):
+            return result("PASS", "transcription", "Apple GPU route installed (mlx-whisper); not run here, the first edit loads its model. "
+                          "CPU fallback: " + data["detail"], (win_fix, mlx), "tools/asr.py uses it by itself and falls back to the CPU if a call fails. CLAUDE_EDIT_ASR=cpu turns it off.")
+        data = dict(data, detail=data["detail"] + "; this Mac can transcribe on its own GPU instead: " + mlx)
+        cpu = mlx
     return result(data["status"], "transcription", data["detail"], (win_fix, cpu),
                   "No model downloads here. The normal loader probes large-v3 on CUDA in a throwaway process, then falls back to turbo int8 on CPU "
                   "(also on Apple Silicon), so a GPU driver crash slows a run down instead of stopping it. "
@@ -402,6 +411,27 @@ def check_portability(root):
                   "Tools find the project with tools/paths.py (CLAUDE_EDIT_ROOT overrides it). Replace each absolute path with one relative to the project root.")
 
 
+INSTALLERS = ("irm https://raw.githubusercontent.com/ctskool/claude-edit/main/install.ps1 | iex",
+              "curl -fsSL https://raw.githubusercontent.com/ctskool/claude-edit/main/install.sh | bash")
+
+
+def check_global_skill(root, home=None):
+    """Whether /claude-edit works from every folder: the installer copies the skill into ~/.claude/skills with a root.txt
+    that names this checkout. Without it the skill only loads when Claude Code is opened inside the checkout."""
+    skill = Path(home or Path.home()) / ".claude/skills/claude-edit"
+    marker, hint = skill / "root.txt", "The installer is safe to run again: it updates the checkout and copies the skill afresh."
+    if not marker.is_file():
+        return result("WARN", "skill in every folder", f"not installed: /claude-edit only works when Claude Code is opened in {root}", INSTALLERS, hint)
+    points = Path(marker.read_text(encoding="utf8").strip())
+    if points.resolve() != Path(root).resolve():
+        return result("WARN", "skill in every folder", f"the installed skill runs another checkout: {points}", INSTALLERS, hint)
+    here = root / ".claude/skills/claude-edit"
+    stale = [f.name for f in sorted(here.glob("*.md")) if not (skill / f.name).is_file() or (skill / f.name).read_bytes() != f.read_bytes()]
+    if stale:
+        return result("WARN", "skill in every folder", "the installed skill is older than this checkout (" + ", ".join(stale[:4]) + "): run the installer again", INSTALLERS, hint)
+    return result("PASS", "skill in every folder", f"{skill} runs this checkout", INSTALLERS, hint)
+
+
 def collect(root):
     rows = [check_python(), check_layout(root)]
     if sys.version_info < MIN_PYTHON:
@@ -413,11 +443,14 @@ def collect(root):
     rows += check_browsers(root)
     rows += [check_command("claude", root), check_command("codex", root, optional=True), check_disk(root)]
     rows.append(check_portability(root))
+    rows.append(check_global_skill(root))
     return rows
 
 
-def show(rows, fix_hints=False):
+def show(rows, fix_hints=False, brief=False):
     for row in rows:
+        if brief and row.status == "PASS":
+            continue
         detail = " ".join(str(row.detail).split())
         print(f"{row.status} {row.name}: {detail}")
         print(f"  Windows: {row.windows}")
@@ -432,12 +465,13 @@ def show(rows, fix_hints=False):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--fix-hints", action="store_true", help="explain fixes; never installs or changes anything")
+    ap.add_argument("--brief", action="store_true", help="print only the WARN and FAIL lines and the count")
     a = ap.parse_args(argv)
     try:
         rows = collect(project_root())
     except (OSError, ValueError) as e:
         rows = [result("FAIL", "doctor", str(e), same("python tools/doctor.py --fix-hints"), "Check CLAUDE_EDIT_ROOT and project read permissions.")]
-    return show(rows, a.fix_hints)
+    return show(rows, a.fix_hints, a.brief)
 
 
 if __name__ == "__main__":

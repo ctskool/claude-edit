@@ -294,7 +294,7 @@ class Output(unittest.TestCase):
     def test_cli_routes_fix_hints(self):
         with mock.patch.object(doctor, "collect", return_value=[]), mock.patch.object(doctor, "show", return_value=0) as show:
             self.assertEqual(doctor.main(["--fix-hints"]), 0)
-            show.assert_called_once_with([], True)
+            show.assert_called_once_with([], True, False)
 
     def test_author_paths_warn_until_removed(self):
         with tempfile.TemporaryDirectory() as d:

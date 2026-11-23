@@ -207,29 +207,27 @@ Each one came out of an approved edit, so the next edit can start from it. They 
 
 ## Start here
 
-You need Claude Code, Python 3.10+, Node.js 22+, ffmpeg and Chrome or Edge. [INSTALL.md](INSTALL.md) has the full steps for Windows and macOS.
+One command installs it for every folder on your machine. It puts the editor in `~/claude-edit`, builds its Python and Node environments there, and adds the `/claude-edit` skill to your Claude Code, so you can open Claude Code anywhere.
 
-```bash
-git clone https://github.com/ctskool/claude-edit.git
+Windows (PowerShell):
+
+```powershell
+irm https://raw.githubusercontent.com/ctskool/claude-edit/main/install.ps1 | iex
 ```
 
-```bash
-cd claude-edit
-```
+macOS (Terminal):
 
 ```bash
-python -m pip install -r requirements.txt
+curl -fsSL https://raw.githubusercontent.com/ctskool/claude-edit/main/install.sh | bash
 ```
 
-```bash
-npm ci
+It needs Claude Code, Python 3.10+, Node.js 22+, git and ffmpeg already installed, and tells you the install command for any that are missing. Run it again to update. Then, in Claude Code, in any folder:
+
+```text
+/claude-edit "C:/path/to/your/take.mkv"
 ```
 
-```bash
-python tools/doctor.py
-```
-
-Fix anything the doctor marks FAIL, then open Claude Code in this folder and type `/claude-edit` with the path to your raw take.
+Your edits and finals are kept in `~/claude-edit`, and each final is also copied next to your take. [INSTALL.md](INSTALL.md) has the system software, the manual steps and the optional extras.
 
 **What to record.** For today's vertical template, a vertical take with your screen in the top half and your face cam in the bottom half, the way Chase records in OBS. A separate full-quality camera file beside it is optional. A plain face-only take works too: say so at the start.
 
@@ -272,6 +270,7 @@ flowchart LR
 | Linux | Untested |
 | Widescreen (16:9 long-form) | Ships as the `charcoal` template, built by hand from [`templates/charcoal/CARD.md`](templates/charcoal/CARD.md). Four of the author's videos went through it on Windows with an NVIDIA card. Without one it renders in software (`render_slices_x264.py`, picked automatically), which is slower and has not been timed on another machine |
 | No NVIDIA card | Shorts: everything runs (transcription on the CPU with a smaller model, renders in the browser, encodes with libx264); only the popout bottom needs NVIDIA. Long-form: the software renderer. Expect renders several times slower than the author's times |
+| Mac speed | On an Apple Silicon Mac the installer adds `mlx-whisper`, so transcription runs on the Mac's own GPU instead of the CPU; the cutter decodes your camera file on Apple's hardware decoder and the cut review page's preview uses Apple's hardware encoder. Each falls back to the CPU route by itself if it fails. **Written on Windows and not yet run on a Mac.** Finals and long-form still encode in software on a Mac |
 | Final size | 4K30 when your camera recording is 4K, 1080p30 otherwise. A 4K final of a one-minute short took 3 to 16 minutes on the author's RTX 5090; ask for 1080p (`final-by-hand.md`) on a laptop |
 | Looks | `charcoal`, `neo-brutalist` and `collage` are kit looks: several delivered shorts each, and a finished edit can be remade in another. `blueprint` and `sky` are written by hand per video (one short each so far) and re-render whole after a note |
 | A first run by someone else | Not done yet. Expect rough edges, and run `python tools/doctor.py --fix-hints` first |

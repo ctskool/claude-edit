@@ -1,8 +1,36 @@
 # Install claude-edit
 
-`/claude-edit` is a project skill: it lives in this repo's `.claude/skills/claude-edit/` and runs the tools beside it. Clone the whole repo and open Claude Code inside it. Copying only `SKILL.md` into a global skills folder will not work.
+The editor is a whole folder (tools, templates, fonts, Node packages), not one skill file. The installer puts that folder in one place and adds the `/claude-edit` skill to your Claude Code, so it works from **any folder** you open Claude Code in.
 
-You need plain Claude Code. Codex is optional. Windows is tested. **macOS is partly tested** on an Apple Silicon MacBook Air: install, doctor, the test suite, transcription, the cut and source prep all run, but no whole edit has run on a Mac yet.
+## Quick install
+
+Install the system software in step 1 first. Then:
+
+Windows (PowerShell):
+
+```powershell
+irm https://raw.githubusercontent.com/ctskool/claude-edit/main/install.ps1 | iex
+```
+
+macOS (Terminal):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ctskool/claude-edit/main/install.sh | bash
+```
+
+What it does, and nothing else:
+
+1. Clones this repo to `~/claude-edit` (set `CLAUDE_EDIT_ROOT` first for another folder; run `install.ps1` or `install.sh` from inside a clone and that clone is used).
+2. Builds a Python environment in it, installs the Python and Node packages and the screenshot browser.
+3. On an Apple Silicon Mac, adds `mlx-whisper` so transcription runs on the Mac's GPU.
+4. Copies the skill to `~/.claude/skills/claude-edit` with a `root.txt` that names the folder from step 1.
+5. Runs the doctor and prints anything that needs attention.
+
+Run it again any time to update. It took under two minutes on the author's PC. The transcription model downloads by itself on your first edit. Your edits live in `~/claude-edit/work/`, finals in `~/claude-edit/out/`, and each final is also copied next to your take. To remove it, delete `~/claude-edit` and `~/.claude/skills/claude-edit`.
+
+The Windows installer has been run from a clean state; **the macOS installer and the Mac GPU transcription were written on Windows and have not yet run on a Mac.** If the macOS one fails, the manual steps below do the same job.
+
+You need plain Claude Code. Codex is optional. Windows is tested. **macOS is partly tested** on an Apple Silicon MacBook Air with the manual steps: install, doctor, the test suite, transcription on the CPU, the cut and source prep all run, but no whole edit has run on a Mac yet.
 
 ## 1. System software
 
@@ -31,7 +59,9 @@ curl -fsSL https://claude.ai/install.sh | bash
 
 Install [Homebrew](https://brew.sh/) first if you don't have it. Use `ffmpeg-full`, not `ffmpeg`: Homebrew's plain `ffmpeg` has no `drawtext` filter, and the final delivery's contact sheet needs it. If you already have plain `ffmpeg`, run `brew unlink ffmpeg` before the `brew link` line. Apple Silicon has no CUDA, so transcription runs on the CPU (slower, same result). [Claude Code setup reference](https://code.claude.com/docs/en/setup).
 
-## 2. Clone and install
+## 2. Clone and install by hand
+
+Skip this if you used the quick install. Done this way, `/claude-edit` works when Claude Code is opened inside the clone; run `install.ps1` or `install.sh` from the clone afterwards to make it work everywhere.
 
 ### Windows
 
@@ -82,6 +112,14 @@ python -c "import sys; sys.path.insert(0,'tools'); from asr import load_whisper;
 
 Never install the NVIDIA wheels on a Mac.
 
+On an Apple Silicon Mac, the fast path is `mlx-whisper` instead (the quick install adds it):
+
+```bash
+python -m pip install mlx-whisper
+```
+
+The tools then transcribe on the Mac's GPU by themselves and say so; if a call fails they redo it on the CPU. `CLAUDE_EDIT_ASR=cpu` turns it off. Not yet run on a Mac.
+
 **Two pencil sounds.** Two sounds in the palette are from Pixabay, whose licence lets you use them in videos but not pass the files on. So they don't ship; this downloads them from Pixabay and cuts their slices on your machine:
 
 ```text
@@ -103,7 +141,7 @@ Each line is PASS, WARN or FAIL, with the Windows and macOS command that fixes i
 
 For a short, record a vertical (9:16) take: your screen in the top half and your face cam in the bottom half. This is how Chase records in OBS. It is built in the ivory look unless you name another ("in charcoal", "the collage one"); the README lists them. For a 16:9 long-form video, hand over the screen recording and say it is long-form. A separate full-quality camera file named `CAMERA-<same timestamp>.mkv` next to the take is optional; with it, the face clips come from the clean camera. A take that is just your face (no split) works too: tell Claude at intake.
 
-From the repo folder, with the Python environment selected:
+From any folder after the quick install (after a manual install: from the repo folder, with its Python environment selected):
 
 ```text
 claude

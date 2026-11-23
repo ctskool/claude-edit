@@ -251,7 +251,11 @@ def videos(d, S, done=None):
                     "+faststart", "-f", "mp4", out + ".part"]
             gpu = ["ffmpeg", "-v", "error", "-y", "-hwaccel", "cuda", "-hwaccel_output_format", "cuda", "-i", src, "-an",
                    "-vf", "scale_cuda=-2:540", *tail]
-            if subprocess.run(gpu, capture_output=True).returncode:      # no CUDA decode for this file: scale on the CPU
+            mac = ["ffmpeg", "-v", "error", "-y", "-hwaccel", "videotoolbox", "-i", src, "-an", "-vf", "scale=-2:540", "-r", "30",
+                   "-c:v", "h264_videotoolbox", "-g", "8", "-bf", "0", "-b:v", "1200k", "-pix_fmt", "yuv420p", *tail[tail.index("-movflags"):]]
+            if sys.platform == "darwin" and subprocess.run(mac, capture_output=True).returncode == 0:
+                pass                                                     # a Mac: VideoToolbox did it (not yet run on a Mac)
+            elif subprocess.run(gpu, capture_output=True).returncode:    # no CUDA decode for this file: scale on the CPU
                 cpu = ["ffmpeg", "-v", "error", "-y", "-i", src, "-an", "-vf", "scale=-2:540", *tail]
                 if subprocess.run(cpu, capture_output=True).returncode:  # no NVENC either (no NVIDIA card, a Mac): libx264
                     soft = ["-c:v", "libx264", "-preset", "veryfast", "-crf", "26", "-pix_fmt", "yuv420p", "-g", "8", "-bf", "0"]
