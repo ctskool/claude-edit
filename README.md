@@ -1,25 +1,33 @@
 <p align="center">
-  <a href="https://ctskool.github.io/claude-edit/"><img src="media/banner.webp" width="100%" alt="Claude Edit: raw take in, your notes at the exact second. A raw talking-head take beside the edit Claude made from it, playing the same seconds."></a>
+  <a href="https://ctskool.github.io/claude-edit/"><img src="media/banner.webp" width="100%" alt="Claude Edit: raw take in, your notes at the exact second, any look out. Five phones play the same five seconds of one short in five looks: charcoal, neo-brutalist, collage, blueprint and sky."></a>
 </p>
 
 <p align="center">
   <b>A Claude Code skill that edits your talking-head videos beat by beat.</b><br>
-  You watch your own edit, pause on a frame and leave a note. Claude changes only what you noted.
+  You watch your own edit, pause on a frame and leave a note. Claude changes only what you noted.<br>
+  Shorts in six looks, and 16:9 long-form.
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/skill-%2Fclaude--edit-24272d?style=flat-square" alt="Skill: /claude-edit">
   <img src="https://img.shields.io/badge/runs%20in-Claude%20Code-d77757?style=flat-square" alt="Runs in Claude Code">
   <img src="https://img.shields.io/badge/built%20with-HyperFrames-24272d?style=flat-square" alt="Built with HyperFrames">
+  <img src="https://img.shields.io/badge/looks-6-ff6a3d?style=flat-square" alt="Six looks">
+  <img src="https://img.shields.io/badge/final-4K30-24272d?style=flat-square" alt="4K30 finals">
+  <img src="https://img.shields.io/badge/GPU-optional-24272d?style=flat-square" alt="An NVIDIA GPU is optional">
   <img src="https://img.shields.io/badge/tested%20on-Windows%20%7C%20Mac%20(partly)-ff6a3d?style=flat-square" alt="Tested on Windows; Mac partly tested">
 </p>
 
 <p align="center">
   <a href="https://ctskool.github.io/claude-edit/"><b>Watch the gallery</b></a>
   &nbsp;·&nbsp;
+  <a href="#one-take-any-look">Looks</a>
+  &nbsp;·&nbsp;
   <a href="#how-an-edit-goes">How an edit goes</a>
   &nbsp;·&nbsp;
   <a href="#the-review-player">The player</a>
+  &nbsp;·&nbsp;
+  <a href="#long-form">Long-form</a>
   &nbsp;·&nbsp;
   <a href="#start-here">Start here</a>
   &nbsp;·&nbsp;
@@ -35,6 +43,21 @@
 | **Your part** | Listen to the cut in the cut review page and fix any join by ear, leave notes in the player wherever you want a change, then approve |
 | **It stops for you** | After the cut, after every render, before sound, before the final. It never moves the picture while you're reviewing |
 | **It never** | Invents a number, generates your body or face, or changes something you didn't note |
+
+## One take, any look
+
+The banner above is one real take: the same five seconds, edited five ways. The words, the cut and the timing are identical; only the look changes. Say the look when you hand over the take ("in collage", "the blueprint one"), or ask for a finished edit to be remade in another.
+
+| Look | What it is | How it's built |
+|---|---|---|
+| **Ivory** | The default. Warm paper cards, serif numbers, real screenshots rebuilt sharp | Kit look |
+| **Charcoal** | The same layout in near-black with one orange accent | Kit look |
+| **Neo-brutalist** | Cream dot grid, outlined white cards with hard shadows, yellow highlights | Kit look |
+| **Collage** | Torn paper, newsprint, halftone cut-outs | Kit look, with its own images and motion |
+| **Blueprint** | The whole short as one engineering drawing a camera travels across | Written by hand per video |
+| **Sky** | A 16-bit Claude acts the short out on a pixel sky | Written by hand per video |
+
+Kit looks share one build, so a finished edit can be remade in another kit look without redoing the edit, and a note re-renders only the beats it touched. Blueprint and sky are authored per video and re-render whole after a note (two to four minutes on the author's machine). All six go through the same cut review, the same player and the same Approve click.
 
 ## Raw take in, edited video out
 
@@ -60,20 +83,20 @@ Left is the raw take. Right is the edit Claude made from it, on the same seconds
 ## How an edit goes
 
 1. **Raw in.** Hand it one or more raw takes. Claude transcribes them on your computer, drops the failed takes, false starts and long pauses, and checks the cut by transcribing it again.
-2. **The one-minute cut listen.** Claude sends you a phone-size copy of the cut and **stops**. Nothing gets built until you've listened and said it's right. While you listen, it already checks the facts and captures the pages you mention.
-3. **The first edit.** One agent checks the facts, plans every beat (which words land on what, which real screenshot or clip shows it, where the layout switches) and checks its own plan against a short list. It shows you stills of the hook and first step so you can steer early, then builds the whole video in the ivory template and renders it at review quality.
+2. **The cut review.** A page opens that looks like a simple timeline: your camera on top, one row of clips below. You hear the tight cut, drag any join that sounds wrong, and approve. Nothing visual is final until you do. While you listen, Claude already checks the facts and captures the pages you mention.
+3. **The first edit.** One agent checks the facts, plans every beat (which words land on what, which real screenshot or clip shows it, where the layout switches) and checks its own plan against a short list. It shows you stills of the hook and first step so you can steer early, then builds the whole video in your look and renders it at review quality.
 4. **Its own defects round.** A fresh reviewer that never saw the plan looks at the rendered frames for broken frames, clipped text and anything that hides your face, and a script checks for one-frame jumps. Claude fixes what they find before you see it.
 5. **Your notes, at exact seconds.** The review player opens in your browser. Pause where you want a change, press **N**, type. Each note is saved with the exact frame and the picture it was left on.
 6. **The note round.** Say "go" in the chat. Claude maps each note to the one piece of source that drew that frame, changes only that, and re-renders only the beats it touched. Then you look again. Repeat as often as you like.
-7. **Approval.** You approve in the player. Claude re-renders every beat fresh and compares each frame with the picture you approved, so nothing changed behind your back.
+7. **Approval.** You approve in the player. Your click is the approval: the picture you watched is the one that gets finished, and the final starts by itself.
 8. **Sound.** Claude places sound effects by what each moment does, levelled against your voice. You listen in the player and leave sound notes the same way.
-9. **The final.** Built fresh from a frozen copy of the approved edit, mastered, checked again, and handed to you as an MP4.
+9. **The final.** Built fresh from a frozen copy of the approved edit at 4K30 (1080p when your camera file isn't 4K), mastered, checked again, and handed to you as an MP4.
 
 Claude also turns your notes into candidate rules for next time. Nothing becomes a rule until you mark it keep.
 
-Since 2026-11-10 this is the default "light path": one agent in place of sixteen. On the author's test video it took 40 minutes from the raw take where the older pipeline took 127, with about a tenth of the tokens. The older multi-agent pipeline is still in the skill; ask for "the full pipeline" to use it. You can also hand over a reference video and say whether you want its whole look or specific things; Claude applies a whole look by hand in that project, and can save it as a named look you pick next time. Two looks ship: ivory (the default) and charcoal (say "in charcoal").
+One agent plans and builds the whole edit, and one fresh reviewer checks the frames. On the author's test video that took 40 minutes from the raw take. You can also hand over a reference video and say whether you want its whole look or specific things.
 
-Some stages are newer than others. Research during the cut listen, the parallel build and the component library are tested on stubs but haven't run on a real video yet; the table at the top of [SKILL.md](.claude/skills/claude-edit/SKILL.md) says which stage has.
+Some stages are newer than others; [status.md](.claude/skills/claude-edit/status.md) says which have run on real videos.
 
 ## The review player
 
@@ -96,6 +119,23 @@ The default look is the light grey above. Optional looks live in [`tools/beat_re
 </td>
 </tr>
 </table>
+
+## Long-form
+
+<p align="center">
+  <img src="media/longform.webp" width="100%" alt="Three frames from a 16:9 long-form video: a big number with a bar under it, a versus card, and a results card, each with the speaker's face in a rounded window.">
+</p>
+
+The `charcoal` template edits a widescreen YouTube video: your screen recording plus your camera, minutes long.
+
+1. **Same cut, same review page**, with your timing notes before any graphic exists.
+2. **A stills storyboard** of the whole video, approved before anything renders.
+3. **A pilot** of the intro and first chapter in the player.
+4. **The build:** your screen full frame with your face in a corner, or your camera full frame, and a designed graphic for each idea.
+5. **Notes by segment** in the player. Rendering is by slice, so a note on one graphic re-renders that slice, not the video.
+6. **The 4K final**, with chapters and captions for the upload.
+
+It is built by hand from one page, [`templates/charcoal/CARD.md`](templates/charcoal/CARD.md). Four of the author's videos have gone through it.
 
 ## What it reuses
 
@@ -202,9 +242,9 @@ Fix anything the doctor marks FAIL, then open Claude Code in this folder and typ
 ```mermaid
 flowchart LR
   raw["Raw take"] --> cut["Cut, verified by a second transcription"]
-  cut --> listen["Your one-minute listen"]
-  listen --> plan["Beat plan, checked by a second agent"]
-  plan --> build["Ivory build, rendered beat by beat"]
+  cut --> listen["You fix joins by ear"]
+  listen --> plan["Beat plan"]
+  plan --> build["Build in your look, rendered beat by beat"]
   build --> player["Review player"]
   player -->|"notes"| round["Change only what you noted"]
   round --> player
@@ -214,8 +254,8 @@ flowchart LR
 | Folder | What's in it |
 |---|---|
 | [`.claude/skills/claude-edit/`](.claude/skills/claude-edit/SKILL.md) | The skill: every stage, its checks and its stop points |
-| [`templates/`](templates) | The house rules, the story rules for cutting, and the ivory template with its build kit, sound palette and component library |
-| [`tools/`](tools) | The cutter, transcription, beat renderer, checks, review player, sound mixer and delivery |
+| [`templates/`](templates) | The house rules, the story rules for cutting, the ivory template with its build kit, looks, sound palette and component library, and the charcoal long-form template |
+| [`tools/`](tools) | The cutter, transcription, the cut review page, beat renderer, checks, review player, sound mixer and delivery |
 | [`tools/workflows/next/`](tools/workflows/next) | The sound workflow the skill runs |
 | [`examples/ivory-edit/`](examples/ivory-edit) | The text files of the approved edit above: how a plan becomes an edit |
 | [`styles/editorial/`](styles/editorial) | The measured look behind ivory |
