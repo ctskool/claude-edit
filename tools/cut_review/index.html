@@ -40,6 +40,11 @@ header h1 span{color:var(--dim);font-weight:400}
 #clock span{color:var(--dim)}
 #play{width:38px;height:38px;border-radius:50%;background:var(--panel2);font-size:15px;padding:0}
 #tl{height:176px;display:block;width:calc(100% - 12px);margin:0 6px;background:var(--panel);cursor:default}
+#scroll{margin:0 6px;padding:7px 10px 9px;background:var(--panel)}
+#strack{position:relative;height:12px;border-radius:6px;background:var(--panel2);cursor:pointer;touch-action:none}
+#sthumb{position:absolute;top:0;height:100%;min-width:28px;border-radius:6px;background:#5a5a5a;cursor:grab}
+#sthumb:hover,#sthumb.on{background:#7a7a7a}#sthumb.on{cursor:grabbing}
+#sphead{position:absolute;top:-3px;width:2px;height:18px;margin-left:-1px;background:#fff;border-radius:1px;pointer-events:none}
 footer{padding:6px 16px 8px;margin:0 6px 6px;background:var(--panel);border-radius:0 0 8px 8px;color:var(--faint);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 footer b{color:var(--dim);font-weight:500}
 </style>
@@ -63,7 +68,8 @@ footer b{color:var(--dim);font-weight:500}
   <div class="r"><button id="zout" title="Zoom out">−</button><button id="zin" title="Zoom in">+</button><button id="zfit" title="Show the whole cut">Fit</button></div>
 </div>
 <canvas id="tl"></canvas>
-<footer><b>Drag a clip's edge</b> to trim it or pull back what was cut · <b>Q</b> / <b>W</b> trim the clip's start / end to the playhead · <b>S</b> split · click a clip, <b>Del</b> to remove it · <b>Space</b> play · <b>← →</b> 1 s · scroll to move, Ctrl+scroll to zoom</footer>
+<div id="scroll" title="Drag to move along the cut; click to jump there"><div id="strack"><div id="sthumb"></div><div id="sphead"></div></div></div>
+<footer><b>Drag a clip's edge</b> to trim it or pull back what was cut · <b>Q</b> / <b>W</b> trim the clip's start / end to the playhead · <b>S</b> split · click a clip, <b>Del</b> to remove it · <b>Space</b> play · <b>← →</b> 1 s · drag the bar or scroll to move, Ctrl+scroll to zoom</footer>
 
 <script>
 const $ = s => document.querySelector(s), SR = 48000, css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -207,7 +213,7 @@ function draw() {
 }
 function frame() {
   if (eng.playing) { if (eng.ctx.currentTime - eng.t0 >= eng.to - eng.from) { cur = eng.to; halt(); } else { cur = pos(); if (!drag) follow(false); } }
-  $('#clock').innerHTML = `<b>${fmt(now())}</b> <span>/ ${fmt(total)}</span>`; draw(); syncVideo(); requestAnimationFrame(frame);
+  $('#clock').innerHTML = `<b>${fmt(now())}</b> <span>/ ${fmt(total)}</span>`; draw(); scrollBar(); syncVideo(); requestAnimationFrame(frame);
 }
 function head() {
   const was = auto.reduce((a, k) => a + k[1] - k[0], 0) / fps, d = total - was, n = keeps.reduce((a, k) => a + !autoIn.has(k[0]) + !autoOut.has(k[1]), 0);
@@ -267,6 +273,27 @@ window.onkeydown = e => {
   else if (k === '=' || k === '+') zoom(0.6); else if (k === '-') zoom(1 / 0.6); else if (k === 'escape') { selK = -1; head(); } else used = false;
   if (used) e.preventDefault();
 };
+
+// The scroll bar under the timeline (like CapCut's): the thumb is the part of the cut on screen. Drag it to move along
+// the cut, click the track to jump there, scroll on it to move. Zoom (+, -, Ctrl+scroll) changes the thumb's width.
+const strack = $('#strack'), sthumb = $('#sthumb');
+let sdrag = null;
+function scrollBar() {
+  const span = Math.max(total, 0.001), W = strack.clientWidth, w = Math.max(28, Math.min(1, viewDur / span) * W);
+  const x = Math.min(W - w, viewStart / span * W);
+  sthumb.style.width = w + 'px'; sthumb.style.left = Math.max(0, x) + 'px';
+  $('#sphead').style.left = Math.min(1, now() / span) * W + 'px';
+}
+strack.addEventListener('pointerdown', e => {
+  e.preventDefault(); strack.setPointerCapture(e.pointerId);
+  const r = strack.getBoundingClientRect();
+  if (e.target !== sthumb) { viewStart = (e.clientX - r.left) / r.width * total - viewDur / 2; clampView(); }   // jump: centre the view on the click
+  sdrag = {x0: e.clientX, vs0: viewStart, per: total / r.width}; sthumb.classList.add('on');
+});
+strack.addEventListener('pointermove', e => { if (!sdrag) return; viewStart = sdrag.vs0 + (e.clientX - sdrag.x0) * sdrag.per; clampView(); });
+const sEnd = () => { sdrag = null; sthumb.classList.remove('on'); };
+strack.addEventListener('pointerup', sEnd); strack.addEventListener('pointercancel', sEnd);
+$('#scroll').addEventListener('wheel', e => { e.preventDefault(); viewStart += (e.deltaX || e.deltaY) / 700 * viewDur; clampView(); }, {passive: false});
 
 (async function boot() {
   ST = await fetch('/state').then(r => r.json()); peaks = new Uint8Array(await fetch('/peaks').then(r => r.arrayBuffer()));
