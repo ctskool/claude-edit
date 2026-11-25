@@ -55,7 +55,7 @@ The banner above is one real take: the same five seconds, edited five ways. The 
 | **Neo-brutalist** | Cream dot grid, outlined white cards with hard shadows, yellow highlights | Kit look |
 | **Collage** | Torn paper, newsprint, halftone cut-outs | Kit look, with its own images and motion |
 | **Blueprint** | The whole short as one engineering drawing a camera travels across | Written by hand per video |
-| **Sky** | A 16-bit Claude acts the short out on a pixel sky | Written by hand per video |
+| **Sky** | A 16-bit Claude acts the short out on a pixel sky; a finished one recolours into 20 skies (noir, storm, snow, sunset, Miami...) for posting variants | Written by hand per video; recolours with `looks/sky/skies.py` |
 
 Kit looks share one build, so a finished edit can be remade in another kit look without redoing the edit, and a note re-renders only the beats it touched. Blueprint and sky are authored per video and re-render whole after a note (two to four minutes on the author's machine). All six go through the same cut review, the same player and the same Approve click.
 

@@ -14,6 +14,7 @@ The **pixel Claude guide** acting the short out on a bright pixel sky. Chase bui
 | `sky.css` | The stage and the theme: stepped sky gradient, cream-framed cards with a navy outline, grass-and-brick floor, titles in a pixel cloud |
 | `fonts/` | Jersey 15, Hanken Grotesk 600/700/800, JetBrains Mono 500/700/800 (SIL OFL 1.1, licences beside them) |
 | `examples/rea.py` | The approved rea short, complete. Copy it to start a new one |
+| `skies.py` | Sky recolours of a finished short: 20 skies (a default set of five), stills, renders, and a distance-from-original ranking. See "Skies" below |
 
 Run a short (from the repo root):
 
@@ -48,6 +49,18 @@ A sky short is reviewed like a kit short [Chase, 2026-11-22]: the beat review pl
 - **Approval.** His click in the player. It runs `short.py final <rev>` through `autofinal.py`: rebuild, refuse unless that is the composition he approved, 4K30 at -14 LUFS, delivered as `out/<id>_sky_final_4k30.mp4`. The few cues are already in the review picture, so there is no separate sound stop.
 - **What it does not have.** No per-beat render in use: `player --partial b04` films only the named beats and checks the rest with stills, but measured on 2026-11-22 it is slower than the whole render (HyperFrames' ranged render pays about 1 min 50 s of start-up per stretch, in software capture), so rounds use the whole render until that is solved. Also no native-size beat button, and none of the kit's automatic checks (motion lint, flashes, copy, geometry): the only automatic check is the render's length and that it has sound. Look at stills across the whole timeline yourself before the handoff.
 
+## Skies: one sky short, many skies
+
+`skies.py` recolours a finished sky short without rebuilding it, for posting one video several times as trial reels. It swaps the page's colours by role (sky bands, clouds, title clouds, card frame, navy outline and text, soft text, card shadow, grass, brick), and some skies add a texture or props over the bands: rain, snow, stars, palm trees, an outrun sun, a perspective grid. The guide, Claude's orange, logos, captions, motion and sound stay as they are. Each sky is its own HyperFrames project in `<OUT>/skies/<name>/`.
+
+- `python templates/ivory/build_kit/looks/sky/skies.py list`: the default set (noir, storm, snow, sunset, vicepastel) and all 20 skies.
+- `... <OUT> set stills 2.2,6.5,25` (or `noir,storm`, or `all`): snapshots in each sky's `checks/`. Look at them before rendering.
+- `... <OUT> set render` (`render 4k` for 4K30): 1080p30 at -14 LUFS, one at a time on `gpu_lock`, delivered as `<OUT>/skies/<id>_sky-<name>_1080p30.mp4` with a contact sheet. A recolour costs only its render.
+- `... <OUT> distance`: after `stills` at the same times on the original and the skies, ranks each sky by how far it sits from the original (mean per-pixel colour difference, OKLab x100). Further is better for the duplicate filter; on the Skill Distill short the set ranged from noir 33.0 to snow 13.9, with dawn (6.9) and aqua (8.6) too close to bother.
+- `<OUT>` is the built project, the folder `short.py` writes (`work/<id>/v2/sky`). The review player ignores `skies/`: rounds don't snapshot it and the approved composition is `index.html` alone.
+
+What to watch for in a new sky: an orange sky swallows the orange guide and Claude's mark (a golden-hour sky was dropped for that; sunset keeps purple at the top). On a dark sky, labels written straight on the sky in the navy must go light (`light=True` rewrites them in the page, since HyperFrames refuses `[style*=...]` selectors); tint the cloud pixels and the title-cloud fill too, or white clouds read as daytime.
+
 ## Rules learned porting it
 
 - HyperFrames refuses CSS selectors that read the inline `style` attribute (`[style*=...]`) and tweens on `left`/`top`: write the sky colours inline, and move with `x`/`y`.
@@ -58,4 +71,3 @@ A sky short is reviewed like a kit short [Chase, 2026-11-22]: the beat review pl
 
 - The rea titles sit at y 66, under the phone's island (as blueprint's did before 2026-11-20). Chase had it posted that way as a trial on 2026-11-20 (https://www.instagram.com/reel/Df-1Qd7klNW/). New sky shorts start titles at 150.
 - The worked example's images live in `work/1119-pixel-guide-test/img`, which is local only.
-- Not in the public repo yet.

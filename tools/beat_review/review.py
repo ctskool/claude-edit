@@ -27,7 +27,7 @@ from common import sha
 
 PROFILE = "review"
 RUN = ROOT / "tools" / "beat_render" / "run.py"
-SKIP = (".hyperframes/", "renders/", "snaps", "verification/", "tools_local/_bak/", "tools_local/__pycache__/")  # what no picture reads
+SKIP = (".hyperframes/", "renders/", "snaps", "verification/", "tools_local/_bak/", "tools_local/__pycache__/", "skies/")  # what no picture reads (skies/: sky recolours, looks/sky/skies.py)
 HOME = ("beats.json", "facts.json", "metadata.json", "words.json")  # the build and the copy check read these, two levels up
 NATIVE_WORKERS = 1
 NATIVE_SECONDS = 600
