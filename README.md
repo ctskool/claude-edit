@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/runs%20in-Claude%20Code-d77757?style=flat-square" alt="Runs in Claude Code">
   <img src="https://img.shields.io/badge/built%20with-HyperFrames-24272d?style=flat-square" alt="Built with HyperFrames">
   <img src="https://img.shields.io/badge/looks-6-ff6a3d?style=flat-square" alt="Six looks">
-  <img src="https://img.shields.io/badge/final-4K30-24272d?style=flat-square" alt="4K30 finals">
+  <img src="https://img.shields.io/badge/final-1080p30%20%7C%204K-24272d?style=flat-square" alt="1080p30 finals, 4K when you ask">
   <img src="https://img.shields.io/badge/GPU-optional-24272d?style=flat-square" alt="An NVIDIA GPU is optional">
   <img src="https://img.shields.io/badge/tested%20on-Windows%20%7C%20Mac%20(partly)-ff6a3d?style=flat-square" alt="Tested on Windows; Mac partly tested">
 </p>
@@ -90,7 +90,7 @@ Left is the raw take. Right is the edit Claude made from it, on the same seconds
 6. **The note round.** Say "go" in the chat. Claude maps each note to the one piece of source that drew that frame, changes only that, and re-renders only the beats it touched. Then you look again. Repeat as often as you like.
 7. **Approval.** You approve in the player. Your click is the approval: the picture you watched is the one that gets finished, and the final starts by itself.
 8. **Sound.** Claude places sound effects by what each moment does, levelled against your voice. You listen in the player and leave sound notes the same way.
-9. **The final.** Built fresh from a frozen copy of the approved edit at 4K30 (1080p when your camera file isn't 4K), mastered, checked again, and handed to you as an MP4.
+9. **The final.** Built fresh from a frozen copy of the approved edit at 1080p30 (4K30 when you ask for it and your camera file is 4K), mastered, checked again, and handed to you as an MP4.
 
 Claude also turns your notes into candidate rules for next time. Nothing becomes a rule until you mark it keep.
 
@@ -271,7 +271,7 @@ flowchart LR
 | Widescreen (16:9 long-form) | Ships as the `charcoal` template, built by hand from [`templates/charcoal/CARD.md`](templates/charcoal/CARD.md). Four of the author's videos went through it on Windows with an NVIDIA card. Without one it renders in software (`render_slices_x264.py`, picked automatically), which is slower and has not been timed on another machine |
 | No NVIDIA card | Shorts: everything runs (transcription on the CPU with a smaller model, renders in the browser, encodes with libx264); only the popout bottom needs NVIDIA. Long-form: the software renderer. Expect renders several times slower than the author's times |
 | Mac speed | On an Apple Silicon Mac the installer adds `mlx-whisper`, so transcription runs on the Mac's own GPU instead of the CPU; the cutter decodes your camera file on Apple's hardware decoder and the cut review page's preview uses Apple's hardware encoder. Each falls back to the CPU route by itself if it fails. **Written on Windows and not yet run on a Mac.** Finals and long-form still encode in software on a Mac |
-| Final size | 4K30 when your camera recording is 4K, 1080p30 otherwise. A 4K final of a one-minute short took 3 to 16 minutes on the author's RTX 5090; ask for 1080p (`final-by-hand.md`) on a laptop |
+| Final size | Shorts: 1080p30 by default, since no platform plays a short above 1080p. Ask for 4K30 when you want a master to keep and your camera recording is 4K; a 4K final of a one-minute short took 3 to 16 minutes on the author's RTX 5090. Long-form finals are 4K |
 | Looks | `charcoal`, `neo-brutalist` and `collage` are kit looks: several delivered shorts each, and a finished edit can be remade in another. `blueprint` and `sky` are written by hand per video (one short each so far) and re-render whole after a note |
 | A first run by someone else | Not done yet. Expect rough edges, and run `python tools/doctor.py --fix-hints` first |
 

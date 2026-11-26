@@ -253,16 +253,17 @@ def hf(cmd, cwd):
     print(">", cmd); return subprocess.run(f"npx --yes hyperframes@0.9.13 {cmd}", cwd=cwd, shell=True).returncode
 
 
-def render(spec, out, k4=False):
+def render(spec, out, k4=False, tag=""):
     """HyperFrames render, then -14 LUFS. One heavy job at a time (tools/gpu_lock.py). Returns the finished file.
-    In a player project (OUT = work/<id>/v2/<look>) it lands in renders/, which no round snapshots or restores."""
+    In a player project (OUT = work/<id>/v2/<look>) it lands in renders/, which no round snapshots or restores.
+    `tag` names a 1080 render apart: the review picture is renders/<NAME>.mp4 (look_player.py), and a 1080 final must not overwrite it."""
     sys.path.insert(0, str(REPO / "tools"))
     import gpu_lock
-    raw = out / "renders" / f"{spec.NAME}{'_4k' if k4 else ''}_raw.mp4"; raw.parent.mkdir(exist_ok=True)
+    raw = out / "renders" / f"{spec.NAME}{'_4k' if k4 else tag}_raw.mp4"; raw.parent.mkdir(exist_ok=True)
     with gpu_lock.held(f"{'4K' if k4 else 'review'} render {spec.NAME}"):
         rc = hf(f'render {"--resolution portrait-4k " if k4 else ""}-o "renders/{raw.name}"', out)
     if rc: sys.exit(rc)
-    final = (raw.parent if out.parent.name == "v2" else out) / f"{spec.NAME}{'_4k30' if k4 else ''}.mp4"
+    final = (raw.parent if out.parent.name == "v2" else out) / f"{spec.NAME}{'_4k30' if k4 else tag}.mp4"
     finish(raw, final)
     return final
 
@@ -276,7 +277,7 @@ def run(spec, argv, build, engine):
       check | stills 3.9 8.2 ... | render [4k]     as before: <OUT>/<NAME>[_4k30].mp4
       player                                       review render at 1080, loaded into the beat review player (tools/look_player.py)
       player --partial b04 b05                     experimental, slower than `player` today: only those beats filmed again (look_player.picture)
-      final <composition_rev>                      the 4K final of the approved composition; his Approve click runs this (autofinal.py)"""
+      final <composition_rev> [4k]                 the final of the approved composition, 1080p30 (4K30 with `4k`); his Approve click runs this (autofinal.py)"""
     out = build(spec)
     cmd = argv[0]
     if cmd == "check":
@@ -299,9 +300,10 @@ def run(spec, argv, build, engine):
         else:
             if look_player.file_hash(out / "index.html") != argv[1]:
                 sys.exit("the spec no longer builds the approved composition: load it again with `player` and have him approve that")
-            print("built 4k30:", render(spec, out, True))
+            k4 = argv[2:3] == ["4k"]
+            print(f"built {'4k30' if k4 else '1080p30'}:", render(spec, out, k4, tag="_final1080"))
     else:
-        sys.exit(f"unknown command {cmd}: check | stills | render [4k] | player | final <rev>")
+        sys.exit(f"unknown command {cmd}: check | stills | render [4k] | player | final <rev> [4k]")
 
 
 def main(spec, argv):

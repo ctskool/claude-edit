@@ -52,7 +52,7 @@ These scripts were written for 1114-tools and still carry that video's numbers. 
 5. **Sound.**
    - Copy hook 1's `sound.json` and hard-link its `assets/sfx/` files in, because the new project has none.
    - Then run `sound_mix.py rebind --why "..."`, `check` and `stale`.
-6. **Approval.** In the player, or in chat when he says so. `review.approve` then starts the 4K final.
+6. **Approval.** In the player, or in chat when he says so. `review.approve` then starts the final (1080p30).
    - Before re-delivering an id, move that id's existing `out/` final and `out/preview/` file to `out/_superseded/`. `deliver.py` refuses to overwrite them.
 7. **Post** with /trial-reels.
    - The same caption across the variants is fine.

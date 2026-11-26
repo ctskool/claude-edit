@@ -952,6 +952,28 @@ class Finish(Base):
             self.assertEqual(REAL_FINISH(self.project, self.h)["stage"], "waiting")
         popen.assert_not_called()
 
+    def test_the_final_is_1080p30_unless_he_asked_for_4k(self):
+        """Chase, 2026-11-24: shorts finals are 1080p30; 4K30 only from --spec or work/<id>/final.json."""
+        self.assertEqual(autofinal.spec_of(self.project), "1080p30")
+        with mock.patch.object(autofinal, "sound_ready", return_value=None), mock.patch.object(autofinal.subprocess, "Popen") as popen:
+            popen.return_value.pid = 321
+            s = REAL_FINISH(self.project, self.h)
+        self.assertEqual(s["spec"], "1080p30")
+        self.assertEqual(popen.call_args.args[0][-2:], ["--spec", "1080p30"])
+        store.write_json(review.home_of(self.project) / "final.json", {"spec": "4k30"})
+        self.assertEqual(autofinal.spec_of(self.project), "4k30")
+        self.assertEqual(autofinal.spec_of(self.project, "1080p30"), "1080p30")
+        store.write_json(review.home_of(self.project) / "final.json", {"spec": "4k60"})
+        with self.assertRaisesRegex(ValueError, "by hand"):
+            autofinal.spec_of(self.project)
+
+    def test_a_4k_final_without_the_4k_face_says_so(self):
+        with mock.patch.object(autofinal.look_player, "marker", return_value=None), mock.patch.object(autofinal, "step") as step, \
+                self.assertRaisesRegex(RuntimeError, "face_half_4k"):
+            autofinal.run(self.project, self.h, "4k30")
+        step.assert_not_called()
+        self.assertEqual(autofinal.status(self.project, self.h)["stage"], "error")
+
     def test_start_without_a_picture_takes_the_approved_one(self):
         with self.assertRaisesRegex(ValueError, "no approved picture"):
             REAL_FINISH(self.project)

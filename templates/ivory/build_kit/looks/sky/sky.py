@@ -143,5 +143,5 @@ def build(spec):
 
 
 def main(spec, argv):
-    """check | stills 3.9 8.2 ... | render [4k] | player | final <rev>: the commands blueprint has (bp.run), on this engine's build."""
+    """check | stills 3.9 8.2 ... | render [4k] | player | final <rev> [4k]: the commands blueprint has (bp.run), on this engine's build."""
     bp.run(spec, argv, build, "sky")

@@ -2,7 +2,7 @@
 
 Chase's baseline look: a split-screen short, graphics on an ivory panel above his real face cam. [Chase]
 To the tools it is `editorial`: spec `styles/editorial/STYLE.md`, flag `--pack editorial`. [Ours]
-Layout numbers in STYLE.md and these rule files are at 1080x1920. Publish is 2160x3840 at 30 fps (4K30); 60 fps only when he asks. [Chase]
+Layout numbers in STYLE.md and these rule files are at 1080x1920. Publish is 1080x1920 at 30 fps since 2026-11-24 (4K30 only when he asks; 60 fps only when he asks). [Chase]
 
 ## Status: in use
 

@@ -1,17 +1,19 @@
-Read this only when `autofinal.py` failed or cannot be used, a 4K check fails, he asks for 1080p or for 60 fps, the project was prepped before `face_half_4k.mp4` existed, or the sound sheet changes after a final. Otherwise his Approve click builds and delivers the 4K30 final by itself (`short-finish.md`, section 10).
+Read this only when `autofinal.py` failed or cannot be used, he asks for 4K or for 60 fps on a project prepped before `face_half_4k.mp4` existed, or the sound sheet changes after a final. Otherwise his Approve click builds and delivers the 1080p30 final by itself, or the 4K30 one when he asked for 4K (`short-finish.md`, section 10).
 
 It holds the by-hand part of section 10, moved here unchanged from `SKILL.md`. The final is built fresh from a frozen copy of the approved composition, never from the review picture, and never two renders at once.
 
-## 4K30 and 1080p30
+## 1080p30 and 4K30
 
-**4K30 is the default final.** Reviews render at 1080p for speed; the edit is a page, so the final renders the same composition at 2160x3840 and text and graphics come out sharp. Prep already wrote `assets/face_half_4k.mp4` (the same frames as `face_half.mp4` at the source's full size), so nothing is re-cut. By hand: write `<work>/swaps-4k30.json` (`<work>` is `work/<id>`) pointing `assets/face_half.mp4` at it, with his approval words in `authorized_by`. YouTube plays and rewards 4K; Instagram and TikTok show 1080p at most, and the same 4K file is fine there.
+**1080p30 is the default final** [Chase, 2026-11-24: no platform plays a short above 1080p]. Its commands are below the 4K ones.
+
+**4K30 only when he asks for it on this short** (a master to keep, a crop for long-form). From his Approve click: write `<work>/final.json` `{"spec": "4k30"}` before he approves, or run `autofinal.py start $P --spec 4k30` after. The final renders the same composition at 2160x3840. Prep already wrote `assets/face_half_4k.mp4` (the same frames as `face_half.mp4` at the source's full size), so nothing is re-cut. By hand: write `<work>/swaps-4k30.json` (`<work>` is `work/<id>`) pointing `assets/face_half.mp4` at it, with his approval words in `authorized_by`.
 ```bash
 # {"swaps": [{"path": "assets/face_half.mp4", "file": "<work>/assets/face_half_4k.mp4", "source": "prep_source.py face_half_4k (same frame map)", "why": "4K30 final", "authorized_by": "<his approval, verbatim>"}]}
 python tools/beat_review/final.py build $P --spec 4k30 --workers 6 --swaps <work>/swaps-4k30.json
 python tools/deliver.py $P <base>_4k30 --mode final --stitched <file that build printed> --source-swap assets/face_half.mp4
 python tools/sound_mix.py check-media out/<base>_4k30.mp4
 ```
-On 1102-1 (85 s) the 4K30 build took 11 minutes at 6 workers (1080p30: about 3.5), and delivering it about 10 more. A project prepped before face_half_4k existed: make it with `tools/face_retime.py raw/cut.mp4 --map face_map.json --reuse --crop <metadata face crop> --scale <crop width>x-2 --out assets/face_half_4k.mp4`, never a plain `fps=30` (the swap check refuses frames a tick off). Clips from other skills keep their own size: a /vfx clip stays 1080x1920 and is scaled up. Don't swap in a `/vfx --4k` render: a full-frame 2160x3840 clip inside the composition renders with held frames (about half its frames repeated, found 2026-11-04), while the 1080 clip plays every frame. **1080p30 is the fallback** if a 4K check fails, or if he asks for it:
+On 1102-1 (85 s) the 4K30 build took 11 minutes at 6 workers (1080p30: about 3.5), and delivering it about 10 more. A project prepped before face_half_4k existed: make it with `tools/face_retime.py raw/cut.mp4 --map face_map.json --reuse --crop <metadata face crop> --scale <crop width>x-2 --out assets/face_half_4k.mp4`, never a plain `fps=30` (the swap check refuses frames a tick off). Clips from other skills keep their own size: a /vfx clip stays 1080x1920 and is scaled up. Don't swap in a `/vfx --4k` render: a full-frame 2160x3840 clip inside the composition renders with held frames (about half its frames repeated, found 2026-11-04), while the 1080 clip plays every frame. **1080p30**, the default (and the fallback if a 4K check fails):
 ```bash
 python tools/beat_review/final.py build $P --spec 1080p30 --workers 4
 python tools/deliver.py $P <base> --mode final --stitched <file that build printed>

@@ -23,7 +23,7 @@ The spec's own `player` command renders and calls load(); nothing here is run by
                                                                     software capture, and the stills check a few minutes more): do not use it in a run yet
   python -B tools/beat_review_v2/server.py work/<id>/v2/<look>
 Notes are a normal round: review.freeze(project), edit the spec, `player` again, review.close_round(project, done=[...]).
-His Approve click starts the 4K final (autofinal.py runs the spec's `final`).
+His Approve click starts the final, 1080p30 unless he asked for 4K (autofinal.py runs the spec's `final`).
 """
 import json, shutil, subprocess, sys
 from pathlib import Path

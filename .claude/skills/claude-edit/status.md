@@ -21,7 +21,7 @@ Rewritten 2026-11-22 from what the author has shipped with it on his own machine
 | Player, notes and rounds | Works | `tools/beat_review_v2/` over `tools/beat_review/`, port 4750. Real rounds on every short. Its tests need the author's fixture edit, which does not ship, so they skip |
 | Approval | Works | His Approve click writes the record and starts the final (`autofinal.py`). The fresh-render check is by hand only (`deep=True`) |
 | Sound, shorts | Works | `sound.json`, the cue lane and listening preview in the player. Levels from reference measurements and the vetted slices (`templates/ivory/sound.md`) |
-| Final, shorts | Works | 4K30 by default from the Approve click; 32 delivered. From a tool shell use `autofinal.py run --picture <sha>` in a background task, not `start`. Whole 4K60 only on a fixture copy |
+| Final, shorts | Works | 1080p30 by default from the Approve click since 2026-11-24 (4K30 only when he asks: `final.json` or `--spec 4k30`); 32 delivered at 4K30 before that. From a tool shell use `autofinal.py run --picture <sha>` in a background task, not `start`. Whole 4K60 only on a fixture copy |
 | Popout bottom | Partly | `tools/popout.py`. Proven on a copy of 1030-2 at review size. Never on a new raw or through a 4K final (2026-11-11) |
 | Full-face setting | Partly | Resolved by hand at intake. `tools/tests/test_full_face.py` covers motionlint and the rule files' wording (2026-11-11) |
 | Effects from `/animate` and `/vfx` | Partly | `effects-bridge.md`. `/vfx` orbit run for real on 1102-1; `/animate` not yet run through a note round (2026-11-11) |

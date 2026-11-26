@@ -13,7 +13,7 @@ Restate any frame count in seconds, then snap once to the output grid. [Ours]
   Why: facts and the cut must match across versions. Met when: a second template re-runs no transcript, cut or audio step.
 - **A template may override pacing.** [Chase] Today it does so by taking listed trims before graphics, one template per output. [Ours]
   "Never re-cut from raw" is a proposal waiting on his yes. Why: a blend is no one version anyone can check. Met when: the run names one template version and its trims.
-- **Publish 4K. Review, then finish last.** [Chase] Today that is 4K30 (2160x3840, 30 fps), with 4K60 only when he asks; review in the player, with notes left at exact seconds; no CapCut draft, because CapCut is not wired. [Ours, 2026-11-11: this line read "Publish 4K60 ... Review an MP4 with chat notes. CapCut draft after approve." until the flow changed]
+- **Publish 1080p30. Review, then finish last.** [Chase, 2026-11-24: no platform plays a short above 1080p; until then this line read "Publish 4K ... 4K30 (2160x3840, 30 fps)"] 4K30 or 4K60 only when he asks; the page is still laid out on the 2160x3840 canvas; review in the player, with notes left at exact seconds; no CapCut draft, because CapCut is not wired. [Ours, 2026-11-11: this line read "Publish 4K60 ... Review an MP4 with chat notes. CapCut draft after approve." until the flow changed]
   Why: he cannot review what was not rendered, and notes must stay cheap. Met when: no notes round runs through CapCut.
 
 ## Build path, today's tools [Ours]

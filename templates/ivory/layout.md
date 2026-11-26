@@ -2,7 +2,7 @@
 
 Two layouts: split, full-graphic. A third, full-face, exists only when `full_face` is on. Chase's rules win every conflict.
 Format: rule, why, then Met (how to tell it held). "(untested on ivory)" means ivory has not proven it.
-All STYLE.md layout numbers here are at 1080x1920. Publish is 2160x3840 at 30 fps (4K30); 60 fps only when he asks.
+All STYLE.md layout numbers here are at 1080x1920. Publish is 1080x1920 at 30 fps since 2026-11-24; 2160x3840 (4K30) only when he asks, 60 fps likewise.
 
 ## The `full_face` setting
 

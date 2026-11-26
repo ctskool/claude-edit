@@ -1,8 +1,8 @@
-Read this when he approves in the player, or when sound or the final is the next step. It holds sections 8, 9 and 10, moved here unchanged from `SKILL.md`. The by-hand final (4K30 by hand, 1080p30, a new sound sheet after a final, 4K60) is in `final-by-hand.md`.
+Read this when he approves in the player, or when sound or the final is the next step. It holds sections 8, 9 and 10, moved here unchanged from `SKILL.md`. The by-hand final (1080p30, 4K30 when he asks, a new sound sheet after a final, 4K60) is in `final-by-hand.md`.
 
 ## 8. Approval
 
-He approves in the player, and his click is the approval: he watched this exact file. `review.approve(project, picture_sha)` refuses a picture with a FAIL not fixed or waived, with an open note, or that is not the newest picture byte for byte, then writes the record at once (`beat/approvals/<file_sha16>.json`, result `APPROVED`). No second render (Chase, 2026-11-04: "once I've done the final approval on the editor, just it should go right into the 4K build").
+He approves in the player, and his click is the approval: he watched this exact file. `review.approve(project, picture_sha)` refuses a picture with a FAIL not fixed or waived, with an open note, or that is not the newest picture byte for byte, then writes the record at once (`beat/approvals/<file_sha16>.json`, result `APPROVED`). No second render (Chase, 2026-11-04: "once I've done the final approval on the editor, just it should go right into the 4K build"; the build is 1080p30 since 2026-11-24, see section 10).
 - The same click starts the final (`tools/beat_review/autofinal.py`) when the sound is ready: `sound.json` written for this picture and no sound note open. Otherwise the player says the final starts once the sound is done, and section 9 comes first. Read where it is with `review.approval_status(project)["final"]`.
 - Before section 9, two things that make the next video better:
   1. **Library:** `python tools/library.py harvest $P`. It adds this edit's scenes to `templates/ivory/library/` and raises their proven counts. It writes only the library and refuses an unapproved project; report a refusal, never bypass it.
@@ -28,8 +28,8 @@ python tools/sound_mix.py stale $P
 
 The final is built fresh from a frozen copy of the approved composition, never from the review picture. `build` refuses without an approval record in `beat/approvals/`. Long job: never two renders at once (`tools/gpu_lock.py` queues them).
 
-**`autofinal.py` does all of this by itself** from his Approve click, or from `python tools/beat_review/autofinal.py start $P` once the sound is good. It writes the swap file (shown in `final-by-hand.md`) with his click as `authorized_by`, builds 4K30 under `gpu_lock` (1080p30 when there is no `assets/face_half_4k.mp4`), delivers `out/<id>_<style>_final_4k30.mp4`, and runs `check-media`. The player shows each stage, and `work/<id>/final-<sha16>.log` has the output. On an error, read the log, fix it, and run `start` again. The commands it runs, for doing it by hand, are in `final-by-hand.md`.
+**`autofinal.py` does all of this by itself** from his Approve click, or from `python tools/beat_review/autofinal.py start $P` once the sound is good. It builds 1080p30 under `gpu_lock`, delivers `out/<id>_<style>_final.mp4`, and runs `check-media`. When he asked for 4K on this short (`<work>/final.json` `{"spec": "4k30"}`, or `start $P --spec 4k30`), it writes the swap file (shown in `final-by-hand.md`) with his click as `authorized_by` and delivers `out/<id>_<style>_final_4k30.mp4` instead. The player shows each stage, and `work/<id>/final-<sha16>.log` has the output. On an error, read the log, fix it, and run `start` again. The commands it runs, for doing it by hand, are in `final-by-hand.md`.
 
-**4K30 is the default final.** 1080p30 is the fallback if a 4K check fails, or if he asks for it; 4K60 only if he asks for 60 fps. All three by hand: `final-by-hand.md`.
+**1080p30 is the default final** [Chase, 2026-11-24: no platform plays a short above 1080p]. 4K30 only when he asks for it on this short; 4K60 only if he asks for 60 fps. All three by hand: `final-by-hand.md`.
 
 Send him a phone copy of the sounded file and wait for final approval. Sound quality and stressed-word masking stay UNVERIFIED until Chase listens.

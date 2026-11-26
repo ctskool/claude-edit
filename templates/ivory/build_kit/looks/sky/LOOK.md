@@ -46,7 +46,7 @@ A sky short is reviewed like a kit short [Chase, 2026-11-22]: the beat review pl
 - **Where the short lives.** `work/<id>/v2/sky/short.py`, with `OUT` = that folder (`HERE` in the worked copy `work/1118-rea-sky/v2/sky/short.py`). The player needs that layout, and a spec inside the project is snapshotted by every round, so Go back restores it. `BEATS` (the second each beat of his cut starts, the first 0) is what the player shows as beats.
 - **First picture.** `python work/<id>/v2/sky/short.py player`: the 1080 review render (waits its turn on `gpu_lock`), then loaded into the player. Serve it with `python -B tools/beat_review_v2/server.py work/<id>/v2/sky` and give him the handoff as SKILL.md section 6 says.
 - **A note round** (he says go in chat): `review.freeze(project)`, the smallest change in `short.py`, `player` again, `review.close_round(project, done=[...], not_done={...})`. The whole short re-renders each round (about 2 minutes for the 49 s rea short on a quiet machine, up to three times that when it is busy); beats whose frames changed are marked in the player.
-- **Approval.** His click in the player. It runs `short.py final <rev>` through `autofinal.py`: rebuild, refuse unless that is the composition he approved, 4K30 at -14 LUFS, delivered as `out/<id>_sky_final_4k30.mp4`. The few cues are already in the review picture, so there is no separate sound stop.
+- **Approval.** His click in the player. It runs `short.py final <rev>` through `autofinal.py`: rebuild, refuse unless that is the composition he approved, 1080p30 at -14 LUFS, delivered as `out/<id>_sky_final.mp4` (4K30 only when he asks: `final.json` `{"spec": "4k30"}` or `autofinal.py start $P --spec 4k30`, which runs `final <rev> 4k` and delivers `_final_4k30.mp4`). The few cues are already in the review picture, so there is no separate sound stop.
 - **What it does not have.** No per-beat render in use: `player --partial b04` films only the named beats and checks the rest with stills, but measured on 2026-11-22 it is slower than the whole render (HyperFrames' ranged render pays about 1 min 50 s of start-up per stretch, in software capture), so rounds use the whole render until that is solved. Also no native-size beat button, and none of the kit's automatic checks (motion lint, flashes, copy, geometry): the only automatic check is the render's length and that it has sound. Look at stills across the whole timeline yourself before the handoff.
 
 ## Skies: one sky short, many skies
@@ -69,5 +69,5 @@ What to watch for in a new sky: an orange sky swallows the orange guide and Clau
 
 ## Known gaps
 
-- The rea titles sit at y 66, under the phone's island (as blueprint's did before 2026-11-20). Chase had it posted that way as a trial on 2026-11-20 (https://www.instagram.com/reel/Df-1Qd7klNW/). New sky shorts start titles at 150.
+- The rea titles sit at y 66, under the phone's island (as blueprint's did before 2026-11-20). Chase had it posted that way as a trial on 2026-11-20. New sky shorts start titles at 150.
 - The worked example's images live in `work/1119-pixel-guide-test/img`, which is local only.
